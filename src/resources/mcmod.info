@@ -1,0 +1,9 @@
+[{
+    "modid": "sereneseasons",
+    "name": "Serene Seasons",
+    "description": "Adds seasons, and a slew of supplementary features",
+    "version": "${mod_version}",
+    "mcversion": "${minecraft_version}",
+    "authorList": ["Adubbz", "Forstride"],
+    "logoFile": "assets/sereneseasons/textures/gui/logo.png"
+}]
