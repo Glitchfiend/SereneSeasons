@@ -5,7 +5,7 @@
  * 
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
  ******************************************************************************/
-package toughasnails.asm.transformer;
+package sereneseasons.asm.transformer;
 
 import java.util.List;
 
@@ -19,8 +19,8 @@ import org.objectweb.asm.tree.MethodNode;
 import com.google.common.collect.Lists;
 
 import net.minecraft.launchwrapper.IClassTransformer;
-import toughasnails.asm.ASMHelper;
-import toughasnails.asm.ObfHelper;
+import sereneseasons.asm.ASMHelper;
+import sereneseasons.asm.ObfHelper;
 
 public class EntityRendererTransformer implements IClassTransformer
 {
@@ -58,7 +58,7 @@ public class EntityRendererTransformer implements IClassTransformer
                 
                 //Redirect the call to our own version of getFloatTemperature
                 targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
-                targetMethodInsnNode.owner = "toughasnails/season/SeasonASMHelper";
+                targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
                 targetMethodInsnNode.name = "getFloatTemperature";
                 targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
                 
@@ -70,7 +70,7 @@ public class EntityRendererTransformer implements IClassTransformer
                 
                 //Redirect the call to our own version of getFloatTemperature
                 targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
-                targetMethodInsnNode.owner = "toughasnails/season/SeasonASMHelper";
+                targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
                 targetMethodInsnNode.name = "getFloatTemperature";
                 targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
                 

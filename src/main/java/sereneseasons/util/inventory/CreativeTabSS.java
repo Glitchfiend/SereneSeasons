@@ -12,7 +12,7 @@ import sereneseasons.core.SereneSeasons;
 
 public class CreativeTabSS extends CreativeTabs
 {
-    public static final CreativeTabs instance = new CreativeTabSS(CreativeTabs.getNextID(), "tabToughAsNails");
+    public static final CreativeTabs instance = new CreativeTabSS(CreativeTabs.getNextID(), "tabSereneSeasons");
 
     private CreativeTabSS(int index, String label)
     {

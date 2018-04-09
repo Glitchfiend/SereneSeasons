@@ -5,7 +5,7 @@
  * 
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
  ******************************************************************************/
-package toughasnails.asm;
+package sereneseasons.asm;
 
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 

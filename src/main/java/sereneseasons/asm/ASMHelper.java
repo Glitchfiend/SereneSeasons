@@ -5,7 +5,7 @@
  * 
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
  ******************************************************************************/
-package toughasnails.asm;
+package sereneseasons.asm;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 
 public class ASMHelper
 {
-    public static final Logger LOGGER = LogManager.getLogger("ToughAsNails Transformer");
+    public static final Logger LOGGER = LogManager.getLogger("SereneSeasons Transformer");
     
     public static boolean methodEquals(MethodNode methodNode, String[] names, String desc)
     {
