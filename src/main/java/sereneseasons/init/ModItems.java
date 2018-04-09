@@ -20,6 +20,11 @@ public class ModItems
     
     public static void registerItems()
     {
+    	// SS Creative Tab Icon
+    	ss_icon = registerItem(new Item(), "ss_icon");
+        ss_icon.setCreativeTab(null);
+
+        // Main Items
         season_clock = registerItem(new ItemSeasonClock(), "season_clock");
     }
 

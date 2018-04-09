@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sereneseasons.api.SSItems;
 import sereneseasons.core.SereneSeasons;
 
 public class CreativeTabSS extends CreativeTabs
@@ -22,7 +23,7 @@ public class CreativeTabSS extends CreativeTabs
     @Override
     public ItemStack getTabIconItem()
     {
-        return new ItemStack(Items.AIR);
+        return new ItemStack(SSItems.ss_icon);
     }
     
     @Override
