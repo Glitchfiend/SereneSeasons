@@ -15,8 +15,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import sereneseasons.command.SSCommand;
+import sereneseasons.init.ModBlocks;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModHandlers;
+import sereneseasons.init.ModItems;
 
 @Mod(modid = SereneSeasons.MOD_ID, version = SereneSeasons.MOD_VERSION, name = SereneSeasons.MOD_NAME, dependencies = "required-after:forge@[1.0.0.0,)")
 public class SereneSeasons
@@ -40,6 +42,8 @@ public class SereneSeasons
         configDirectory = new File(event.getModConfigurationDirectory(), "sereneseasons");
 
         ModConfig.preInit(configDirectory);
+        ModBlocks.init();
+        ModItems.init();
         ModHandlers.init();
 
         proxy.registerRenderers();

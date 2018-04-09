@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "normal": { "model": "sereneseasons:season_sensor_spring" }
+    }
+}
