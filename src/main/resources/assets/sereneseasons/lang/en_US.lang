@@ -1,0 +1,6 @@
+commands.sereneseasons.usage=/sereneseasons <setseason> [args]
+commands.sereneseasons.setseason.success=Set season to %s
+commands.sereneseasons.setseason.fail=Invalid season %s
+commands.sereneseasons.setseason.disabled=Seasons are currently disabled!
+
+itemGroup.tabSereneSeasons=Serene Seasons
