@@ -1,4 +1,6 @@
-**Serene Seasons** is a **Minecraft mod** that adds **seasons**, and a **slew of supplementary features!**
+<p align="center"><img src="https://i.imgur.com/5RNBDHE.png"></p>
+
+**Serene Seasons** is a **Minecraft mod** that adds **seasons** with **changing colors, temperature shifting, and more!**
 
 -----------------
 
