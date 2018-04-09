@@ -11,10 +11,6 @@ buildscript {
     }
 }
 
-plugins {
-    id "com.matthewprenger.cursegradle" version "1.0.9"
-}
-
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
@@ -51,10 +47,10 @@ minecraft {
 
 def commonManifest = {
 		attributes (
-			"FMLCorePlugin": 'sereneseasons.asm.TANLoadingPlugin',
+			"FMLCorePlugin": 'sereneseasons.asm.SSLoadingPlugin',
 			"FMLCorePluginContainsFMLMod": 'true',
 			"ForceLoadAsMod": 'true',
-			"FMLAT": 'sereneseasonss_at.cfg'
+			"FMLAT": 'sereneseasons_at.cfg'
 		)
 }
 
