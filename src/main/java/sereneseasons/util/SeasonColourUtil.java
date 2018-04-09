@@ -8,6 +8,8 @@
 package sereneseasons.util;
 
 
+import com.google.common.collect.Lists;
+import net.minecraft.world.biome.Biome;
 import org.lwjgl.util.Color;
 
 import sereneseasons.api.config.SeasonsOption;
@@ -15,8 +17,12 @@ import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
 import sereneseasons.init.ModConfig;
 
+import java.util.List;
+
 public class SeasonColourUtil 
 {
+    public static List<Biome> biomeBlacklist = Lists.newArrayList();
+
     public static int multiplyColours(int colour1, int colour2)
     {
         //Convert each colour to a scale between 0 and 1 and multiply them
@@ -57,8 +63,11 @@ public class SeasonColourUtil
         return getIntFromColour(newColour);
     }
     
-    public static int applySeasonalGrassColouring(Season.SubSeason season, int originalColour)
+    public static int applySeasonalGrassColouring(Season.SubSeason season, Biome biome, int originalColour)
     {
+        if (biomeBlacklist.contains(biome))
+            return originalColour;
+
         int overlay = season.getGrassOverlay();
         float saturationMultiplier = season.getGrassSaturationMultiplier();
         if (!(SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS)) || !ModConfig.seasons.changeGrassColour)
@@ -70,8 +79,11 @@ public class SeasonColourUtil
         return saturationMultiplier != -1 ? saturateColour(newColour, saturationMultiplier) : newColour;
     }
     
-    public static int applySeasonalFoliageColouring(Season.SubSeason season, int originalColour)
+    public static int applySeasonalFoliageColouring(Season.SubSeason season, Biome biome, int originalColour)
     {
+        if (biomeBlacklist.contains(biome))
+            return originalColour;
+
         int overlay = season.getFoliageOverlay();
         float saturationMultiplier = season.getFoliageSaturationMultiplier();
         if (!(SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS)) || !ModConfig.seasons.changeFoliageColour)

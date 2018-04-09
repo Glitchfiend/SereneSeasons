@@ -7,6 +7,10 @@
  ******************************************************************************/
 package sereneseasons.init;
 
+import static sereneseasons.util.SeasonColourUtil.biomeBlacklist;
+
+import com.google.common.collect.Lists;
+import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeColorHelper;
@@ -56,13 +60,15 @@ public class ModHandlers
         BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-            return SeasonColourUtil.applySeasonalGrassColouring(calendar.getSubSeason(), biome.getGrassColorAtPos(blockPosition));
+            return SeasonColourUtil.applySeasonalGrassColouring(calendar.getSubSeason(), biome, biome.getGrassColorAtPos(blockPosition));
         };
 
         BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-            return SeasonColourUtil.applySeasonalFoliageColouring(calendar.getSubSeason(), biome.getFoliageColorAtPos(blockPosition));
+            return SeasonColourUtil.applySeasonalFoliageColouring(calendar.getSubSeason(), biome, biome.getFoliageColorAtPos(blockPosition));
         };
+
+        // biomeBlacklist.add(Biomes.OCEAN);
     }
 }
