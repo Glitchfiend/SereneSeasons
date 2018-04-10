@@ -31,7 +31,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         World world = event.world;
 
-        if (event.phase == TickEvent.Phase.END && !world.isRemote && world.provider.getDimension() == 0 && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (event.phase == TickEvent.Phase.END && !world.isRemote && world.provider.getDimension() == 0)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
 
@@ -69,7 +69,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         
         int dimension = Minecraft.getMinecraft().player.dimension;
 
-        if (event.phase == TickEvent.Phase.END && dimension == 0 && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (event.phase == TickEvent.Phase.END && dimension == 0)
         {
             //Keep ticking as we're synchronized with the server only every second
             if (clientSeasonCycleTicks++ > SeasonTime.ZERO.getCycleDuration())
@@ -89,7 +89,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public static void sendSeasonUpdate(World world)
     {
-        if (!world.isRemote && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (!world.isRemote)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
             PacketHandler.instance.sendToAll(new MessageSyncSeasonCycle(savedData.seasonCycleTicks));

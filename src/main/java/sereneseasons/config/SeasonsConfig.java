@@ -32,7 +32,6 @@ public class SeasonsConfig extends ConfigHandler
     {
         try
         {
-            addSyncedValue(SeasonsOption.ENABLE_SEASONS, true, "Toggle", "Seasons progress as days increase");
             addSyncedValue(SeasonsOption.DAY_DURATION, 24000, TIME_SETTINGS,"The duration of a Minecraft day in ticks", 20, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 5, TIME_SETTINGS,"The duration of a sub season in days", 1, Integer.MAX_VALUE);
             

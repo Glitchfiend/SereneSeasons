@@ -22,7 +22,7 @@ public class WeatherFrequencyHandler
     @SubscribeEvent
     public void onWorldTick(WorldTickEvent event)
     {
-        if (event.phase == Phase.END && event.side == Side.SERVER && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (event.phase == Phase.END && event.side == Side.SERVER)
         {
             World world = event.world;
             Season season = SeasonHelper.getSeasonData(world).getSubSeason().getSeason();

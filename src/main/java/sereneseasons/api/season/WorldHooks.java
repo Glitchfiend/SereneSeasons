@@ -12,7 +12,7 @@ public class WorldHooks
     {
         try
         {
-            return (Boolean)Class.forName("toughasnails.season.SeasonASMHelper").getMethod("canSnowAtInSeason", World.class, BlockPos.class, Boolean.class, Season.class).invoke(null, world, pos, checkLight, season);
+            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("canSnowAtInSeason", World.class, BlockPos.class, Boolean.class, Season.class).invoke(null, world, pos, checkLight, season);
         }
         catch (Exception e)
         {
@@ -27,7 +27,7 @@ public class WorldHooks
     {
         try
         {
-            return (Boolean)Class.forName("toughasnails.season.SeasonASMHelper").getMethod("canBlockFreezeInSeason", World.class, BlockPos.class, Boolean.class, Season.class).invoke(null, world, pos, noWaterAdj, season);
+            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("canBlockFreezeInSeason", World.class, BlockPos.class, Boolean.class, Season.class).invoke(null, world, pos, noWaterAdj, season);
         }
         catch (Exception e)
         {
@@ -42,7 +42,7 @@ public class WorldHooks
     {
         try
         {
-            return (Boolean)Class.forName("toughasnails.season.SeasonASMHelper").getMethod("isRainingAtInSeason", World.class, BlockPos.class, Season.class).invoke(null, world, pos, season);
+            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("isRainingAtInSeason", World.class, BlockPos.class, Season.class).invoke(null, world, pos, season);
         }
         catch (Exception e)
         {

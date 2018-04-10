@@ -71,24 +71,17 @@ public class SSCommand extends CommandBase
             }
         }
 
-        if (SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (newSeason != null)
         {
-            if (newSeason != null)
-            {
-                SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.world);
-                seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * newSeason.ordinal();
-                seasonData.markDirty();
-                SeasonHandler.sendSeasonUpdate(player.world);
-                sender.sendMessage(new TextComponentTranslation("commands.toughasnails.setseason.success", args[1]));
-            }
-            else
-            {
-                sender.sendMessage(new TextComponentTranslation("commands.toughasnails.setseason.fail", args[1]));
-            }
+            SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.world);
+            seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * newSeason.ordinal();
+            seasonData.markDirty();
+            SeasonHandler.sendSeasonUpdate(player.world);
+            sender.sendMessage(new TextComponentTranslation("commands.sereneseasons.setseason.success", args[1]));
         }
         else
         {
-            sender.sendMessage(new TextComponentTranslation("commands.toughasnails.setseason.disabled"));
+            sender.sendMessage(new TextComponentTranslation("commands.sereneseasons.setseason.fail", args[1]));
         }
     }
 
@@ -97,7 +90,7 @@ public class SSCommand extends CommandBase
     {
         if (args.length == 1)
         {
-            return getListOfStringsMatchingLastWord(args, "settemp", "tempinfo");
+            return getListOfStringsMatchingLastWord(args, "setseason");
         }
 
         return null;

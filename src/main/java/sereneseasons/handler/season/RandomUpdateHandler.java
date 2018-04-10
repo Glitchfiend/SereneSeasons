@@ -35,12 +35,6 @@ public class RandomUpdateHandler
             Season season = SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
             Season.SubSeason subSeason = SeasonHelper.getSeasonData(world).getSubSeason();
             
-            if (!(SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS)))
-            {
-            	season = Season.SUMMER;
-            	subSeason = Season.SubSeason.MID_SUMMER;
-            }
-            
             //Only melt when it isn't winter
             if (subSeason != Season.SubSeason.EARLY_WINTER && subSeason != Season.SubSeason.MID_WINTER && subSeason != Season.SubSeason.LATE_WINTER)
             {

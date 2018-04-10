@@ -27,7 +27,7 @@ public class StopSpawnHandler
     {
         Season season = SeasonHelper.getSeasonData(event.getWorld()).getSubSeason().getSeason();
         
-        if (season == Season.WINTER && event.getEntity() instanceof EntityAnimal && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (season == Season.WINTER && event.getEntity() instanceof EntityAnimal)
         {
             event.setResult(Result.DENY);
         }
@@ -40,7 +40,7 @@ public class StopSpawnHandler
         Season season = SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
         
         //Prevent animals from spawning in new chunks during the winter
-        if (event.getType() == EventType.ANIMALS && season == Season.WINTER && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (event.getType() == EventType.ANIMALS && season == Season.WINTER)
         {
             event.setResult(Result.DENY);
         }

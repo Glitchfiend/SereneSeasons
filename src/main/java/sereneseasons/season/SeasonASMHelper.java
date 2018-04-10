@@ -115,7 +115,7 @@ public class SeasonASMHelper
     {
         Season season = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason().getSeason();
         
-        if (biome.getDefaultTemperature() <= 0.8F && season == Season.WINTER && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (biome.getDefaultTemperature() <= 0.8F && season == Season.WINTER)
         {
             return 0.0F;
         }

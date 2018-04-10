@@ -21,7 +21,7 @@ public class SeasonSleepHandler
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if (event.phase == Phase.START && event.side == Side.SERVER && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_SEASONS))
+        if (event.phase == Phase.START && event.side == Side.SERVER)
         {
             WorldServer world = (WorldServer)event.world;
 
