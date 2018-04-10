@@ -36,7 +36,22 @@ public class ModConfig
 
     public static void init(File configDir)
     {
-        blacklistedBiomeNames = JsonUtil.getOrCreateConfigFile(configDir, "biome_blacklist.json", new ArrayList<String>(), new TypeToken<List<String>>(){}.getType());
+    	List<String> blacklistedBiomes = Lists.newArrayList("minecraft:desert", "minecraft:desert_hills",
+    			"minecraft:mutated_desert", "minecraft:jungle", "minecraft:jungle_hills", "minecraft:jungle_edge",
+    			"minecraft:mutated_jungle", "minecraft:mutated_jungle_edge", "minecraft:mesa", "minecraft:mesa_rock",
+    			"minecraft:mesa_clear_rock", "minecraft:mutated_mesa", "minecraft:mutated_mesa_rock",
+    			"minecraft:mutated_mesa_clear_rock", "minecraft:mushroom_island", "minecraft:mushroom_island_shore",
+    			"minecraft:savanna", "minecraft:savanna_rock", "minecraft:mutated_savanna",
+    			"minecraft:mutated_savanna_rock", "biomesoplenty:bamboo_forest", "biomesoplenty:bayou",
+    			"biomesoplenty:brushland", "biomesoplenty:eucalyptus_forest", "biomesoplenty:lush_desert",
+    			"biomesoplenty:mangrove", "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods",
+    			"biomesoplenty:outback", "biomesoplenty:overgrown_cliffs", "biomesoplenty:rainforest",
+    			"biomesoplenty:sacred_springs", "biomesoplenty:tropical_rainforest", "biomesoplenty:wasteland",
+    			"biomesoplenty:xeric_shrubland", "biomesoplenty:flower_island", "biomesoplenty:origin_island",
+    			"biomesoplenty:tropical_island", "biomesoplenty:volcanic_island", "biomesoplenty:oasis",
+    			"biomesoplenty:white_beach");
+    	
+        blacklistedBiomeNames = JsonUtil.getOrCreateConfigFile(configDir, "biome_blacklist.json", blacklistedBiomes, new TypeToken<List<String>>(){}.getType());
 
         for (String biomeName : blacklistedBiomeNames)
         {
@@ -45,10 +60,6 @@ public class ModConfig
             if (ForgeRegistries.BIOMES.containsKey(loc))
             {
                 SeasonColourUtil.biomeBlacklist.add(ForgeRegistries.BIOMES.getValue(loc));
-            }
-            else
-            {
-                SereneSeasons.logger.error("Cannot blacklist " + loc.toString() + " as it is an invalid biome!");
             }
         }
     }
