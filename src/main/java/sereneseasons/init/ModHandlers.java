@@ -7,8 +7,6 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import static sereneseasons.util.SeasonColourUtil.biomeBlacklist;
-
 import com.google.common.collect.Lists;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
@@ -68,7 +66,5 @@ public class ModHandlers
             SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
             return SeasonColourUtil.applySeasonalFoliageColouring(calendar.getSubSeason(), biome, biome.getFoliageColorAtPos(blockPosition));
         };
-
-        // biomeBlacklist.add(Biomes.OCEAN);
     }
 }

@@ -52,7 +52,7 @@ public class SereneSeasons
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-
+        ModConfig.init(configDirectory);
     }
 
     @EventHandler
