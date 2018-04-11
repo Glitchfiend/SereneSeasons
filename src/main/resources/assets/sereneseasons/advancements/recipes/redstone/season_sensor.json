@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "sereneseason:season_sensor"
+        "recipe": "sereneseasons:season_sensor"
       }
     },
     "has_quartz": {

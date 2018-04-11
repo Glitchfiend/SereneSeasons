@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "forge:ore_shaped",
   "pattern": [
     " # ",
     "#R#",
@@ -7,12 +7,12 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:quartz",
-      "data": 32767
+      "type": "forge:ore_dict",
+	  "ore": "gemQuartz"
     },
     "R": {
-      "item": "minecraft:redstone",
-      "data": 32767
+      "type": "forge:ore_dict",
+	  "ore": "dustRedstone"
     }
   },
   "result": {

@@ -1,21 +1,18 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "GGG",
-    "QSQ",
-    "###"
+    "#W#",
+    "WGW",
+    "#W#"
   ],
   "key": {
     "#": {
-      "item": "minecraft:stone_slab",
-      "data": 3
-    },
-    "S": {
-      "item": "sereneseasons:season_clock"
-    },
-    "Q": {
       "type": "forge:ore_dict",
-	  "ore": "gemQuartz"
+	  "ore": "dyeCyan"
+    },
+    "W": {
+      "type": "forge:ore_dict",
+	  "ore": "stickWood"
     },
     "G": {
       "type": "forge:ore_dict",
@@ -23,7 +20,7 @@
     }
   },
   "result": {
-    "item": "sereneseasons:season_sensor_spring",
+    "item": "sereneseasons:greenhouse_glass",
     "data": 0
   }
 }
