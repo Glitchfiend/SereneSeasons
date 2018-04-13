@@ -61,7 +61,7 @@ public class BiomeConfig
     {
         List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore",
                 "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland",
-                "biomesoplenty:flower_island", "biomesoplenty:origin_island");
+                "biomesoplenty:flower_island", "biomesoplenty:origin_island", "biomeoplenty:origin_beach");
 
         for (String biomeName : blacklistedBiomes)
         {
@@ -79,12 +79,14 @@ public class BiomeConfig
                 "minecraft:mutated_jungle", "minecraft:mutated_jungle_edge", "minecraft:mesa", "minecraft:mesa_rock",
                 "minecraft:mesa_clear_rock", "minecraft:mutated_mesa", "minecraft:mutated_mesa_rock",
                 "minecraft:mutated_mesa_clear_rock", "minecraft:savanna", "minecraft:savanna_rock",
-                "minecraft:mutated_savanna", "minecraft:mutated_savanna_rock", "biomesoplenty:bamboo_forest",
-                "biomesoplenty:bayou", "biomesoplenty:brushland", "biomesoplenty:eucalyptus_forest",
-                "biomesoplenty:lush_desert", "biomesoplenty:mangrove", "biomesoplenty:outback",
-                "biomesoplenty:overgrown_cliffs", "biomesoplenty:rainforest", "biomesoplenty:sacred_springs",
-                "biomesoplenty:tropical_rainforest", "biomesoplenty:xeric_shrubland", "biomesoplenty:tropical_island",
-                "biomesoplenty:volcanic_island", "biomesoplenty:oasis", "biomesoplenty:white_beach");
+                "minecraft:mutated_savanna", "minecraft:mutated_savanna_rock", "minecraft:mushroom_island", "minecraft:mushroom_island_shore",
+                "biomesoplenty:bamboo_forest", "biomesoplenty:bayou", "biomesoplenty:brushland",
+                "biomesoplenty:eucalyptus_forest", "biomesoplenty:lush_desert", "biomesoplenty:mangrove",
+                "biomesoplenty:outback", "biomesoplenty:overgrown_cliffs", "biomesoplenty:rainforest",
+                "biomesoplenty:sacred_springs", "biomesoplenty:tropical_rainforest", "biomesoplenty:wasteland",
+                "biomesoplenty:xeric_shrubland", "biomesoplenty:flower_island", "biomesoplenty:origin_island",
+                "biomesoplenty:tropical_island", "biomesoplenty:volcanic_island", "biomesoplenty:oasis",
+                "biomesoplenty:white_beach", "biomesoplenty:origin_beach");
 
         for (String biomeName : tropicalBiomes)
         {
