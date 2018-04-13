@@ -10,8 +10,8 @@ package sereneseasons.api.season;
 public enum Season 
 {
     SPRING, SUMMER, AUTUMN, WINTER;
-    
-    public static enum SubSeason
+
+    public enum SubSeason implements ISeasonColorProvider
     {
         EARLY_SPRING(SPRING, 0x778087, 0.85F, 0x6F818F, 0.85F),
         MID_SPRING(SPRING, 0x6F818F, 0x5F849F),
@@ -32,7 +32,7 @@ public enum Season
         private int foliageOverlay;
         private float foliageSaturationMultiplier;
         
-        private SubSeason(Season season, int grassColour, float grassSaturation, int foliageColour, float foliageSaturation)
+        SubSeason(Season season, int grassColour, float grassSaturation, int foliageColour, float foliageSaturation)
         {
             this.season = season;
             this.grassOverlay = grassColour;
@@ -41,7 +41,7 @@ public enum Season
             this.foliageSaturationMultiplier = foliageSaturation; 
         }
         
-        private SubSeason(Season season, int grassColour, int foliageColour)
+        SubSeason(Season season, int grassColour, int foliageColour)
         {
             this(season, grassColour, -1, foliageColour, -1);
         }
@@ -66,6 +66,54 @@ public enum Season
             return this.foliageOverlay;
         }
         
+        public float getFoliageSaturationMultiplier()
+        {
+            return this.foliageSaturationMultiplier;
+        }
+    }
+
+    public enum TropicalSeason implements ISeasonColorProvider
+    {
+        EARLY_DRY(0xFFFFFF, 0xFFFFFF),
+        MID_DRY(0xA09683, 0.75F, 0xA08A83, 0.75F),
+        LATE_DRY(0x9B968D, 0.9F, 0x988D89, 0.9F),
+        EARLY_WET(0x538E89, 0x4E8893),
+        MID_WET(0x2AA196, 0x2498AE),
+        LATE_WET(0x678582, 0x638085);
+
+        private int grassOverlay;
+        private float grassSaturationMultiplier;
+        private int foliageOverlay;
+        private float foliageSaturationMultiplier;
+
+        TropicalSeason(int grassColour, float grassSaturation, int foliageColour, float foliageSaturation)
+        {
+            this.grassOverlay = grassColour;
+            this.grassSaturationMultiplier = grassSaturation;
+            this.foliageOverlay = foliageColour;
+            this.foliageSaturationMultiplier = foliageSaturation;
+        }
+
+        TropicalSeason(int grassColour, int foliageColour)
+        {
+            this(grassColour, -1, foliageColour, -1);
+        }
+
+        public int getGrassOverlay()
+        {
+            return this.grassOverlay;
+        }
+
+        public float getGrassSaturationMultiplier()
+        {
+            return this.grassSaturationMultiplier;
+        }
+
+        public int getFoliageOverlay()
+        {
+            return this.foliageOverlay;
+        }
+
         public float getFoliageSaturationMultiplier()
         {
             return this.foliageSaturationMultiplier;

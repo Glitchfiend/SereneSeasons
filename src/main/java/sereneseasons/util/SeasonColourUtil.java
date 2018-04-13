@@ -14,15 +14,15 @@ import org.lwjgl.util.Color;
 
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
+import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
+import sereneseasons.config.BiomeConfig;
 import sereneseasons.init.ModConfig;
 
 import java.util.List;
 
 public class SeasonColourUtil 
 {
-    public static List<Biome> biomeBlacklist = Lists.newArrayList();
-
     public static int multiplyColours(int colour1, int colour2)
     {
         //Convert each colour to a scale between 0 and 1 and multiply them
@@ -63,13 +63,13 @@ public class SeasonColourUtil
         return getIntFromColour(newColour);
     }
     
-    public static int applySeasonalGrassColouring(Season.SubSeason season, Biome biome, int originalColour)
+    public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (biomeBlacklist.contains(biome))
+        if (!BiomeConfig.hasSeasonalColoring(biome))
             return originalColour;
 
-        int overlay = season.getGrassOverlay();
-        float saturationMultiplier = season.getGrassSaturationMultiplier();
+        int overlay = colorProvider.getGrassOverlay();
+        float saturationMultiplier = colorProvider.getGrassSaturationMultiplier();
         if (!ModConfig.seasons.changeGrassColour)
     	{
         	overlay = Season.SubSeason.MID_SUMMER.getGrassOverlay();
@@ -79,13 +79,13 @@ public class SeasonColourUtil
         return saturationMultiplier != -1 ? saturateColour(newColour, saturationMultiplier) : newColour;
     }
     
-    public static int applySeasonalFoliageColouring(Season.SubSeason season, Biome biome, int originalColour)
+    public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (biomeBlacklist.contains(biome))
+        if (!BiomeConfig.hasSeasonalColoring(biome))
             return originalColour;
 
-        int overlay = season.getFoliageOverlay();
-        float saturationMultiplier = season.getFoliageSaturationMultiplier();
+        int overlay = colorProvider.getFoliageOverlay();
+        float saturationMultiplier = colorProvider.getFoliageSaturationMultiplier();
         if (!ModConfig.seasons.changeFoliageColour)
     	{
         	overlay = Season.SubSeason.MID_SUMMER.getFoliageOverlay();

@@ -16,7 +16,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.*;
 import sereneseasons.season.SeasonTime;
@@ -58,13 +60,15 @@ public class ModHandlers
         BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-            return SeasonColourUtil.applySeasonalGrassColouring(calendar.getSubSeason(), biome, biome.getGrassColorAtPos(blockPosition));
+            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+            return SeasonColourUtil.applySeasonalGrassColouring(colorProvider, biome, biome.getGrassColorAtPos(blockPosition));
         };
 
         BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-            return SeasonColourUtil.applySeasonalFoliageColouring(calendar.getSubSeason(), biome, biome.getFoliageColorAtPos(blockPosition));
+            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+            return SeasonColourUtil.applySeasonalFoliageColouring(colorProvider, biome, biome.getFoliageColorAtPos(blockPosition));
         };
     }
 }

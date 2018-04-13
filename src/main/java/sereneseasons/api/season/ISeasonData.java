@@ -70,4 +70,12 @@ public interface ISeasonData
      * @return The current season
      */
     Season getSeason();
+
+    /**
+     * Get the current tropical season. This method is
+     * mainly for convenience.
+     *
+     * @return The current tropical season
+     */
+    Season.TropicalSeason getTropicalSeason();
 }

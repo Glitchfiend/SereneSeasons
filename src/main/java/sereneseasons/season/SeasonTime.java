@@ -72,4 +72,11 @@ public final class SeasonTime implements ISeasonData
     {
         return this.getSubSeason().getSeason();
     }
+
+    @Override
+    public Season.TropicalSeason getTropicalSeason()
+    {
+        int index = (this.time / (getSubSeasonDuration() * 2)) % Season.TropicalSeason.values().length;
+        return Season.TropicalSeason.values()[index];
+    }
 }
