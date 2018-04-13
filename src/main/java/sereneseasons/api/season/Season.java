@@ -75,11 +75,11 @@ public enum Season
     public enum TropicalSeason implements ISeasonColorProvider
     {
         EARLY_DRY(0xFFFFFF, 0xFFFFFF),
-        MID_DRY(0xA09683, 0.75F, 0xA08A83, 0.75F),
-        LATE_DRY(0x9B968D, 0.9F, 0x988D89, 0.9F),
-        EARLY_WET(0x538E89, 0x4E8893),
-        MID_WET(0x2AA196, 0x2498AE),
-        LATE_WET(0x678582, 0x638085);
+        MID_DRY(0xA58668, 0.8F, 0xB7867C, 0.95F),
+        LATE_DRY(0x8E7B6D, 0.9F, 0xA08B86, 0.975F),
+        EARLY_WET(0x758C8A, 0x728C91),
+        MID_WET(0x548384, 0x2498AE),
+        LATE_WET(0x658989, 0x4E8893);
 
         private int grassOverlay;
         private float grassSaturationMultiplier;
