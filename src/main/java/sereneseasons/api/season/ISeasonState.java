@@ -9,7 +9,7 @@ package sereneseasons.api.season;
 
 import sereneseasons.api.season.Season.SubSeason;
 
-public interface ISeasonData 
+public interface ISeasonState
 {
     /**
      * Get the duration of a single day. Normally this is

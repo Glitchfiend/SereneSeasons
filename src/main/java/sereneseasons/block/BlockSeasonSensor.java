@@ -20,7 +20,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -88,7 +87,7 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
             int power = 0;
             int startTicks = this.type.ordinal() * SeasonTime.ZERO.getSeasonDuration();
             int endTicks = (this.type.ordinal() + 1) * SeasonTime.ZERO.getSeasonDuration();
-            int currentTicks = SeasonHelper.getSeasonData(world).getSeasonCycleTicks();
+            int currentTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
             
             if (currentTicks >= startTicks && currentTicks <= endTicks)
             {

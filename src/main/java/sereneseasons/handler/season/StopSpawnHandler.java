@@ -14,8 +14,6 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
@@ -25,7 +23,7 @@ public class StopSpawnHandler
     @SubscribeEvent
     public void onCheckEntitySpawn(LivingSpawnEvent.CheckSpawn event)
     {
-        Season season = SeasonHelper.getSeasonData(event.getWorld()).getSubSeason().getSeason();
+        Season season = SeasonHelper.getSeasonState(event.getWorld()).getSubSeason().getSeason();
         
         if (season == Season.WINTER && event.getEntity() instanceof EntityAnimal)
         {
@@ -37,7 +35,7 @@ public class StopSpawnHandler
     public void onChunkPopulate(PopulateChunkEvent.Populate event)
     {
         World world = event.getWorld();
-        Season season = SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
+        Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
         
         //Prevent animals from spawning in new chunks during the winter
         if (event.getType() == EventType.ANIMALS && season == Season.WINTER)

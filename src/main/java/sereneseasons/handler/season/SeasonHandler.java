@@ -14,9 +14,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
-import sereneseasons.api.season.ISeasonData;
+import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.handler.PacketHandler;
@@ -113,16 +111,16 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
     
     //
-    // Used to implement getSeasonData in the API
+    // Used to implement getSeasonState in the API
     //
     
-    public ISeasonData getServerSeasonData(World world)
+    public ISeasonState getServerSeasonState(World world)
     {
         SeasonSavedData savedData = getSeasonSavedData(world);
         return new SeasonTime(savedData.seasonCycleTicks);
     }
     
-    public ISeasonData getClientSeasonData()
+    public ISeasonState getClientSeasonState()
     {
         return new SeasonTime(clientSeasonCycleTicks);
     }

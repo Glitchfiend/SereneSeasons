@@ -62,8 +62,8 @@ public class WorldTransformer implements IClassTransformer
                 
                 //Get the current season
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonData", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonData", "net/minecraft/world/World"), false));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonData", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonState", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonState", "net/minecraft/world/World"), false));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonState", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "sereneseasons/api/season/Season$SubSeason", "getSeason", "()Lsereneseasons/api/season/Season;", false));
                 insnList.add(new VarInsnNode(Opcodes.ASTORE, 3));
 
@@ -87,8 +87,8 @@ public class WorldTransformer implements IClassTransformer
                 
                 //Get the current season
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonData", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonData", "net/minecraft/world/World"), false));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonData", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonState", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonState", "net/minecraft/world/World"), false));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonState", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "sereneseasons/api/season/Season$SubSeason", "getSeason", "()Lsereneseasons/api/season/Season;", false));
                 insnList.add(new VarInsnNode(Opcodes.ASTORE, 3));
 
@@ -112,8 +112,8 @@ public class WorldTransformer implements IClassTransformer
                 
                 //Get the current season
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonData", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonData", "net/minecraft/world/World"), false));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonData", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonState", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonState", "net/minecraft/world/World"), false));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonState", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "sereneseasons/api/season/Season$SubSeason", "getSeason", "()Lsereneseasons/api/season/Season;", false));
                 insnList.add(new VarInsnNode(Opcodes.ASTORE, 2));
 

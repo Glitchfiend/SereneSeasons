@@ -10,10 +10,10 @@ package sereneseasons.season;
 import com.google.common.base.Preconditions;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
-import sereneseasons.api.season.ISeasonData;
+import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 
-public final class SeasonTime implements ISeasonData
+public final class SeasonTime implements ISeasonState
 {
     public static final SeasonTime ZERO = new SeasonTime(0);
     public final int time;

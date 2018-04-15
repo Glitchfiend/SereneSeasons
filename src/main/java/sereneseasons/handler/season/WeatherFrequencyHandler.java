@@ -12,8 +12,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
@@ -25,7 +23,7 @@ public class WeatherFrequencyHandler
         if (event.phase == Phase.END && event.side == Side.SERVER)
         {
             World world = event.world;
-            Season season = SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
+            Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
             
             //During winter, the absolute maximum delay between rain/thunder should be 30 mins, unlike
             //the standard 160 minutes. We only wish to modify the time between rain/thunder occurring, not

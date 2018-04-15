@@ -18,8 +18,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
@@ -32,8 +30,8 @@ public class RandomUpdateHandler
         if (event.phase == Phase.END && event.side == Side.SERVER)
         {
             WorldServer world = (WorldServer)event.world;
-            Season season = SeasonHelper.getSeasonData(world).getSubSeason().getSeason();
-            Season.SubSeason subSeason = SeasonHelper.getSeasonData(world).getSubSeason();
+            Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
+            Season.SubSeason subSeason = SeasonHelper.getSeasonState(world).getSubSeason();
             
             //Only melt when it isn't winter
             if (subSeason != Season.SubSeason.EARLY_WINTER && subSeason != Season.SubSeason.MID_WINTER && subSeason != Season.SubSeason.LATE_WINTER)

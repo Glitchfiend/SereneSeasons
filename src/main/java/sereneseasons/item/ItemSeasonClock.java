@@ -53,7 +53,7 @@ public class ItemSeasonClock extends Item
                     
                     if (world.provider.isSurfaceWorld())
                     {
-                        int seasonCycleTicks = SeasonHelper.getSeasonData(world).getSeasonCycleTicks();
+                        int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
                         d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
                     }
                     else
