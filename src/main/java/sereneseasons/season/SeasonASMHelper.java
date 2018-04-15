@@ -149,7 +149,7 @@ public class SeasonASMHelper
         {
             float biomeTemp = biome.getTemperature(pos);
 
-            if (tropicalBiome && (season == Season.AUTUMN || season == Season.SPRING))
+            if (!tropicalBiome && (season == Season.AUTUMN || season == Season.SPRING))
                 biomeTemp -= 0.25;
 
             return biomeTemp;
