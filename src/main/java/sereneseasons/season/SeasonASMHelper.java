@@ -139,8 +139,9 @@ public class SeasonASMHelper
     public static float getFloatTemperature(Biome biome, BlockPos pos)
     {
         Season season = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason().getSeason();
+        boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
 
-        if (!BiomeConfig.usesTropicalSeasons(biome) && biome.getDefaultTemperature() <= 0.8F && season == Season.WINTER)
+        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && season == Season.WINTER)
         {
             return 0.0F;
         }
@@ -148,8 +149,8 @@ public class SeasonASMHelper
         {
             float biomeTemp = biome.getTemperature(pos);
 
-            if (season == Season.AUTUMN || season == Season.SPRING)
-                biomeTemp -= 0.4;
+            if (tropicalBiome && (season == Season.AUTUMN || season == Season.SPRING))
+                biomeTemp -= 0.25;
 
             return biomeTemp;
         }
