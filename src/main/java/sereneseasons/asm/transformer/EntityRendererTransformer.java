@@ -12,9 +12,7 @@ import java.util.List;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import com.google.common.collect.Lists;
 
@@ -26,8 +24,9 @@ public class EntityRendererTransformer implements IClassTransformer
 {
     private static final String[] RENDER_RAIN_SNOW_NAMES = new String[] { "renderRainSnow", "func_78474_d", "c" };
     private static final String[] ADD_RAIN_PARTICLES_NAMES = new String[] { "addRainParticles", "func_78484_h", "q" };
-    
+
     private static final String[] GET_FLOAT_TEMPERATURE_NAMES = new String[] { "getTemperature", "func_180626_a", "a" };
+    private static final String[] CAN_RAIN_NAMES = new String[] { "canRain", "func_76738_d", "d" };
     
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass)
@@ -53,28 +52,80 @@ public class EntityRendererTransformer implements IClassTransformer
         for (MethodNode methodNode : classNode.methods)
         {
             if (ASMHelper.methodEquals(methodNode, RENDER_RAIN_SNOW_NAMES, "(F)V"))
-            { 
-                MethodInsnNode targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), GET_FLOAT_TEMPERATURE_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/util/math/BlockPos"));
-                
-                //Redirect the call to our own version of getFloatTemperature
-                targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
-                targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
-                targetMethodInsnNode.name = "getFloatTemperature";
-                targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
-                
-                successfulTransformations.add(methodNode.name + " " + methodNode.desc);
+            {
+                int successCount = 0;
+
+                MethodInsnNode targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), CAN_RAIN_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "Z"));
+
+                // Replace biome.canRain() || biome.getEnableSnow() check with our own
+                if (targetMethodInsnNode != null)
+                {
+                    int targetInsnIndex = methodNode.instructions.indexOf(targetMethodInsnNode);
+
+                    targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
+                    targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
+                    targetMethodInsnNode.name = "shouldRenderRainSnow";
+                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/world/biome/Biome");
+
+                    ASMHelper.clearNextInstructions(methodNode, methodNode.instructions.get(targetInsnIndex + 1), 3);
+
+                    // Add world argument
+                    methodNode.instructions.insertBefore(methodNode.instructions.get(targetInsnIndex - 1), new VarInsnNode(Opcodes.ALOAD, 5));
+
+                    successCount++;
+                }
+
+                targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), GET_FLOAT_TEMPERATURE_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/util/math/BlockPos"));
+
+                if (targetMethodInsnNode != null)
+                {
+                    //Redirect the call to our own version of getFloatTemperature
+                    targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
+                    targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
+                    targetMethodInsnNode.name = "getFloatTemperature";
+                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
+                    successCount++;
+                }
+
+                if (successCount == 2)
+                    successfulTransformations.add(methodNode.name + " " + methodNode.desc);
             }
             else if (ASMHelper.methodEquals(methodNode, ADD_RAIN_PARTICLES_NAMES, "()V"))
-            { 
-                MethodInsnNode targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), GET_FLOAT_TEMPERATURE_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/util/math/BlockPos"));
-                
-                //Redirect the call to our own version of getFloatTemperature
-                targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
-                targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
-                targetMethodInsnNode.name = "getFloatTemperature";
-                targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
-                
-                successfulTransformations.add(methodNode.name + " " + methodNode.desc);
+            {
+                int successCount = 0;
+
+                MethodInsnNode targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), CAN_RAIN_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "Z"));
+
+                if (targetMethodInsnNode != null)
+                {
+                    int targetInsnIndex = methodNode.instructions.indexOf(targetMethodInsnNode);
+
+                    //Redirect the call to canRain to our own check
+                    targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
+                    targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
+                    targetMethodInsnNode.name = "shouldAddRainParticles";
+                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/world/biome/Biome");
+
+                    // Add world argument
+                    methodNode.instructions.insertBefore(methodNode.instructions.get(targetInsnIndex - 1), new VarInsnNode(Opcodes.ALOAD, 3));
+
+                    successCount++;
+                }
+
+                targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), GET_FLOAT_TEMPERATURE_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/util/math/BlockPos"));
+
+                if (targetMethodInsnNode != null)
+                {
+                    //Redirect the call to our own version of getFloatTemperature
+                    targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
+                    targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
+                    targetMethodInsnNode.name = "getFloatTemperature";
+                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
+                    successCount++;
+                }
+
+                if (successCount == 2)
+                    successfulTransformations.add(methodNode.name + " " + methodNode.desc);
             }
         }
         

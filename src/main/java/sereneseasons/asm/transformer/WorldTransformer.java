@@ -63,8 +63,6 @@ public class WorldTransformer implements IClassTransformer
                 //Get the current season
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonState", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonState", "net/minecraft/world/World"), false));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonState", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "sereneseasons/api/season/Season$SubSeason", "getSeason", "()Lsereneseasons/api/season/Season;", false));
                 insnList.add(new VarInsnNode(Opcodes.ASTORE, 3));
 
                 //Invoke our replacement method
@@ -72,7 +70,7 @@ public class WorldTransformer implements IClassTransformer
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 insnList.add(new VarInsnNode(Opcodes.ILOAD, 2));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 3));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/season/SeasonASMHelper", "canSnowAtInSeason", ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/util/math/BlockPos", "Z", "sereneseasons/api/season/Season"), false));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/season/SeasonASMHelper", "canSnowAtInSeason", ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/util/math/BlockPos", "Z", "sereneseasons/api/season/ISeasonState"), false));
                 insnList.add(new InsnNode(Opcodes.IRETURN));
 
                 //Substitute existing instructions with our new ones
@@ -88,8 +86,6 @@ public class WorldTransformer implements IClassTransformer
                 //Get the current season
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonState", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonState", "net/minecraft/world/World"), false));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonState", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "sereneseasons/api/season/Season$SubSeason", "getSeason", "()Lsereneseasons/api/season/Season;", false));
                 insnList.add(new VarInsnNode(Opcodes.ASTORE, 3));
 
                 //Invoke our replacement method
@@ -97,7 +93,7 @@ public class WorldTransformer implements IClassTransformer
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 insnList.add(new VarInsnNode(Opcodes.ILOAD, 2));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 3));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/season/SeasonASMHelper", "canBlockFreezeInSeason", ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/util/math/BlockPos", "Z", "sereneseasons/api/season/Season"), false));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/season/SeasonASMHelper", "canBlockFreezeInSeason", ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/util/math/BlockPos", "Z", "sereneseasons/api/season/ISeasonState"), false));
                 insnList.add(new InsnNode(Opcodes.IRETURN));
 
                 //Substitute existing instructions with our new ones
@@ -113,15 +109,13 @@ public class WorldTransformer implements IClassTransformer
                 //Get the current season
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/api/season/SeasonHelper", "getSeasonState", ObfHelper.createMethodDescriptor(obfuscatedClass, "sereneseasons/api/season/ISeasonState", "net/minecraft/world/World"), false));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "sereneseasons/api/season/ISeasonState", "getSubSeason", "()Lsereneseasons/api/season/Season$SubSeason;", true));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "sereneseasons/api/season/Season$SubSeason", "getSeason", "()Lsereneseasons/api/season/Season;", false));
                 insnList.add(new VarInsnNode(Opcodes.ASTORE, 2));
 
                 //Invoke our replacement method
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 2));
-                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/season/SeasonASMHelper", "isRainingAtInSeason", ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/util/math/BlockPos", "sereneseasons/api/season/Season"), false));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "sereneseasons/season/SeasonASMHelper", "isRainingAtInSeason", ObfHelper.createMethodDescriptor(obfuscatedClass, "Z", "net/minecraft/world/World", "net/minecraft/util/math/BlockPos", "sereneseasons/api/season/ISeasonState"), false));
                 insnList.add(new InsnNode(Opcodes.IRETURN));
                 
                 MethodInsnNode invokeMethodNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/World"), GET_BIOME_GEN_FOR_COORDS_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos"));

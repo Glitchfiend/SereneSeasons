@@ -55,6 +55,18 @@ public class ASMHelper
             iterator.remove();
         }
     }
+
+    public static void clearNextInstructions(MethodNode methodNode, AbstractInsnNode insnNode, int count)
+    {
+        Iterator<AbstractInsnNode> iterator = methodNode.instructions.iterator(methodNode.instructions.indexOf(insnNode));
+
+        while (iterator.hasNext() && count > 0)
+        {
+            iterator.next();
+            iterator.remove();
+            count--;
+        }
+    }
     
     public static MethodInsnNode getUniqueMethodInsnNode(MethodNode methodNode, int opcode, String owner, String[] names, String desc)
     {
@@ -103,18 +115,30 @@ public class ASMHelper
     }
     
     private static Printer printer = new Textifier();
-    private static TraceMethodVisitor methodVisitor = new TraceMethodVisitor(printer); 
-    
-    public static void printMethod(MethodNode methodNode)
+    private static TraceMethodVisitor methodVisitor = new TraceMethodVisitor(printer);
+
+    public static void printMethod(MethodNode methodNode, int startIndex, int count)
     {
-        for (AbstractInsnNode insnNode : methodNode.instructions.toArray())
+        Iterator<AbstractInsnNode> it = methodNode.instructions.iterator(startIndex);
+
+        LOGGER.info("----- Printing " + methodNode.name + "... -----");
+
+        while (it.hasNext() && (count > 0 || count == -1))
         {
-            insnNode.accept(methodVisitor);
+            it.next().accept(methodVisitor);
             StringWriter stringWriter = new StringWriter();
             printer.print(new PrintWriter(stringWriter));
             printer.getText().clear();
-            
-           LOGGER.info(stringWriter.toString().replace("\n", ""));
+
+            LOGGER.info(stringWriter.toString().replace("\n", ""));
+            count--;
         }
+
+        LOGGER.info("----- Finished! -----");
+    }
+
+    public static void printMethod(MethodNode methodNode)
+    {
+        printMethod(methodNode, 0, -1);
     }
 }
