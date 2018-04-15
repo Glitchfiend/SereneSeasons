@@ -146,7 +146,12 @@ public class SeasonASMHelper
         }
         else
         {
-            return biome.getTemperature(pos);
+            float biomeTemp = biome.getTemperature(pos);
+
+            if (season == Season.AUTUMN || season == Season.SPRING)
+                biomeTemp -= 0.4;
+
+            return biomeTemp;
         }
     }
 
