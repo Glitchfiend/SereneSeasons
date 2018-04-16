@@ -14,13 +14,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
+import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.season.SeasonHandler;
@@ -138,22 +138,36 @@ public class SeasonASMHelper
     
     public static float getFloatTemperature(Biome biome, BlockPos pos)
     {
-        Season season = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason().getSeason();
+        SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
+        float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && season == Season.WINTER)
+        if (!tropicalBiome && biomeTemp <= 0.8F)
         {
-            return 0.0F;
+	        switch ((SubSeason) subSeason)
+	        {
+	        	default:
+	        		break;
+	        
+		        case LATE_SPRING: case EARLY_AUTUMN:
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, -0.5F, 2.0F);
+		    		break;
+	        
+		        case MID_SPRING: case MID_AUTUMN:
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, -0.5F, 2.0F);
+		    		break;
+	        
+	        	case EARLY_SPRING: case LATE_AUTUMN:
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, -0.5F, 2.0F);
+		    		break;
+	    		
+	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
+	        		biomeTemp = MathHelper.clamp(biomeTemp - 0.7F, -0.5F, 2.0F);
+	        		break;
+	        }
         }
-        else
-        {
-            float biomeTemp = biome.getTemperature(pos);
-
-            if (!tropicalBiome && (season == Season.AUTUMN || season == Season.SPRING))
-                biomeTemp -= 0.25;
-
-            return biomeTemp;
-        }
+        
+        return biomeTemp;
     }
 
     ////////////////////////////
