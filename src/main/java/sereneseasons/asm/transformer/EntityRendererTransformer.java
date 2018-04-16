@@ -7,18 +7,16 @@
  ******************************************************************************/
 package sereneseasons.asm.transformer;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
-
-import com.google.common.collect.Lists;
-
-import net.minecraft.launchwrapper.IClassTransformer;
 import sereneseasons.asm.ASMHelper;
 import sereneseasons.asm.ObfHelper;
+
+import java.util.List;
 
 public class EntityRendererTransformer implements IClassTransformer
 {
@@ -71,6 +69,37 @@ public class EntityRendererTransformer implements IClassTransformer
 
                     // Add world argument
                     methodNode.instructions.insertBefore(methodNode.instructions.get(targetInsnIndex - 1), new VarInsnNode(Opcodes.ALOAD, 5));
+
+                    targetInsnIndex -= 1;
+
+                    int offset = 0;
+                    AbstractInsnNode currentInsn = methodNode.instructions.get(targetInsnIndex - offset);;
+
+                    // Remove any extraneous instructions on this line. This should hopefully help prevent other mods
+                    // from breaking our stuff
+                    do
+                    {
+                        if (!(currentInsn instanceof VarInsnNode))
+                        {
+                            methodNode.instructions.remove(currentInsn);
+                        }
+                        else
+                        {
+                            VarInsnNode varInsnNode = (VarInsnNode)currentInsn;
+
+                            if (varInsnNode.getOpcode() == Opcodes.ALOAD && varInsnNode.var != 5 && varInsnNode.var != 29)
+                            {
+                                methodNode.instructions.remove(currentInsn);
+                            }
+                            else
+                            {
+                                offset++;
+                            }
+                        }
+
+                        currentInsn = methodNode.instructions.get(targetInsnIndex - offset);
+                    }
+                    while(!(currentInsn instanceof LabelNode));
 
                     successCount++;
                 }

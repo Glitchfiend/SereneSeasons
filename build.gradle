@@ -50,7 +50,8 @@ def commonManifest = {
 			"FMLCorePlugin": 'sereneseasons.asm.SSLoadingPlugin',
 			"FMLCorePluginContainsFMLMod": 'true',
 			"ForceLoadAsMod": 'true',
-			"FMLAT": 'sereneseasons_at.cfg'
+			"FMLAT": 'sereneseasons_at.cfg',
+            "TweakOrder": 999
 		)
 }
 
