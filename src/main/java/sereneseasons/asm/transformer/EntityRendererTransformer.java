@@ -59,6 +59,19 @@ public class EntityRendererTransformer implements IClassTransformer
                 if (targetMethodInsnNode != null)
                 {
                     int targetInsnIndex = methodNode.instructions.indexOf(targetMethodInsnNode);
+                    int worldAloadIndex = targetInsnIndex - 7;
+                    int worldVarNum = -1;
+
+                    // Take the world var num from a nearby instruction incase some other mod breaks it.
+                    // Looking at you Optifine!
+                    if (methodNode.instructions.get(worldAloadIndex) instanceof VarInsnNode)
+                    {
+                        worldVarNum = ((VarInsnNode)methodNode.instructions.get(worldAloadIndex)).var;
+                    }
+                    else
+                    {
+                        throw new RuntimeException("Failed to locate world var number whilst replacing biome.canRain() || biome.getEnableSnow()");
+                    }
 
                     targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
                     targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
@@ -68,7 +81,7 @@ public class EntityRendererTransformer implements IClassTransformer
                     ASMHelper.clearNextInstructions(methodNode, methodNode.instructions.get(targetInsnIndex + 1), 3);
 
                     // Add world argument
-                    methodNode.instructions.insertBefore(methodNode.instructions.get(targetInsnIndex - 1), new VarInsnNode(Opcodes.ALOAD, 5));
+                    methodNode.instructions.insertBefore(methodNode.instructions.get(targetInsnIndex - 1), new VarInsnNode(Opcodes.ALOAD, worldVarNum));
 
                     targetInsnIndex -= 1;
 

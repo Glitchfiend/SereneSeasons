@@ -131,7 +131,9 @@ public class ASMHelper
             printer.getText().clear();
 
             LOGGER.info(stringWriter.toString().replace("\n", ""));
-            count--;
+
+            if (count != -1)
+                count--;
         }
 
         LOGGER.info("----- Finished! -----");
