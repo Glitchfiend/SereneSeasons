@@ -1,0 +1,15 @@
+commands.sereneseasons.usage=/sereneseasons <setseason> [argomenti]
+commands.sereneseasons.setseason.success=Cambiata la stagione a %s
+commands.sereneseasons.setseason.fail=Stagione non valida %s
+commands.sereneseasons.setseason.disabled=Le stagioni sono attualmente disabilitate
+
+itemGroup.tabSereneSeasons=Serene Seasons
+
+tile.greenhouse_glass.name=Vetro per Serra
+tile.season_sensor_spring.name=Sensore Stagionale
+tile.season_sensor_summer.name=Sensore Stagionale
+tile.season_sensor_autumn.name=Sensore Stagionale
+tile.season_sensor_winter.name=Sensore Stagionale
+item.ss_icon.name=Icona SS
+
+item.season_clock.name=Orologio Stagionale
