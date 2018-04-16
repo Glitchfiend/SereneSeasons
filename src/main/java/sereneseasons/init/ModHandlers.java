@@ -54,24 +54,29 @@ public class ModHandlers
         }
     }
 
-    private static final BiomeColorHelper.ColorResolver ORIGINAL_GRASS_COLOR_RESOLVER = BiomeColorHelper.GRASS_COLOR;
-    private static final BiomeColorHelper.ColorResolver ORIGINAL_FOLIAGE_COLOR_RESOLVER = BiomeColorHelper.FOLIAGE_COLOR;
+    @SideOnly(Side.CLIENT)
+    private static BiomeColorHelper.ColorResolver originalGrassColorResolver;
+    @SideOnly(Side.CLIENT)
+    private static BiomeColorHelper.ColorResolver originalFoliageColorResolver;
 
     @SideOnly(Side.CLIENT)
     private static void registerSeasonColourHandlers()
     {
+        originalGrassColorResolver = BiomeColorHelper.GRASS_COLOR;
+        originalFoliageColorResolver = BiomeColorHelper.FOLIAGE_COLOR;
+
         BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColourUtil.applySeasonalGrassColouring(colorProvider, biome, ORIGINAL_GRASS_COLOR_RESOLVER.getColorAtPos(biome, blockPosition));
+            return SeasonColourUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColorAtPos(biome, blockPosition));
         };
 
         BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColourUtil.applySeasonalFoliageColouring(colorProvider, biome, ORIGINAL_FOLIAGE_COLOR_RESOLVER.getColorAtPos(biome, blockPosition));
+            return SeasonColourUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColorAtPos(biome, blockPosition));
         };
     }
 }
