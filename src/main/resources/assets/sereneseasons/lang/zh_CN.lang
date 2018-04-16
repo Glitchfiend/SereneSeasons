@@ -1,7 +1,7 @@
 commands.sereneseasons.usage=/sereneseasons <setseason> [季节]
-commands.sereneseasons.setseason.success=将季节设置为 %s
-commands.sereneseasons.setseason.fail=无效的季节 %s
-commands.sereneseasons.setseason.disabled=当前季节变化被禁用！
+commands.sereneseasons.setseason.success=已将季节设置为：%s
+commands.sereneseasons.setseason.fail=无效的季节参数：%s
+commands.sereneseasons.setseason.disabled=季节变化当前已禁用！
 
 itemGroup.tabSereneSeasons=静谧四季
 
