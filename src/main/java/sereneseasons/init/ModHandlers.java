@@ -7,10 +7,6 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import com.google.common.collect.Lists;
-import net.minecraft.init.Biomes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -20,7 +16,11 @@ import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.PacketHandler;
-import sereneseasons.handler.season.*;
+import sereneseasons.handler.season.ProviderIceHandler;
+import sereneseasons.handler.season.RandomUpdateHandler;
+import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.handler.season.SeasonSleepHandler;
+import sereneseasons.handler.season.WeatherFrequencyHandler;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColourUtil;
 
@@ -38,13 +38,6 @@ public class ModHandlers
         MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
         MinecraftForge.TERRAIN_GEN_BUS.register(new ProviderIceHandler());
         MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
-
-        if (!(ModConfig.seasons.winterAnimalSpawns))
-        {
-            StopSpawnHandler stopSpawnHandler = new StopSpawnHandler();
-            MinecraftForge.EVENT_BUS.register(stopSpawnHandler);
-            MinecraftForge.TERRAIN_GEN_BUS.register(stopSpawnHandler);
-        }
 
         MinecraftForge.EVENT_BUS.register(new WeatherFrequencyHandler());
 

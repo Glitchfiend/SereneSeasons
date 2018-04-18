@@ -18,7 +18,6 @@ public class SeasonsConfig extends ConfigHandler
     public static final String EVENT_SETTINGS = "Event Settings";
     public static final String AESTHETIC_SETTINGS = "Aesthetic Settings";
 
-    public boolean winterAnimalSpawns;
     public boolean changeGrassColour;
     public boolean changeFoliageColour;
 
@@ -34,9 +33,6 @@ public class SeasonsConfig extends ConfigHandler
         {
             addSyncedValue(SeasonsOption.DAY_DURATION, 24000, TIME_SETTINGS,"The duration of a Minecraft day in ticks", 20, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 5, TIME_SETTINGS,"The duration of a sub season in days", 1, Integer.MAX_VALUE);
-            
-            // Only applicable server-side
-            winterAnimalSpawns = config.getBoolean("Enable Winter Animal Spawns", EVENT_SETTINGS, false, "Allow animals to spawn naturally during the winter");
             
             // Client-only. The server shouldn't get to decide these.
             changeGrassColour = config.getBoolean("Change Grass Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the grass colour based on the current season");
