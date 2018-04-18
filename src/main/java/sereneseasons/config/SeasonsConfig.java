@@ -32,7 +32,7 @@ public class SeasonsConfig extends ConfigHandler
         try
         {
             addSyncedValue(SeasonsOption.DAY_DURATION, 24000, TIME_SETTINGS,"The duration of a Minecraft day in ticks", 20, Integer.MAX_VALUE);
-            addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 5, TIME_SETTINGS,"The duration of a sub season in days", 1, Integer.MAX_VALUE);
+            addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 7, TIME_SETTINGS,"The duration of a sub season in days", 1, Integer.MAX_VALUE);
             
             // Client-only. The server shouldn't get to decide these.
             changeGrassColour = config.getBoolean("Change Grass Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the grass colour based on the current season");
