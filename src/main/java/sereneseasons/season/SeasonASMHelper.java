@@ -120,14 +120,23 @@ public class SeasonASMHelper
         {
             Season.TropicalSeason tropicalSeason = seasonState.getTropicalSeason();
 
-            if (tropicalSeason == Season.TropicalSeason.MID_DRY)
-                return false;
-            else if (tropicalSeason == Season.TropicalSeason.MID_WET)
-                return true;
+            switch ((Season.TropicalSeason) tropicalSeason)
+            {
+	            case MID_DRY:
+	            	return false;
+	            	
+	            case MID_WET:
+	            	return true;
+	            	
+	            default:
+	            	return biome.canRain();
+            }
         }
 
         if (( biome.getEnableSnow() && seasonState.getSeason() != Season.WINTER) || (world.canSnowAt(pos, false)))
+        {
             return false;
+        }
 
         return biome.canRain();
     }
@@ -180,10 +189,17 @@ public class SeasonASMHelper
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
-            if (tropicalSeason == Season.TropicalSeason.MID_DRY)
-                return false;
-            else if (tropicalSeason == Season.TropicalSeason.MID_WET)
-                return true;
+            switch ((Season.TropicalSeason) tropicalSeason)
+            {
+	            case MID_DRY:
+	            	return false;
+	            	
+	            case MID_WET:
+	            	return true;
+	            	
+	            default:
+	            	return biome.canRain() || biome.getEnableSnow();
+            }
         }
 
         return biome.canRain() || biome.getEnableSnow();
