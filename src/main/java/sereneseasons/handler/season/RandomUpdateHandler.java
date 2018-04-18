@@ -70,10 +70,32 @@ public class RandomUpdateHandler
                         {
                             ((BlockIce)Blocks.ICE).turnIntoWater(world, groundPos);
                         }
+                        else
+                        {
+                        	for (int i = topPos.getY(); i > 0; i--)
+                        	{
+                        		if (world.getBlockState(groundPos.down(i)).getBlock() == Blocks.ICE && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(groundPos.down(i)).getTemperature(groundPos.down(i))))
+                        		{
+                        			((BlockIce)Blocks.ICE).turnIntoWater(world, groundPos.down(i));
+                        			break;
+                        		}
+                        	}
+                        }
 
                         if (world.getBlockState(topPos).getBlock() == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(topPos).getTemperature(topPos)))
                         {
                             world.setBlockToAir(topPos);
+                        }
+                        else
+                        {
+                        	for (int i = topPos.getY(); i > 0; i--)
+                        	{
+                        		if (world.getBlockState(topPos.down(i)).getBlock() == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(topPos.down(i)).getTemperature(topPos.down(i))))
+                        		{
+                        			world.setBlockToAir(topPos.down(i));
+                        			break;
+                        		}
+                        	}
                         }
                     }
                 }

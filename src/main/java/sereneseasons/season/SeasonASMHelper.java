@@ -150,19 +150,19 @@ public class SeasonASMHelper
 	        		break;
 	        
 		        case LATE_SPRING: case EARLY_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, -0.5F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, -0.25F, 2.0F);
 		    		break;
 	        
 		        case MID_SPRING: case MID_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, -0.5F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, -0.25F, 2.0F);
 		    		break;
 	        
 	        	case EARLY_SPRING: case LATE_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, -0.5F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, -0.25F, 2.0F);
 		    		break;
 	    		
 	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
-	        		biomeTemp = MathHelper.clamp(biomeTemp - 0.7F, -0.5F, 2.0F);
+	        		biomeTemp = 0.0F;
 	        		break;
 	        }
         }
