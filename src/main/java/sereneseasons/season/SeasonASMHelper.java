@@ -142,7 +142,7 @@ public class SeasonASMHelper
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biomeTemp <= 0.8F)
+        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F)
         {
 	        switch ((SubSeason) subSeason)
 	        {
@@ -195,10 +195,17 @@ public class SeasonASMHelper
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
-            if (tropicalSeason == Season.TropicalSeason.MID_DRY)
-                return false;
-            else if (tropicalSeason == Season.TropicalSeason.MID_WET)
-                return true;
+            switch ((Season.TropicalSeason) tropicalSeason)
+            {
+	            case MID_DRY:
+	            	return false;
+	            	
+	            case MID_WET:
+	            	return true;
+	            	
+	            default:
+	            	return biome.canRain();
+            }
         }
 
         return biome.canRain();
