@@ -7,6 +7,8 @@
  ******************************************************************************/
 package sereneseasons.api.season;
 
+import sereneseasons.season.SeasonTime;
+
 public enum Season 
 {
     SPRING, SUMMER, AUTUMN, WINTER;
@@ -44,6 +46,11 @@ public enum Season
         SubSeason(Season season, int grassColour, int foliageColour)
         {
             this(season, grassColour, -1, foliageColour, -1);
+        }
+        
+        public ISeasonState getDefaultState()
+        {
+        	return new SeasonTime(this);
         }
         
         public Season getSeason()

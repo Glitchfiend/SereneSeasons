@@ -12,6 +12,7 @@ import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
+import sereneseasons.api.season.Season.SubSeason;
 
 public final class SeasonTime implements ISeasonState
 {
@@ -22,6 +23,11 @@ public final class SeasonTime implements ISeasonState
     {
         Preconditions.checkArgument(time >= 0, "Time cannot be negative!");
         this.time = time;
+    }
+    
+    public SeasonTime(SubSeason firstDayOfSubSeason)
+    {
+        this.time = firstDayOfSubSeason.ordinal() * getSubSeasonDuration();;
     }
 
     @Override

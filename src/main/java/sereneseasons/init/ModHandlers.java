@@ -18,6 +18,7 @@ import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.ProviderIceHandler;
 import sereneseasons.handler.season.RandomUpdateHandler;
+import sereneseasons.handler.season.SeasonChunkPatchingHandler;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.handler.season.SeasonSleepHandler;
 import sereneseasons.handler.season.WeatherFrequencyHandler;
@@ -38,6 +39,7 @@ public class ModHandlers
         MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
         MinecraftForge.TERRAIN_GEN_BUS.register(new ProviderIceHandler());
         MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
+        MinecraftForge.EVENT_BUS.register(new SeasonChunkPatchingHandler());
 
         MinecraftForge.EVENT_BUS.register(new WeatherFrequencyHandler());
 
