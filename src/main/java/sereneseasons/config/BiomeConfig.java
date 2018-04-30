@@ -89,7 +89,8 @@ public class BiomeConfig
                 "biomesoplenty:volcanic_island", "biomesoplenty:oasis", "biomesoplenty:white_beach",
                 
         		"traverse:arid_highland", "traverse:badlands", "traverse:canyon", "traverse:desert_shrubland", "traverse:mini_jungle",
-        		"traverse:mountainous_desert", "traverse:red_desert", "traverse:rocky_plateau");
+        		"traverse:mountainous_desert", "traverse:red_desert", "traverse:rocky_plateau",
+        		"conquest:bamboo_forest", "conquest:desert_mod", "conquest:jungle_mod", "conquest:mesa_extreme_mod", "conquest:red_desert");
 
         for (String biomeName : tropicalBiomes)
         {
