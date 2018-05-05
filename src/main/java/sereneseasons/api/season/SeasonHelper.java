@@ -78,7 +78,7 @@ public class SeasonHelper
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && getModifiedTemperatureForBiome(biome, subSeason.getSeason()) <= 0.8F && biome.getDefaultTemperature() > 0.0F)
+        if (!tropicalBiome && getModifiedTemperatureForBiome(biome, subSeason.getSeason()) <= 0.8F && biome.getDefaultTemperature() > 0.15F)
         {
 	        switch ((SubSeason) subSeason)
 	        {
@@ -90,11 +90,11 @@ public class SeasonHelper
 		    		break;
 	        
 		        case MID_SPRING: case MID_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, -0.25F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, 0.15F, 2.0F);
 		    		break;
 	        
 	        	case EARLY_SPRING: case LATE_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, -0.25F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, 0.15F, 2.0F);
 		    		break;
 	    		
 	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
