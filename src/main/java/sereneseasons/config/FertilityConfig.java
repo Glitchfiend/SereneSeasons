@@ -7,9 +7,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import sereneseasons.core.SereneSeasons;
 
-@Config(modid = SereneSeasons.MOD_ID, name = SereneSeasons.MOD_ID+"/cropgrowth", category = "")
+@Config(modid = SereneSeasons.MOD_ID, name = SereneSeasons.MOD_ID+"/cropfertility", category = "")
 @Mod.EventBusSubscriber
-public class CropConfig {
+public class FertilityConfig {
 
 	public static General general_category = new General();
 	public static SeasonFertility seasonal_fertility = new SeasonFertility();
@@ -23,24 +23,29 @@ public class CropConfig {
 
 	public static class General{
 		@Config.Comment({"Whether crops break if out of season. If false, they simply don't grow"})
-		public boolean crops_break = true;
+		public boolean crops_break = false;
 		@Config.Comment({"Whether unlisted seeds are fertile every season. False means they're infertile every season"})
 		public boolean ignore_unlisted_crops = true;
 		@Config.Comment({"Whether to include tooltips on crops listing which seasons they're fertile in. " +
-				"Note: only applies to listed seeds"})
+				"Note: only applies to listed seeds. Currently not implemented."})
 		public boolean seed_tooltips = true;
+		@Config.Comment({"Whether to ignore tall grass growth. True means it will always grow"})
+		public boolean ignore_tall_grass = true;
+		@Config.Comment({"Whether to ignore sapling growth. True means it will always grow"})
+		public boolean ignore_saplings = true;
 	}
 
 	public static class SeasonFertility{
-		@Config.Comment({"Crops that do the opposite of what cropsBreak is set to"})
+		@Config.Comment({"Seeds that do the opposite of what cropsBreak is set to." +
+				"Seeds *only* listed here are considered \"unlisted\" for ignore_unlisted_crops"})
 		public String [] crops_break_opposite = new String[]{};
-		@Config.Comment({"Crops growable in the spring"})
-		public String [] spring_seeds = new String[]{"minecraft:potato"};
-		@Config.Comment({"Crops growable in the summer"})
-		public String [] summer_seeds = new String[]{"minecraft:potato", "minecraft:carrot"};
-		@Config.Comment({"Crops growable in the fall"})
+		@Config.Comment({"Seeds growable in the spring"})
+		public String [] spring_seeds = new String[]{"minecraft:potato", "minecraft:carrot"};
+		@Config.Comment({"Seeds growable in the summer"})
+		public String [] summer_seeds = new String[]{"minecraft:potato", "minecraft:carrot", "minecraft:wheat_seeds"};
+		@Config.Comment({"Seeds growable in the fall"})
 		public String [] fall_seeds = new String[]{"minecraft:potato", "minecraft:wheat_seeds"};
-		@Config.Comment({"Crops growable in the winter"})
+		@Config.Comment({"Seeds growable in the winter"})
 		public String [] winter_seeds = new String[]{"minecraft:potato"};
 	}
 }
