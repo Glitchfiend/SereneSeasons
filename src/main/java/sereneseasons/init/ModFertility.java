@@ -5,6 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,8 @@ import java.util.*;
 /**
  * Constructs efficient data structures to process, store, and give access to data from the FertilityConfig file
  */
-public class ModFertility {
+public class ModFertility
+{
 
 	private static HashSet<String> springPlants = new HashSet<String>();
 	private static HashSet<String> summerPlants = new HashSet<String>();
@@ -31,7 +33,8 @@ public class ModFertility {
 	//Maps seed name to all fertile seasons via byte
 	private static HashMap<String, Integer> seedSeasons= new HashMap<String, Integer>();
 
-	public static void init(){
+	public static void init()
+	{
 		//Store crops in hash sets for quick and easy retrieval
 		initSeasonCrops(FertilityConfig.seasonal_fertility.spring_seeds, springPlants, 1);
 		initSeasonCrops(FertilityConfig.seasonal_fertility.summer_seeds, summerPlants, 2);
@@ -41,7 +44,8 @@ public class ModFertility {
 		initSeasonCrops(FertilityConfig.seasonal_fertility.crops_break_opposite, oppositeBreak, 0);
 	}
 
-	public static boolean isCropFertile(String cropName, World world){
+	public static boolean isCropFertile(String cropName, World world)
+	{
 		//Get season
 		String sname = SeasonHelper.getSeasonState(world).getSeason().name();
 		//Check if crop's fertility is specified
@@ -54,14 +58,15 @@ public class ModFertility {
 		else if(sname.equals("WINTER") && winterPlants.contains(cropName))
 			return true;
 
-		//Check if unspecified crops are by default fertile
-		if(!allListedPlants.contains(cropName) && FertilityConfig.general_category.ignore_unlisted_crops)
+		//Check if unspecified crops are by default fertile in non-winter, and that it's not winter
+		if(!allListedPlants.contains(cropName) && FertilityConfig.general_category.ignore_unlisted_crops && !sname.equals("WINTER"))
 			return true;
 
 		return false;
 	}
 
-	public static boolean shouldBreakCrop(String cropName){
+	public static boolean shouldBreakCrop(String cropName)
+	{
 		boolean flag = false;
 		if(oppositeBreak.contains(cropName))
 			flag = true;
@@ -75,10 +80,13 @@ public class ModFertility {
 	 * @param seeds String array of seeds that are fertile during the chosen season
 	 * @param cropSet HashSet that will store the list of crops fertile during the chosen season
 	 */
-	private static void initSeasonCrops(String [] seeds, HashSet<String> cropSet, int bitmask){
-		for(String seed : seeds){
+	private static void initSeasonCrops(String [] seeds, HashSet<String> cropSet, int bitmask)
+	{
+		for(String seed : seeds)
+		{
 			Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(seed));
-			if(item instanceof IPlantable){
+			if(item instanceof IPlantable)
+			{
 				String plantName = ((IPlantable) item).getPlant(null, null).getBlock().getRegistryName().toString();
 				cropSet.add(plantName);
 				if(bitmask != 0)
@@ -87,24 +95,28 @@ public class ModFertility {
 					continue;
 
 				//Add to seedSeasons
-				if(seedSeasons.containsKey(seed)){
+				if(seedSeasons.containsKey(seed))
+				{
 					int seasons = seedSeasons.get(seed);
 					seedSeasons.put(seed, seasons | bitmask);
-				}else{
+				}
+				else
+				{
 					seedSeasons.put(seed, bitmask);
 				}
 			}
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static void setupTooltips(){
+	public static void setupTooltips(ItemTooltipEvent event)
+	{
 		//Set up tooltips if enabled and on client side
-		if(FertilityConfig.general_category.seed_tooltips) {
-			for (String seed : seedSeasons.keySet()) {
-				System.out.println("Adding tooltip to "+seed);
-				Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(seed));
-				item.addInformation(null, null, getFormattedSeasonNames(seedSeasons.get(seed)), null);
+		if(FertilityConfig.general_category.seed_tooltips)
+		{
+			String name = event.getItemStack().getItem().getRegistryName().toString();
+			if(seedSeasons.containsKey(name))
+			{
+				event.getToolTip().addAll(getFormattedSeasonNames(seedSeasons.get(name)));
 			}
 		}
 	}
@@ -114,25 +126,24 @@ public class ModFertility {
 	 * @param mask Bitmask containing all selected seasons.
 	 * @return A list containing tooltips to add
 	 */
-	private static List<String> getFormattedSeasonNames(int mask){
+	private static List<String> getFormattedSeasonNames(int mask)
+	{
 		LinkedList<String> toret = new LinkedList<String>();
 		String toadd = "";
 		if((mask & 1) != 0)
-			//toadd += TextFormatting.GREEN + "Sp";
-			toret.add(TextFormatting.GREEN + "Spring");
+			toadd += TextFormatting.GREEN + "Sp ";
+			//toret.add(TextFormatting.GREEN + "Spring");
 		if((mask & 2) != 0)
-			//toadd += TextFormatting.YELLOW + "Su";
-			toret.add(TextFormatting.YELLOW + "Summer");
+			toadd += TextFormatting.YELLOW + "Su ";
+			//toret.add(TextFormatting.YELLOW + "Summer");
 		if((mask & 4) != 0)
-			//toadd += TextFormatting.GOLD + "Fa";
-			toret.add(TextFormatting.GOLD + "Fall");
+			toadd += TextFormatting.GOLD + "Fa ";
+			//toret.add(TextFormatting.GOLD + "Fall");
 		if((mask & 8) != 0)
-			//toadd += TextFormatting.BLUE + "Wi";
-			toret.add(TextFormatting.BLUE + "Winter");
+			toadd += TextFormatting.BLUE + "Wi";
+			//toret.add(TextFormatting.BLUE + "Winter");
 
-		//toret.add(toadd);
-		for(String s : toret)
-			System.out.println(s);
+		toret.add(toadd);
 		return toret;
 	}
 

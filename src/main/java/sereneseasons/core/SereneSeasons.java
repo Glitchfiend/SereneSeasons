@@ -58,7 +58,7 @@ public class SereneSeasons
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        ModFertility.setupTooltips();
+
     }
 
     @EventHandler
