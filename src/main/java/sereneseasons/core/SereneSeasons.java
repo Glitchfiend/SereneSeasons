@@ -2,6 +2,8 @@ package sereneseasons.core;
 
 import java.io.File;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,10 +17,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import sereneseasons.command.SSCommand;
-import sereneseasons.init.ModBlocks;
-import sereneseasons.init.ModConfig;
-import sereneseasons.init.ModHandlers;
-import sereneseasons.init.ModItems;
+import sereneseasons.init.*;
 
 @Mod(modid = SereneSeasons.MOD_ID, version = SereneSeasons.MOD_VERSION, name = SereneSeasons.MOD_NAME, dependencies = "required-after:forge@[1.0.0.0,)")
 public class SereneSeasons
@@ -45,6 +44,7 @@ public class SereneSeasons
         ModBlocks.init();
         ModItems.init();
         ModHandlers.init();
+        ModFertility.init();
 
         proxy.registerRenderers();
     }
