@@ -80,13 +80,17 @@ public class BiomeConfig
                 "minecraft:mesa_clear_rock", "minecraft:mutated_mesa", "minecraft:mutated_mesa_rock",
                 "minecraft:mutated_mesa_clear_rock", "minecraft:savanna", "minecraft:savanna_rock",
                 "minecraft:mutated_savanna", "minecraft:mutated_savanna_rock", "minecraft:mushroom_island", "minecraft:mushroom_island_shore",
+                
                 "biomesoplenty:bamboo_forest", "biomesoplenty:bayou", "biomesoplenty:brushland",
                 "biomesoplenty:eucalyptus_forest", "biomesoplenty:lush_desert", "biomesoplenty:mangrove",
                 "biomesoplenty:outback", "biomesoplenty:overgrown_cliffs", "biomesoplenty:rainforest",
                 "biomesoplenty:sacred_springs", "biomesoplenty:tropical_rainforest", "biomesoplenty:wasteland",
-                "biomesoplenty:xeric_shrubland", "biomesoplenty:flower_island", "biomesoplenty:origin_island",
-                "biomesoplenty:tropical_island", "biomesoplenty:volcanic_island", "biomesoplenty:oasis",
-                "biomesoplenty:white_beach", "biomesoplenty:origin_beach");
+                "biomesoplenty:xeric_shrubland", "biomesoplenty:flower_island", "biomesoplenty:tropical_island",
+                "biomesoplenty:volcanic_island", "biomesoplenty:oasis", "biomesoplenty:white_beach",
+                
+        		"traverse:arid_highland", "traverse:badlands", "traverse:canyon", "traverse:desert_shrubland", "traverse:mini_jungle",
+        		"traverse:mountainous_desert", "traverse:red_desert", "traverse:rocky_plateau",
+        		"conquest:bamboo_forest", "conquest:desert_mod", "conquest:jungle_mod", "conquest:mesa_extreme_mod", "conquest:red_desert");
 
         for (String biomeName : tropicalBiomes)
         {
