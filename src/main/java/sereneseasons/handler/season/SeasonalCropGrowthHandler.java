@@ -27,21 +27,17 @@ public class SeasonalCropGrowthHandler
 	public void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
 		Block plant = event.getState().getBlock();
-
-		if (plant instanceof BlockCrops)
+		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld());
+		
+		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-			boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld());
-			
-			if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+			if (FertilityConfig.general_category.crops_break)
 			{
-				if (FertilityConfig.general_category.crops_break)
-				{
-					event.getWorld().destroyBlock(event.getPos(), true);
-				}
-				else
-				{
-					event.setResult(Event.Result.DENY);
-				}
+				event.getWorld().destroyBlock(event.getPos(), true);
+			}
+			else
+			{
+				event.setResult(Event.Result.DENY);
 			}
 		}
 	}
