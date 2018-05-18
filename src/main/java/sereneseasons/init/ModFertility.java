@@ -63,9 +63,23 @@ public class ModFertility
 		}
 
 		//Check if unspecified crops are by default fertile in non-winter, and that it's not winter
-		if (!allListedPlants.contains(cropName) && FertilityConfig.general_category.ignore_unlisted_crops && season != Season.WINTER)
+		if (!allListedPlants.contains(cropName))
 		{
-			return true;
+			if (season == Season.WINTER)
+			{
+				if (FertilityConfig.general_category.ignore_unlisted_crops)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return true;
+			}
 		}
 
 		return false;
@@ -119,39 +133,34 @@ public class ModFertility
 			String name = event.getItemStack().getItem().getRegistryName().toString();
 			if (seedSeasons.containsKey(name))
 			{
-				event.getToolTip().addAll(getFormattedSeasonNames(seedSeasons.get(name)));
+				int mask = seedSeasons.get(name);
+				
+				event.getToolTip().add("Growable Seasons:");
+				
+				if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
+				{
+					event.getToolTip().add(TextFormatting.LIGHT_PURPLE + "Year-Round");
+				}
+				else
+				{
+					if ((mask & 1) != 0)
+					{
+						event.getToolTip().add(TextFormatting.GREEN + "Spring");
+					}
+					if ((mask & 2) != 0)
+					{
+						event.getToolTip().add(TextFormatting.YELLOW + "Summer");
+					}
+					if ((mask & 4) != 0)
+					{
+						event.getToolTip().add(TextFormatting.GOLD + "Autumn");
+					}
+					if ((mask & 8) != 0)
+					{
+						event.getToolTip().add(TextFormatting.AQUA + "Winter");
+					}
+				}
 			}
 		}
-	}
-
-	/**
-	 * Returns a list of formatted strings to add to a seed based on the parameter bitmask
-	 * @param mask Bitmask containing all selected seasons.
-	 * @return A list containing tooltips to add
-	 */
-	private static List<String> getFormattedSeasonNames(int mask)
-	{
-		LinkedList<String> tooltip = new LinkedList<String>();
-		String string = "";
-		
-		if ((mask & 1) != 0)
-		{
-			string += TextFormatting.GREEN + "(Sp.) ";
-		}
-		if ((mask & 2) != 0)
-		{
-			string += TextFormatting.YELLOW + "(Su.) ";
-		}
-		if ((mask & 4) != 0)
-		{
-			string += TextFormatting.GOLD + "(Au.) ";
-		}
-		if ((mask & 8) != 0)
-		{
-			string += TextFormatting.AQUA + "(Wi.) ";
-		}
-
-		tooltip.add(string);
-		return tooltip;
 	}
 }

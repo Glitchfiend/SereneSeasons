@@ -28,17 +28,14 @@ public class FertilityConfig
 		@Config.Comment({"Whether crops break if out of season. If false, they simply don't grow"})
 		public boolean crops_break = false;
 		
-		@Config.Comment({"Whether unlisted seeds are fertile every season but winter. False means they're infertile every season and true means they're fertile every season except Winter"})
-		public boolean ignore_unlisted_crops = true;
+		@Config.Comment({"Whether unlisted seeds are fertile every season. False means they're fertile every season except Winter"})
+		public boolean ignore_unlisted_crops = false;
 		
-		@Config.Comment({"Whether to include tooltips on crops listing which seasons they're fertile in. Note: only applies to listed seeds. Currently not implemented."})
+		@Config.Comment({"Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed seeds."})
 		public boolean seed_tooltips = true;
 		
-		@Config.Comment({"Whether to ignore sapling growth. True means it will always grow"})
-		public boolean ignore_saplings = false;
-		
 		@Config.Comment({"Maximum height greenhouse glass can be above a crop for it to be fertile out of season"})
-		public int greenhouse_glass_max_height = 5;
+		public int greenhouse_glass_max_height = 7;
 	}
 
 	public static class SeasonFertility
@@ -50,9 +47,9 @@ public class FertilityConfig
 		public String [] summer_seeds = new String[]{ "minecraft:melon_seeds", "minecraft:wheat_seeds" };
 		
 		@Config.Comment({"Seeds growable in Autumn"})
-		public String [] autumn_seeds = new String[]{ "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds" };
+		public String [] autumn_seeds = new String[]{ "minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds" };
 		
 		@Config.Comment({"Seeds growable in Winter"})
-		public String [] winter_seeds = new String[]{ "" };
+		public String [] winter_seeds = new String[]{ "minecraft:potato" };
 	}
 }
