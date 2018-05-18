@@ -1,6 +1,10 @@
 package sereneseasons.handler.season;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockSapling;
+import net.minecraft.block.IGrowable;
+import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -25,12 +29,22 @@ public class SeasonalCropGrowthHandler
 	public void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
 		Block plant = event.getState().getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld());
-		if(isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos())){
-			if(ModFertility.shouldBreakCrop(plant.getRegistryName().toString()))
-				event.getWorld().destroyBlock(event.getPos(), true);
-			else
-				event.setResult(Event.Result.DENY);
+
+		if (plant instanceof BlockCrops)
+		{
+			boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld());
+			
+			if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+			{
+				if (FertilityConfig.general_category.crops_break)
+				{
+					event.getWorld().destroyBlock(event.getPos(), true);
+				}
+				else
+				{
+					event.setResult(Event.Result.DENY);
+				}
+			}
 		}
 	}
 
@@ -39,32 +53,44 @@ public class SeasonalCropGrowthHandler
 	{
 		Block plant = event.getBlock().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld());
-		if(isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		
+		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-			if(ModFertility.shouldBreakCrop(plant.getRegistryName().toString()))
+			if (FertilityConfig.general_category.crops_break)
+			{
 				event.getWorld().destroyBlock(event.getPos(), true);
+			}
+			
 			event.setCanceled(true);
 		}
 	}
 
 	private boolean isFertilityApplicable(Block block)
 	{
-		if(!(block instanceof IGrowable))
+		if (!(block instanceof IGrowable))
+		{
 			return false;
-		if(((block instanceof BlockTallGrass || block instanceof BlockDoublePlant || block instanceof BlockGrass)) ||
-				(block instanceof BlockSapling && FertilityConfig.general_category.ignore_saplings))
+		}
+		if ((block instanceof BlockSapling && FertilityConfig.general_category.ignore_saplings))
+		{
 			return false;
+		}
 		else
+		{
 			return true;
+		}
 	}
 
 	private boolean isGreenhouseGlassAboveBlock(World world, BlockPos cropPos)
 	{
-		for(int i = 0; i < FertilityConfig.general_category.greenhouse_glass_max_height; i++)
+		for (int i = 0; i < FertilityConfig.general_category.greenhouse_glass_max_height; i++)
 		{
-			if(world.getBlockState(cropPos.add(0, i+1, 0)).getBlock().equals(SSBlocks.greenhouse_glass))
+			if (world.getBlockState(cropPos.add(0, i + 1, 0)).getBlock().equals(SSBlocks.greenhouse_glass))
+			{
 				return true;
+			}
 		}
+		
 		return false;
 	}
 }
