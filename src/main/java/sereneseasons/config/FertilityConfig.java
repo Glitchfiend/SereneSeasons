@@ -41,15 +41,29 @@ public class FertilityConfig
 	public static class SeasonFertility
 	{
 		@Config.Comment({"Seeds growable in Spring"})
-		public String [] spring_seeds = new String[]{ "minecraft:potato", "minecraft:carrot" };
+		public String [] spring_seeds = new String[]
+		{
+			"minecraft:potato", "minecraft:carrot"
+		};
 		
 		@Config.Comment({"Seeds growable in Summer"})
-		public String [] summer_seeds = new String[]{ "minecraft:melon_seeds", "minecraft:wheat_seeds" };
+		public String [] summer_seeds = new String[]
+		{
+			"minecraft:melon_seeds", "minecraft:wheat_seeds",
+			"simplecorn:kernels"
+		};
 		
 		@Config.Comment({"Seeds growable in Autumn"})
-		public String [] autumn_seeds = new String[]{ "minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds" };
+		public String [] autumn_seeds = new String[]
+		{
+			"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds",
+			"simplecorn:kernels"
+		};
 		
 		@Config.Comment({"Seeds growable in Winter"})
-		public String [] winter_seeds = new String[]{ "minecraft:potato" };
+		public String [] winter_seeds = new String[]
+		{
+			"minecraft:potato"
+		};
 	}
 }

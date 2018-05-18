@@ -44,7 +44,6 @@ public class SereneSeasons
         ModBlocks.init();
         ModItems.init();
         ModHandlers.init();
-        ModFertility.init();
 
         proxy.registerRenderers();
     }
@@ -58,7 +57,7 @@ public class SereneSeasons
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-
+    	ModFertility.init();
     }
 
     @EventHandler
