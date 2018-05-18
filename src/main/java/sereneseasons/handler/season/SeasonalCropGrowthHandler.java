@@ -2,6 +2,7 @@ package sereneseasons.handler.season;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockStem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -64,7 +65,7 @@ public class SeasonalCropGrowthHandler
 
 	private boolean isFertilityApplicable(Block block)
 	{
-		return (block instanceof BlockCrops);
+		return (block instanceof BlockCrops || block instanceof BlockStem);
 	}
 
 	private boolean isGreenhouseGlassAboveBlock(World world, BlockPos cropPos)
