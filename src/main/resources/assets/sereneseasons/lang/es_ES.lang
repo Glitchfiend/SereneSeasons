@@ -1,0 +1,15 @@
+commands.sereneseasons.usage=/sereneseasons <setseason> [args]
+commands.sereneseasons.setseason.success=Estación establecida a %s
+commands.sereneseasons.setseason.fail=Estación inválida %s
+commands.sereneseasons.setseason.disabled=Las estaciones se encuentran deshabilitadas!
+
+itemGroup.tabSereneSeasons=Serene Seasons
+
+tile.greenhouse_glass.name=Cristal de invernadero
+tile.season_sensor_spring.name=Sensor de estación
+tile.season_sensor_summer.name=Sensor de estación
+tile.season_sensor_autumn.name=Sensor de estación
+tile.season_sensor_winter.name=Sensor de estación
+item.ss_icon.name=Icono SS
+
+item.season_clock.name=Reloj de estaciones
