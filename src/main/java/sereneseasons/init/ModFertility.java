@@ -67,14 +67,7 @@ public class ModFertility
 		{
 			if (season == Season.WINTER)
 			{
-				if (FertilityConfig.general_category.ignore_unlisted_crops)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+				return (FertilityConfig.general_category.ignore_unlisted_crops);
 			}
 			else
 			{
@@ -139,25 +132,25 @@ public class ModFertility
 				
 				if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
 				{
-					event.getToolTip().add(TextFormatting.LIGHT_PURPLE + "Year-Round");
+					event.getToolTip().add(TextFormatting.LIGHT_PURPLE + " Year-Round");
 				}
 				else
 				{
 					if ((mask & 1) != 0)
 					{
-						event.getToolTip().add(TextFormatting.GREEN + "Spring");
+						event.getToolTip().add(TextFormatting.GREEN + " Spring");
 					}
 					if ((mask & 2) != 0)
 					{
-						event.getToolTip().add(TextFormatting.YELLOW + "Summer");
+						event.getToolTip().add(TextFormatting.YELLOW + " Summer");
 					}
 					if ((mask & 4) != 0)
 					{
-						event.getToolTip().add(TextFormatting.GOLD + "Autumn");
+						event.getToolTip().add(TextFormatting.GOLD + " Autumn");
 					}
 					if ((mask & 8) != 0)
 					{
-						event.getToolTip().add(TextFormatting.AQUA + "Winter");
+						event.getToolTip().add(TextFormatting.AQUA + " Winter");
 					}
 				}
 			}

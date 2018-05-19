@@ -63,7 +63,7 @@ public class FertilityConfig
 		@Config.Comment({"Seeds growable in Winter"})
 		public String [] winter_seeds = new String[]
 		{
-			"minecraft:potato"
+			""
 		};
 	}
 }
