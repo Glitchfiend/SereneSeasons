@@ -12,6 +12,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
@@ -147,7 +149,8 @@ public class ModFertility
 			}
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	public static void setupTooltips(ItemTooltipEvent event)
 	{
 		//Set up tooltips if enabled and on client side

@@ -15,14 +15,16 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
 
 public class SeasonalCropGrowthHandler
 {
-
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onItemTooltipAdded(ItemTooltipEvent event)
 	{
 		ModFertility.setupTooltips(event);
