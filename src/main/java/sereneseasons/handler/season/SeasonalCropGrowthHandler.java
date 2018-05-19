@@ -68,6 +68,11 @@ public class SeasonalCropGrowthHandler
 
 	private boolean isFertilityApplicable(Block block)
 	{
+		if (!FertilityConfig.general_category.seasonal_crops)
+		{
+			return false;
+		}
+		
 		if (!(block instanceof IGrowable))
 		{
 			return false;

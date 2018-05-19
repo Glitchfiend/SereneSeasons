@@ -49,6 +49,11 @@ public class ModFertility
 		Season season = SeasonHelper.getSeasonState(world).getSeason();
 		Biome biome = world.getBiome(pos);
 		
+		if (!FertilityConfig.general_category.seasonal_crops)
+		{
+			return true;
+		}
+		
 		if (BiomeConfig.usesTropicalSeasons(biome))
 		{
 			if (summerPlants.contains(cropName))
@@ -154,7 +159,7 @@ public class ModFertility
 	public static void setupTooltips(ItemTooltipEvent event)
 	{
 		//Set up tooltips if enabled and on client side
-		if (FertilityConfig.general_category.seed_tooltips)
+		if (FertilityConfig.general_category.seed_tooltips && FertilityConfig.general_category.seasonal_crops)
 		{
 			String name = event.getItemStack().getItem().getRegistryName().toString();
 			if (seedSeasons.containsKey(name))
