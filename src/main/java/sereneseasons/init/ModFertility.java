@@ -128,7 +128,7 @@ public class ModFertility
 			{
 				int mask = seedSeasons.get(name);
 				
-				event.getToolTip().add("Growable Seasons:");
+				event.getToolTip().add("Fertile Seasons:");
 				
 				if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
 				{
