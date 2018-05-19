@@ -2,18 +2,19 @@ package sereneseasons.init;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 
 /**
@@ -40,38 +41,67 @@ public class ModFertility
 		initSeasonCrops(FertilityConfig.seasonal_fertility.winter_seeds, winterPlants, 8);
 	}
 
-	public static boolean isCropFertile(String cropName, World world)
+	public static boolean isCropFertile(String cropName, World world, BlockPos pos)
 	{
 		//Get season
 		Season season = SeasonHelper.getSeasonState(world).getSeason();
-		//Check if crop's fertility is specified
-		if (season == Season.SPRING && springPlants.contains(cropName))
+		Biome biome = world.getBiome(pos);
+		
+		if (BiomeConfig.usesTropicalSeasons(biome))
 		{
-			return true;
-		}
-		else if (season == Season.SUMMER && summerPlants.contains(cropName))
-		{
-			return true;
-		}
-		else if (season == Season.AUTUMN && autumnPlants.contains(cropName))
-		{
-			return true;
-		}
-		else if (season == Season.WINTER && winterPlants.contains(cropName))
-		{
-			return true;
-		}
-
-		//Check if unspecified crops are by default fertile in non-winter, and that it's not winter
-		if (!allListedPlants.contains(cropName))
-		{
-			if (season == Season.WINTER)
+			if (summerPlants.contains(cropName))
 			{
-				return (FertilityConfig.general_category.ignore_unlisted_crops);
+				return true;
 			}
 			else
 			{
-				return true;
+				return false;
+			}
+		}
+		else 
+		{
+			if (biome.getTemperature(pos) < 0.15F)
+			{
+				if (winterPlants.contains(cropName))
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (season == Season.SPRING && springPlants.contains(cropName))
+				{
+					return true;
+				}
+				else if (season == Season.SUMMER && summerPlants.contains(cropName))
+				{
+					return true;
+				}
+				else if (season == Season.AUTUMN && autumnPlants.contains(cropName))
+				{
+					return true;
+				}
+				else if (season == Season.WINTER && winterPlants.contains(cropName))
+				{
+					return true;
+				}
+
+				//Check if unspecified crops are by default fertile in non-winter, and that it's not winter
+				if (!allListedPlants.contains(cropName))
+				{
+					if (season == Season.WINTER)
+					{
+						return (FertilityConfig.general_category.ignore_unlisted_crops);
+					}
+					else
+					{
+						return true;
+					}
+				}
 			}
 		}
 

@@ -32,7 +32,7 @@ public class SeasonalCropGrowthHandler
 	public void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
 		Block plant = event.getState().getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld());
+		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
 		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
@@ -51,7 +51,7 @@ public class SeasonalCropGrowthHandler
 	public void onBonemeal(BonemealEvent event)
 	{
 		Block plant = event.getBlock().getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld());
+		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
 		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
