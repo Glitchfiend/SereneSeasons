@@ -56,7 +56,7 @@ public class ModFertility
 		
 		if (BiomeConfig.usesTropicalSeasons(biome))
 		{
-			if (summerPlants.contains(cropName))
+			if (summerPlants.contains(cropName) || !(allListedPlants.contains(cropName)))
 			{
 				return true;
 			}
