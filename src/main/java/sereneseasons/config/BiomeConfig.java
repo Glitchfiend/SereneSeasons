@@ -12,9 +12,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sereneseasons.config.json.BiomeData;
-import sereneseasons.util.SeasonColourUtil;
 import sereneseasons.util.config.JsonUtil;
 
 import java.io.File;
@@ -23,19 +21,28 @@ import java.util.Map;
 
 public class BiomeConfig
 {
-    public static Map<String, BiomeData> biomeDataMap = Maps.newHashMap();
+    public static Map<ResourceLocation, BiomeData> biomeDataMap = Maps.newHashMap();
 
     public static void init(File configDir)
     {
         Map<String, BiomeData> defaultBiomeData = Maps.newHashMap();
         addBlacklistedBiomes(defaultBiomeData);
         addTropicalBiomes(defaultBiomeData);
-        biomeDataMap = JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
+
+        Map<String, BiomeData> tmpBiomeDataMap =
+                JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
+
+        biomeDataMap.clear();
+
+        for (Map.Entry<String, BiomeData> entry : tmpBiomeDataMap.entrySet())
+        {
+            biomeDataMap.put(new ResourceLocation(entry.getKey()), entry.getValue());
+        }
     }
 
     public static boolean hasSeasonalColoring(Biome biome)
     {
-        String name = biome.getRegistryName().toString();
+        ResourceLocation name = biome.getRegistryName();
 
         if (biomeDataMap.containsKey(name))
         {
@@ -47,7 +54,7 @@ public class BiomeConfig
 
     public static boolean usesTropicalSeasons(Biome biome)
     {
-        String name = biome.getRegistryName().toString();
+        ResourceLocation name = biome.getRegistryName();
 
         if (biomeDataMap.containsKey(name))
         {

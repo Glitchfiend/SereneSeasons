@@ -25,7 +25,9 @@ public enum Season
         EARLY_WINTER(WINTER, 0xAF4F4F, 0.60F, 0xDB3030, 0.60F),
         MID_WINTER(WINTER, 0xAF4F4F, 0.45F, 0xDB3030, 0.45F),
         LATE_WINTER(WINTER, 0x8E8181, 0.60F, 0xA57070, 0.60F);
-        
+
+        public static final SubSeason[] VALUES = SubSeason.values();
+
         private Season season;
         private int grassOverlay;
         private float grassSaturationMultiplier;
@@ -80,6 +82,8 @@ public enum Season
         EARLY_WET(0x758C8A, 0x728C91),
         MID_WET(0x548384, 0x2498AE),
         LATE_WET(0x658989, 0x4E8893);
+
+        public static final TropicalSeason[] VALUES = TropicalSeason.values();
 
         private int grassOverlay;
         private float grassSaturationMultiplier;
