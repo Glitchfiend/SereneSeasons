@@ -1,6 +1,6 @@
 package sereneseasons.handler.season;
 
-import com.sun.istack.internal.Nullable;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockPlanks;
