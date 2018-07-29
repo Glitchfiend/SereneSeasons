@@ -20,6 +20,7 @@ public class SeasonsConfig extends ConfigHandler
 
     public boolean changeGrassColour;
     public boolean changeFoliageColour;
+    public boolean changeBirchColour;
 
     public SeasonsConfig(File configFile)
     {
@@ -37,6 +38,7 @@ public class SeasonsConfig extends ConfigHandler
             // Client-only. The server shouldn't get to decide these.
             changeGrassColour = config.getBoolean("Change Grass Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the grass colour based on the current season");
             changeFoliageColour = config.getBoolean("Change Foliage Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the foliage colour based on the current season");
+            changeBirchColour = config.getBoolean("Change Birch Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the birch colour based on the current season");
         }
         catch (Exception e)
         {
