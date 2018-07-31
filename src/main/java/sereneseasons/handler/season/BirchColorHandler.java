@@ -19,7 +19,6 @@ import sereneseasons.config.BiomeConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 
-@SideOnly(Side.CLIENT)
 public class BirchColorHandler
 {
 	public static void init()

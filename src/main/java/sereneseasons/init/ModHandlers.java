@@ -78,6 +78,9 @@ public class ModHandlers
     
     public static void postInit()
     {
-    	BirchColorHandler.init();
+    	if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+        {
+    		BirchColorHandler.init();
+        }
     }
 }
