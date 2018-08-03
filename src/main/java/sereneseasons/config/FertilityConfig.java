@@ -34,7 +34,7 @@ public class FertilityConfig
 		@Config.Comment({"Whether unlisted seeds are fertile every season. False means they're fertile every season except Winter"})
 		public boolean ignore_unlisted_crops = false;
 		
-		@Config.Comment({"Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed seeds."})
+		@Config.Comment({"Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed crops."})
 		public boolean seed_tooltips = true;
 		
 		@Config.Comment({"Maximum height greenhouse glass can be above a crop for it to be fertile out of season"})
@@ -43,10 +43,10 @@ public class FertilityConfig
 
 	public static class SeasonFertility
 	{
-		@Config.Comment({"Seeds growable in Spring"})
+		@Config.Comment({"Crops growable in Spring (List either the seed item for the crop, or the crop block itself)"})
 		public String [] spring_seeds = new String[]
 		{
-			"minecraft:potato", "minecraft:carrot",
+			"minecraft:potato", "minecraft:carrot", "minecraft:sapling",
 			"harvestcraft:caulifloweritem", "harvestcraft:coffeebeanitem", "harvestcraft:garlicitem", "harvestcraft:beanitem", "harvestcraft:rhubarbitem", 
 			"harvestcraft:strawberryitem", "harvestcraft:oatsitem", "harvestcraft:celeryitem", "harvestcraft:peasitem", "harvestcraft:broccoliitem", 
 			"harvestcraft:cabbageitem", "harvestcraft:spinachitem", "harvestcraft:zucchiniitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem", 
@@ -60,10 +60,10 @@ public class FertilityConfig
 			"harvestcraft:scallionitem", "harvestcraft:scallionseeditem", "harvestcraft:kaleitem", "harvestcraft:kaleseeditem"
 		};
 		
-		@Config.Comment({"Seeds growable in Summer"})
+		@Config.Comment({"Crops growable in Summer (List either the seed item for the crop, or the crop block itself)"})
 		public String [] summer_seeds = new String[]
 		{
-			"minecraft:melon_seeds", "minecraft:wheat_seeds",
+			"minecraft:melon_seeds", "minecraft:wheat_seeds", "minecraft:sapling",
 			"simplecorn:kernels",
 			"harvestcraft:coffeebeanitem", "harvestcraft:beanitem", "harvestcraft:blueberryitem", "harvestcraft:cornitem", "harvestcraft:chilipepperitem", 
 			"harvestcraft:radishitem", "harvestcraft:tomatoitem", "harvestcraft:grapeitem", "harvestcraft:raspberryitem", "harvestcraft:peasitem", 
@@ -84,10 +84,10 @@ public class FertilityConfig
 			"harvestcraft:gigapickleitem", "harvestcraft:gigapickleseeditem"
 		};
 		
-		@Config.Comment({"Seeds growable in Autumn"})
+		@Config.Comment({"Crops growable in Autumn (List either the seed item for the crop, or the crop block itself)"})
 		public String [] autumn_seeds = new String[]
 		{
-			"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds",
+			"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds", "minecraft:sapling",
 			"simplecorn:kernels",
 			"harvestcraft:cornitem", "harvestcraft:artichokeitem", "harvestcraft:beetitem", "harvestcraft:cranberryitem", "harvestcraft:eggplantitem", 
 			"harvestcraft:grapeitem", "harvestcraft:whitemushroomitem", "harvestcraft:blackberryitem", "harvestcraft:oatsitem", "harvestcraft:ryeitem", 
@@ -100,7 +100,7 @@ public class FertilityConfig
 			"harvestcraft:rutabagaseeditem"
 		};
 		
-		@Config.Comment({"Seeds growable in Winter"})
+		@Config.Comment({"Crops growable in Winter (List either the seed item for the crop, or the crop block itself)"})
 		public String [] winter_seeds = new String[]
 		{
 			""

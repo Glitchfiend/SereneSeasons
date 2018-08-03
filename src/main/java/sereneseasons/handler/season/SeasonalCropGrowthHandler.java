@@ -79,7 +79,7 @@ public class SeasonalCropGrowthHandler
 		}
 		else
 		{
-			if (block instanceof BlockTallGrass || block instanceof BlockMushroom || block instanceof BlockCocoa || block instanceof BlockDoublePlant || block instanceof BlockGrass || block instanceof BlockSapling)
+			if (block instanceof BlockCocoa)
 			{
 				return false;
 			}
