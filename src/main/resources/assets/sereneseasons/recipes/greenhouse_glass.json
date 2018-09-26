@@ -1,9 +1,9 @@
 {
   "type": "forge:ore_shaped",
   "pattern": [
-    "#W#",
-    "WGW",
-    "#W#"
+    "#G#",
+    "GWG",
+    "#G#"
   ],
   "key": {
     "#": {
@@ -12,7 +12,7 @@
     },
     "W": {
       "type": "forge:ore_dict",
-	  "ore": "stickWood"
+	  "ore": "plankWood"
     },
     "G": {
       "type": "forge:ore_dict",

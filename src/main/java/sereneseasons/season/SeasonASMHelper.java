@@ -148,7 +148,39 @@ public class SeasonASMHelper
     public static float getFloatTemperature(Biome biome, BlockPos pos)
     {
         SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
+<<<<<<< HEAD
         return SeasonHelper.getSeasonFloatTemperature(biome, pos, subSeason);
+=======
+        boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
+        float biomeTemp = biome.getTemperature(pos);
+
+        if (!tropicalBiome && biome.getTemperature(pos) <= 0.8F && biome.getTemperature(pos) >= 0.15F)
+        {
+	        switch ((SubSeason) subSeason)
+	        {
+	        	default:
+	        		break;
+	        
+		        case LATE_SPRING: case EARLY_AUTUMN:
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, 0.15F, 2.0F);
+		    		break;
+	        
+		        case MID_SPRING: case MID_AUTUMN:
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, 0.15F, 2.0F);
+		    		break;
+	        
+	        	case EARLY_SPRING: case LATE_AUTUMN:
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, 0.15F, 2.0F);
+		    		break;
+	    		
+	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
+	        		biomeTemp = 0.0F;
+	        		break;
+	        }
+        }
+        
+        return biomeTemp;
+>>>>>>> refs/heads/master
     }
 
     ////////////////////////////

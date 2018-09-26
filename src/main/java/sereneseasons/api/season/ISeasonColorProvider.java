@@ -13,4 +13,5 @@ public interface ISeasonColorProvider
     float getGrassSaturationMultiplier();
     int getFoliageOverlay();
     float getFoliageSaturationMultiplier();
+    int getBirchColor();
 }

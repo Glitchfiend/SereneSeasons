@@ -77,8 +77,9 @@ public class SeasonHelper
 	public static float getSeasonFloatTemperature(Biome biome, BlockPos pos, SubSeason subSeason) {
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
+		float biomeTempForCheck = getModifiedFloatTemperatureAtPos(biome, pos, subSeason.getSeason());
 
-        if (!tropicalBiome && getModifiedTemperatureForBiome(biome, subSeason.getSeason()) <= 0.8F && biome.getDefaultTemperature() > 0.15F)
+        if (!tropicalBiome && biomeTempForCheck <= 0.8F && biomeTempForCheck > 0.15F)
         {
 	        switch ((SubSeason) subSeason)
 	        {
