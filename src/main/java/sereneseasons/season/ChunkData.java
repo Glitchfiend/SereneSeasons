@@ -40,7 +40,7 @@ public class ChunkData
      * Sets if a neighbor needs to be patched.
      * 
      * @see {@link ChunkKey#NEIGHBORS}
-     * @see {@link SeasonChunkPatcher#notifyLoadedAndPopulated}
+     * @see {@link ChunkPatchingManager#notifyLoadedAndPopulated}
      * @param idx index of the neighbor
      * @param bToSet iff flag is to be set.
      */
@@ -59,7 +59,7 @@ public class ChunkData
      * Returns if a neighbor needs to be patched.
      * 
      * @see {@link ChunkKey#NEIGHBORS}
-     * @see {@link SeasonChunkPatcher#notifyLoadedAndPopulated}
+     * @see {@link ChunkPatchingManager#notifyLoadedAndPopulated}
      * @param idx index of the neighbor
      * @return <code>true</code> iff yes.
      */
@@ -72,7 +72,7 @@ public class ChunkData
     }
 
     /**
-     * Returns if this chunk is enqueued for patching by {@link SeasonChunkPatcher}
+     * Returns if this chunk is enqueued for patching by {@link ChunkPatchingManager}
      * 
      * @param bToBePatched <code>true</code> iff yes.
      */

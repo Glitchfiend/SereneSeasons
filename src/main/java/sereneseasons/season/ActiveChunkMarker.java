@@ -6,7 +6,7 @@ import sereneseasons.season.ChunkData;
 
 /**
  * Used to mark chunks as active and keep tracking them. Patching time stamps for active chunks are
- * always kept up-to-date in {@link SeasonChunkPatcher#onServerWorldTick(net.minecraft.world.WorldServer)}.
+ * always kept up-to-date in {@link ChunkPatchingManager#onServerWorldTick(net.minecraft.world.WorldServer)}.
  */
 public class ActiveChunkMarker extends Node<Long>
 {
@@ -15,7 +15,7 @@ public class ActiveChunkMarker extends Node<Long>
     private long lastVisitTime;
 
     /**
-     * The constructor. Called from {@link SeasonChunkPatcher#onServerWorldTick(net.minecraft.world.WorldServer)}.
+     * The constructor. Called from {@link ChunkPatchingManager#onServerWorldTick(net.minecraft.world.WorldServer)}.
      * 
      * @param data the marked chunk
      * @param world the world
@@ -72,7 +72,7 @@ public class ActiveChunkMarker extends Node<Long>
     /**
      * Used to untrack a chunk of being active. <br/>
      * <br/>
-     * <b>Important</b>: Shouldn't be used directly, as the heap of tracked chunks at {@link SeasonChunkPatcher}
+     * <b>Important</b>: Shouldn't be used directly, as the heap of tracked chunks at {@link ChunkPatchingManager}
      * needs to be in synch with this action.
      */
     void internalUnmark()

@@ -4,18 +4,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
-import sereneseasons.api.season.Season;
-import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.ActiveChunkMarker;
 import sereneseasons.season.ChunkData;
@@ -23,24 +17,14 @@ import sereneseasons.season.ChunkKey;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.util.BinaryHeap;
 import sereneseasons.util.ChunkUtils;
-import sereneseasons.api.season.SeasonHelper;
 
 /**
  * A manager to maintain a queue of chunks which require a patching (e.g. adding water freeze or snow in winter).
  */
-public class SeasonChunkPatcher
+public class ChunkPatchingManager
 {
-	/**
-	 * Fixed point threshold for probability. THR_PROB_MAX means probability is 100%.
-	 */
-    private static final int THR_PROB_MAX = 1000;
-    
-    /**
-     * Amount of ticks to look back in the past at the journal
-     * to avoid replaying whole journal when patching generated chunks.
-     */
-    private static final long RETROSPECTIVE_WINDOW_TICKS = 24000 * 9;
-
+	private ChunkPatcher patcher = new ChunkPatcher(); 
+	
     private int numPatcherPerTick;
     private int awaitTicksBeforeDeactivation;
 
@@ -50,15 +34,12 @@ public class SeasonChunkPatcher
     public int statisticsPendingAmount;
     public int statisticsRejectedPendingAmount;
 
-    /**
-     * Secured by multi-threading access
-     */
     public HashSet<ChunkKey> pendingChunksMask = new HashSet<ChunkKey>();
     public LinkedList<PendingChunkEntry> pendingChunkList = new LinkedList<PendingChunkEntry>();
 
     public BinaryHeap<Long, ActiveChunkMarker> activeChunksHeap = new BinaryHeap<Long, ActiveChunkMarker>();
 
-    public SeasonChunkPatcher()
+    public ChunkPatchingManager()
     {
         numPatcherPerTick = SyncedConfig.getIntValue(SeasonsOption.NUM_PATCHES_PER_TICK);
         awaitTicksBeforeDeactivation = SyncedConfig.getIntValue(SeasonsOption.PATCH_TICK_DISTANCE);
@@ -373,7 +354,7 @@ public class SeasonChunkPatcher
             }
 
             // Perform a chunk patch and clear to-be-patched flag.
-            patchChunkTerrain(chunkData);
+            patcher.patchChunkTerrain(chunkData);
             chunkData.setToBePatched(false);
         }
 
@@ -395,269 +376,6 @@ public class SeasonChunkPatcher
         }
     }
 
-    /**
-     * Patches the actual chunk by replaying the journal on it
-     * depending on the passed time this chunk has been patched before, if ever. 
-     * 
-     * @param chunkData the actual chunk.
-     */
-    private void patchChunkTerrain(ChunkData chunkData)
-    {
-        Chunk chunk = chunkData.getChunk();
-        World world = chunk.getWorld();
-
-        Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-
-        long lastPatchedTime = chunkData.getLastPatchedTime();
-        boolean bFastForward = false;
-        long windowBorder = world.getTotalWorldTime() - RETROSPECTIVE_WINDOW_TICKS;
-        if (lastPatchedTime < windowBorder)
-        {
-            // Old entries have no effect. Considering it by reseting chunk snow
-            // states and patch from newer journal entries only
-            lastPatchedTime = windowBorder;
-            bFastForward = true;
-        }
-        int fromIdx = seasonData.getJournalIndexAfterTime(lastPatchedTime);
-
-        // determine initial state
-        boolean bWasRaining = seasonData.wasLastRaining(fromIdx);
-        boolean bWasCold = seasonData.wasLastCold(fromIdx);
-
-        long rainingTrackTicks = 0;
-        long coldTrackTicks = 0;
-
-        long intervalRainingTrackStart = lastPatchedTime;
-        long intervalSnowyTrackStart = lastPatchedTime;
-
-        // initialize in case of fast forward
-        if (bFastForward)
-        {
-            if (bWasCold)
-                executePatchCommand(4, 0, chunk);  // 4 = set all snow/frozen
-            else
-                executePatchCommand(5, 0, chunk);  // 5 = set all molten
-        }
-
-        // Replay latest journal entries
-        if (fromIdx != -1)
-        {
-            int command = 0; // 0 = NOP
-
-            // Apply events from journal
-            for (int curEntry = fromIdx; curEntry < seasonData.journal.size(); curEntry++)
-            {
-                WeatherJournalEvent wevt = seasonData.journal.get(curEntry);
-
-                rainingTrackTicks = wevt.getTimeStamp() - intervalRainingTrackStart;
-                coldTrackTicks = wevt.getTimeStamp() - intervalSnowyTrackStart;
-
-                switch (wevt.getEventType())
-                {
-                    case EVENT_START_RAINING:
-                        if (!bWasRaining)
-                        {
-                            intervalRainingTrackStart = wevt.getTimeStamp();
-                            command = 0;  // 0 = NOP
-                            bWasRaining = true;
-                        }
-                        break;
-                    case EVENT_STOP_RAINING:
-                        if (bWasRaining)
-                        {
-                            intervalRainingTrackStart = wevt.getTimeStamp();
-                            if (bWasCold)
-                                command = 2; // 2 = simulate chunk snow (requires duration parameter in ticks)
-                            else
-                                command = 0; // 0 = NOP
-                            bWasRaining = false;
-                        }
-                        break;
-                    case EVENT_TO_COLD_SEASON:
-                        if (!bWasCold)
-                        {
-                            intervalSnowyTrackStart = wevt.getTimeStamp();
-                            command = 3; // 3 = simulate melting (requires duration parameter in ticks)
-                            bWasCold = true;
-                        }
-                        break;
-                    case EVENT_TO_WARM_SEASON:
-                        if (bWasCold)
-                        {
-                            intervalSnowyTrackStart = wevt.getTimeStamp();
-                            if (bWasRaining)
-                                command = 2; // 2 = simulate chunk snow (requires duration parameter in ticks).
-                            else
-                                command = 1; // 1 = simulate freeze only (requires duration parameter in ticks).
-                            bWasCold = false;
-                        }
-                        break;
-                    default:
-                        // Do nothing
-                        command = 0;  // 0 = NOP
-                }
-
-                executePatchCommand(command, coldTrackTicks, rainingTrackTicks, chunk);
-            }
-        }
-
-        // Post update for running events
-        rainingTrackTicks = world.getTotalWorldTime() - intervalRainingTrackStart;
-        coldTrackTicks = world.getTotalWorldTime() - intervalSnowyTrackStart;
-
-        if (seasonData.wasLastRaining(-1) && seasonData.wasLastCold(-1))
-        {
-            executePatchCommand(2, coldTrackTicks, rainingTrackTicks, chunk);
-        }
-        else if (!seasonData.wasLastCold(-1))
-        {
-            executePatchCommand(3, coldTrackTicks, rainingTrackTicks, chunk);
-        }
-        else
-        {
-            executePatchCommand(1, coldTrackTicks, rainingTrackTicks, chunk);
-        }
-
-        chunkData.setPatchTimeUptodate();
-    }
-    
-    /**
-     * Executes a patching action on a chunk.<br/>
-     * Commands have following meaning:<br/>
-     * <ul>
-     *  <li>0 = NOP. Do nothing.</li>
-     *  <li>1 = simulate freeze only.</li>
-     *  <li>2 = simulate chunk snow (requires duration parameter in ticks).</li>
-     *  <li>3 = simulate melting (requires duration parameter in ticks).</li>
-     *  <li>4 = set all snow/frozen.</li>
-     *  <li>5 = set all molten.</li>
-     * </ul>
-     * 
-     * @param command the action itself
-     * @param coldTrackTicks amount of ticks the weather was cold (resulting to freezing)
-     * @param rainingTrackTicks amount of ticks the weather was rainy/snowy (resulting to snowing if cold)
-     * @param chunk the patched chunk
-     */
-    private void executePatchCommand(int command, long coldTrackTicks, long rainingTrackTicks, Chunk chunk)
-    {
-        if (command != 0)
-        {
-            int threshold = 0;
-            if (command == 2)
-            {
-                long dur = rainingTrackTicks;
-                if (dur > coldTrackTicks)
-                    dur = coldTrackTicks;
-                threshold = evalProbPerBlockUpdateForTicks((int) dur);
-            }
-            else if (command == 1 || command == 3)
-                threshold = evalProbPerBlockUpdateForTicks((int) coldTrackTicks);
-            executePatchCommand(command, threshold, chunk);
-        }
-    }
-    
-    /**
-     * executes a patching action on a chunk.<br/>
-     * Commands have following meaning:<br/>
-     * <ul>
-     *  <li>0 = NOP. Do nothing.</li>
-     *  <li>1 = simulate freeze only.</li>
-     *  <li>2 = simulate chunk snow (requires duration parameter in ticks).</li>
-     *  <li>3 = simulate melting (requires duration parameter in ticks).</li>
-     *  <li>4 = set all snow/frozen.</li>
-     *  <li>5 = set all molten.</li>
-     * </ul>
-     * 
-     * @param command the action itself
-     * @param threshold duration in ticks, if needed
-     * @param chunk the patched chunk
-     */
-    private void executePatchCommand(int command, int threshold, Chunk chunk)
-    {
-        // TODO: Maybe improve client notification on block changes at setBlockState calls if performance issues are occurring!
-
-        ChunkPos chunkPos = chunk.getPos();
-        World world = chunk.getWorld();
-
-        if (command == 4 || command == 5)
-        {
-            threshold = THR_PROB_MAX;
-        }
-
-        MutableBlockPos pos = new MutableBlockPos();
-        for (int iX = 0; iX < 16; iX++)
-        {
-            for (int iZ = 0; iZ < 16; iZ++)
-            {
-                int height = chunk.getHeightValue(iX, iZ);
-                pos.setPos(chunkPos.getXStart() + iX, height, chunkPos.getZStart() + iZ);
-
-                BlockPos below = pos.down();
-
-                if ((command == 1 || command == 2 || command == 4))
-                {
-                    // Apply snow in dependence of last rain time and apply ice
-                    // in dependence of last time the season changed to cold
-                    // (where canSnowAtTempInSeason have returned false before).
-                    if (world.rand.nextInt(THR_PROB_MAX) < threshold)
-                    {
-                        if (SeasonASMHelper.canBlockFreezeInSeason(world, below, false, SubSeason.EARLY_WINTER.getDefaultState()))
-                        {
-                            // NOTE: Is a simplified freeze behavior
-                            world.setBlockState(below, Blocks.ICE.getDefaultState(), 2);
-                        }
-                        else if (command != 1 && SeasonASMHelper.canSnowAtInSeason(world, pos, true, SubSeason.EARLY_WINTER.getDefaultState()))
-                        {
-                            world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState(), 2);
-                        }
-                    }
-                    // TODO: Simulate crop death
-                }
-                else if (command == 3 || command == 5)
-                {
-                    // Remove snow and ice in dependence of last time the season
-                    // changed to cold (where canSnowAtTempInSeason have
-                    // returned true before).
-                    if (world.rand.nextInt(THR_PROB_MAX) <= threshold * 10)
-                    {
-                        IBlockState blockState = world.getBlockState(pos);
-                        if (blockState.getBlock() == Blocks.SNOW_LAYER)
-                        {
-                            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-                        }
-                        else
-                        {
-                            blockState = world.getBlockState(below);
-                            if (blockState.getBlock() == Blocks.ICE)
-                            {
-                                world.setBlockState(below, Blocks.WATER.getDefaultState(), 2);
-                                world.neighborChanged(below, Blocks.WATER, below);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Evals probability per block, an action is performed.
-     * 
-     * @param duringTicks duration in ticks. More means, higher probability.
-     * @return the probability in the interval. (0, THR_PROB_MAX]
-     */
-    private int evalProbPerBlockUpdateForTicks(int duringTicks)
-    {
-        final double fieldHitProb = 1.0 / (16.0 * 16.0);
-        final double snowUpdateProbInTick = 1.0 / 16.0;
-        final double correctionFactor = 0.75;
-        final double hitProb = correctionFactor * fieldHitProb * snowUpdateProbInTick;
-        final double missProb = 1.0 - hitProb;
-        double prob = hitProb * (1.0 - Math.pow(missProb, duringTicks + 1)) / (1.0 - missProb);
-
-        return (int) ((double) THR_PROB_MAX * prob + 0.5);
-    }
     
     ////////////////////
 

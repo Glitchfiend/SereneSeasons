@@ -14,16 +14,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sereneseasons.season.SeasonChunkPatcher;
+import sereneseasons.season.ChunkPatchingManager;
 
 /**
  * Handles sets of events related to update chunks in dependence to the seasons. <br/>
- * It holds a reference to {@link SeasonChunkPatcher} and is a central point to glue the patching mechanism
+ * It holds a reference to {@link ChunkPatchingManager} and is a central point to glue the patching mechanism
  * with the rest of the mod.
  */
 public class SeasonChunkPatchingHandler
 {
-    private static SeasonChunkPatcher chunkPatcher = new SeasonChunkPatcher();
+    private static ChunkPatchingManager chunkPatcher = new ChunkPatchingManager();
 
     /**
      * Event listener to renders statistical information on the chunk
@@ -55,7 +55,7 @@ public class SeasonChunkPatchingHandler
      * Chunk must be populated before to avoid artifacts, like snow under trees. It is enqueued for patching in {@link #postPopulate}
      * instead if chunk is unpopulated.
      * 
-     * @see {@link SeasonChunkPatcher#notifyLoadedAndPopulated} for more details on the patching order.
+     * @see {@link ChunkPatchingManager#notifyLoadedAndPopulated} for more details on the patching order.
      * @param event the Forge event
      */
     @SubscribeEvent
@@ -91,7 +91,7 @@ public class SeasonChunkPatchingHandler
      * Event listener to handle chunks which got just populated.
      * Enqueues chunk for patching (e.g. adding water freeze to it in winter) in this case.
      * 
-     * @see {@link SeasonChunkPatcher#notifyLoadedAndPopulated} for more details on the patching order.
+     * @see {@link ChunkPatchingManager#notifyLoadedAndPopulated} for more details on the patching order.
      * @param event the Forge event.
      */
     @SubscribeEvent
@@ -159,7 +159,7 @@ public class SeasonChunkPatchingHandler
      * 
      * @return the chunk patcher.
      */
-    public static SeasonChunkPatcher getSeasonChunkPatcher()
+    public static ChunkPatchingManager getChunkPatchingManager()
     {
         return chunkPatcher;
     }
