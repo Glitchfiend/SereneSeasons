@@ -2,16 +2,30 @@ package sereneseasons.season;
 
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * Stores additional meta data for a chunk used by seasons, like time stamps when the chunk has been patched lately. 
+ */
 public class ChunkData
 {
+	// Reference to chunk
     private final ChunkKey key;
     private Chunk chunk;
 
+    // Is stored by SeasonSavedData.
     private long lastPatchedTime;
+    
+    // Volatile properties not stored in SeasonSavedData.
     private boolean isToBePatched;
-    private ActiveChunkData belongingAC;
+    private ActiveChunkMarker belongingAC;
     private int notifyNeighborsOnLoadingPopulated;
 
+    /**
+     * The constructor.
+     * 
+     * @param key key for the chunk
+     * @param chunk the chunk. May be <code>null</code> if chunk is not known/loaded.
+     * @param lastPatchedTime last time the chunk has been patched.
+     */
     public ChunkData(ChunkKey key, Chunk chunk, long lastPatchedTime)
     {
         this.key = key;
@@ -22,6 +36,14 @@ public class ChunkData
         this.notifyNeighborsOnLoadingPopulated = 0;
     }
 
+    /**
+     * Sets if a neighbor needs to be patched.
+     * 
+     * @see {@link ChunkKey#NEIGHBORS}
+     * @see {@link SeasonChunkPatcher#notifyLoadedAndPopulated}
+     * @param idx index of the neighbor
+     * @param bToSet iff flag is to be set.
+     */
     public void setNeighborToNotify(int idx, boolean bToSet)
     {
         if (idx < 0 || idx >= 8)
@@ -33,6 +55,14 @@ public class ChunkData
             this.notifyNeighborsOnLoadingPopulated &= ~bit;
     }
 
+    /**
+     * Returns if a neighbor needs to be patched.
+     * 
+     * @see {@link ChunkKey#NEIGHBORS}
+     * @see {@link SeasonChunkPatcher#notifyLoadedAndPopulated}
+     * @param idx index of the neighbor
+     * @return <code>true</code> iff yes.
+     */
     public boolean isNeighborToBeNotified(int idx)
     {
         if (idx < 0 || idx >= 8)
@@ -41,63 +71,113 @@ public class ChunkData
         return (this.notifyNeighborsOnLoadingPopulated & bit) != 0;
     }
 
-    public void setToBePatched(boolean bToBePatched)
+    /**
+     * Returns if this chunk is enqueued for patching by {@link SeasonChunkPatcher}
+     * 
+     * @param bToBePatched <code>true</code> iff yes.
+     */
+    void setToBePatched(boolean bToBePatched)
     {
         this.isToBePatched = bToBePatched;
     }
 
-    public void setBelongingAC(ActiveChunkData belongingAC)
+    /**
+     * Returns the belonging marker if this chunk is actively updated by {@link WorldServer#updateBlocks()}
+     * 
+     * @param belongingAC
+     */
+    public void setBelongingAC(ActiveChunkMarker belongingAC)
     {
         this.belongingAC = belongingAC;
     }
 
-    public void setLoadedChunk(Chunk chunk)
+    /**
+     * Attaches a loaded chunk object to this meta data. 
+     * 
+     * @param chunk the chunk
+     */
+    void attachLoadedChunk(Chunk chunk)
     {
         if (chunk == null)
             throw new IllegalArgumentException("chunk must be non null. Use clearLoadedChunk() for other case.");
         this.chunk = chunk;
     }
-
-    public boolean getIsToBePatched()
-    {
-        return isToBePatched;
-    }
-
-    public ActiveChunkData getBelongingAC()
-    {
-        return belongingAC;
-    }
-
-    public ChunkKey getKey()
-    {
-        return key;
-    }
-
-    public Chunk getChunk()
-    {
-        return chunk;
-    }
-
-    public void setPatchTimeUptodate()
-    {
-        if (chunk != null)
-            this.lastPatchedTime = chunk.getWorld().getTotalWorldTime();
-    }
-
-    public void setPatchTimeTo(long lastPatchedTime)
-    {
-        this.lastPatchedTime = lastPatchedTime;
-    }
-
-    public long getLastPatchedTime()
-    {
-        return lastPatchedTime;
-    }
-
-    public void clearLoadedChunk()
+    
+    /**
+     * Detaches the chunk from this meta data, if it got unloaded.
+     */
+    void detachLoadedChunk()
     {
         setToBePatched(false);
         this.chunk = null;
     }
 
+    /**
+     * Returns whether this chunk is enqueued for patching.
+     * 
+     * @return <code>true</code> iff yes.
+     */
+    public boolean getIsToBePatched()
+    {
+        return isToBePatched;
+    }
+
+    /**
+     * Returns the belonging marker object if the chunk is actively updated by {@link WorldServer#updateBlocks()}
+     * 
+     * @return the marker object.
+     */
+    public ActiveChunkMarker getBelongingAC()
+    {
+        return belongingAC;
+    }
+
+    /**
+     * Returns the chunk key.
+     * 
+     * @return the chunk key.
+     */
+    public ChunkKey getKey()
+    {
+        return key;
+    }
+
+    /**
+     * Returns the chunk object or <code>null</code> if it is not known.
+     * 
+     * @return the chunk object.
+     */
+    public Chunk getChunk()
+    {
+        return chunk;
+    }
+
+    /**
+     * Sets the time stamp this chunk has been patched to recent time.
+     */
+    void setPatchTimeUptodate()
+    {
+        if (chunk != null)
+            this.lastPatchedTime = chunk.getWorld().getTotalWorldTime();
+    }
+
+    /**
+     * Sets the time stamp this chunk has been patched to a specific time.
+     * 
+     * @param lastPatchedTime the specific time.
+     */
+    void setPatchTimeTo(long lastPatchedTime)
+    {
+        this.lastPatchedTime = lastPatchedTime;
+    }
+
+    /**
+     * Returns the time stamp this chunk has been patched last time.
+     * 
+     * @return the time stamp of the patching.
+     */
+    public long getLastPatchedTime()
+    {
+        return lastPatchedTime;
+    }
 }

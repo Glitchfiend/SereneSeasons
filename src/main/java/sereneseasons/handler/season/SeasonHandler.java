@@ -56,7 +56,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     @SubscribeEvent
-    public void worldUnload(WorldEvent.Unload event)
+    public void onWorldUnloaded(WorldEvent.Unload event)
     {
         World world = event.getWorld();
         if (world.isRemote)
@@ -68,7 +68,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     @SubscribeEvent
-    public void chunkUnload(ChunkEvent.Unload event)
+    public void onChunkUnloaded(ChunkEvent.Unload event)
     {
         if (event.getWorld().isRemote)
             return;
@@ -76,7 +76,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         Chunk chunk = event.getChunk();
 
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(chunk.getWorld());
-        seasonData.notifyChunkUnloaded(chunk);
+        seasonData.onChunkUnloaded(chunk);
     }
 
     @SubscribeEvent

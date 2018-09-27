@@ -1,5 +1,11 @@
 package sereneseasons.season;
 
+/**
+ * Weather change event type as recorded in journal. <br/>
+ * <br/>
+ * <b>Important</b>: To maintain backwards compatibility the stored code should not be changed
+ * for an event type or reused for a different type.  
+ */
 public enum WeatherEventType
 {
     EVENT_UNKNOWN(0),
@@ -15,6 +21,12 @@ public enum WeatherEventType
         this.code = code;
     }
 
+    /**
+     * Returns enumeration item by code (as stored in NBT)
+     * 
+     * @param code an integer identifying the event type.
+     * @return the event type.
+     */
     public static WeatherEventType fromCode(int code)
     {
         for (WeatherEventType etype : values())
@@ -25,6 +37,11 @@ public enum WeatherEventType
         return EVENT_UNKNOWN;
     }
 
+    /**
+     * Returns a code from event type.
+     * 
+     * @return a code to be stored in NBT.
+     */
     public int getCode()
     {
         return code;

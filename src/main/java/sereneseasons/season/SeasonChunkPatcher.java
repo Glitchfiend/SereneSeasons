@@ -17,7 +17,7 @@ import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.handler.season.SeasonHandler;
-import sereneseasons.season.ActiveChunkData;
+import sereneseasons.season.ActiveChunkMarker;
 import sereneseasons.season.ChunkData;
 import sereneseasons.season.ChunkKey;
 import sereneseasons.season.SeasonSavedData;
@@ -25,9 +25,20 @@ import sereneseasons.util.BinaryHeap;
 import sereneseasons.util.ChunkUtils;
 import sereneseasons.api.season.SeasonHelper;
 
+/**
+ * A manager to maintain a queue of chunks which require a patching (e.g. adding water freeze or snow in winter).
+ */
 public class SeasonChunkPatcher
 {
+	/**
+	 * Fixed point threshold for probability. THR_PROB_MAX means probability is 100%.
+	 */
     private static final int THR_PROB_MAX = 1000;
+    
+    /**
+     * Amount of ticks to look back in the past at the journal
+     * to avoid replaying whole journal when patching generated chunks.
+     */
     private static final long RETROSPECTIVE_WINDOW_TICKS = 24000 * 9;
 
     private int numPatcherPerTick;
@@ -45,7 +56,7 @@ public class SeasonChunkPatcher
     public HashSet<ChunkKey> pendingChunksMask = new HashSet<ChunkKey>();
     public LinkedList<PendingChunkEntry> pendingChunkList = new LinkedList<PendingChunkEntry>();
 
-    public BinaryHeap<Long, ActiveChunkData> updatedChunksQueue = new BinaryHeap<Long, ActiveChunkData>();
+    public BinaryHeap<Long, ActiveChunkMarker> activeChunksHeap = new BinaryHeap<Long, ActiveChunkMarker>();
 
     public SeasonChunkPatcher()
     {
@@ -59,6 +70,17 @@ public class SeasonChunkPatcher
         statisticsRejectedPendingAmount = 0;
     }
 
+    /**
+     * Is used to submit neighbor chunks for patching. <br/>
+     * <br/>
+     * <b>Conditions to met when patching</b>: It is necessary to ensure that
+     * a chunk is patched only after it is populated itself as well as a set of neighbors. Structures may generated
+     * at neighbors during population which would overlap the chunk itself, like trees or village huts a.s.o.
+     * This logic is used simply to reduce artifacts with snow which would stay under the overlaps, like snow under trees. 
+     * 
+     * @param world world of the chunk
+     * @param chunkPos position of the chunk
+     */
     public void notifyLoadedAndPopulated(World world, ChunkPos chunkPos)
     {
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
@@ -79,6 +101,11 @@ public class SeasonChunkPatcher
         }
     }
 
+    /**
+     * Enqueues a chunk for patching. Will get processed at {@link #onServerTick()}.
+     * 
+     * @param chunk the chunk
+     */
     public void enqueueChunkOnce(Chunk chunk)
     {
         ChunkKey key = new ChunkKey(chunk.getPos(), chunk.getWorld());
@@ -88,6 +115,14 @@ public class SeasonChunkPatcher
         pendingChunkList.add(new PendingChunkEntry(chunk));
     }
 
+    /**
+     * Like {@link #enqueueChunkOnce(Chunk)}, enqueues a chunk for patching.
+     * May be used alternatively if the loading state of the actual chunk
+     * is not known or chunk is not loaded. 
+     * 
+     * @param world the world managing the chunk
+     * @param chunkPos the position of the chunk within the world
+     */
     public void enqueueChunkOnce(World world, ChunkPos chunkPos)
     {
         ChunkKey key = new ChunkKey(chunkPos, world);
@@ -97,6 +132,14 @@ public class SeasonChunkPatcher
         pendingChunkList.add(new PendingChunkEntry(key, world));
     }
 
+    /**
+     * Adds chunk to patching if generated. <br/>
+     * 
+     * @deprecated Is not used anymore.
+     * @param world the world managing the chunk
+     * @param pos the position of the chunk within the world
+     */
+    @Deprecated
     private void addChunkIfGenerated(World world, ChunkPos pos)
     {
         if (!world.isChunkGeneratedAt(pos.x, pos.z))
@@ -104,6 +147,14 @@ public class SeasonChunkPatcher
         enqueueChunkOnce(world, pos);
     }
 
+    /**
+     * Adds neighbor chunk to patching if generated. <br/>
+     * 
+     * @deprecated Is not used anymore.
+     * @param world the world managing the chunk
+     * @param pos the position of the chunk within the world
+     */
+    @Deprecated
     public void enqueueGeneratedNeighborChunks(World world, ChunkPos pos)
     {
         for (ChunkKey.Neighbor nb : ChunkKey.NEIGHBORS)
@@ -111,9 +162,35 @@ public class SeasonChunkPatcher
             addChunkIfGenerated(world, nb.getOffset(pos));
         }
     }
+    
+    /**
+     * Untracks a chunk from being active. Is used internally.
+     * 
+     * @param chunkData the chunk to untrack.
+     */
+    private void internalUntrackFromActive(ChunkData chunkData)
+    {
+        ActiveChunkMarker ac = chunkData.getBelongingAC();
+        if (ac != null)
+        {
+            activeChunksHeap.remove(ac);
+            ac.internalUnmark();
+        }
+    }
 
+    /**
+     * Is called by {@link sereneseasons.handler.season.SeasonChunkPatchingHandler#onWorldTick}. <br/>
+     * Used to mark chunks as active by same logic as {@link WorldServer#updateBlocks} is iterating through chunks.
+     * Patching time stamps for active chunks are kept up to date.
+     * 
+     * @param world the server world
+     */
     public void onServerWorldTick(WorldServer world)
     {
+    	// IMPORTANT: When porting mod to newer Minecraft versions,
+    	//            please make sure that logic is in synch with WorldServer.updateBlocks()
+    	//            to retrieve all actively updated chunks as Minecraft does
+    	
         world.profiler.startSection("seasonChunkFind");
 
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
@@ -128,7 +205,7 @@ public class SeasonChunkPatcher
             Chunk activeChunk = iter.next();
             ChunkData chunkData = seasonData.getStoredChunkData(activeChunk, true);
 
-            ActiveChunkData ac = chunkData.getBelongingAC();
+            ActiveChunkMarker ac = chunkData.getBelongingAC();
             if (ac == null)
             {
                 // Roll up patches
@@ -136,7 +213,7 @@ public class SeasonChunkPatcher
                 chunkData.setToBePatched(true);
 
                 // Tag as active and as awaiting to be patched
-                ac = new ActiveChunkData(chunkData, world);
+                ac = new ActiveChunkMarker(chunkData, world);
 
                 statisticsAddedToActive++;
             }
@@ -147,9 +224,9 @@ public class SeasonChunkPatcher
                 chunkData.setPatchTimeUptodate();
             }
 
-            updatedChunksQueue.remove(ac);
+            activeChunksHeap.remove(ac);
             ac.setNodeKey(world.getTotalWorldTime());
-            updatedChunksQueue.add(ac);
+            activeChunksHeap.add(ac);
 
             statisticsVisitedActive++;
         }
@@ -157,14 +234,28 @@ public class SeasonChunkPatcher
         world.profiler.endSection();
     }
 
+    /**
+     * Is called by {@link sereneseasons.handler.season.SeasonChunkPatchingHandler#onChunkUnload}. <br/>
+     * Event listener to handle unloaded chunks. They are untracked from being active.
+     * 
+     * @param event the Forge event
+     */
     public void onChunkUnload(Chunk chunk)
     {
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(chunk.getWorld());
         ChunkData data = seasonData.getStoredChunkData(chunk, false);
-        if (data != null)
-            internRemoveFromQueue(data);
+        if (data != null) {
+            internalUntrackFromActive(data);
+            data.setToBePatched(false);
+        }
     }
 
+    /**
+     * Is called by {@link sereneseasons.handler.season.SeasonChunkPatchingHandler#onWorldUnload}. <br/>
+     * Used to cleanup all pending patching jobs for the specific world. All chunks marked as active are untracked as well. 
+     *   
+     * @param world the world.
+     */
     public void onServerWorldUnload(World world)
     {
         // Clear loadedChunkQueue
@@ -180,31 +271,35 @@ public class SeasonChunkPatcher
         }
 
         // Clear active chunk tracking for the world
-        LinkedList<ActiveChunkData> chunks = new LinkedList<ActiveChunkData>();
-        for (ActiveChunkData ac : updatedChunksQueue)
+        LinkedList<ActiveChunkMarker> chunksRetainedActive = new LinkedList<ActiveChunkMarker>();
+        for (ActiveChunkMarker ac : activeChunksHeap)
         {
             if (ac.getWorld() == world)
-                ac.detach();
+                ac.internalUnmark();
             else
-                chunks.add(ac);
+            	chunksRetainedActive.add(ac);
         }
 
-        updatedChunksQueue.clear();
-        for (ActiveChunkData ac : chunks)
+        activeChunksHeap.clear();
+        for (ActiveChunkMarker ac : chunksRetainedActive)
         {
-            updatedChunksQueue.add(ac);
+            activeChunksHeap.add(ac);
         }
     }
 
+    /**
+     * Server tick handler to consume queue for patching as well as handling other tasks like untracking active chunks.
+     */
     public void onServerTick()
     {
         LinkedList<PendingChunkEntry> chunksInProcess = pendingChunkList;
         statisticsDeletedFromActive = 0;
 
-        // Iterate through loaded chunks to untrack non active chunks
+        // Iterate through loaded chunks to untrack chunks marked as active which weren't
+        // visited by onServerWorldTick() for a longer time
         while (true)
         {
-            ActiveChunkData ac = updatedChunksQueue.peek();
+            ActiveChunkMarker ac = activeChunksHeap.peek();
             if (ac == null)
                 break;
 
@@ -212,8 +307,8 @@ public class SeasonChunkPatcher
             World world = ac.getWorld();
             if (ac.getLastVisitTime() + awaitTicksBeforeDeactivation <= world.getTotalWorldTime())
             {
-                ac.detach();
-                updatedChunksQueue.remove(ac);
+                ac.internalUnmark();
+                activeChunksHeap.remove(ac);
 
                 statisticsDeletedFromActive++;
             }
@@ -226,25 +321,31 @@ public class SeasonChunkPatcher
         statisticsPendingAmount = chunksInProcess.size();
         statisticsRejectedPendingAmount = 0;
 
+        // Process patching queue. Reject a chunk from patching which got unloaded
+        //     or a neighbor is unpopulated (see javadoc of method notifyLoadedAndPopulated for reason, why). 
         int numProcessed = 0;
         for (PendingChunkEntry entry : chunksInProcess)
         {
+        	// Only patch a maximal amount of chunks per tick to avoid server lags.
             if (numProcessed >= numPatcherPerTick)
                 break;
             numProcessed++;
 
             Chunk chunk = entry.getChunk();
-
             SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(chunk.getWorld());
             ChunkData chunkData = seasonData.getStoredChunkData(chunk, true);
+
+            // Check for unloaded. Reject if so
             if (!chunk.isLoaded())
             {
-                internRemoveFromQueue(chunkData);
+                internalUntrackFromActive(chunkData);
+                chunkData.setToBePatched(false);
 
                 statisticsRejectedPendingAmount++;
                 continue;
             }
 
+            // Check for unpopulated neighbors. Reject if so
             ChunkPos chunkPos = chunk.getPos();
             World world = chunk.getWorld();
             int unavailableChunkMask = ChunkUtils.identifyUnloadedOrUnpopulatedNeighbors(world, chunkPos);
@@ -264,16 +365,15 @@ public class SeasonChunkPatcher
                     nbChunkData.setNeighborToNotify(oppositeI, true);
                 }
 
-                internRemoveFromQueue(chunkData);
+                internalUntrackFromActive(chunkData);
+                chunkData.setToBePatched(false);
 
                 statisticsRejectedPendingAmount++;
                 continue;
             }
 
-            // Perform a chunk patch
+            // Perform a chunk patch and clear to-be-patched flag.
             patchChunkTerrain(chunkData);
-
-            // Clear to-be-patched flag
             chunkData.setToBePatched(false);
         }
 
@@ -295,20 +395,187 @@ public class SeasonChunkPatcher
         }
     }
 
-    private void internRemoveFromQueue(ChunkData chunkData)
+    /**
+     * Patches the actual chunk by replaying the journal on it
+     * depending on the passed time this chunk has been patched before, if ever. 
+     * 
+     * @param chunkData the actual chunk.
+     */
+    private void patchChunkTerrain(ChunkData chunkData)
     {
-        ActiveChunkData ac = chunkData.getBelongingAC();
-        if (ac != null)
-        {
-            updatedChunksQueue.remove(ac);
-            ac.detach();
-        }
-        chunkData.setToBePatched(false);
-    }
+        Chunk chunk = chunkData.getChunk();
+        World world = chunk.getWorld();
 
-    private void executePatchCommand(int command, int threshold, Chunk chunk, Season season)
+        Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
+        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
+
+        long lastPatchedTime = chunkData.getLastPatchedTime();
+        boolean bFastForward = false;
+        long windowBorder = world.getTotalWorldTime() - RETROSPECTIVE_WINDOW_TICKS;
+        if (lastPatchedTime < windowBorder)
+        {
+            // Old entries have no effect. Considering it by reseting chunk snow
+            // states and patch from newer journal entries only
+            lastPatchedTime = windowBorder;
+            bFastForward = true;
+        }
+        int fromIdx = seasonData.getJournalIndexAfterTime(lastPatchedTime);
+
+        // determine initial state
+        boolean bWasRaining = seasonData.wasLastRaining(fromIdx);
+        boolean bWasCold = seasonData.wasLastCold(fromIdx);
+
+        long rainingTrackTicks = 0;
+        long coldTrackTicks = 0;
+
+        long intervalRainingTrackStart = lastPatchedTime;
+        long intervalSnowyTrackStart = lastPatchedTime;
+
+        // initialize in case of fast forward
+        if (bFastForward)
+        {
+            if (bWasCold)
+                executePatchCommand(4, 0, chunk);  // 4 = set all snow/frozen
+            else
+                executePatchCommand(5, 0, chunk);  // 5 = set all molten
+        }
+
+        // Replay latest journal entries
+        if (fromIdx != -1)
+        {
+            int command = 0; // 0 = NOP
+
+            // Apply events from journal
+            for (int curEntry = fromIdx; curEntry < seasonData.journal.size(); curEntry++)
+            {
+                WeatherJournalEvent wevt = seasonData.journal.get(curEntry);
+
+                rainingTrackTicks = wevt.getTimeStamp() - intervalRainingTrackStart;
+                coldTrackTicks = wevt.getTimeStamp() - intervalSnowyTrackStart;
+
+                switch (wevt.getEventType())
+                {
+                    case EVENT_START_RAINING:
+                        if (!bWasRaining)
+                        {
+                            intervalRainingTrackStart = wevt.getTimeStamp();
+                            command = 0;  // 0 = NOP
+                            bWasRaining = true;
+                        }
+                        break;
+                    case EVENT_STOP_RAINING:
+                        if (bWasRaining)
+                        {
+                            intervalRainingTrackStart = wevt.getTimeStamp();
+                            if (bWasCold)
+                                command = 2; // 2 = simulate chunk snow (requires duration parameter in ticks)
+                            else
+                                command = 0; // 0 = NOP
+                            bWasRaining = false;
+                        }
+                        break;
+                    case EVENT_TO_COLD_SEASON:
+                        if (!bWasCold)
+                        {
+                            intervalSnowyTrackStart = wevt.getTimeStamp();
+                            command = 3; // 3 = simulate melting (requires duration parameter in ticks)
+                            bWasCold = true;
+                        }
+                        break;
+                    case EVENT_TO_WARM_SEASON:
+                        if (bWasCold)
+                        {
+                            intervalSnowyTrackStart = wevt.getTimeStamp();
+                            if (bWasRaining)
+                                command = 2; // 2 = simulate chunk snow (requires duration parameter in ticks).
+                            else
+                                command = 1; // 1 = simulate freeze only (requires duration parameter in ticks).
+                            bWasCold = false;
+                        }
+                        break;
+                    default:
+                        // Do nothing
+                        command = 0;  // 0 = NOP
+                }
+
+                executePatchCommand(command, coldTrackTicks, rainingTrackTicks, chunk);
+            }
+        }
+
+        // Post update for running events
+        rainingTrackTicks = world.getTotalWorldTime() - intervalRainingTrackStart;
+        coldTrackTicks = world.getTotalWorldTime() - intervalSnowyTrackStart;
+
+        if (seasonData.wasLastRaining(-1) && seasonData.wasLastCold(-1))
+        {
+            executePatchCommand(2, coldTrackTicks, rainingTrackTicks, chunk);
+        }
+        else if (!seasonData.wasLastCold(-1))
+        {
+            executePatchCommand(3, coldTrackTicks, rainingTrackTicks, chunk);
+        }
+        else
+        {
+            executePatchCommand(1, coldTrackTicks, rainingTrackTicks, chunk);
+        }
+
+        chunkData.setPatchTimeUptodate();
+    }
+    
+    /**
+     * Executes a patching action on a chunk.<br/>
+     * Commands have following meaning:<br/>
+     * <ul>
+     *  <li>0 = NOP. Do nothing.</li>
+     *  <li>1 = simulate freeze only.</li>
+     *  <li>2 = simulate chunk snow (requires duration parameter in ticks).</li>
+     *  <li>3 = simulate melting (requires duration parameter in ticks).</li>
+     *  <li>4 = set all snow/frozen.</li>
+     *  <li>5 = set all molten.</li>
+     * </ul>
+     * 
+     * @param command the action itself
+     * @param coldTrackTicks amount of ticks the weather was cold (resulting to freezing)
+     * @param rainingTrackTicks amount of ticks the weather was rainy/snowy (resulting to snowing if cold)
+     * @param chunk the patched chunk
+     */
+    private void executePatchCommand(int command, long coldTrackTicks, long rainingTrackTicks, Chunk chunk)
     {
-        // TODO: Handle client notification on block changes properly!
+        if (command != 0)
+        {
+            int threshold = 0;
+            if (command == 2)
+            {
+                long dur = rainingTrackTicks;
+                if (dur > coldTrackTicks)
+                    dur = coldTrackTicks;
+                threshold = evalProbPerBlockUpdateForTicks((int) dur);
+            }
+            else if (command == 1 || command == 3)
+                threshold = evalProbPerBlockUpdateForTicks((int) coldTrackTicks);
+            executePatchCommand(command, threshold, chunk);
+        }
+    }
+    
+    /**
+     * executes a patching action on a chunk.<br/>
+     * Commands have following meaning:<br/>
+     * <ul>
+     *  <li>0 = NOP. Do nothing.</li>
+     *  <li>1 = simulate freeze only.</li>
+     *  <li>2 = simulate chunk snow (requires duration parameter in ticks).</li>
+     *  <li>3 = simulate melting (requires duration parameter in ticks).</li>
+     *  <li>4 = set all snow/frozen.</li>
+     *  <li>5 = set all molten.</li>
+     * </ul>
+     * 
+     * @param command the action itself
+     * @param threshold duration in ticks, if needed
+     * @param chunk the patched chunk
+     */
+    private void executePatchCommand(int command, int threshold, Chunk chunk)
+    {
+        // TODO: Maybe improve client notification on block changes at setBlockState calls if performance issues are occurring!
 
         ChunkPos chunkPos = chunk.getPos();
         World world = chunk.getWorld();
@@ -374,156 +641,13 @@ public class SeasonChunkPatcher
         }
     }
 
-    private void executePatchCommand(int command, long snowyTrackTicks, long rainingTrackTicks, Chunk chunk, Season season)
-    {
-        if (command != 0)
-        {
-            int threshold = 0;
-            if (command == 2)
-            {
-                long dur = rainingTrackTicks;
-                if (dur > snowyTrackTicks)
-                    dur = snowyTrackTicks;
-                threshold = evalProbUpdateTick((int) dur);
-            }
-            else if (command == 1 || command == 3)
-                threshold = evalProbUpdateTick((int) snowyTrackTicks);
-            executePatchCommand(command, threshold, chunk, season);
-        }
-    }
-
-    private void patchChunkTerrain(ChunkData chunkData)
-    {
-        Chunk chunk = chunkData.getChunk();
-        World world = chunk.getWorld();
-
-        Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-
-        long lastPatchedTime = chunkData.getLastPatchedTime();
-        boolean bFastForward = false;
-        long windowBorder = world.getTotalWorldTime() - RETROSPECTIVE_WINDOW_TICKS;
-        if (lastPatchedTime < windowBorder)
-        {
-            // Old entries have no effect. Considering it by reseting chunk snow
-            // states and patch from newer journal entries only
-            lastPatchedTime = windowBorder;
-            bFastForward = true;
-        }
-        int fromIdx = seasonData.getJournalIndexAfterTime(lastPatchedTime);
-
-        // determine initial state
-        boolean bWasRaining = seasonData.wasLastRaining(fromIdx);
-        boolean bWasSnowy = seasonData.wasLastSnowy(fromIdx);
-
-        long rainingTrackTicks = 0;
-        long snowyTrackTicks = 0;
-
-        long intervalRainingTrackStart = lastPatchedTime;
-        long intervalSnowyTrackStart = lastPatchedTime;
-
-        // initialize in case of fast forward
-        if (bFastForward)
-        {
-            if (bWasSnowy)
-                executePatchCommand(4, 0, chunk, season);
-            else
-                executePatchCommand(5, 0, chunk, season);
-        }
-
-        // Replay latest journal entries
-        if (fromIdx != -1)
-        {
-            int command = 0; // 0 = NOP. 1 = simulate freeze only. 2 = simulate
-                             // chunk snow (requires ticks) 3 = simulate melting
-                             // (requires ticks) 4 = set all snow 5 = set all
-                             // molten
-
-            // Apply events from journal
-            for (int curEntry = fromIdx; curEntry < seasonData.journal.size(); curEntry++)
-            {
-                WeatherJournalEvent wevt = seasonData.journal.get(curEntry);
-
-                rainingTrackTicks = wevt.getTimeStamp() - intervalRainingTrackStart;
-                snowyTrackTicks = wevt.getTimeStamp() - intervalSnowyTrackStart;
-
-                switch (wevt.getEventType())
-                {
-                    case EVENT_START_RAINING:
-                        if (!bWasRaining)
-                        {
-                            intervalRainingTrackStart = wevt.getTimeStamp();
-                            command = 0;
-                            bWasRaining = true;
-                        }
-                        break;
-                    case EVENT_STOP_RAINING:
-                        if (bWasRaining)
-                        {
-                            intervalRainingTrackStart = wevt.getTimeStamp();
-                            if (bWasSnowy)
-                                command = 2;
-                            else
-                                command = 0;
-                            bWasRaining = false;
-                        }
-                        break;
-                    case EVENT_TO_COLD_SEASON:
-                        if (!bWasSnowy)
-                        {
-                            intervalSnowyTrackStart = wevt.getTimeStamp();
-                            command = 3;
-                            bWasSnowy = true;
-                        }
-                        break;
-                    case EVENT_TO_WARM_SEASON:
-                        if (bWasSnowy)
-                        {
-                            intervalSnowyTrackStart = wevt.getTimeStamp();
-                            if (bWasRaining)
-                                command = 2;
-                            else
-                                command = 1;
-                            bWasSnowy = false;
-                        }
-                        break;
-                    default:
-                        // Do nothing
-                        command = 0;
-                }
-
-                // DEBUG
-                /*
-                 * if( command == 1 || command == 2 ) command = 4; else if(
-                 * command == 3 ) command = 5;
-                 */
-                // DEBUG END
-
-                executePatchCommand(command, snowyTrackTicks, rainingTrackTicks, chunk, season);
-            }
-        }
-
-        // Post update for running events
-        rainingTrackTicks = world.getTotalWorldTime() - intervalRainingTrackStart;
-        snowyTrackTicks = world.getTotalWorldTime() - intervalSnowyTrackStart;
-
-        if (seasonData.wasLastRaining(-1) && seasonData.wasLastSnowy(-1))
-        {
-            executePatchCommand(2, snowyTrackTicks, rainingTrackTicks, chunk, season);
-        }
-        else if (!seasonData.wasLastSnowy(-1))
-        {
-            executePatchCommand(3, snowyTrackTicks, rainingTrackTicks, chunk, season);
-        }
-        else
-        {
-            executePatchCommand(1, snowyTrackTicks, rainingTrackTicks, chunk, season);
-        }
-
-        chunkData.setPatchTimeUptodate();
-    }
-
-    private int evalProbUpdateTick(int duringTicks)
+    /**
+     * Evals probability per block, an action is performed.
+     * 
+     * @param duringTicks duration in ticks. More means, higher probability.
+     * @return the probability in the interval. (0, THR_PROB_MAX]
+     */
+    private int evalProbPerBlockUpdateForTicks(int duringTicks)
     {
         final double fieldHitProb = 1.0 / (16.0 * 16.0);
         final double snowUpdateProbInTick = 1.0 / 16.0;
@@ -534,13 +658,23 @@ public class SeasonChunkPatcher
 
         return (int) ((double) THR_PROB_MAX * prob + 0.5);
     }
+    
+    ////////////////////
 
+    /**
+     * An entry to point to pending chunks for patching. Covers case, the actual chunk is not known.
+     */
     private static class PendingChunkEntry
     {
         private final ChunkKey key;
         private final World world;
         private Chunk chunk;
 
+        /**
+         * Constructor which is called if the chunk is known.
+         * 
+         * @param chunk the chunk.
+         */
         public PendingChunkEntry(Chunk chunk)
         {
             this.world = chunk.getWorld();
@@ -548,6 +682,12 @@ public class SeasonChunkPatcher
             this.chunk = chunk;
         }
 
+        /**
+         * Constructor which is called if chunk is not known to be loaded.
+         * 
+         * @param key a key uniquely identifying the chunk on the server.
+         * @param world the world the chunk is in.
+         */
         public PendingChunkEntry(ChunkKey key, World world)
         {
             this.key = key;
@@ -555,16 +695,31 @@ public class SeasonChunkPatcher
             this.chunk = null;
         }
 
+        /**
+         * Returns a hashable key identifying a chunk on the server.
+         * 
+         * @return the key.
+         */
         public ChunkKey getKey()
         {
             return this.key;
         }
 
+        /**
+         * Returns the world of the chunk.
+         * 
+         * @return the world.
+         */
         public World getWorld()
         {
             return this.world;
         }
 
+        /**
+         * Gets the chunk. Performs a lazy loading if chunk is not loaded.
+         * 
+         * @return the chunk.
+         */
         public Chunk getChunk()
         {
             if (chunk == null)

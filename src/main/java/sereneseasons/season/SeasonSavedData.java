@@ -31,7 +31,7 @@ public class SeasonSavedData extends WorldSavedData
 
     public int seasonCycleTicks;
 
-    private boolean isLastSnowyState = false;
+    private boolean isLastColdState = false;
     private boolean isLastRainyState = false;
     public List<WeatherJournalEvent> journal = new ArrayList<WeatherJournalEvent>();
 
@@ -100,6 +100,11 @@ public class SeasonSavedData extends WorldSavedData
         return nbt;
     }
 
+    /**
+     * Creates a list of stored chunks ready to be written to NBT.
+     * 
+     * @return a list of chunk meta data to be stored.
+     */
     private List<ChunkDataStorage> toLastPatchedTimeStorable()
     {
         int size = managedChunks.size();
@@ -111,6 +116,11 @@ public class SeasonSavedData extends WorldSavedData
         return result;
     }
 
+    /**
+     * Transfers readen NBT data to stored chunk meta data.
+     * 
+     * @param list a list of readen chunk meta data. 
+     */
     private void applyLastPatchedTimes(List<ChunkDataStorage> list)
     {
         for (ChunkDataStorage entry : list)
@@ -128,9 +138,14 @@ public class SeasonSavedData extends WorldSavedData
         }
     }
 
+    /**
+     * Determines {@link #isLastColdState} and {@link #isLastRainyState} states for the latest journal entry.
+     */
     private void determineLastState()
     {
-        int lastSnowyState = -1;
+    	// IMPORTANT: Keep in synch, if first minecraft day is starting in a different season with a different weather.
+    	
+        int lastColdState = -1;
         int lastRainyState = -1;
         for (int i = journal.size() - 1; i >= 0; i--)
         {
@@ -140,12 +155,12 @@ public class SeasonSavedData extends WorldSavedData
             switch (etype)
             {
                 case EVENT_TO_COLD_SEASON:
-                    if (lastSnowyState == -1)
-                        lastSnowyState = 1;
+                    if (lastColdState == -1)
+                        lastColdState = 1;
                     break;
                 case EVENT_TO_WARM_SEASON:
-                    if (lastSnowyState == -1)
-                        lastSnowyState = 0;
+                    if (lastColdState == -1)
+                        lastColdState = 0;
                     break;
                 case EVENT_START_RAINING:
                     if (lastRainyState == -1)
@@ -160,16 +175,22 @@ public class SeasonSavedData extends WorldSavedData
             }
 
             // Is now fully determined?
-            if (lastSnowyState != -1 && lastRainyState != -1)
+            if (lastColdState != -1 && lastRainyState != -1)
                 break;
         }
 
-        isLastSnowyState = (lastSnowyState == 1); // -1 state is Default: First
+        isLastColdState = (lastColdState == 1);  // -1 state is Default: First
                                                   // minecraft day is at spring.
         isLastRainyState = (lastRainyState == 1); // -1 state is Default: First
                                                   // minecraft day has no rain.
     }
 
+    /**
+     * Returns if it was raining at the time of a specific journal entry. 
+     * 
+     * @param atIdx the journal index.
+     * @return <code>true</code> iff yes.
+     */
     public boolean wasLastRaining(int atIdx)
     {
         if (atIdx != -1)
@@ -193,7 +214,13 @@ public class SeasonSavedData extends WorldSavedData
         return isLastRainyState;
     }
 
-    public boolean wasLastSnowy(int atIdx)
+    /**
+     * Returns if it was cold at the time of a specific journal entry. 
+     * 
+     * @param atIdx the journal index.
+     * @return <code>true</code> iff yes.
+     */
+    public boolean wasLastCold(int atIdx)
     {
         if (atIdx != -1)
         {
@@ -213,13 +240,20 @@ public class SeasonSavedData extends WorldSavedData
             }
         }
 
-        return isLastSnowyState;
+        return isLastColdState;
     }
 
+    /**
+     * Returns the index of the next journal entry after a given time stamp.
+     * 
+     * @param timeStamp the time stamp.
+     * @return the index of the journal entry.
+     */
     public int getJournalIndexAfterTime(long timeStamp)
     {
-        // FIXME SEASON: Use subdivision to find the time point in approx. O(log n)
-        // steps.
+        // FIXME: Use subdivision to find the time point in approx. O(log n) steps.
+    	//        Performance issues are expected for a longer server run.
+        //        Or use some sort of caching to amortize costs.
 
         for (int i = 0; i < journal.size(); i++)
         {
@@ -230,15 +264,21 @@ public class SeasonSavedData extends WorldSavedData
         return -1;
     }
 
+    /**
+     * Adds a recent journal entry.
+     * 
+     * @param w the world
+     * @param eventType the event type
+     */
     private void addEvent(World w, WeatherEventType eventType)
     {
         switch (eventType)
         {
             case EVENT_TO_COLD_SEASON:
-                isLastSnowyState = true;
+                isLastColdState = true;
                 break;
             case EVENT_TO_WARM_SEASON:
-                isLastSnowyState = false;
+                isLastColdState = false;
                 break;
             case EVENT_START_RAINING:
                 isLastRainyState = true;
@@ -254,11 +294,18 @@ public class SeasonSavedData extends WorldSavedData
         journal.add(new WeatherJournalEvent(w.getTotalWorldTime(), eventType));
     }
 
+    /**
+     * Is called from {@link sereneseasons.handler.season.SeasonHandler#onWorldTick(WorldTickEvent)}.
+     * Decides whether to add new journal element based on current weather and season state.
+     * 
+     * @param w the world.
+     * @param curSeason the current season.
+     */
     public void updateJournal(World w, Season curSeason)
     {
-        if (curSeason == Season.WINTER && !wasLastSnowy(-1))
+        if (curSeason == Season.WINTER && !wasLastCold(-1))
             addEvent(w, WeatherEventType.EVENT_TO_COLD_SEASON);
-        else if (curSeason != Season.WINTER && wasLastSnowy(-1))
+        else if (curSeason != Season.WINTER && wasLastCold(-1))
             addEvent(w, WeatherEventType.EVENT_TO_WARM_SEASON);
 
         if (w.isRaining() && !wasLastRaining(-1))
@@ -267,6 +314,13 @@ public class SeasonSavedData extends WorldSavedData
             addEvent(w, WeatherEventType.EVENT_STOP_RAINING);
     }
 
+    /**
+     * Returns a meta data entry for a chunk. Can create a new one if not existing. 
+     * 
+     * @param chunk the chunk
+     * @param bCreateIfNotExisting if <code>true</code> then a new entry is created if not existing.
+     * @return the chunk meta data for seasons.
+     */
     public ChunkData getStoredChunkData(Chunk chunk, boolean bCreateIfNotExisting)
     {
         ChunkPos cpos = chunk.getPos();
@@ -289,7 +343,7 @@ public class SeasonSavedData extends WorldSavedData
             {
                 if (bCreateIfNotExisting)
                 {
-                    chunkData.setLoadedChunk(chunk);
+                    chunkData.attachLoadedChunk(chunk);
                 }
                 else
                     return null;
@@ -300,20 +354,27 @@ public class SeasonSavedData extends WorldSavedData
             return null;
 
         long lastPatchTime = 0; // Initial time. Should be bigger than
-                                // ActiveChunkData.getSmallerKey() value!
+                                // ActiveChunkMarker.getSmallerKey() value!
 
         chunkData = new ChunkData(key, chunk, lastPatchTime);
         managedChunks.put(key, chunkData);
         return chunkData;
     }
 
+    /**
+     * Returns a meta data entry for a chunk key. Can create a new one if not existing. 
+     * 
+     * @param key the chunk key.
+     * @param bCreateIfNotExisting if <code>true</code> then a new entry is created if not existing.
+     * @return the chunk meta data for seasons.
+     */
     public ChunkData getStoredChunkData(ChunkKey key, boolean bCreateIfNotExisting)
     {
         ChunkData chunkData = managedChunks.get(key);
         if (chunkData == null && bCreateIfNotExisting)
         {
             long lastPatchTime = 0; // Initial time. Should be bigger than
-                                    // ActiveChunkData.getSmallerKey() value!
+                                    // ActiveChunkMarker.getSmallerKey() value!
 
             chunkData = new ChunkData(key, null, lastPatchTime);
             managedChunks.put(key, chunkData);
@@ -321,12 +382,26 @@ public class SeasonSavedData extends WorldSavedData
         return chunkData;
     }
 
+    /**
+     * Returns a meta data entry for a chunk position. Can create a new one if not existing. 
+     * 
+     * @param world the world of the chunk.
+     * @param pos the chunk position.
+     * @param bCreateIfNotExisting if <code>true</code> then a new entry is created if not existing.
+     * @return the chunk meta data for seasons.
+     */
     public ChunkData getStoredChunkData(World world, ChunkPos pos, boolean bCreateIfNotExisting)
     {
         ChunkKey key = new ChunkKey(pos, world);
         return getStoredChunkData(key, bCreateIfNotExisting);
     }
 
+    /**
+     * Called from {@link sereneseasons.handler.season.SeasonHandler#onWorldUnloaded}. <br/>
+     * Cleanup routine if a world got unloaded.
+     * 
+     * @param world the unloaded world.
+     */
     public void onWorldUnload(World world)
     {
         // Clear managed chunk tags associated to the world
@@ -334,42 +409,75 @@ public class SeasonSavedData extends WorldSavedData
                                // associated to the world.
     }
 
-    public void notifyChunkUnloaded(Chunk chunk)
+    /**
+     * Called from {@link sereneseasons.handler.season.SeasonHandler#onChunkUnloaded}. <br/>
+     * Cleanup routine if a chunk got unloaded. In this case the meta is detached from Chunk.
+     *   
+     * @param chunk the unloaded chunk.
+     */
+    public void onChunkUnloaded(Chunk chunk)
     {
         ChunkKey key = new ChunkKey(chunk.getPos(), chunk.getWorld());
         ChunkData chunkData = managedChunks.get(key);
         if (chunkData != null)
         {
-            chunkData.clearLoadedChunk();
+            chunkData.detachLoadedChunk();
         }
     }
+    
+    //////////////////
 
+    /**
+     * Storage object for a chunk meta data {@link ChunkData}. 
+     */
     public static class ChunkDataStorage implements IDataStorable
     {
         private ChunkKey key;
         private long lastPatchedTime;
 
+        /**
+         * The constructor. Used for streaming.
+         */
         public ChunkDataStorage()
         {
             // For streaming
         }
 
+        /**
+         * The constructor.
+         * 
+         * @param key the chunk key identifying the chunk itself.
+         * @param data
+         */
         public ChunkDataStorage(ChunkKey key, ChunkData data)
         {
             this.key = key;
             this.lastPatchedTime = data.getLastPatchedTime();
         }
 
+        /**
+         * Returns the key identifying the chunk.
+         * 
+         * @return the chunk key.
+         */
         public ChunkKey getKey()
         {
             return key;
         }
 
+        /**
+         * Returns the time stamp a chunk has been patched last time.
+         * 
+         * @return the time stamp.
+         */
         public long getLastPatchedTime()
         {
             return lastPatchedTime;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void writeToStream(ObjectOutputStream os) throws IOException
         {
@@ -379,6 +487,9 @@ public class SeasonSavedData extends WorldSavedData
             os.writeLong(lastPatchedTime);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void readFromStream(ObjectInputStream is) throws IOException
         {

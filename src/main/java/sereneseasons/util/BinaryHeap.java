@@ -4,12 +4,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * Originally from
+ * A binary heap. Originally from
  * https://courses.cs.washington.edu/courses/cse373/11wi/homework/5/BinaryHeap.java
- * 
- * @param <T>
  */
-public class BinaryHeap<K, T extends BinaryHeapNode<K>> implements Iterable<T>
+public class BinaryHeap<K, T extends BinaryHeap.Node<K>> implements Iterable<T>
 {
     private static final int DEFAULT_CAPACITY = 10;
     protected T[] array;
@@ -22,7 +20,7 @@ public class BinaryHeap<K, T extends BinaryHeapNode<K>> implements Iterable<T>
     public BinaryHeap()
     {
         // Java doesn't allow construction of arrays of placeholder data types
-        array = (T[]) new BinaryHeapNode[DEFAULT_CAPACITY];
+        array = (T[]) new Node[DEFAULT_CAPACITY];
         size = 0;
     }
 
@@ -83,7 +81,7 @@ public class BinaryHeap<K, T extends BinaryHeapNode<K>> implements Iterable<T>
             return;
         }
 
-        BinaryHeapNode<K> first = peek();
+        Node<K> first = peek();
         elem.setNodeKey(first.getSmallerKey());
         bubbleUp(index);
         remove();
@@ -194,7 +192,7 @@ public class BinaryHeap<K, T extends BinaryHeapNode<K>> implements Iterable<T>
         return rightIndex(i) <= size;
     }
 
-    protected BinaryHeapNode<K> parent(int i)
+    protected Node<K> parent(int i)
     {
         return array[parentIndex(i)];
     }
@@ -251,6 +249,68 @@ public class BinaryHeap<K, T extends BinaryHeapNode<K>> implements Iterable<T>
         {
             return array[++curIndex];
         }
+    }
+    
+    ///////////////////
+    
+    /**
+     * A binary heap node.
+     * 
+     * @param <K> Datatype of a comparable key
+     */
+    public static abstract class Node<K> implements Comparable<Node<K>>
+    {
+        int index;
+
+        /**
+         * The constructor
+         */
+        protected Node()
+        {
+            this.index = 0;
+        }
+
+        /**
+         * Returns the index within the heap.
+         * 0 means this node is not existing in the heap.
+         * 
+         * @return the node index.
+         */
+        public int getIndex()
+        {
+            return index;
+        }
+
+        /**
+         * Returns whether the node is existing within a heap.
+         * 
+         * @return <code>true</code> iff yes.
+         */
+        public boolean isEnqueued()
+        {
+            return index >= 1;
+        }
+
+        /**
+         * Returns some key value smaller than the actual node key.
+         * 
+         * @return a smaller key.
+         */
+        public abstract K getSmallerKey();
+
+        /**
+         * Sets the node key.
+         * 
+         * @param key the key.
+         */
+        public abstract void setNodeKey(K key);
+
+        /**
+         * Gets the node key.
+         * 
+         * @return the node key.
+         */
+        public abstract long getNodeKey();
     }
 
 }

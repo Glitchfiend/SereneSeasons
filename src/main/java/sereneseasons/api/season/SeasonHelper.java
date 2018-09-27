@@ -7,10 +7,7 @@
  ******************************************************************************/
 package sereneseasons.api.season;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -56,6 +53,15 @@ public class SeasonHelper
         return temperature < 0.15F || (season == Season.WINTER && temperature <= 0.8F );
     }
 
+    /**
+     * Shifts temperature down in some biomes like Plains to avoid raining in winter for them.
+     * 
+     * @param temperature temperature as retrieved from {@link Biome#getTemperature} or
+     * {@link Biome#getDefaultTemperature}
+     * @param biome regarded biome
+     * @param season regarded season
+     * @return the modified temperature
+     */
     private static float modifyTemperature(float temperature, Biome biome, Season season ) {
 		if( biome == Biomes.PLAINS && season == Season.WINTER ) {
 			temperature -= 0.1F;
@@ -64,16 +70,42 @@ public class SeasonHelper
 		return temperature;
     }
     
+    /**
+     * Returns a modified temperature by {@link #modifyTemperature(float, Biome, Season)}
+     * returned by {@link Biome#getTemperature(BlockPos)}.
+     * 
+     * @param biome regarded biome
+     * @param season regarded season
+     * @return the modified temperature
+     */
     public static float getModifiedTemperatureForBiome(Biome biome, Season season) {
 		float temperature = biome.getDefaultTemperature();
 		return modifyTemperature(temperature, biome, season);
     }
     
+    /**
+     * Returns a modified temperature by {@link #modifyTemperature(float, Biome, Season)}
+     * returned by {@link Biome#getDefaultTemperature()}.
+     * 
+     * @param biome regarded biome
+     * @param season regarded season
+     * @return the modified temperature
+     */
     public static float getModifiedFloatTemperatureAtPos(Biome biome, BlockPos pos, Season season) {
 		float temperature = biome.getTemperature(pos);
 		return modifyTemperature(temperature, biome, season);
     }
 
+    /**
+     * Helper method for {@link SeasonASMHelper} evaluating the temperature. Was used in MC1.7.10 version
+     * to override the temperature returned by {@link Biome}, but now is only used to trigger rain/snow particles
+     * at {@link net.minecraft.client.renderer.EntityRenderer#addRainParticles} for MC1.11.2 or higher. 
+     * 
+     * @param biome actual biome. Must match the biome at given position.
+     * @param pos actual position
+     * @param subSeason actual season
+     * @return the temperature influenced by season.
+     */
 	public static float getSeasonFloatTemperature(Biome biome, BlockPos pos, SubSeason subSeason) {
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
@@ -112,41 +144,5 @@ public class SeasonHelper
     {
         ISeasonState getServerSeasonState(World world);
         ISeasonState getClientSeasonState();
-    }
-
-    public static IBlockState getCropFromType(int type)
-    {
-        switch(type) {
-        case 1:
-            return Blocks.WHEAT.getDefaultState();
-        case 2:
-            return Blocks.POTATOES.getDefaultState();
-        case 3:
-            return Blocks.CARROTS.getDefaultState();
-        case 4:
-            return Blocks.PUMPKIN_STEM.getDefaultState();
-        case 5:
-            return Blocks.MELON_STEM.getDefaultState();
-        case 6:
-            return Blocks.BEETROOTS.getDefaultState();
-        }
-        return null;
-    }
-
-    public static int getTypeFromCrop(Block block)
-    {
-        if( block == Blocks.BEETROOTS )
-            return 6;
-        if( block == Blocks.MELON_STEM )
-            return 5;
-        if( block == Blocks.PUMPKIN_STEM )
-            return 4;
-        if( block == Blocks.CARROTS  )
-            return 3;
-        if( block == Blocks.POTATOES )
-            return 2;
-        if( block == Blocks.WHEAT )
-            return 1;
-        return 0;
     }
 }
