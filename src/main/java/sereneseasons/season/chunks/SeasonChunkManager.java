@@ -1,11 +1,4 @@
-/*******************************************************************************
- * Copyright 2016, the Biomes O' Plenty Team
- * 
- * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Public License.
- * 
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
- ******************************************************************************/
-package sereneseasons.season.data;
+package sereneseasons.season.chunks;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,75 +12,58 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.common.util.INBTSerializable;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.util.DataUtils;
 
-public class SeasonSavedData extends WorldSavedData
-{
-    public static final String DATA_IDENTIFIER = "seasons";
+/**
+ * Manager to store additional information for chunks.
+ */
+public class SeasonChunkManager implements INBTSerializable<NBTTagCompound> {
+	public HashMap<ChunkKey, SeasonChunkData> managedChunks = new HashMap<ChunkKey, SeasonChunkData>();
 
-    public int seasonCycleTicks;
-    public HashMap<ChunkKey, SeasonChunkData> managedChunks = new HashMap<ChunkKey, SeasonChunkData>();
-    public SeasonJournal journal = new SeasonJournal();
+	/**
+	 * The constructor.
+	 */
+	public SeasonChunkManager() {
+	}
 
-    public SeasonSavedData()
-    {
-        this(DATA_IDENTIFIER);
-    }
-
-    // This specific constructor is required for saving to occur
-    public SeasonSavedData(String identifier)
-    {
-        super(identifier);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt)
-    {
-        this.seasonCycleTicks = nbt.getInteger("SeasonCycleTicks");
-
-        this.journal = new SeasonJournal();
-        this.journal.deserializeNBT(nbt.getCompoundTag("Journal"));
-        
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		
         try
         {
-            List<SeasonChunkData> storedChunkData = DataUtils.toListStorable(nbt.getByteArray("ChunkExtraInfo"), SeasonChunkData.class);
-            applyLoadedChunkData(storedChunkData);
-        }
-        catch (IOException e)
-        {
-        	SereneSeasons.logger.error("Couldn't load chunk patch timestamps. Some chunks won't be in synch with season.", e);
-        }
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
-    {
-    	nbt.setInteger("SeasonCycleTicks", this.seasonCycleTicks);
-    	nbt.setTag("Journal", this.journal.serializeNBT());
-    	
-        try
-        {
-            nbt.setByteArray("ChunkExtraInfo", DataUtils.toBytebufStorable(toChunkDataList()));
+            nbt.setByteArray("ChunkData", DataUtils.toBytebufStorable(toChunkDataList()));
         }
         catch (IOException e)
         {
         	SereneSeasons.logger.error("Couldn't store chunk patch timestamps. Some chunks won't be in synch with season.", e);
         }
+		return nbt;
+	}
 
-        return nbt;
-    }
-    
-    /**
-     * Returns the journal.
-     * 
-     * @return the journal.
-     */
-    public SeasonJournal getJournal() {
-    	return this.journal;
-    }
-
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		if( nbt != null ) {
+	        try
+	        {
+	            List<SeasonChunkData> storedChunkData = DataUtils.toListStorable(nbt.getByteArray("ChunkData"), SeasonChunkData.class);
+	            applyLoadedChunkData(storedChunkData);
+	        }
+	        catch (IOException e)
+	        {
+	        	SereneSeasons.logger.error("Couldn't load chunk patch timestamps. Some chunks won't be in synch with season.", e);
+	        }
+		}		
+	}
+	
     /**
      * Creates a list of stored chunks ready to be written to NBT.
      * 
@@ -198,7 +174,7 @@ public class SeasonSavedData extends WorldSavedData
         ChunkKey key = new ChunkKey(pos, world);
         return getStoredChunkData(key, bCreateIfNotExisting);
     }
-
+    
     /**
      * Called from {@link sereneseasons.handler.season.SeasonHandler#onWorldUnloaded}. <br/>
      * Cleanup routine if a world got unloaded.

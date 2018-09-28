@@ -1,4 +1,4 @@
-package sereneseasons.season.data;
+package sereneseasons.season.journal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +12,9 @@ import sereneseasons.api.season.Season;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.util.DataUtils;
 
+/**
+ * Object representing the journal.
+ */
 public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
     private boolean isLastColdState = false;
     private boolean isLastRainyState = false;

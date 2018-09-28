@@ -13,8 +13,8 @@ import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
 import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
-import sereneseasons.season.data.SeasonSavedData;
 
 import java.util.List;
 

@@ -14,8 +14,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.season.data.SeasonJournal;
-import sereneseasons.season.data.SeasonSavedData;
+import sereneseasons.season.SeasonSavedData;
+import sereneseasons.season.journal.SeasonJournal;
 
 public class SeasonSleepHandler
 {

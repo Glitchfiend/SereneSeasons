@@ -1,4 +1,4 @@
-package sereneseasons.season.data;
+package sereneseasons.season.chunks;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -57,7 +57,6 @@ public class SeasonChunkData implements IDataStorable
      */
     void detachLoadedChunk()
     {
-//        setToBePatched(false);
         this.chunk = null;
     }
 
@@ -128,12 +127,18 @@ public class SeasonChunkData implements IDataStorable
     	return true;
     }
     
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public void writeToStream(ObjectOutputStream os) throws IOException {
 		this.key.writeToStream(os);
         os.writeLong(this.lastPatchedTime);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public void readFromStream(ObjectInputStream is) throws IOException {
         this.key = new ChunkKey();

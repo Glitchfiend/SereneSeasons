@@ -12,10 +12,10 @@ import net.minecraft.world.chunk.Chunk;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonASMHelper;
-import sereneseasons.season.data.SeasonChunkData;
-import sereneseasons.season.data.SeasonJournal;
-import sereneseasons.season.data.SeasonSavedData;
-import sereneseasons.season.data.WeatherJournalEvent;
+import sereneseasons.season.SeasonSavedData;
+import sereneseasons.season.chunks.SeasonChunkData;
+import sereneseasons.season.journal.SeasonJournal;
+import sereneseasons.season.journal.WeatherJournalEvent;
 
 /**
  * The actual patcher for chunks.
