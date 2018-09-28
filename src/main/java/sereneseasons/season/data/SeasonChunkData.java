@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import sereneseasons.util.IDataStorable;
@@ -12,7 +11,7 @@ import sereneseasons.util.IDataStorable;
 /**
  * Stores additional meta data for a chunk used by seasons, like time stamps when the chunk has been patched lately. 
  */
-public class SeasonChunkData
+public class SeasonChunkData implements IDataStorable
 {
 	// Reference to chunk
     private ChunkKey key;
@@ -129,80 +128,16 @@ public class SeasonChunkData
     	return true;
     }
     
-    ////////////////////
-    
-    /**
-     * Storage object for a chunk meta data {@link SeasonChunkData}. 
-     */
-    public static class ChunkDataStorage implements IDataStorable
-    {
-        private ChunkKey key;
-        private long lastPatchedTime;
+	@Override
+	public void writeToStream(ObjectOutputStream os) throws IOException {
+		this.key.writeToStream(os);
+        os.writeLong(this.lastPatchedTime);
+	}
 
-        /**
-         * The constructor. Used for streaming.
-         */
-        public ChunkDataStorage()
-        {
-            // For streaming
-        }
-
-        /**
-         * The constructor.
-         * 
-         * @param key the chunk key identifying the chunk itself.
-         * @param data
-         */
-        public ChunkDataStorage(ChunkKey key, SeasonChunkData data)
-        {
-            this.key = key;
-            this.lastPatchedTime = data.getLastPatchedTime();
-        }
-
-        /**
-         * Returns the key identifying the chunk.
-         * 
-         * @return the chunk key.
-         */
-        public ChunkKey getKey()
-        {
-            return key;
-        }
-
-        /**
-         * Returns the time stamp a chunk has been patched last time.
-         * 
-         * @return the time stamp.
-         */
-        public long getLastPatchedTime()
-        {
-            return lastPatchedTime;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void writeToStream(ObjectOutputStream os) throws IOException
-        {
-            os.writeInt(key.getPos().x);
-            os.writeInt(key.getPos().z);
-            os.writeInt(key.getDimension());
-            os.writeLong(lastPatchedTime);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void readFromStream(ObjectInputStream is) throws IOException
-        {
-            int chunkXPos = is.readInt();
-            int chunkZPos = is.readInt();
-            int dimension = is.readInt();
-            this.key = new ChunkKey(new ChunkPos(chunkXPos, chunkZPos), dimension);
-            this.lastPatchedTime = is.readLong();
-        }
-    }
-
+	@Override
+	public void readFromStream(ObjectInputStream is) throws IOException {
+        this.key = new ChunkKey();
+        this.key.readFromStream(is);
+        this.lastPatchedTime = is.readLong();		
+	}
 }

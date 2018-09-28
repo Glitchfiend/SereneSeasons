@@ -1,12 +1,17 @@
 package sereneseasons.season.data;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import sereneseasons.util.IDataStorable;
 
 /**
  * An object to identify a chunk on a server uniquely. It is a position/dimension pair of the chunk.
  */
-public class ChunkKey
+public class ChunkKey implements IDataStorable
 {
 	// IMPORTANT: Update SeasonSavedData.ChunkDataStorage if some properties changed which need to be persisted.
 	
@@ -22,6 +27,12 @@ public class ChunkKey
 
     private ChunkPos pos;
     private int dimension;
+    
+    /**
+     * The constructor. For streaming only.
+     */
+    public ChunkKey() {
+    }
 
     /**
      * The constructor.
@@ -59,6 +70,8 @@ public class ChunkKey
     {
         if (world.isRemote)
             return false;
+        // TODO: Exclude more of these exotic world types!
+        
         if (world.provider.getDimension() != dimension)
             return false;
         return true;
@@ -199,4 +212,19 @@ public class ChunkKey
             return new ChunkKey(getOffset(key.getPos()), key.getDimension());
         }
     }
+
+	@Override
+	public void writeToStream(ObjectOutputStream os) throws IOException {
+        os.writeInt(pos.x);
+        os.writeInt(pos.z);
+        os.writeInt(dimension);
+	}
+
+	@Override
+	public void readFromStream(ObjectInputStream is) throws IOException {
+        int chunkXPos = is.readInt();
+        int chunkZPos = is.readInt();
+        pos = new ChunkPos(chunkXPos, chunkZPos);
+        dimension = is.readInt();		
+	}
 }

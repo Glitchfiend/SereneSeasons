@@ -295,7 +295,7 @@ public class ChunkPatchingManager
             activeChunksHeap.add(ac);
         }
         
-    	// TODO: TEST: Remove all patched chunk data associated with this world
+    	// Remove all patched chunk data associated with this world
         Iterator<Map.Entry<ChunkKey, PatchedChunkData>> pcdIter = chunkDataMap.entrySet().iterator();
         while( pcdIter.hasNext() ) {
         	Map.Entry<ChunkKey, PatchedChunkData> pcdEntry = pcdIter.next();
@@ -335,7 +335,9 @@ public class ChunkPatchingManager
                 break;
         }
 
-        pendingChunkList = new LinkedList<PendingChunkEntry>();
+        pendingChunkList = new LinkedList<PendingChunkEntry>();	// This construct is required, because
+        														// chunks are associated to their SeasonSavedData pendant
+        														// on lazy loading when loading/generating neighbors
 
         statisticsPendingAmount = chunksInProcess.size();
         statisticsRejectedPendingAmount = 0;
@@ -408,7 +410,6 @@ public class ChunkPatchingManager
         }
 
         // reinsert unprocessed entries to queue
-        // TODO: Remove as soon as neighbor checks are not cascading anymore!
         if (chunksInProcess.size() > 0)
         {
             chunksInProcess.addAll(pendingChunkList);

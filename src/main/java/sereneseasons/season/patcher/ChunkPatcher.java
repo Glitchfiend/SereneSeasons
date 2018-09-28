@@ -1,5 +1,7 @@
 package sereneseasons.season.patcher;
 
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +13,7 @@ import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonASMHelper;
 import sereneseasons.season.data.SeasonChunkData;
+import sereneseasons.season.data.SeasonJournal;
 import sereneseasons.season.data.SeasonSavedData;
 import sereneseasons.season.data.WeatherJournalEvent;
 
@@ -44,6 +47,7 @@ public class ChunkPatcher {
         World world = chunk.getWorld();
 
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
+        SeasonJournal journal = seasonData.getJournal();
 
         long lastPatchedTime = chunkData.getLastPatchedTime();
         boolean bFastForward = false;
@@ -55,11 +59,11 @@ public class ChunkPatcher {
             lastPatchedTime = windowBorder;
             bFastForward = true;
         }
-        int fromIdx = seasonData.getJournalIndexAfterTime(lastPatchedTime);
+        int fromIdx = journal.getJournalIndexAfterTime(lastPatchedTime);
 
         // determine initial state
-        boolean bWasRaining = seasonData.wasLastRaining(fromIdx);
-        boolean bWasCold = seasonData.wasLastCold(fromIdx);
+        boolean bWasRaining = journal.wasLastRaining(fromIdx);
+        boolean bWasCold = journal.wasLastCold(fromIdx);
 
         long rainingTrackTicks = 0;
         long coldTrackTicks = 0;
@@ -82,9 +86,10 @@ public class ChunkPatcher {
             int command = 0; // 0 = NOP
 
             // Apply events from journal
-            for (int curEntry = fromIdx; curEntry < seasonData.journal.size(); curEntry++)
+            List<WeatherJournalEvent> journalEntries = journal.getJournalEvents();
+            for (int curEntry = fromIdx; curEntry < journalEntries.size(); curEntry++)
             {
-                WeatherJournalEvent wevt = seasonData.journal.get(curEntry);
+                WeatherJournalEvent wevt = journalEntries.get(curEntry);
 
                 rainingTrackTicks = wevt.getTimeStamp() - intervalRainingTrackStart;
                 coldTrackTicks = wevt.getTimeStamp() - intervalColdTrackStart;
@@ -142,11 +147,11 @@ public class ChunkPatcher {
         rainingTrackTicks = world.getTotalWorldTime() - intervalRainingTrackStart;
         coldTrackTicks = world.getTotalWorldTime() - intervalColdTrackStart;
 
-        if (seasonData.wasLastRaining(-1) && seasonData.wasLastCold(-1))
+        if (journal.wasLastRaining(-1) && journal.wasLastCold(-1))
         {
             executePatchCommand(2, coldTrackTicks, rainingTrackTicks, chunk);
         }
-        else if (!seasonData.wasLastCold(-1))
+        else if (!journal.wasLastCold(-1))
         {
             executePatchCommand(3, coldTrackTicks, rainingTrackTicks, chunk);
         }

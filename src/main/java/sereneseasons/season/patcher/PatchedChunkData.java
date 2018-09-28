@@ -1,7 +1,7 @@
 package sereneseasons.season.patcher;
 
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.WorldServer;
 import sereneseasons.season.data.ChunkKey;
 import sereneseasons.season.data.SeasonChunkData;
 import sereneseasons.util.BinaryHeap.Node;

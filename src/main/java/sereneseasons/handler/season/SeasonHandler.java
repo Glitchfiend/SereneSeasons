@@ -24,6 +24,7 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonTime;
+import sereneseasons.season.data.SeasonJournal;
 import sereneseasons.season.data.SeasonSavedData;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
@@ -48,7 +49,8 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
                 sendSeasonUpdate(world);
             }
 
-            savedData.updateJournal(world, season);
+            SeasonJournal journal = savedData.getJournal();
+            journal.updateJournal(world, season);
 
             savedData.markDirty();
         }

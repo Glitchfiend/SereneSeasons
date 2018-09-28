@@ -10,17 +10,17 @@ package sereneseasons.season.data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.WorldSavedData;
-import sereneseasons.api.season.Season;
 import sereneseasons.core.SereneSeasons;
-import sereneseasons.season.data.SeasonChunkData.ChunkDataStorage;
 import sereneseasons.util.DataUtils;
 
 public class SeasonSavedData extends WorldSavedData
@@ -28,12 +28,8 @@ public class SeasonSavedData extends WorldSavedData
     public static final String DATA_IDENTIFIER = "seasons";
 
     public int seasonCycleTicks;
-
-    private boolean isLastColdState = false;
-    private boolean isLastRainyState = false;
-    public List<WeatherJournalEvent> journal = new ArrayList<WeatherJournalEvent>();
-
     public HashMap<ChunkKey, SeasonChunkData> managedChunks = new HashMap<ChunkKey, SeasonChunkData>();
+    public SeasonJournal journal = new SeasonJournal();
 
     public SeasonSavedData()
     {
@@ -50,45 +46,30 @@ public class SeasonSavedData extends WorldSavedData
     public void readFromNBT(NBTTagCompound nbt)
     {
         this.seasonCycleTicks = nbt.getInteger("SeasonCycleTicks");
-        try
-        {
-            this.journal = DataUtils.toListStorable(nbt.getByteArray("WeatherJournal"), WeatherJournalEvent.class);
-        }
-        catch (IOException e)
-        {
-            SereneSeasons.logger.error("Couldn't retrieve weather journal. Use a clear one.", e);
-            this.journal = new ArrayList<WeatherJournalEvent>();
-        }
 
+        this.journal = new SeasonJournal();
+        this.journal.deserializeNBT(nbt.getCompoundTag("Journal"));
+        
         try
         {
-            List<ChunkDataStorage> timeStamps = DataUtils.toListStorable(nbt.getByteArray("ChunkExtraInfo"), ChunkDataStorage.class);
-            applyLastPatchedTimes(timeStamps);
+            List<SeasonChunkData> storedChunkData = DataUtils.toListStorable(nbt.getByteArray("ChunkExtraInfo"), SeasonChunkData.class);
+            applyLoadedChunkData(storedChunkData);
         }
         catch (IOException e)
         {
         	SereneSeasons.logger.error("Couldn't load chunk patch timestamps. Some chunks won't be in synch with season.", e);
         }
-
-        determineLastState();
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
-        nbt.setInteger("SeasonCycleTicks", this.seasonCycleTicks);
+    	nbt.setInteger("SeasonCycleTicks", this.seasonCycleTicks);
+    	nbt.setTag("Journal", this.journal.serializeNBT());
+    	
         try
         {
-            nbt.setByteArray("WeatherJournal", DataUtils.toBytebufStorable(journal));
-        }
-        catch (IOException e)
-        {
-        	SereneSeasons.logger.error("Couldn't store weather journal.", e);
-        }
-
-        try
-        {
-            nbt.setByteArray("ChunkExtraInfo", DataUtils.toBytebufStorable(toLastPatchedTimeStorable()));
+            nbt.setByteArray("ChunkExtraInfo", DataUtils.toBytebufStorable(toChunkDataList()));
         }
         catch (IOException e)
         {
@@ -97,19 +78,28 @@ public class SeasonSavedData extends WorldSavedData
 
         return nbt;
     }
+    
+    /**
+     * Returns the journal.
+     * 
+     * @return the journal.
+     */
+    public SeasonJournal getJournal() {
+    	return this.journal;
+    }
 
     /**
      * Creates a list of stored chunks ready to be written to NBT.
      * 
      * @return a list of chunk meta data to be stored.
      */
-    private List<ChunkDataStorage> toLastPatchedTimeStorable()
+    private List<SeasonChunkData> toChunkDataList()
     {
         int size = managedChunks.size();
-        ArrayList<ChunkDataStorage> result = new ArrayList<ChunkDataStorage>(size);
+        ArrayList<SeasonChunkData> result = new ArrayList<SeasonChunkData>(size);
         for (Map.Entry<ChunkKey, SeasonChunkData> entry : managedChunks.entrySet())
         {
-            result.add(new ChunkDataStorage(entry.getKey(), entry.getValue()));
+        	result.add(entry.getValue());
         }
         return result;
     }
@@ -119,197 +109,12 @@ public class SeasonSavedData extends WorldSavedData
      * 
      * @param list a list of readen chunk meta data. 
      */
-    private void applyLastPatchedTimes(List<ChunkDataStorage> list)
+    private void applyLoadedChunkData(List<SeasonChunkData> list)
     {
-        for (ChunkDataStorage entry : list)
+        for (SeasonChunkData data : list)
         {
-            SeasonChunkData data = managedChunks.get(entry.getKey());
-            if (data != null)
-            {
-                data.setPatchTimeTo(data.getLastPatchedTime());
-            }
-            else
-            {
-                data = new SeasonChunkData(entry.getKey(), null, entry.getLastPatchedTime());
-                managedChunks.put(entry.getKey(), data);
-            }
+        	managedChunks.put(data.getKey(), data);
         }
-    }
-
-    /**
-     * Determines {@link #isLastColdState} and {@link #isLastRainyState} states for the latest journal entry.
-     */
-    private void determineLastState()
-    {
-    	// IMPORTANT: Keep in synch, if first minecraft day is starting in a different season with a different weather.
-    	
-        int lastColdState = -1;
-        int lastRainyState = -1;
-        for (int i = journal.size() - 1; i >= 0; i--)
-        {
-            WeatherJournalEvent je = journal.get(i);
-            WeatherEventType etype = je.getEventType();
-
-            switch (etype)
-            {
-                case EVENT_TO_COLD_SEASON:
-                    if (lastColdState == -1)
-                        lastColdState = 1;
-                    break;
-                case EVENT_TO_WARM_SEASON:
-                    if (lastColdState == -1)
-                        lastColdState = 0;
-                    break;
-                case EVENT_START_RAINING:
-                    if (lastRainyState == -1)
-                        lastRainyState = 1;
-                    break;
-                case EVENT_STOP_RAINING:
-                    if (lastRainyState == -1)
-                        lastRainyState = 0;
-                    break;
-                case EVENT_UNKNOWN:
-                	SereneSeasons.logger.warn("Unknown weather journal entry found.");
-            }
-
-            // Is now fully determined?
-            if (lastColdState != -1 && lastRainyState != -1)
-                break;
-        }
-
-        isLastColdState = (lastColdState == 1);  // -1 state is Default: First
-                                                  // minecraft day is at spring.
-        isLastRainyState = (lastRainyState == 1); // -1 state is Default: First
-                                                  // minecraft day has no rain.
-    }
-
-    /**
-     * Returns if it was raining at the time of a specific journal entry. 
-     * 
-     * @param atIdx the journal index.
-     * @return <code>true</code> iff yes.
-     */
-    public boolean wasLastRaining(int atIdx)
-    {
-        if (atIdx != -1)
-        {
-            for (int i = atIdx; i < journal.size(); i++)
-            {
-                WeatherJournalEvent je = journal.get(i);
-                WeatherEventType etype = je.getEventType();
-
-                switch (etype)
-                {
-                    case EVENT_START_RAINING:
-                        return false;
-                    case EVENT_STOP_RAINING:
-                        return true;
-                    default:
-                }
-            }
-        }
-
-        return isLastRainyState;
-    }
-
-    /**
-     * Returns if it was cold at the time of a specific journal entry. 
-     * 
-     * @param atIdx the journal index.
-     * @return <code>true</code> iff yes.
-     */
-    public boolean wasLastCold(int atIdx)
-    {
-        if (atIdx != -1)
-        {
-            for (int i = atIdx; i < journal.size(); i++)
-            {
-                WeatherJournalEvent je = journal.get(i);
-                WeatherEventType etype = je.getEventType();
-
-                switch (etype)
-                {
-                    case EVENT_TO_COLD_SEASON:
-                        return false;
-                    case EVENT_TO_WARM_SEASON:
-                        return true;
-                    default:
-                }
-            }
-        }
-
-        return isLastColdState;
-    }
-
-    /**
-     * Returns the index of the next journal entry after a given time stamp.
-     * 
-     * @param timeStamp the time stamp.
-     * @return the index of the journal entry.
-     */
-    public int getJournalIndexAfterTime(long timeStamp)
-    {
-        // FIXME: Use subdivision to find the time point in approx. O(log n) steps.
-    	//        Performance issues are expected for a longer server run.
-        //        Or use some sort of caching to amortize costs.
-
-        for (int i = 0; i < journal.size(); i++)
-        {
-            if (journal.get(i).getTimeStamp() >= timeStamp)
-                return i;
-        }
-
-        return -1;
-    }
-
-    /**
-     * Adds a recent journal entry.
-     * 
-     * @param w the world
-     * @param eventType the event type
-     */
-    private void addEvent(World w, WeatherEventType eventType)
-    {
-        switch (eventType)
-        {
-            case EVENT_TO_COLD_SEASON:
-                isLastColdState = true;
-                break;
-            case EVENT_TO_WARM_SEASON:
-                isLastColdState = false;
-                break;
-            case EVENT_START_RAINING:
-                isLastRainyState = true;
-                break;
-            case EVENT_STOP_RAINING:
-                isLastRainyState = false;
-                break;
-            case EVENT_UNKNOWN:
-            	SereneSeasons.logger.warn("Unknown weather event added. Ignoring");
-                return;
-        }
-
-        journal.add(new WeatherJournalEvent(w.getTotalWorldTime(), eventType));
-    }
-
-    /**
-     * Is called from event handlers, like {@link sereneseasons.handler.season.SeasonHandler#onWorldTick(WorldTickEvent)}.
-     * Decides whether to add new journal element based on current weather and season state.
-     * 
-     * @param w the world.
-     * @param curSeason the current season.
-     */
-    public void updateJournal(World w, Season curSeason)
-    {
-        if (curSeason == Season.WINTER && !wasLastCold(-1))
-            addEvent(w, WeatherEventType.EVENT_TO_COLD_SEASON);
-        else if (curSeason != Season.WINTER && wasLastCold(-1))
-            addEvent(w, WeatherEventType.EVENT_TO_WARM_SEASON);
-
-        if (w.isRaining() && !wasLastRaining(-1))
-            addEvent(w, WeatherEventType.EVENT_START_RAINING);
-        else if (!w.isRaining() && wasLastRaining(-1))
-            addEvent(w, WeatherEventType.EVENT_STOP_RAINING);
     }
 
     /**
@@ -403,8 +208,12 @@ public class SeasonSavedData extends WorldSavedData
     public void onWorldUnload(World world)
     {
         // Clear managed chunk tags associated to the world
-        managedChunks.clear(); // No BUG: managedChunks contains only chunks
-                               // associated to the world.
+    	Iterator<Entry<ChunkKey, SeasonChunkData>> iter = managedChunks.entrySet().iterator();
+    	while( iter.hasNext() ) {
+    		SeasonChunkData data = iter.next().getValue();
+    		if( data.isAssociatedToWorld(world) )
+    			iter.remove();
+    	}
     }
 
     /**
