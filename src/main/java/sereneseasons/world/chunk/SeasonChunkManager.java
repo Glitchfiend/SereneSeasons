@@ -1,22 +1,14 @@
 package sereneseasons.world.chunk;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.util.INBTSerializable;
 import sereneseasons.core.SereneSeasons;
-import sereneseasons.util.DataUtils;
 
 /**
  * Manager to store additional information for chunks.
@@ -27,80 +19,26 @@ public class SeasonChunkManager {
 	public static final SeasonChunkManager INSTANCE = new SeasonChunkManager();
 
 	/**
-	 * The constructor.
+	 * The constructor. Only singleton allowed.
 	 */
 	private SeasonChunkManager() {
 	}
 
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	@Override
-//	public NBTTagCompound serializeNBT() {
-//		NBTTagCompound nbt = new NBTTagCompound();
-//		
-//        try
-//        {
-//            nbt.setByteArray("ChunkData", DataUtils.toBytebufStorable(toChunkDataList()));
-//        }
-//        catch (IOException e)
-//        {
-//        	SereneSeasons.logger.error("Couldn't store chunk patch timestamps. Some chunks won't be in synch with season.", e);
-//        }
-//		return nbt;
-//	}
-//
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	@Override
-//	public void deserializeNBT(NBTTagCompound nbt) {
-//		if( nbt != null ) {
-//	        try
-//	        {
-//	            List<SeasonChunkData> storedChunkData = DataUtils.toListStorable(nbt.getByteArray("ChunkData"), SeasonChunkData.class);
-//	            applyLoadedChunkData(storedChunkData);
-//	        }
-//	        catch (IOException e)
-//	        {
-//	        	SereneSeasons.logger.error("Couldn't load chunk patch timestamps. Some chunks won't be in synch with season.", e);
-//	        }
-//		}		
-//	}
-//	
-//    /**
-//     * Creates a list of stored chunks ready to be written to NBT.
-//     * 
-//     * @return a list of chunk meta data to be stored.
-//     */
-//    private List<SeasonChunkData> toChunkDataList()
-//    {
-//        int size = managedChunks.size();
-//        ArrayList<SeasonChunkData> result = new ArrayList<SeasonChunkData>(size);
-//        for (Map.Entry<ChunkKey, SeasonChunkData> entry : managedChunks.entrySet())
-//        {
-//        	result.add(entry.getValue());
-//        }
-//        return result;
-//    }
-//
-//    /**
-//     * Transfers readen NBT data to stored chunk meta data.
-//     * 
-//     * @param list a list of readen chunk meta data. 
-//     */
-//    private void applyLoadedChunkData(List<SeasonChunkData> list)
-//    {
-//        for (SeasonChunkData data : list)
-//        {
-//        	managedChunks.put(data.getKey(), data);
-//        }
-//    }
-	
+	/**
+	 * Is called from Chunk event handler. <br/>
+	 * Registers a new loaded chunk.
+	 * 
+	 * @param data the additional data
+	 */
 	public void registerChunkData(SeasonChunkData data) {
 		managedChunks.put(data.getKey(), data);
 	}
 	
+	/**
+	 * Returns all managed chunks.
+	 * 
+	 * @return a collection of managed chunks.
+	 */
 	public Collection<SeasonChunkData> getManagedChunks() {
 		return Collections.unmodifiableCollection(managedChunks.values());
 	}

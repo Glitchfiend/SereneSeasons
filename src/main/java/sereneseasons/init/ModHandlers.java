@@ -31,14 +31,13 @@ import sereneseasons.util.SeasonColourUtil;
 public class ModHandlers
 {
     private static final SeasonHandler SEASON_HANDLER = new SeasonHandler();
-    private static final ChunkHandler CHUNK_HANDLER = new ChunkHandler();
 
     public static void init()
     {
         PacketHandler.init();
 
         //Handlers for functionality related to seasons
-        MinecraftForge.EVENT_BUS.register(CHUNK_HANDLER);
+        MinecraftForge.EVENT_BUS.register(new ChunkHandler());
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
         MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());

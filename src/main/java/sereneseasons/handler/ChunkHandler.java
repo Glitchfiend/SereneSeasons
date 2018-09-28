@@ -45,9 +45,6 @@ public class ChunkHandler {
             return;
 
         SeasonChunkManager.INSTANCE.onWorldUnload(world);
-        // Season data cleanup
-//        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-//        seasonData.onWorldUnload(world);
     }
 
     @SubscribeEvent
@@ -58,8 +55,5 @@ public class ChunkHandler {
 
         Chunk chunk = event.getChunk();
         SeasonChunkManager.INSTANCE.onChunkUnloaded(chunk);
-
-//        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(chunk.getWorld());
-//        seasonData.onChunkUnloaded(chunk);
     }
 }

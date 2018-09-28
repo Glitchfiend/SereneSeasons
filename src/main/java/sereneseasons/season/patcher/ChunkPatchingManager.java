@@ -12,8 +12,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
-import sereneseasons.handler.season.SeasonHandler;
-import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.patcher.PatchedChunkData.ActiveChunkMarker;
 import sereneseasons.util.BinaryHeap;
 import sereneseasons.util.ChunkUtils;
