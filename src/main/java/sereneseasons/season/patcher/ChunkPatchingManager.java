@@ -14,12 +14,12 @@ import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
-import sereneseasons.season.chunks.ChunkKey;
-import sereneseasons.season.chunks.SeasonChunkData;
-import sereneseasons.season.chunks.SeasonChunkManager;
 import sereneseasons.season.patcher.PatchedChunkData.ActiveChunkMarker;
 import sereneseasons.util.BinaryHeap;
 import sereneseasons.util.ChunkUtils;
+import sereneseasons.world.chunk.ChunkKey;
+import sereneseasons.world.chunk.SeasonChunkData;
+import sereneseasons.world.chunk.SeasonChunkManager;
 
 /**
  * A manager to maintain a queue of chunks which require a patching (e.g. adding water freeze or snow in winter).
@@ -88,9 +88,7 @@ public class ChunkPatchingManager
      */
     public void notifyLoadedAndPopulated(World world, ChunkPos chunkPos)
     {
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-        SeasonChunkManager chunkMan = seasonData.getChunkManager();
-        SeasonChunkData chunkData = chunkMan.getStoredChunkData(world, chunkPos, false);
+        SeasonChunkData chunkData = SeasonChunkManager.INSTANCE.getStoredChunkData(world, chunkPos, false);
         if (chunkData != null)
         {
         	PatchedChunkData pcd = getPatchedChunkData(chunkData);
@@ -201,9 +199,6 @@ public class ChunkPatchingManager
     	
         world.profiler.startSection("seasonChunkFind");
 
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-        SeasonChunkManager chunkMan = seasonData.getChunkManager();
-
         // Iterate through actively updated chunks to enqueue them for patching
         // and begin tracking them
         statisticsVisitedActive = 0;
@@ -212,7 +207,7 @@ public class ChunkPatchingManager
         while (iter.hasNext())
         {
             Chunk activeChunk = iter.next();
-            SeasonChunkData chunkData = chunkMan.getStoredChunkData(activeChunk, true);
+            SeasonChunkData chunkData = SeasonChunkManager.INSTANCE.getStoredChunkData(activeChunk, true);
             PatchedChunkData pcd = getPatchedChunkData(chunkData);
 
             ActiveChunkMarker ac = pcd.getBelongingAC();
@@ -252,9 +247,7 @@ public class ChunkPatchingManager
      */
     public void onChunkUnload(Chunk chunk)
     {
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(chunk.getWorld());
-        SeasonChunkManager chunkMan = seasonData.getChunkManager();
-        SeasonChunkData data = chunkMan.getStoredChunkData(chunk, false);
+        SeasonChunkData data = SeasonChunkManager.INSTANCE.getStoredChunkData(chunk, false);
         if (data != null) {
         	PatchedChunkData pcd = getPatchedChunkData(data);
         	
@@ -357,9 +350,7 @@ public class ChunkPatchingManager
             numProcessed++;
 
             Chunk chunk = entry.getChunk();
-            SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(chunk.getWorld());
-            SeasonChunkManager chunkMan = seasonData.getChunkManager();
-            SeasonChunkData chunkData = chunkMan.getStoredChunkData(chunk, true);
+            SeasonChunkData chunkData = SeasonChunkManager.INSTANCE.getStoredChunkData(chunk, true);
             PatchedChunkData pcd = getPatchedChunkData(chunkData);
 
             // Check for unloaded. Reject if so
@@ -387,7 +378,7 @@ public class ChunkPatchingManager
 
                     ChunkKey nbKey = ChunkKey.NEIGHBORS[i].getOffset(chunkData.getKey());
                     int oppositeI = ChunkKey.NEIGHBORS[i].getOppositeIdx();
-                    SeasonChunkData nbChunkData = chunkMan.getStoredChunkData(nbKey, true);
+                    SeasonChunkData nbChunkData = SeasonChunkManager.INSTANCE.getStoredChunkData(nbKey, true);
                     PatchedChunkData nbPcd = getPatchedChunkData(nbChunkData);
 
                     nbPcd.setNeighborToNotify(oppositeI, true);

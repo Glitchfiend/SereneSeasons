@@ -13,9 +13,9 @@ import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonASMHelper;
 import sereneseasons.season.SeasonSavedData;
-import sereneseasons.season.chunks.SeasonChunkData;
 import sereneseasons.season.journal.SeasonJournal;
 import sereneseasons.season.journal.WeatherJournalEvent;
+import sereneseasons.world.chunk.SeasonChunkData;
 
 /**
  * The actual patcher for chunks.

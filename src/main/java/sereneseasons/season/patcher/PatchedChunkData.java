@@ -2,9 +2,9 @@ package sereneseasons.season.patcher;
 
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import sereneseasons.season.chunks.ChunkKey;
-import sereneseasons.season.chunks.SeasonChunkData;
 import sereneseasons.util.BinaryHeap.Node;
+import sereneseasons.world.chunk.ChunkKey;
+import sereneseasons.world.chunk.SeasonChunkData;
 
 class PatchedChunkData {
 	private final SeasonChunkData chunkData;

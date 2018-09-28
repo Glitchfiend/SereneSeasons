@@ -1,4 +1,4 @@
-package sereneseasons.season.chunks;
+package sereneseasons.world.chunk;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,10 +11,8 @@ import sereneseasons.util.IDataStorable;
 /**
  * An object to identify a chunk on a server uniquely. It is a position/dimension pair of the chunk.
  */
-public class ChunkKey implements IDataStorable
+public class ChunkKey
 {
-	// IMPORTANT: Update SeasonSavedData.ChunkDataStorage if some properties changed which need to be persisted.
-	
     public static final Neighbor[] NEIGHBORS = new Neighbor[] {
     		new Neighbor(1, 0, 2),
     		new Neighbor(1, 1, 7),
@@ -28,11 +26,11 @@ public class ChunkKey implements IDataStorable
     private ChunkPos pos;
     private int dimension;
     
-    /**
-     * The constructor. For streaming only.
-     */
-    public ChunkKey() {
-    }
+//    /**
+//     * The constructor. For streaming only.
+//     */
+//    public ChunkKey() {
+//    }
 
     /**
      * The constructor.
@@ -213,18 +211,18 @@ public class ChunkKey implements IDataStorable
         }
     }
 
-	@Override
-	public void writeToStream(ObjectOutputStream os) throws IOException {
-        os.writeInt(pos.x);
-        os.writeInt(pos.z);
-        os.writeInt(dimension);
-	}
-
-	@Override
-	public void readFromStream(ObjectInputStream is) throws IOException {
-        int chunkXPos = is.readInt();
-        int chunkZPos = is.readInt();
-        pos = new ChunkPos(chunkXPos, chunkZPos);
-        dimension = is.readInt();		
-	}
+//	@Override
+//	public void writeToStream(ObjectOutputStream os) throws IOException {
+//        os.writeInt(pos.x);
+//        os.writeInt(pos.z);
+//        os.writeInt(dimension);
+//	}
+//
+//	@Override
+//	public void readFromStream(ObjectInputStream is) throws IOException {
+//        int chunkXPos = is.readInt();
+//        int chunkZPos = is.readInt();
+//        pos = new ChunkPos(chunkXPos, chunkZPos);
+//        dimension = is.readInt();		
+//	}
 }

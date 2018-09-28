@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.handler.ChunkHandler;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.BirchColorHandler;
 import sereneseasons.handler.season.ProviderIceHandler;
@@ -30,12 +31,14 @@ import sereneseasons.util.SeasonColourUtil;
 public class ModHandlers
 {
     private static final SeasonHandler SEASON_HANDLER = new SeasonHandler();
+    private static final ChunkHandler CHUNK_HANDLER = new ChunkHandler();
 
     public static void init()
     {
         PacketHandler.init();
 
         //Handlers for functionality related to seasons
+        MinecraftForge.EVENT_BUS.register(CHUNK_HANDLER);
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
         MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());

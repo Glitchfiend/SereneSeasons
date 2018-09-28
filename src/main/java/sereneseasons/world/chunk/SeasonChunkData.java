@@ -1,17 +1,19 @@
-package sereneseasons.season.chunks;
+package sereneseasons.world.chunk;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.INBTSerializable;
 import sereneseasons.util.IDataStorable;
 
 /**
  * Stores additional meta data for a chunk used by seasons, like time stamps when the chunk has been patched lately. 
  */
-public class SeasonChunkData implements IDataStorable
+public class SeasonChunkData implements INBTSerializable<NBTTagCompound> // implements IDataStorable
 {
 	// Reference to chunk
     private ChunkKey key;
@@ -20,11 +22,11 @@ public class SeasonChunkData implements IDataStorable
     // Is stored by SeasonSavedData.
     private long lastPatchedTime;
     
-    /**
-     * The constructor. Used for streaming.
-     */
-    public SeasonChunkData() {
-    }
+//    /**
+//     * The constructor. Used for streaming.
+//     */
+//    public SeasonChunkData() {
+//    }
     
     /**
      * The constructor.
@@ -127,22 +129,45 @@ public class SeasonChunkData implements IDataStorable
     	return true;
     }
     
-    /**
-     * {@inheritDoc}
-     */
+//    /**
+//     * {@inheritDoc}
+//     */
+//	@Override
+//	public void writeToStream(ObjectOutputStream os) throws IOException {
+//		this.key.writeToStream(os);
+//        os.writeLong(this.lastPatchedTime);
+//	}
+//
+//    /**
+//     * {@inheritDoc}
+//     */
+//	@Override
+//	public void readFromStream(ObjectInputStream is) throws IOException {
+//        this.key = new ChunkKey();
+//        this.key.readFromStream(is);
+//        this.lastPatchedTime = is.readLong();		
+//	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void writeToStream(ObjectOutputStream os) throws IOException {
-		this.key.writeToStream(os);
-        os.writeLong(this.lastPatchedTime);
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setLong("LastPatchedTime", lastPatchedTime);
+		return nbt;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void readFromStream(ObjectInputStream is) throws IOException {
-        this.key = new ChunkKey();
-        this.key.readFromStream(is);
-        this.lastPatchedTime = is.readLong();		
+	public void deserializeNBT(NBTTagCompound nbt) {
+		this.lastPatchedTime = nbt.getLong("LastPatchedTime");
+	}
+	
+	public static boolean hasNBTData(NBTTagCompound nbt) {
+		// Check if at least one mandatory key is existing
+		return nbt.hasKey("LastPatchedTime");
 	}
 }

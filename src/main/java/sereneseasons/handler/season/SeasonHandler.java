@@ -57,30 +57,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     @SubscribeEvent
-    public void onWorldUnloaded(WorldEvent.Unload event)
-    {
-        World world = event.getWorld();
-        if (world.isRemote)
-            return;
-
-        // Season data cleanup
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-        seasonData.onWorldUnload(world);
-    }
-
-    @SubscribeEvent
-    public void onChunkUnloaded(ChunkEvent.Unload event)
-    {
-        if (event.getWorld().isRemote)
-            return;
-
-        Chunk chunk = event.getChunk();
-
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(chunk.getWorld());
-        seasonData.onChunkUnloaded(chunk);
-    }
-
-    @SubscribeEvent
     public void onPlayerLogin(PlayerLoggedInEvent event)
     {
         EntityPlayer player = event.player;
