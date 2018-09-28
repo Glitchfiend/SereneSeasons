@@ -30,9 +30,9 @@ public class SeasonChunkManager {
 	 * 
 	 * @param data the additional data
 	 */
-	public void registerChunkData(SeasonChunkData data) {
-		managedChunks.put(data.getKey(), data);
-	}
+//	public void registerChunkData(SeasonChunkData data) {
+//		managedChunks.put(data.getKey(), data);
+//	}
 	
 	/**
 	 * Returns all managed chunks.
@@ -57,13 +57,13 @@ public class SeasonChunkManager {
         SeasonChunkData chunkData = managedChunks.get(key);
         if (chunkData != null)
         {
-            Chunk curChunk = chunkData.getChunk();
+            Chunk curChunk = chunkData.getCachedChunk();
             if (curChunk != null)
             {
                 if (curChunk != chunk)
                 {
                     if (curChunk.isLoaded())
-                        SereneSeasons.logger.error("Chunk mismatching in SeasonSavedData.getStoredChunkData .");
+                        SereneSeasons.logger.error("Chunk mismatching in SeasonChunkManager.getStoredChunkData .");
                     curChunk = null;
                 }
             }

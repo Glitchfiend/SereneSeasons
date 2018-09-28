@@ -1,9 +1,12 @@
 package sereneseasons.world.chunk;
 
+import java.lang.ref.WeakReference;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.INBTSerializable;
+import sereneseasons.core.SereneSeasons;
 
 /**
  * Stores additional meta data for a chunk used by seasons, like time stamps when the chunk has been patched lately. 
@@ -12,7 +15,7 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
 {
 	// Reference to chunk
     private ChunkKey key;
-    private Chunk chunk;
+    private WeakReference<Chunk> chunkRef;
 
     // Is stored by SeasonSavedData.
     private long lastPatchedTime;
@@ -24,10 +27,11 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
      * @param chunk the chunk. May be <code>null</code> if chunk is not known/loaded.
      * @param lastPatchedTime last time the chunk has been patched.
      */
-    public SeasonChunkData(ChunkKey key, Chunk chunk, long lastPatchedTime)
+    SeasonChunkData(ChunkKey key, Chunk chunk, long lastPatchedTime)
     {
         this.key = key;
-        this.chunk = chunk;
+        if( chunk != null)
+        	attachLoadedChunk(chunk);
         this.lastPatchedTime = lastPatchedTime;
     }
 
@@ -38,9 +42,12 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
      */
     void attachLoadedChunk(Chunk chunk)
     {
+    	Chunk currentChunk = getCachedChunk();
+    	if( currentChunk != null && currentChunk.isLoaded() && currentChunk != chunk )
+    		SereneSeasons.logger.error("current chunk is mismatching assigned in SeasonChunkData.attachLoadedChunk .");
         if (chunk == null)
             throw new IllegalArgumentException("chunk must be non null. Use clearLoadedChunk() for other case.");
-        this.chunk = chunk;
+        this.chunkRef = new WeakReference<Chunk>(chunk);
     }
     
     /**
@@ -48,7 +55,7 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
      */
     void detachLoadedChunk()
     {
-        this.chunk = null;
+        this.chunkRef = null;
     }
 
     /**
@@ -62,22 +69,36 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
     }
 
     /**
-     * Returns the chunk object or <code>null</code> if it is not known.
+     * Returns the chunk known object.
      * 
-     * @return the chunk object.
+     * @return the chunk or <code>null</code> if not loaded or unknown.
      */
-    public Chunk getChunk()
+    public Chunk getCachedChunk()
     {
+    	if( chunkRef == null)
+    		return null;
+    	Chunk chunk = chunkRef.get();
         return chunk;
     }
-
+    
     /**
-     * Sets the time stamp this chunk has been patched to recent time.
+     * Returns chunk. Ensured it is loaded and non-<code>null</code> if world is provided.
+     * 
+     * @param world the world of the chunk. If <code>null</code> then chunk won't be loaded if not existing.
+     * @return the chunk or <code>null</code> if not loaded.
      */
-    public void setPatchTimeUptodate()
-    {
-        if (chunk != null)
-            this.lastPatchedTime = chunk.getWorld().getTotalWorldTime();
+    public Chunk getChunk(World world) {
+    	Chunk chunk = getCachedChunk();
+    	if( world != null ) {
+        	if( !isAssociatedToWorld(world) )
+        		throw new IllegalArgumentException("Incompatible world.");
+        	if( chunk == null ) {
+        		// NOTE: ChunkHandler.onChunkLoaded may get called thus overwriting this object
+        		chunk = world.getChunkFromChunkCoords(key.getPos().x, key.getPos().z);
+        		attachLoadedChunk(chunk);
+        	}
+    	}
+    	return chunk;
     }
 
     /**
@@ -107,6 +128,7 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
      * @return <code>true</code> iff chunk is located in the given world
      */
     public boolean isAssociatedToWorld(World world) {
+    	Chunk chunk = getCachedChunk();
     	if( chunk != null ) {
     		if( world != chunk.getWorld() )
     			return false;
@@ -133,6 +155,9 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
 	 */
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
+		// NOTE: May get called again for already existing object.
+		//       Happens for example on getChunk(World) call if chunk is not loaded.
+		
 		this.lastPatchedTime = nbt.getLong("LastPatchedTime");
 	}
 	

@@ -224,7 +224,7 @@ public class ChunkPatchingManager
             {
                 // For an active chunk (having no pending patching)
                 // the time is always actual
-                chunkData.setPatchTimeUptodate();
+                chunkData.setPatchTimeTo(world.getTotalWorldTime());
             }
 
             activeChunksHeap.remove(ac);
@@ -390,7 +390,7 @@ public class ChunkPatchingManager
             }
 
             // Perform a chunk patch and clear to-be-patched flag.
-            patcher.patchChunkTerrain(chunkData);
+            patcher.patchChunkTerrain(chunk, chunkData);
             pcd.setToBePatched(false);
         }
 

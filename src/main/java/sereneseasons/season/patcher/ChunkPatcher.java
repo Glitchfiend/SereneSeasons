@@ -41,9 +41,8 @@ public class ChunkPatcher {
      * 
      * @param chunkData the actual chunk.
      */
-    public void patchChunkTerrain(SeasonChunkData chunkData)
+    public void patchChunkTerrain(Chunk chunk, SeasonChunkData chunkData)
     {
-        Chunk chunk = chunkData.getChunk();
         World world = chunk.getWorld();
 
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
@@ -160,7 +159,7 @@ public class ChunkPatcher {
             executePatchCommand(1, coldTrackTicks, rainingTrackTicks, chunk);
         }
 
-        chunkData.setPatchTimeUptodate();
+        chunkData.setPatchTimeTo(world.getTotalWorldTime()); // set patch time up-to-date
     }
     
     /**

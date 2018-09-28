@@ -32,9 +32,8 @@ public class ChunkHandler {
 		Chunk chunk = event.getChunk();
 		ChunkKey key = new ChunkKey(chunk.getPos(), event.getWorld());
 		
-		SeasonChunkData chunkData = new SeasonChunkData(key, chunk, 0);
+		SeasonChunkData chunkData = SeasonChunkManager.INSTANCE.getStoredChunkData(key, true);
 		chunkData.deserializeNBT(nbt);
-		SeasonChunkManager.INSTANCE.registerChunkData(chunkData);		
 	}
 	
     @SubscribeEvent
