@@ -1,4 +1,4 @@
-package sereneseasons.season;
+package sereneseasons.season.data;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

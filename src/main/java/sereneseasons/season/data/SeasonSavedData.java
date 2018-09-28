@@ -5,11 +5,9 @@
  * 
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
  ******************************************************************************/
-package sereneseasons.season;
+package sereneseasons.season.data;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +20,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.WorldSavedData;
 import sereneseasons.api.season.Season;
 import sereneseasons.core.SereneSeasons;
+import sereneseasons.season.data.SeasonChunkData.ChunkDataStorage;
 import sereneseasons.util.DataUtils;
-import sereneseasons.util.IDataStorable;
 
 public class SeasonSavedData extends WorldSavedData
 {
@@ -35,7 +33,7 @@ public class SeasonSavedData extends WorldSavedData
     private boolean isLastRainyState = false;
     public List<WeatherJournalEvent> journal = new ArrayList<WeatherJournalEvent>();
 
-    public HashMap<ChunkKey, ChunkData> managedChunks = new HashMap<ChunkKey, ChunkData>();
+    public HashMap<ChunkKey, SeasonChunkData> managedChunks = new HashMap<ChunkKey, SeasonChunkData>();
 
     public SeasonSavedData()
     {
@@ -109,7 +107,7 @@ public class SeasonSavedData extends WorldSavedData
     {
         int size = managedChunks.size();
         ArrayList<ChunkDataStorage> result = new ArrayList<ChunkDataStorage>(size);
-        for (Map.Entry<ChunkKey, ChunkData> entry : managedChunks.entrySet())
+        for (Map.Entry<ChunkKey, SeasonChunkData> entry : managedChunks.entrySet())
         {
             result.add(new ChunkDataStorage(entry.getKey(), entry.getValue()));
         }
@@ -125,14 +123,14 @@ public class SeasonSavedData extends WorldSavedData
     {
         for (ChunkDataStorage entry : list)
         {
-            ChunkData data = managedChunks.get(entry.getKey());
+            SeasonChunkData data = managedChunks.get(entry.getKey());
             if (data != null)
             {
                 data.setPatchTimeTo(data.getLastPatchedTime());
             }
             else
             {
-                data = new ChunkData(entry.getKey(), null, entry.getLastPatchedTime());
+                data = new SeasonChunkData(entry.getKey(), null, entry.getLastPatchedTime());
                 managedChunks.put(entry.getKey(), data);
             }
         }
@@ -295,7 +293,7 @@ public class SeasonSavedData extends WorldSavedData
     }
 
     /**
-     * Is called from {@link sereneseasons.handler.season.SeasonHandler#onWorldTick(WorldTickEvent)}.
+     * Is called from event handlers, like {@link sereneseasons.handler.season.SeasonHandler#onWorldTick(WorldTickEvent)}.
      * Decides whether to add new journal element based on current weather and season state.
      * 
      * @param w the world.
@@ -321,11 +319,11 @@ public class SeasonSavedData extends WorldSavedData
      * @param bCreateIfNotExisting if <code>true</code> then a new entry is created if not existing.
      * @return the chunk meta data for seasons.
      */
-    public ChunkData getStoredChunkData(Chunk chunk, boolean bCreateIfNotExisting)
+    public SeasonChunkData getStoredChunkData(Chunk chunk, boolean bCreateIfNotExisting)
     {
         ChunkPos cpos = chunk.getPos();
         ChunkKey key = new ChunkKey(cpos, chunk.getWorld());
-        ChunkData chunkData = managedChunks.get(key);
+        SeasonChunkData chunkData = managedChunks.get(key);
         if (chunkData != null)
         {
             Chunk curChunk = chunkData.getChunk();
@@ -356,7 +354,7 @@ public class SeasonSavedData extends WorldSavedData
         long lastPatchTime = 0; // Initial time. Should be bigger than
                                 // ActiveChunkMarker.getSmallerKey() value!
 
-        chunkData = new ChunkData(key, chunk, lastPatchTime);
+        chunkData = new SeasonChunkData(key, chunk, lastPatchTime);
         managedChunks.put(key, chunkData);
         return chunkData;
     }
@@ -368,15 +366,15 @@ public class SeasonSavedData extends WorldSavedData
      * @param bCreateIfNotExisting if <code>true</code> then a new entry is created if not existing.
      * @return the chunk meta data for seasons.
      */
-    public ChunkData getStoredChunkData(ChunkKey key, boolean bCreateIfNotExisting)
+    public SeasonChunkData getStoredChunkData(ChunkKey key, boolean bCreateIfNotExisting)
     {
-        ChunkData chunkData = managedChunks.get(key);
+        SeasonChunkData chunkData = managedChunks.get(key);
         if (chunkData == null && bCreateIfNotExisting)
         {
             long lastPatchTime = 0; // Initial time. Should be bigger than
                                     // ActiveChunkMarker.getSmallerKey() value!
 
-            chunkData = new ChunkData(key, null, lastPatchTime);
+            chunkData = new SeasonChunkData(key, null, lastPatchTime);
             managedChunks.put(key, chunkData);
         }
         return chunkData;
@@ -390,7 +388,7 @@ public class SeasonSavedData extends WorldSavedData
      * @param bCreateIfNotExisting if <code>true</code> then a new entry is created if not existing.
      * @return the chunk meta data for seasons.
      */
-    public ChunkData getStoredChunkData(World world, ChunkPos pos, boolean bCreateIfNotExisting)
+    public SeasonChunkData getStoredChunkData(World world, ChunkPos pos, boolean bCreateIfNotExisting)
     {
         ChunkKey key = new ChunkKey(pos, world);
         return getStoredChunkData(key, bCreateIfNotExisting);
@@ -418,86 +416,10 @@ public class SeasonSavedData extends WorldSavedData
     public void onChunkUnloaded(Chunk chunk)
     {
         ChunkKey key = new ChunkKey(chunk.getPos(), chunk.getWorld());
-        ChunkData chunkData = managedChunks.get(key);
+        SeasonChunkData chunkData = managedChunks.get(key);
         if (chunkData != null)
         {
             chunkData.detachLoadedChunk();
-        }
-    }
-    
-    //////////////////
-
-    /**
-     * Storage object for a chunk meta data {@link ChunkData}. 
-     */
-    public static class ChunkDataStorage implements IDataStorable
-    {
-        private ChunkKey key;
-        private long lastPatchedTime;
-
-        /**
-         * The constructor. Used for streaming.
-         */
-        public ChunkDataStorage()
-        {
-            // For streaming
-        }
-
-        /**
-         * The constructor.
-         * 
-         * @param key the chunk key identifying the chunk itself.
-         * @param data
-         */
-        public ChunkDataStorage(ChunkKey key, ChunkData data)
-        {
-            this.key = key;
-            this.lastPatchedTime = data.getLastPatchedTime();
-        }
-
-        /**
-         * Returns the key identifying the chunk.
-         * 
-         * @return the chunk key.
-         */
-        public ChunkKey getKey()
-        {
-            return key;
-        }
-
-        /**
-         * Returns the time stamp a chunk has been patched last time.
-         * 
-         * @return the time stamp.
-         */
-        public long getLastPatchedTime()
-        {
-            return lastPatchedTime;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void writeToStream(ObjectOutputStream os) throws IOException
-        {
-            os.writeInt(key.getPos().x);
-            os.writeInt(key.getPos().z);
-            os.writeInt(key.getDimension());
-            os.writeLong(lastPatchedTime);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void readFromStream(ObjectInputStream is) throws IOException
-        {
-            int chunkXPos = is.readInt();
-            int chunkZPos = is.readInt();
-            int dimension = is.readInt();
-            this.key = new ChunkKey(new ChunkPos(chunkXPos, chunkZPos), dimension);
-            this.lastPatchedTime = is.readLong();
         }
     }
 }

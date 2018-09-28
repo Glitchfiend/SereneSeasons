@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sereneseasons.season.ChunkPatchingManager;
+import sereneseasons.season.patcher.ChunkPatchingManager;
 
 /**
  * Handles sets of events related to update chunks in dependence to the seasons. <br/>

@@ -1,4 +1,4 @@
-package sereneseasons.season;
+package sereneseasons.season.data;
 
 /**
  * Weather change event type as recorded in journal. <br/>

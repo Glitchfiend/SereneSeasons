@@ -15,8 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
-import sereneseasons.season.SeasonSavedData;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.season.data.SeasonSavedData;
 
 public class SeasonSleepHandler
 {

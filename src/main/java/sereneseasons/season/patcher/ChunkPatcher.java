@@ -1,4 +1,4 @@
-package sereneseasons.season;
+package sereneseasons.season.patcher;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -9,6 +9,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.season.SeasonASMHelper;
+import sereneseasons.season.data.SeasonChunkData;
+import sereneseasons.season.data.SeasonSavedData;
+import sereneseasons.season.data.WeatherJournalEvent;
 
 /**
  * The actual patcher for chunks.
@@ -34,7 +38,7 @@ public class ChunkPatcher {
      * 
      * @param chunkData the actual chunk.
      */
-    public void patchChunkTerrain(ChunkData chunkData)
+    public void patchChunkTerrain(SeasonChunkData chunkData)
     {
         Chunk chunk = chunkData.getChunk();
         World world = chunk.getWorld();
@@ -61,7 +65,7 @@ public class ChunkPatcher {
         long coldTrackTicks = 0;
 
         long intervalRainingTrackStart = lastPatchedTime;
-        long intervalSnowyTrackStart = lastPatchedTime;
+        long intervalColdTrackStart = lastPatchedTime;
 
         // initialize in case of fast forward
         if (bFastForward)
@@ -83,7 +87,7 @@ public class ChunkPatcher {
                 WeatherJournalEvent wevt = seasonData.journal.get(curEntry);
 
                 rainingTrackTicks = wevt.getTimeStamp() - intervalRainingTrackStart;
-                coldTrackTicks = wevt.getTimeStamp() - intervalSnowyTrackStart;
+                coldTrackTicks = wevt.getTimeStamp() - intervalColdTrackStart;
 
                 switch (wevt.getEventType())
                 {
@@ -109,7 +113,7 @@ public class ChunkPatcher {
                     case EVENT_TO_COLD_SEASON:
                         if (!bWasCold)
                         {
-                            intervalSnowyTrackStart = wevt.getTimeStamp();
+                            intervalColdTrackStart = wevt.getTimeStamp();
                             command = 3; // 3 = simulate melting (requires duration parameter in ticks)
                             bWasCold = true;
                         }
@@ -117,7 +121,7 @@ public class ChunkPatcher {
                     case EVENT_TO_WARM_SEASON:
                         if (bWasCold)
                         {
-                            intervalSnowyTrackStart = wevt.getTimeStamp();
+                            intervalColdTrackStart = wevt.getTimeStamp();
                             if (bWasRaining)
                                 command = 2; // 2 = simulate chunk snow (requires duration parameter in ticks).
                             else
@@ -136,7 +140,7 @@ public class ChunkPatcher {
 
         // Post update for running events
         rainingTrackTicks = world.getTotalWorldTime() - intervalRainingTrackStart;
-        coldTrackTicks = world.getTotalWorldTime() - intervalSnowyTrackStart;
+        coldTrackTicks = world.getTotalWorldTime() - intervalColdTrackStart;
 
         if (seasonData.wasLastRaining(-1) && seasonData.wasLastCold(-1))
         {

@@ -1,4 +1,4 @@
-package sereneseasons.season;
+package sereneseasons.season.data;
 
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;

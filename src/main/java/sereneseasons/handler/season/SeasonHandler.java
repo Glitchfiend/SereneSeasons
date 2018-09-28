@@ -17,15 +17,14 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
-import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
+import sereneseasons.season.data.SeasonSavedData;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {

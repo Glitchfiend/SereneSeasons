@@ -3,7 +3,7 @@ package sereneseasons.util;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import sereneseasons.season.ChunkKey;
+import sereneseasons.season.data.ChunkKey;
 
 public class ChunkUtils
 {
