@@ -9,11 +9,12 @@ package sereneseasons.api.config;
 
 public enum SeasonsOption implements ISyncedOption
 {
-    BLACKLIST_DIMENSIONS("Blacklist Dimensions"),
+//    BLACKLIST_DIMENSIONS("Blacklist Dimensions"),
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration"),
     NUM_PATCHES_PER_TICK("Chunk patches per tick"),
-    PATCH_TICK_DISTANCE("Ticks between patches");
+    PATCH_TICK_DISTANCE("Ticks between patches"),
+    ENABLE_GLOBAL_FROST("Enable Global Frost");
 
     private final String optionName;
 

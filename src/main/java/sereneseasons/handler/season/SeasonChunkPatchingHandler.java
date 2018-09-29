@@ -14,6 +14,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sereneseasons.api.config.SeasonsOption;
+import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.season.patcher.ChunkPatchingManager;
 
 /**
@@ -59,8 +61,11 @@ public class SeasonChunkPatchingHandler
      * @param event the Forge event
      */
     @SubscribeEvent
-    public void onChunkDataLoad(ChunkEvent.Load event)
+    public void onChunkLoad(ChunkEvent.Load event)
     {
+    	if( !isEnabled() )
+    		return;
+    	
         if (event.getWorld().isRemote)
             return;
 
@@ -80,6 +85,9 @@ public class SeasonChunkPatchingHandler
     @SubscribeEvent
     public void onChunkUnload(ChunkEvent.Unload event)
     {
+    	if( !isEnabled() )
+    		return;
+    	
         if (event.getWorld().isRemote)
             return;
 
@@ -97,6 +105,9 @@ public class SeasonChunkPatchingHandler
     @SubscribeEvent
     public void onPostPopulate(PopulateChunkEvent.Post event)
     {
+    	if( !isEnabled() )
+    		return;
+    	
         World world = event.getWorld();
         if (world.isRemote)
             return;
@@ -115,6 +126,9 @@ public class SeasonChunkPatchingHandler
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
+    	if( !isEnabled() )
+    		return;
+    	
         World world = event.world;
 
         if (event.side == Side.SERVER && (world instanceof WorldServer))
@@ -134,12 +148,14 @@ public class SeasonChunkPatchingHandler
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event)
     {
+    	// NOTE: Testing for activated patching not needed here. Only cleanups
+    	
         World world = event.getWorld();
         if (world.isRemote)
             return;
 
         // Clear loadedChunkQueue
-        chunkPatcher.onServerWorldUnload(world);
+        chunkPatcher.cleanupOnServerWorldUnload(world);
     }
 
     /**
@@ -150,6 +166,9 @@ public class SeasonChunkPatchingHandler
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event)
     {
+    	if( !isEnabled() )
+    		return;
+    	
         // Performs pending patching tasks
         chunkPatcher.onServerTick();
     }
@@ -162,5 +181,14 @@ public class SeasonChunkPatchingHandler
     public static ChunkPatchingManager getChunkPatchingManager()
     {
         return chunkPatcher;
+    }
+    
+    /**
+     * Returns whether global weather effects are enabled.
+     * 
+     * @return <code>true</code> iff yes.
+     */
+    public boolean isEnabled() {
+    	return SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_GLOBAL_FROST);
     }
 }

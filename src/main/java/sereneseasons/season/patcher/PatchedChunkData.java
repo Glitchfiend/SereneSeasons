@@ -81,7 +81,7 @@ class PatchedChunkData {
      * 
      * @param belongingAC
      */
-    public void setBelongingAC(ActiveChunkMarker belongingAC)
+    void setBelongingAC(ActiveChunkMarker belongingAC)
     {
         this.belongingAC = belongingAC;
     }
@@ -111,7 +111,7 @@ class PatchedChunkData {
      * 
      * @param world the world
      */
-    public ActiveChunkMarker createBelongingAC(World world) {
+    ActiveChunkMarker createBelongingAC(World world) {
     	if( belongingAC != null )
     		throw new IllegalStateException("Invalid call of createBelongingAC(). belongingAC is not null.");
     	if( !isAssociatedToWorld(world) )
@@ -192,6 +192,16 @@ class PatchedChunkData {
         public World getWorld()
         {
             return world;
+        }
+        
+        /**
+         * Tells if the chunk is located in the given world.
+         * 
+         * @param world the world
+         * @return <code>true</code> iff chunk is located in the given world
+         */
+        public boolean isAssociatedToWorld(World world) {
+        	return this.world == world;
         }
 
         /**

@@ -25,16 +25,6 @@ public class SeasonChunkManager {
 	}
 
 	/**
-	 * Is called from Chunk event handler. <br/>
-	 * Registers a new loaded chunk.
-	 * 
-	 * @param data the additional data
-	 */
-//	public void registerChunkData(SeasonChunkData data) {
-//		managedChunks.put(data.getKey(), data);
-//	}
-	
-	/**
 	 * Returns all managed chunks.
 	 * 
 	 * @return a collection of managed chunks.

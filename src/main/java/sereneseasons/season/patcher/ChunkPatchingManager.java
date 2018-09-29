@@ -26,8 +26,8 @@ public class ChunkPatchingManager
 {
 	private ChunkPatcher patcher = new ChunkPatcher(); 
 	
-    private int numPatcherPerTick;
-    private int awaitTicksBeforeDeactivation;
+//    private int numPatcherPerTick;
+//    private int awaitTicksBeforeDeactivation;
 
     public int statisticsVisitedActive;
     public int statisticsAddedToActive;
@@ -47,9 +47,6 @@ public class ChunkPatchingManager
      */
     public ChunkPatchingManager()
     {
-        numPatcherPerTick = SyncedConfig.getIntValue(SeasonsOption.NUM_PATCHES_PER_TICK);
-        awaitTicksBeforeDeactivation = SyncedConfig.getIntValue(SeasonsOption.PATCH_TICK_DISTANCE);
-
         statisticsVisitedActive = 0;
         statisticsAddedToActive = 0;
         statisticsDeletedFromActive = 0;
@@ -260,7 +257,7 @@ public class ChunkPatchingManager
      *   
      * @param world the world.
      */
-    public void onServerWorldUnload(World world)
+    public void cleanupOnServerWorldUnload(World world)
     {
         // Clear loadedChunkQueue
         Iterator<PendingChunkEntry> pcIter = pendingChunkList.iterator();
@@ -278,7 +275,7 @@ public class ChunkPatchingManager
         LinkedList<ActiveChunkMarker> chunksRetainedActive = new LinkedList<ActiveChunkMarker>();
         for (ActiveChunkMarker ac : activeChunksHeap)
         {
-            if (ac.getWorld() == world)
+            if (ac.isAssociatedToWorld(world) )
                 ac.internalUnmark();
             else
             	chunksRetainedActive.add(ac);
@@ -306,6 +303,9 @@ public class ChunkPatchingManager
      */
     public void onServerTick()
     {
+        int numPatcherPerTick = SyncedConfig.getIntValue(SeasonsOption.NUM_PATCHES_PER_TICK);
+        int awaitTicksBeforeDeactivation = SyncedConfig.getIntValue(SeasonsOption.PATCH_TICK_DISTANCE);
+
         LinkedList<PendingChunkEntry> chunksInProcess = pendingChunkList;
         statisticsDeletedFromActive = 0;
 
