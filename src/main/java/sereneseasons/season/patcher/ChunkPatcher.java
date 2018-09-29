@@ -10,8 +10,8 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import sereneseasons.api.season.Season.SubSeason;
+import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.handler.season.SeasonHandler;
-import sereneseasons.season.SeasonASMHelper;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.journal.SeasonJournal;
 import sereneseasons.season.journal.WeatherJournalRecord;
@@ -242,12 +242,12 @@ public class ChunkPatcher {
                     // (where canSnowAtTempInSeason have returned false before).
                     if (world.rand.nextInt(THR_PROB_MAX) < threshold)
                     {
-                        if (SeasonASMHelper.canBlockFreezeInSeason(world, below, false, SubSeason.EARLY_WINTER.getDefaultState()))
+                        if (SeasonHelper.canBlockFreezeInSeason(world, below, false, false, SubSeason.EARLY_WINTER.getDefaultState()))
                         {
                             // NOTE: Is a simplified freeze behavior
                             world.setBlockState(below, Blocks.ICE.getDefaultState(), 2);
                         }
-                        else if (command != 1 && SeasonASMHelper.canSnowAtInSeason(world, pos, true, SubSeason.EARLY_WINTER.getDefaultState()))
+                        else if (command != 1 && SeasonHelper.canSnowAtInSeason(world, pos, true, false, SubSeason.EARLY_WINTER.getDefaultState()))
                         {
                             world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState(), 2);
                         }
@@ -259,20 +259,23 @@ public class ChunkPatcher {
                     // Remove snow and ice in dependence of last time the season
                     // changed to cold (where canSnowAtTempInSeason have
                     // returned true before).
-                    if (world.rand.nextInt(THR_PROB_MAX) <= threshold * 10)
+                    if (world.rand.nextInt(THR_PROB_MAX) <= threshold * 2)
                     {
                         IBlockState blockState = world.getBlockState(pos);
                         if (blockState.getBlock() == Blocks.SNOW_LAYER)
                         {
-                            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+                        	if (!SeasonHelper.canSnowAtInSeason(world, pos, true, true, SubSeason.EARLY_SPRING.getDefaultState()))
+                        		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
                         }
                         else
                         {
                             blockState = world.getBlockState(below);
                             if (blockState.getBlock() == Blocks.ICE)
                             {
-                                world.setBlockState(below, Blocks.WATER.getDefaultState(), 2);
-                                world.neighborChanged(below, Blocks.WATER, below);
+                            	if (!SeasonHelper.canBlockFreezeInSeason(world, below, false, true, SubSeason.EARLY_SPRING.getDefaultState())) {
+                                    world.setBlockState(below, Blocks.WATER.getDefaultState(), 2);
+                                    world.neighborChanged(below, Blocks.WATER, below);
+                            	}
                             }
                         }
                     }

@@ -8,13 +8,7 @@
 package sereneseasons.season;
 
 import jline.internal.Nullable;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import sereneseasons.api.season.ISeasonState;
@@ -32,83 +26,12 @@ public class SeasonASMHelper
     
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState)
     {
-        Season season = seasonState == null ? null : seasonState.getSeason();
-        Biome biome = world.getBiome(pos);
-        float temperature = biome.getTemperature(pos);
-
-        if (BiomeConfig.usesTropicalSeasons(biome))
-            return false;
-
-        //If we're in winter, the temperature can be anything equal to or below 0.7
-        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
-        {
-            return false;
-        }
-        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
-        {
-            return false;
-        }
-        else if (checkLight)
-        {
-            if (pos.getY() >= 0 && pos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, pos) < 10)
-            {
-                IBlockState state = world.getBlockState(pos);
-
-                if (state.getBlock().isAir(state, world, pos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, pos))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        
-        return true;
+    	return SeasonHelper.canSnowAtInSeason(world, pos, checkLight, false, seasonState);
     }
     
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
-        Season season = seasonState == null ? null : seasonState.getSeason();
-        Biome biome = world.getBiome(pos);
-        float temperature = biome.getTemperature(pos);
-
-        if (BiomeConfig.usesTropicalSeasons(biome))
-            return false;
-
-        //If we're in winter, the temperature can be anything equal to or below 0.7
-        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
-        {
-            return false;
-        }
-        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
-        {
-            return false;
-        }
-        else
-        {
-            if (pos.getY() >= 0 && pos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, pos) < 10)
-            {
-                IBlockState iblockstate = world.getBlockState(pos);
-                Block block = iblockstate.getBlock();
-
-                if ((block == Blocks.WATER || block == Blocks.FLOWING_WATER) && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-                {
-                    if (!noWaterAdj)
-                    {
-                        return true;
-                    }
-
-                    boolean flag = world.isWater(pos.west()) && world.isWater(pos.east()) && world.isWater(pos.north()) && world.isWater(pos.south());
-
-                    if (!flag)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
+    	return SeasonHelper.canBlockFreezeInSeason(world, pos, noWaterAdj, false, seasonState);
     }
     
     public static boolean isRainingAtInSeason(World world, BlockPos pos, ISeasonState seasonState)
