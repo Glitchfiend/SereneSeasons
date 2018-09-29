@@ -14,7 +14,7 @@ import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonASMHelper;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.journal.SeasonJournal;
-import sereneseasons.season.journal.WeatherJournalEvent;
+import sereneseasons.season.journal.WeatherJournalRecord;
 import sereneseasons.world.chunk.SeasonChunkData;
 
 /**
@@ -85,10 +85,10 @@ public class ChunkPatcher {
             int command = 0; // 0 = NOP
 
             // Apply events from journal
-            List<WeatherJournalEvent> journalEntries = journal.getJournalEvents();
+            List<WeatherJournalRecord> journalEntries = journal.getJournalEvents();
             for (int curEntry = fromIdx; curEntry < journalEntries.size(); curEntry++)
             {
-                WeatherJournalEvent wevt = journalEntries.get(curEntry);
+                WeatherJournalRecord wevt = journalEntries.get(curEntry);
 
                 rainingTrackTicks = wevt.getTimeStamp() - intervalRainingTrackStart;
                 coldTrackTicks = wevt.getTimeStamp() - intervalColdTrackStart;

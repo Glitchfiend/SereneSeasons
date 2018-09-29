@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import sereneseasons.api.season.Season;
@@ -18,7 +19,7 @@ import sereneseasons.util.DataUtils;
 public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
     private boolean isLastColdState = false;
     private boolean isLastRainyState = false;
-    private List<WeatherJournalEvent> journalEntries = new ArrayList<WeatherJournalEvent>();
+    private List<WeatherJournalRecord> journalEntries = new ArrayList<WeatherJournalRecord>();
 
     /**
      * The constructor.
@@ -33,14 +34,20 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		
-        try
-        {
-            nbt.setByteArray("Entries", DataUtils.toBytebufStorable(journalEntries));
-        }
-        catch (IOException e)
-        {
-        	SereneSeasons.logger.error("Couldn't store weather journal.", e);
-        }
+//        try
+//        {
+//            nbt.setByteArray("Entries", DataUtils.toBytebufStorable(journalEntries));
+//        }
+//        catch (IOException e)
+//        {
+//        	SereneSeasons.logger.error("Couldn't store weather journal.", e);
+//        }
+		
+		NBTTagList recordTagList = new NBTTagList();
+		for( WeatherJournalRecord rec : journalEntries ) {
+			recordTagList.appendTag(rec.serializeNBT());
+		}
+		nbt.setTag("Records", recordTagList);
 
 		return nbt;
 	}
@@ -51,15 +58,25 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
 		if( nbt != null ) {
-	        try
-	        {
-	            this.journalEntries = DataUtils.toListStorable(nbt.getByteArray("Entries"), WeatherJournalEvent.class);
-	        }
-	        catch (IOException e)
-	        {
-	            SereneSeasons.logger.error("Couldn't retrieve weather journal. Use a clear one.", e);
-	            this.journalEntries = new ArrayList<WeatherJournalEvent>();
-	        }
+//	        try
+//	        {
+//	            this.journalEntries = DataUtils.toListStorable(nbt.getByteArray("Entries"), WeatherJournalEvent.class);
+//	        }
+//	        catch (IOException e)
+//	        {
+//	            SereneSeasons.logger.error("Couldn't retrieve weather journal. Use a clear one.", e);
+//	            this.journalEntries = new ArrayList<WeatherJournalEvent>();
+//	        }
+			
+			NBTTagList recordTagList = nbt.getTagList("Records", 10);
+			journalEntries = new ArrayList<WeatherJournalRecord>(recordTagList.tagCount());
+			for( int i = 0; i < recordTagList.tagCount(); i ++ ) {
+				NBTTagCompound tag = recordTagList.getCompoundTagAt(i);
+				
+				WeatherJournalRecord record = new WeatherJournalRecord();
+				record.deserializeNBT(tag);
+				journalEntries.add(record);
+			}
 		}
 
         determineLastState();
@@ -76,7 +93,7 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
         int lastRainyState = -1;
         for (int i = journalEntries.size() - 1; i >= 0; i--)
         {
-            WeatherJournalEvent je = journalEntries.get(i);
+            WeatherJournalRecord je = journalEntries.get(i);
             WeatherEventType etype = je.getEventType();
 
             switch (etype)
@@ -112,7 +129,7 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
                                                   // minecraft day has no rain.
     }
     
-    public List<WeatherJournalEvent> getJournalEvents() {
+    public List<WeatherJournalRecord> getJournalEvents() {
     	return Collections.unmodifiableList(journalEntries);
     }
 
@@ -128,7 +145,7 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
         {
             for (int i = atIdx; i < journalEntries.size(); i++)
             {
-                WeatherJournalEvent je = journalEntries.get(i);
+                WeatherJournalRecord je = journalEntries.get(i);
                 WeatherEventType etype = je.getEventType();
 
                 switch (etype)
@@ -157,7 +174,7 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
         {
             for (int i = atIdx; i < journalEntries.size(); i++)
             {
-                WeatherJournalEvent je = journalEntries.get(i);
+                WeatherJournalRecord je = journalEntries.get(i);
                 WeatherEventType etype = je.getEventType();
 
                 switch (etype)
@@ -222,7 +239,7 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
                 return;
         }
 
-        journalEntries.add(new WeatherJournalEvent(w.getTotalWorldTime(), eventType));
+        journalEntries.add(new WeatherJournalRecord(w.getTotalWorldTime(), eventType));
     }
 
     /**

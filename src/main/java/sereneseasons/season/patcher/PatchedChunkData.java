@@ -67,7 +67,9 @@ class PatchedChunkData {
     }
 
     /**
-     * Returns if this chunk is enqueued for patching by {@link ChunkPatchingManager}
+     * Returns if this chunk is enqueued for patching by {@link ChunkPatchingManager}.<br/>
+     * <br/>
+     * <b>Note</b>: This flag is messy and needs a code revision. 
      * 
      * @param bToBePatched <code>true</code> iff yes.
      */

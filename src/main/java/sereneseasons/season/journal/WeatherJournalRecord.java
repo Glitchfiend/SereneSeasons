@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 import sereneseasons.util.IDataStorable;
 
 /**
  * Object holding a journal entry with a time stamp. 
  */
-public class WeatherJournalEvent implements IDataStorable
+public class WeatherJournalRecord implements INBTSerializable<NBTTagCompound> //, IDataStorable
 {
     private long timeStamp;
     private WeatherEventType eventType;
@@ -17,7 +19,7 @@ public class WeatherJournalEvent implements IDataStorable
     /**
      * The constructor. Used for streaming only.
      */
-    public WeatherJournalEvent()
+    WeatherJournalRecord()
     {
     }
 
@@ -27,7 +29,7 @@ public class WeatherJournalEvent implements IDataStorable
      * @param timeStamp the journal entry time stamp
      * @param eventType the event type for the weather change
      */
-    public WeatherJournalEvent(long timeStamp, WeatherEventType eventType)
+    public WeatherJournalRecord(long timeStamp, WeatherEventType eventType)
     {
         this.timeStamp = timeStamp;
         this.eventType = eventType;
@@ -56,20 +58,34 @@ public class WeatherJournalEvent implements IDataStorable
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void writeToStream(ObjectOutputStream os) throws IOException
-    {
-        os.writeLong(timeStamp);
-        os.writeInt(eventType.getCode());
-    }
+//    @Override
+//    public void writeToStream(ObjectOutputStream os) throws IOException
+//    {
+//        os.writeLong(timeStamp);
+//        os.writeInt(eventType.getCode());
+//    }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void readFromStream(ObjectInputStream is) throws IOException
-    {
-        timeStamp = is.readLong();
-        eventType = WeatherEventType.fromCode(is.readInt());
-    }
+//    @Override
+//    public void readFromStream(ObjectInputStream is) throws IOException
+//    {
+//        timeStamp = is.readLong();
+//        eventType = WeatherEventType.fromCode(is.readInt());
+//    }
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setLong("TimeStamp", timeStamp);
+		nbt.setInteger("Type", eventType.getCode());
+		return nbt;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		timeStamp = nbt.getLong("TimeStamp");
+		eventType = WeatherEventType.fromCode(nbt.getInteger("Type"));
+	}
 }
