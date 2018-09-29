@@ -1,6 +1,5 @@
 package sereneseasons.season.journal;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import sereneseasons.api.season.Season;
 import sereneseasons.core.SereneSeasons;
-import sereneseasons.util.DataUtils;
 
 /**
  * Object representing the journal.
@@ -34,15 +32,6 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		
-//        try
-//        {
-//            nbt.setByteArray("Entries", DataUtils.toBytebufStorable(journalEntries));
-//        }
-//        catch (IOException e)
-//        {
-//        	SereneSeasons.logger.error("Couldn't store weather journal.", e);
-//        }
-		
 		NBTTagList recordTagList = new NBTTagList();
 		for( WeatherJournalRecord rec : journalEntries ) {
 			recordTagList.appendTag(rec.serializeNBT());
@@ -58,16 +47,6 @@ public class SeasonJournal implements INBTSerializable<NBTTagCompound> {
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
 		if( nbt != null ) {
-//	        try
-//	        {
-//	            this.journalEntries = DataUtils.toListStorable(nbt.getByteArray("Entries"), WeatherJournalEvent.class);
-//	        }
-//	        catch (IOException e)
-//	        {
-//	            SereneSeasons.logger.error("Couldn't retrieve weather journal. Use a clear one.", e);
-//	            this.journalEntries = new ArrayList<WeatherJournalEvent>();
-//	        }
-			
 			NBTTagList recordTagList = nbt.getTagList("Records", 10);
 			journalEntries = new ArrayList<WeatherJournalRecord>(recordTagList.tagCount());
 			for( int i = 0; i < recordTagList.tagCount(); i ++ ) {

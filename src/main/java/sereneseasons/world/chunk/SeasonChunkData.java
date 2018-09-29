@@ -46,7 +46,7 @@ public class SeasonChunkData implements INBTSerializable<NBTTagCompound>
     	if( currentChunk != null && currentChunk.isLoaded() && currentChunk != chunk )
     		SereneSeasons.logger.error("current chunk is mismatching assigned in SeasonChunkData.attachLoadedChunk .");
         if (chunk == null)
-            throw new IllegalArgumentException("chunk must be non null. Use clearLoadedChunk() for other case.");
+            throw new IllegalArgumentException("chunk must be non null. Use detachLoadedChunk() for other case.");
         this.chunkRef = new WeakReference<Chunk>(chunk);
     }
     

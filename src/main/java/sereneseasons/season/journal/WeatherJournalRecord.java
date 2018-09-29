@@ -1,17 +1,12 @@
 package sereneseasons.season.journal;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
-import sereneseasons.util.IDataStorable;
 
 /**
  * Object holding a journal entry with a time stamp. 
  */
-public class WeatherJournalRecord implements INBTSerializable<NBTTagCompound> //, IDataStorable
+public class WeatherJournalRecord implements INBTSerializable<NBTTagCompound>
 {
     private long timeStamp;
     private WeatherEventType eventType;
@@ -58,23 +53,6 @@ public class WeatherJournalRecord implements INBTSerializable<NBTTagCompound> //
     /**
      * {@inheritDoc}
      */
-//    @Override
-//    public void writeToStream(ObjectOutputStream os) throws IOException
-//    {
-//        os.writeLong(timeStamp);
-//        os.writeInt(eventType.getCode());
-//    }
-
-    /**
-     * {@inheritDoc}
-     */
-//    @Override
-//    public void readFromStream(ObjectInputStream is) throws IOException
-//    {
-//        timeStamp = is.readLong();
-//        eventType = WeatherEventType.fromCode(is.readInt());
-//    }
-
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -83,6 +61,9 @@ public class WeatherJournalRecord implements INBTSerializable<NBTTagCompound> //
 		return nbt;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
 		timeStamp = nbt.getLong("TimeStamp");
