@@ -36,7 +36,7 @@ public class SeasonsConfig extends ConfigHandler
         {
 //            addSyncedValue(SeasonsOption.BLACKLIST_DIMENSIONS, "", "Toggle", "Dimensions in which no seasons should exist");
             addSyncedValue(SeasonsOption.DAY_DURATION, 24000, TIME_SETTINGS, "The duration of a Minecraft day in ticks", 20, Integer.MAX_VALUE);
-            addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 5, TIME_SETTINGS, "The duration of a sub season in days", 1, Integer.MAX_VALUE);
+            addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 7, TIME_SETTINGS, "The duration of a sub season in days", 1, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.NUM_PATCHES_PER_TICK, 20, PERFORMANCE_SETTINGS, "The amount of chunk patches per server tick. Lower number increases server performance, but increases popping artifacts.", 1, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.PATCH_TICK_DISTANCE, 20 * 5, PERFORMANCE_SETTINGS, "The amount of ticks to keep between patching a chunk.", 0, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.ENABLE_GLOBAL_FROST, false, ALPHA_FEATURE_SETTINGS, "If enabled then weather effects like freezing/snowing are applied globally.");
