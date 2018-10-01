@@ -65,6 +65,7 @@ public abstract class ConfigHandler
         if (event.getModID().equalsIgnoreCase(SereneSeasons.MOD_ID))
         {
             loadConfiguration();
+            SyncedConfig.sendConfigUpdate(null);	// Distribute configuration changes with all clients
         }
     }
 }

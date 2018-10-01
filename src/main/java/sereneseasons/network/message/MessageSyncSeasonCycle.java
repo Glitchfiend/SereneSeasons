@@ -40,6 +40,8 @@ public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<Message
     @Override
     public IMessage onMessage(MessageSyncSeasonCycle message, MessageContext ctx)
     {
+    	// TODO: Handle thread synchronization 
+    	
         if (ctx.side == Side.CLIENT)
         {
             SeasonHandler.clientSeasonCycleTicks = message.seasonCycleTicks;

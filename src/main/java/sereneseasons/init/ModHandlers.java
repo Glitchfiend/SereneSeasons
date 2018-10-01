@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.handler.NetworkEventsHandler;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.BirchColorHandler;
 import sereneseasons.handler.season.ProviderIceHandler;
@@ -33,6 +34,7 @@ public class ModHandlers
     public static void init()
     {
         PacketHandler.init();
+        MinecraftForge.EVENT_BUS.register(new NetworkEventsHandler());
 
         //Handlers for functionality related to seasons
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);

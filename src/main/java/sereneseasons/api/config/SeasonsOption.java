@@ -7,16 +7,22 @@
  ******************************************************************************/
 package sereneseasons.api.config;
 
+import sereneseasons.util.StringUtils;
+
 public enum SeasonsOption implements ISyncedOption
 {
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration");
     
     private final String optionName;
+    private final String nbtOptionName;
 
     SeasonsOption(String name)
     {
         this.optionName = name;
+        this.nbtOptionName = StringUtils.toNBTConformKey(optionName);
+        if( this.nbtOptionName.isEmpty() )
+        	throw new IllegalArgumentException("key is invalid.");
     }
 
     @Override
@@ -24,4 +30,9 @@ public enum SeasonsOption implements ISyncedOption
     {
         return this.optionName;
     }
+
+	@Override
+	public String getNBTOptionName() {
+		return nbtOptionName;
+	}
 }

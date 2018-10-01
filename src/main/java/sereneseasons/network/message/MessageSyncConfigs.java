@@ -43,17 +43,12 @@ public class MessageSyncConfigs implements IMessage, IMessageHandler<MessageSync
     @Override
     public IMessage onMessage(MessageSyncConfigs message, MessageContext ctx)
     {
+    	// TODO: Handle thread synchronization
+    	
         if (ctx.side == Side.CLIENT)
         {
-            for (String key : message.nbtOptions.getKeySet())
-            {
-                SyncedConfig.SyncedConfigEntry entry = SyncedConfig.optionsToSync.get(key);
-                
-                if (entry == null) SereneSeasons.logger.error("Option " + key + " does not exist locally!");
-                
-                entry.value = message.nbtOptions.getString(key);
-                SereneSeasons.logger.info("SS configuration synchronized with the server");
-            }
+        	SyncedConfig.applyFromNBT(message.nbtOptions);
+        	SereneSeasons.logger.info("SS configuration synchronized with the server");
         }
         
         return null;
