@@ -2,13 +2,13 @@ package sereneseasons.api.config;
 
 import com.google.common.collect.Maps;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncConfigs;
+import sereneseasons.util.JavaUtils;
 
 import java.util.Map;
 
@@ -18,8 +18,6 @@ public class SyncedConfig
 
     public static void addOption(ISyncedOption option, String defaultValue)
     {
-    	if( optionsToSync.containsKey(option.getNBTOptionName()) )
-    		throw new IllegalArgumentException("Ambiguous NBT comform option names.");
         optionsToSync.put(option.getNBTOptionName(), new SyncedConfigEntry(defaultValue));
     }
 
@@ -46,6 +44,21 @@ public class SyncedConfig
         }
     }
     
+    public static boolean allowedToSendConfig() {
+    	// TODO: Fix this hackery
+    	if( !JavaUtils.isClassExisting("net.minecraft.client.Minecraft") )
+    		return true;  // If Minecraft class is missing, then it is a dedicated server
+
+    	Minecraft mc = Minecraft.getMinecraft();
+    	if( mc.isSingleplayer() )
+    		return true;
+    	if( mc.world == null ) {
+    		return true;
+    	}
+    	
+    	return false;
+    }
+    
     /**
      * Distributes actual configuration to one or all clients.
      * 
@@ -53,6 +66,8 @@ public class SyncedConfig
      *        If <code>null</code> then configuration is sent to every player.
      */
     public static void sendConfigUpdate(EntityPlayerMP player) {
+    	if( !allowedToSendConfig() )
+    		return;
     	MessageSyncConfigs msg = new MessageSyncConfigs(toNBT());
     	if( player != null )
     		PacketHandler.instance.sendTo(msg, player);

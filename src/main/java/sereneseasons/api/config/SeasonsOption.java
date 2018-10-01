@@ -11,6 +11,8 @@ import sereneseasons.util.StringUtils;
 
 public enum SeasonsOption implements ISyncedOption
 {
+	// WARNING: Avoid option names which would become ambiguous when converted to their NBT conform versions.
+	
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration");
     

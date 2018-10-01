@@ -1,7 +1,8 @@
 package sereneseasons.util;
 
 public class StringUtils {
-
+	private StringUtils() {}
+	
 	public static String toNBTConformKey(String keyStr) {
 		StringBuilder builder = new StringBuilder();
 		boolean startWithCapital = true;
@@ -16,7 +17,7 @@ public class StringUtils {
 				startWithCapital = false;
 			}
 			else {
-				if( Character.isDigit(c) )
+				if( c == '_' || Character.isDigit(c) )
 					builder.append(c);
 				else
 					startWithCapital = true;
