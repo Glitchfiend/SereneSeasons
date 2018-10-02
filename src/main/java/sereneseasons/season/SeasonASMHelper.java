@@ -145,7 +145,7 @@ public class SeasonASMHelper
     // Biome methods //
     ///////////////////
     
-    public static float getFloatTemperature(Biome biome, BlockPos pos)
+    public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
         SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);

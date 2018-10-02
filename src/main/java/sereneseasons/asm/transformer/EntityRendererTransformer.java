@@ -56,11 +56,11 @@ public class EntityRendererTransformer implements IClassTransformer
                 MethodInsnNode targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), CAN_RAIN_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "Z"));
 
                 // Replace biome.canRain() || biome.getEnableSnow() check with our own
+                int worldVarNum = -1;
                 if (targetMethodInsnNode != null)
                 {
                     int targetInsnIndex = methodNode.instructions.indexOf(targetMethodInsnNode);
                     int worldAloadIndex = targetInsnIndex - 7;
-                    int worldVarNum = -1;
 
                     // Take the world var num from a nearby instruction incase some other mod breaks it.
                     // Looking at you Optifine!
@@ -119,13 +119,19 @@ public class EntityRendererTransformer implements IClassTransformer
 
                 targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), GET_FLOAT_TEMPERATURE_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/util/math/BlockPos"));
 
-                if (targetMethodInsnNode != null)
+                if (targetMethodInsnNode != null && worldVarNum != -1)
                 {
+                	int targetInsnIndex = methodNode.instructions.indexOf(targetMethodInsnNode);
+                	
                     //Redirect the call to our own version of getFloatTemperature
                     targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
                     targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
                     targetMethodInsnNode.name = "getFloatTemperature";
-                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
+                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/World", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
+                    
+                    // Add world argument
+                    methodNode.instructions.insertBefore(methodNode.instructions.get(targetInsnIndex - 2), new VarInsnNode(Opcodes.ALOAD, worldVarNum));
+                    
                     successCount++;
                 }
 
@@ -158,11 +164,17 @@ public class EntityRendererTransformer implements IClassTransformer
 
                 if (targetMethodInsnNode != null)
                 {
+                	int targetInsnIndex = methodNode.instructions.indexOf(targetMethodInsnNode);
+                	
                     //Redirect the call to our own version of getFloatTemperature
                     targetMethodInsnNode.setOpcode(Opcodes.INVOKESTATIC);
                     targetMethodInsnNode.owner = "sereneseasons/season/SeasonASMHelper";
                     targetMethodInsnNode.name = "getFloatTemperature";
-                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
+                    targetMethodInsnNode.desc = ObfHelper.createMethodDescriptor(obfuscatedClass, "F", "net/minecraft/world/World", "net/minecraft/world/biome/Biome", "net/minecraft/util/math/BlockPos");
+                    
+                    // Add world argument
+                    methodNode.instructions.insertBefore(methodNode.instructions.get(targetInsnIndex - 2), new VarInsnNode(Opcodes.ALOAD, 3));
+
                     successCount++;
                 }
 
