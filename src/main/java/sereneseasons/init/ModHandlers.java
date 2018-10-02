@@ -7,6 +7,9 @@
  ******************************************************************************/
 package sereneseasons.init;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -24,6 +27,7 @@ import sereneseasons.handler.season.SeasonSleepHandler;
 import sereneseasons.handler.season.SeasonalCropGrowthHandler;
 import sereneseasons.handler.season.WeatherFrequencyHandler;
 import sereneseasons.season.SeasonTime;
+import sereneseasons.util.ISeasonsColorResolver;
 import sereneseasons.util.SeasonColourUtil;
 
 public class ModHandlers
@@ -61,18 +65,27 @@ public class ModHandlers
         originalGrassColorResolver = BiomeColorHelper.GRASS_COLOR;
         originalFoliageColorResolver = BiomeColorHelper.FOLIAGE_COLOR;
 
-        BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) ->
-        {
-            SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColourUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColorAtPos(biome, blockPosition));
+        BiomeColorHelper.GRASS_COLOR = new ISeasonsColorResolver() {
+			@Override
+			public int getColorAtPos(IBlockAccess blockAccess, Biome biome, BlockPos blockPosition) {
+				if( SeasonHandler.isWorldBlacklisted(blockAccess) )
+					return originalGrassColorResolver.getColorAtPos(biome, blockPosition);
+	            SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
+	            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+	            return SeasonColourUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColorAtPos(biome, blockPosition));
+			}
         };
 
-        BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) ->
-        {
-            SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColourUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColorAtPos(biome, blockPosition));
+        BiomeColorHelper.FOLIAGE_COLOR = new ISeasonsColorResolver() {
+
+			@Override
+			public int getColorAtPos(IBlockAccess blockAccess, Biome biome, BlockPos blockPosition) {
+				if( SeasonHandler.isWorldBlacklisted(blockAccess) )
+					return originalFoliageColorResolver.getColorAtPos(biome, blockPosition);
+				SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
+	            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+	            return SeasonColourUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColorAtPos(biome, blockPosition));
+	        }
         };
     }
     

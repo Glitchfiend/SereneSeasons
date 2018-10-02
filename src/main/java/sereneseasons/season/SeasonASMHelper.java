@@ -16,14 +16,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeColorHelper;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.util.ISeasonsColorResolver;
 
 public class SeasonASMHelper
 {
@@ -277,5 +280,25 @@ public class SeasonASMHelper
     	}
 
         return biome.canRain();
+    }
+    
+    //////////////////////////////
+    // BiomeColorHelper methods //
+    //////////////////////////////
+    
+    public static int getColorAtPosExtended(IBlockAccess blockAccess, BlockPos pos, ISeasonsColorResolver colorResolver) {
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        for (BlockPos.MutableBlockPos blockpos$mutableblockpos : BlockPos.getAllInBoxMutable(pos.add(-1, 0, -1), pos.add(1, 0, 1)))
+        {
+            int l = colorResolver.getColorAtPos(blockAccess, blockAccess.getBiome(blockpos$mutableblockpos), blockpos$mutableblockpos);
+            i += (l & 16711680) >> 16;
+            j += (l & 65280) >> 8;
+            k += l & 255;
+        }
+
+        return (i / 9 & 255) << 16 | (j / 9 & 255) << 8 | k / 9 & 255;
     }
 }

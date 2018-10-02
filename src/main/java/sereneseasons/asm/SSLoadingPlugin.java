@@ -16,7 +16,7 @@ public class SSLoadingPlugin implements IFMLLoadingPlugin
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[] { "sereneseasons.asm.transformer.EntityRendererTransformer", "sereneseasons.asm.transformer.WorldTransformer" };
+        return new String[] { "sereneseasons.asm.transformer.EntityRendererTransformer", "sereneseasons.asm.transformer.WorldTransformer", "sereneseasons.asm.transformer.BiomeColorHelperTransformer" };
     }
 
     @Override

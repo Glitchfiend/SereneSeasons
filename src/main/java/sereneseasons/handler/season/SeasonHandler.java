@@ -9,6 +9,7 @@ package sereneseasons.handler.season;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,6 +22,7 @@ import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
+import sereneseasons.util.WorldUtils;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {
@@ -124,6 +126,19 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     	}
     	return false;
     }
+    
+	public static boolean isWorldBlacklisted(IBlockAccess blockAccess) {
+		if( blockAccess == null )
+			return false;
+		
+		World world = WorldUtils.castToWorld(blockAccess);
+		if( world != null ) {
+			int dimId = world.provider.getDimension();
+			return isDimensionBlacklisted(dimId);
+		}
+		
+		return false;
+	}
     
     //
     // Used to implement getSeasonState in the API

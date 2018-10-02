@@ -42,7 +42,7 @@ public class BirchColorHandler
 	            	
 	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour)
 	            	{
-	            		if( !getSafeIsWorldBlacklisted(worldIn) ) {
+	            		if( !SeasonHandler.isWorldBlacklisted(worldIn) ) {
 		            		SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
 			                ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(worldIn.getBiome(pos)) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 			                birchColor = colorProvider.getBirchColor();
@@ -58,18 +58,5 @@ public class BirchColorHandler
 	        }
 	    }, Blocks.LEAVES);
     }
-	
-	private static boolean getSafeIsWorldBlacklisted(IBlockAccess blockAccess) {
-		if( blockAccess == null )
-			return false;
-		
-		World world = WorldUtils.castToWorld(blockAccess);
-		if( world != null ) {
-			int dimId = world.provider.getDimension();
-			return SeasonHandler.isDimensionBlacklisted(dimId);
-		}
-		
-		return false;
-	}
 
 }
