@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
+import sereneseasons.init.ModConfig;
 
 public class MessageSyncConfigs implements IMessage, IMessageHandler<MessageSyncConfigs, IMessage>
 {
@@ -54,6 +55,7 @@ public class MessageSyncConfigs implements IMessage, IMessageHandler<MessageSync
                 entry.value = message.nbtOptions.getString(key);
                 SereneSeasons.logger.info("SS configuration synchronized with the server");
             }
+            ModConfig.seasons.onConfigurationLoaded();
         }
         
         return null;

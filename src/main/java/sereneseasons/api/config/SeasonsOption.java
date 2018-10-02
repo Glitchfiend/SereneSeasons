@@ -9,6 +9,7 @@ package sereneseasons.api.config;
 
 public enum SeasonsOption implements ISyncedOption
 {
+	BLACKLIST_DIMENSIONS("Blacklist Dimensions"),
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration");
     

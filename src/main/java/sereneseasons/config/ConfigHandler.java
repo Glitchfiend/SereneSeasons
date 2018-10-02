@@ -27,6 +27,7 @@ public abstract class ConfigHandler
     {
         config = new Configuration(configFile);
         loadConfiguration();
+        onConfigurationLoaded();
 
         MinecraftForge.EVENT_BUS.register(this);
         this.description = description;
@@ -34,6 +35,9 @@ public abstract class ConfigHandler
     }
 
     protected abstract void loadConfiguration();
+
+    public void onConfigurationLoaded() {
+    }
 
     protected <T> void addSyncedValue(ISyncedOption option, T defaultValue, String category, String comment, T... args)
     {
@@ -65,6 +69,7 @@ public abstract class ConfigHandler
         if (event.getModID().equalsIgnoreCase(SereneSeasons.MOD_ID))
         {
             loadConfiguration();
+            onConfigurationLoaded();
         }
     }
 }

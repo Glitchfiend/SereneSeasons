@@ -58,6 +58,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
     private Season.SubSeason lastSeason = null;
     public static int clientSeasonCycleTicks = 0;
+    public static Integer[] blacklistedDimensions = new Integer[0];
     
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) 
