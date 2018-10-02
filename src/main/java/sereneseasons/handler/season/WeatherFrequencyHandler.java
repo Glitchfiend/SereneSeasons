@@ -23,6 +23,9 @@ public class WeatherFrequencyHandler
         if (event.phase == Phase.END && event.side == Side.SERVER)
         {
             World world = event.world;
+            int dimId = world.provider.getDimension();
+            if( SeasonHandler.isDimensionBlacklisted(dimId) )
+            	return;
             Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
             
             //During winter, the absolute maximum delay between rain/thunder should be 30 mins, unlike

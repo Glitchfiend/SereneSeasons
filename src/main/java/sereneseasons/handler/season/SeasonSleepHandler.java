@@ -21,6 +21,7 @@ public class SeasonSleepHandler
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
+    	// NOTE: Ignore dimension blacklist here. Still need to do timing stuff.
         if (event.phase == Phase.START && event.side == Side.SERVER)
         {
             WorldServer world = (WorldServer)event.world;

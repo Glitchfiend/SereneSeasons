@@ -33,6 +33,10 @@ public class SeasonASMHelper
     
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState)
     {
+        int dimId = world.provider.getDimension();
+        if( SeasonHandler.isDimensionBlacklisted(dimId) )
+        	return world.provider.canSnowAt(pos, checkLight);
+        
         Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
         float temperature = biome.getTemperature(pos);
@@ -69,6 +73,10 @@ public class SeasonASMHelper
     
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
+        int dimId = world.provider.getDimension();
+        if( SeasonHandler.isDimensionBlacklisted(dimId) )
+        	return world.provider.canBlockFreeze(pos, noWaterAdj);
+    	
         Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
         float temperature = biome.getTemperature(pos);
@@ -114,6 +122,10 @@ public class SeasonASMHelper
     
     public static boolean isRainingAtInSeason(World world, BlockPos pos, ISeasonState seasonState)
     {
+        int dimId = world.provider.getDimension();
+        if( SeasonHandler.isDimensionBlacklisted(dimId) )
+        	return isRainingAtVanilla(world, pos);
+        
         Biome biome = world.getBiome(pos);
 
         if (BiomeConfig.usesTropicalSeasons(biome))
@@ -141,15 +153,49 @@ public class SeasonASMHelper
         return biome.canRain();
     }
     
+    private static boolean isRainingAtVanilla(World world, BlockPos position)
+    {
+        if (!world.isRaining())
+        {
+            return false;
+        }
+        else if (!world.canSeeSky(position))
+        {
+            return false;
+        }
+        else if (world.getPrecipitationHeight(position).getY() > position.getY())
+        {
+            return false;
+        }
+        else
+        {
+            Biome biome = world.getBiome(position);
+
+            if (biome.getEnableSnow())
+            {
+                return false;
+            }
+            else
+            {
+                return world.canSnowAt(position, false) ? false : biome.canRain();
+            }
+        }
+    }
+    
     ///////////////////
     // Biome methods //
     ///////////////////
     
     public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
+    	float biomeTemp = biome.getTemperature(pos);
+        
+    	int dimId = world.provider.getDimension();
+        if( SeasonHandler.isDimensionBlacklisted(dimId) )
+        	return biomeTemp;
+        
         SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
-        float biomeTemp = biome.getTemperature(pos);
 
         if (!tropicalBiome && biome.getTemperature(pos) <= 0.8F && biome.getTemperature(pos) >= 0.15F)
         {
@@ -185,20 +231,23 @@ public class SeasonASMHelper
 
     public static boolean shouldRenderRainSnow(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
-        {
-            Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
-
-            switch ((Season.TropicalSeason) tropicalSeason)
+    	int dimId = world.provider.getDimension();
+        if( !SeasonHandler.isDimensionBlacklisted(dimId) ) {
+            if (BiomeConfig.usesTropicalSeasons(biome))
             {
-	            case MID_DRY:
-	            	return false;
-	            	
-	            case MID_WET:
-	            	return true;
-	            	
-	            default:
-	            	return biome.canRain() || biome.getEnableSnow();
+                Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
+
+                switch ((Season.TropicalSeason) tropicalSeason)
+                {
+    	            case MID_DRY:
+    	            	return false;
+    	            	
+    	            case MID_WET:
+    	            	return true;
+    	            	
+    	            default:
+    	            	return biome.canRain() || biome.getEnableSnow();
+                }
             }
         }
 
@@ -207,22 +256,25 @@ public class SeasonASMHelper
 
     public static boolean shouldAddRainParticles(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
-        {
-            Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
-
-            switch ((Season.TropicalSeason) tropicalSeason)
+    	int dimId = world.provider.getDimension();
+    	if( !SeasonHandler.isDimensionBlacklisted(dimId) ) {
+            if (BiomeConfig.usesTropicalSeasons(biome))
             {
-	            case MID_DRY:
-	            	return false;
-	            	
-	            case MID_WET:
-	            	return true;
-	            	
-	            default:
-	            	return biome.canRain();
+                Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
+
+                switch ((Season.TropicalSeason) tropicalSeason)
+                {
+    	            case MID_DRY:
+    	            	return false;
+    	            	
+    	            case MID_WET:
+    	            	return true;
+    	            	
+    	            default:
+    	            	return biome.canRain();
+                }
             }
-        }
+    	}
 
         return biome.canRain();
     }

@@ -9,8 +9,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,6 +20,7 @@ import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
+import sereneseasons.util.WorldUtils;
 
 public class BirchColorHandler
 {
@@ -39,9 +42,11 @@ public class BirchColorHandler
 	            	
 	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour)
 	            	{
-	            		SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-		                ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(worldIn.getBiome(pos)) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-		                birchColor = colorProvider.getBirchColor();
+	            		if( !getSafeIsWorldBlacklisted(worldIn) ) {
+		            		SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
+			                ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(worldIn.getBiome(pos)) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+			                birchColor = colorProvider.getBirchColor();
+			            }
 	            	}
 	            	
 	                return birchColor;
@@ -53,4 +58,18 @@ public class BirchColorHandler
 	        }
 	    }, Blocks.LEAVES);
     }
+	
+	private static boolean getSafeIsWorldBlacklisted(IBlockAccess blockAccess) {
+		if( blockAccess == null )
+			return false;
+		
+		World world = WorldUtils.castToWorld(blockAccess);
+		if( world != null ) {
+			int dimId = world.provider.getDimension();
+			return SeasonHandler.isDimensionBlacklisted(dimId);
+		}
+		
+		return false;
+	}
+
 }

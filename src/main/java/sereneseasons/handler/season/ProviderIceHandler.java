@@ -24,6 +24,9 @@ public class ProviderIceHandler
     public void onPopulateChunkEvent(PopulateChunkEvent.Populate event)
     {
         World world = event.getWorld();
+        int dimId = world.provider.getDimension();
+        if( SeasonHandler.isDimensionBlacklisted(dimId) )
+        	return;
         BlockPos pos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16).add(8, 0, 8);
         
         if (event.getType() == EventType.ICE)

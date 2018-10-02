@@ -27,6 +27,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
+    	// NOTE: Ignore dimension blacklist here. Still need to do timing stuff.
         World world = event.world;
 
         if (event.phase == TickEvent.Phase.END && !world.isRemote && world.provider.getDimension() == 0)
@@ -50,6 +51,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onPlayerLogin(PlayerLoggedInEvent event)
     {
+    	// NOTE: Ignore dimension blacklist here. Still need to do timing stuff.
         EntityPlayer player = event.player;
         World world = player.world;
         
@@ -63,6 +65,8 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) 
     {
+    	// NOTE: Ignore dimension blacklist here. Still need to do timing and rendering stuff.
+    	
         //Only do this when in the world
         if (Minecraft.getMinecraft().player == null) return;
         
@@ -80,7 +84,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             
             if (calendar.getSubSeason() != lastSeason)
             {
-                Minecraft.getMinecraft().renderGlobal.loadRenderers();
+           		Minecraft.getMinecraft().renderGlobal.loadRenderers();
                 lastSeason = calendar.getSubSeason();
             }
         }
@@ -88,6 +92,8 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public static void sendSeasonUpdate(World world)
     {
+    	// NOTE: Ignore dimension blacklist here. Still need to do timing stuff.
+    	
         if (!world.isRemote)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
@@ -109,6 +115,14 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         }
         
         return savedData;
+    }
+    
+    public static boolean isDimensionBlacklisted(int dimId) {
+    	for( int i = 0; i < blacklistedDimensions.length; i ++ ) {
+    		if( dimId == blacklistedDimensions[i] )
+    			return true;
+    	}
+    	return false;
     }
     
     //

@@ -30,6 +30,10 @@ public class RandomUpdateHandler
         if (event.phase == Phase.END && event.side == Side.SERVER)
         {
             WorldServer world = (WorldServer)event.world;
+            int dimId = world.provider.getDimension();
+            if( SeasonHandler.isDimensionBlacklisted(dimId) )
+            	return;
+            
             Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
             Season.SubSeason subSeason = SeasonHelper.getSeasonState(world).getSubSeason();
             
