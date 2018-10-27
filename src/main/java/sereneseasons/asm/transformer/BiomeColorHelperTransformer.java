@@ -84,7 +84,7 @@ public class BiomeColorHelperTransformer implements IClassTransformer {
         if (successfulTransformations.size() != 1) throw new RuntimeException("An error occurred transforming BiomeColorHelper. Applied transformations: " + successfulTransformations.toString());
         
         //Encode the altered class back into bytes
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
         classNode.accept(writer);
         bytes = writer.toByteArray();
         
