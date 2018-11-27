@@ -29,18 +29,18 @@ public class RandomUpdateHandler
     {
         if (event.phase == Phase.END && event.side == Side.SERVER)
         {
-            WorldServer world = (WorldServer)event.world;
-            Season season = SeasonHelper.getSeasonState(world).getSubSeason().getSeason();
-            Season.SubSeason subSeason = SeasonHelper.getSeasonState(world).getSubSeason();
+            Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
+            Season season = subSeason.getSeason();
             
             //Only melt when it isn't winter
-            if (subSeason != Season.SubSeason.EARLY_WINTER && subSeason != Season.SubSeason.MID_WINTER && subSeason != Season.SubSeason.LATE_WINTER)
+            if (season != Season.WINTER)
             {
+            	WorldServer world = (WorldServer)event.world;
                 for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();)
                 {
-                    Chunk chunk = (Chunk)iterator.next();
-                    int x = chunk.x * 16;
-                    int z = chunk.z * 16;
+                    Chunk chunk = iterator.next();
+                    int x = chunk.x << 4;
+                    int z = chunk.z << 4;
                     
                     int rand;
                     switch (subSeason)
@@ -66,36 +66,24 @@ public class RandomUpdateHandler
                         BlockPos topPos = world.getPrecipitationHeight(new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
                         BlockPos groundPos = topPos.down();
 
-                        if (world.getBlockState(groundPos).getBlock() == Blocks.ICE && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(groundPos).getTemperature(groundPos)))
+                        while (groundPos.getY() >= 0)
                         {
-                            ((BlockIce)Blocks.ICE).turnIntoWater(world, groundPos);
-                        }
-                        else
-                        {
-                        	for (int i = topPos.getY(); i > 0; i--)
+                        	if (world.getBlockState(groundPos).getBlock() == Blocks.ICE && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(groundPos).getTemperature(groundPos)))
                         	{
-                        		if (world.getBlockState(groundPos.down(i)).getBlock() == Blocks.ICE && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(groundPos.down(i)).getTemperature(groundPos.down(i))))
-                        		{
-                        			((BlockIce)Blocks.ICE).turnIntoWater(world, groundPos.down(i));
-                        			break;
-                        		}
+                        		((BlockIce)Blocks.ICE).turnIntoWater(world, groundPos);
+                        		break;
                         	}
+                        	groundPos = groundPos.down();
                         }
 
-                        if (world.getBlockState(topPos).getBlock() == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(topPos).getTemperature(topPos)))
+                        while (topPos.getY() >= 0)
                         {
-                            world.setBlockToAir(topPos);
-                        }
-                        else
-                        {
-                        	for (int i = topPos.getY(); i > 0; i--)
-                        	{
-                        		if (world.getBlockState(topPos.down(i)).getBlock() == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(topPos.down(i)).getTemperature(topPos.down(i))))
-                        		{
-                        			world.setBlockToAir(topPos.down(i));
-                        			break;
-                        		}
-                        	}
+                       		if (world.getBlockState(topPos).getBlock() == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(topPos).getTemperature(topPos)))
+                       		{
+                       			world.setBlockToAir(topPos);
+                       			break;
+                       		}
+                       		topPos = topPos.down();
                         }
                     }
                 }
