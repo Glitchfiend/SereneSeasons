@@ -10,7 +10,8 @@ package sereneseasons.api.config;
 public enum SeasonsOption implements ISyncedOption
 {
     DAY_DURATION("Day Duration"),
-    SUB_SEASON_DURATION("Sub Season Duration");
+    SUB_SEASON_DURATION("Sub Season Duration"),
+	STARTING_SUB_SEASON("Staring Sub Season");
     
     private final String optionName;
 
