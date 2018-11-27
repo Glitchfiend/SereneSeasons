@@ -157,30 +157,27 @@ public class ModFertility
 			
 			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
 			
-			if (block instanceof IGrowable)
+			String plantName = block.toString();
+			cropSet.add(plantName);
+			
+			if (bitmask != 0)
 			{
-				String plantName = ((IGrowable) block).toString();
-				cropSet.add(plantName);
-				
-				if (bitmask != 0)
-				{
-					allListedPlants.add(plantName);
-				}
-				else
-				{
-					continue;
-				}
+				allListedPlants.add(plantName);
+			}
+			else
+			{
+				continue;
+			}
 
-				//Add to seedSeasons
-				if (seedSeasons.containsKey(seed))
-				{
-					int seasons = seedSeasons.get(seed);
-					seedSeasons.put(seed, seasons | bitmask);
-				}
-				else
-				{
-					seedSeasons.put(seed, bitmask);
-				}
+			//Add to seedSeasons
+			if (seedSeasons.containsKey(seed))
+			{
+				int seasons = seedSeasons.get(seed);
+				seedSeasons.put(seed, seasons | bitmask);
+			}
+			else
+			{
+				seedSeasons.put(seed, bitmask);
 			}
 		}
 	}
