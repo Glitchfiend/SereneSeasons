@@ -9,6 +9,7 @@ package sereneseasons.handler.season;
 
 import java.util.Iterator;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockIce;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -95,27 +96,31 @@ public class RandomUpdateHandler
                     {
                         world.updateLCG = world.updateLCG * 3 + 1013904223;
                         int randOffset = world.updateLCG >> 2;
-                        BlockPos topPos = world.getPrecipitationHeight(new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
-                        BlockPos groundPos = topPos.down();
+                        BlockPos pos = world.getPrecipitationHeight(new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
+                        boolean first = true;
 
-                        while (groundPos.getY() >= 0)
+                        while (pos.getY() >= 0)
                         {
-                        	if (world.getBlockState(groundPos).getBlock() == Blocks.ICE && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(groundPos).getTemperature(groundPos)))
-                        	{
-                        		((BlockIce)Blocks.ICE).turnIntoWater(world, groundPos);
-                        		break;
-                        	}
-                        	groundPos = groundPos.down();
-                        }
+                        	Block block = world.getBlockState(pos).getBlock();
 
-                        while (topPos.getY() >= 0)
-                        {
-                       		if (world.getBlockState(topPos).getBlock() == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(topPos).getTemperature(topPos)))
+                       		if (block == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(pos).getTemperature(pos)))
                        		{
-                       			world.setBlockToAir(topPos);
+                       			world.setBlockToAir(pos);
                        			break;
                        		}
-                       		topPos = topPos.down();
+
+                       		if(!first)
+                       		{
+                       			if(block == Blocks.ICE && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(pos).getTemperature(pos)))
+                       			{
+                       				((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
+                       				break;
+                       			}
+                            }
+                       		else
+                       			first = false;
+
+                       		pos = pos.down();
                         }
                     }
                 }
