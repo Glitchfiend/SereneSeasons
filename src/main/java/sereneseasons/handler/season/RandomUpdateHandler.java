@@ -103,7 +103,7 @@ public class RandomUpdateHandler
                         {
                         	Block block = world.getBlockState(pos).getBlock();
 
-                       		if (block == Blocks.SNOW_LAYER && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(pos).getTemperature(pos)))
+                       		if (block == Blocks.SNOW_LAYER && (world.getBiome(pos).getTemperature(pos) >= 0.15F))
                        		{
                        			world.setBlockToAir(pos);
                        			break;
@@ -111,7 +111,7 @@ public class RandomUpdateHandler
 
                        		if(!first)
                        		{
-                       			if(block == Blocks.ICE && !SeasonHelper.canSnowAtTempInSeason(season, world.getBiome(pos).getTemperature(pos)))
+                       			if(block == Blocks.ICE && (world.getBiome(pos).getTemperature(pos) >= 0.15F))
                        			{
                        				((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
                        				break;

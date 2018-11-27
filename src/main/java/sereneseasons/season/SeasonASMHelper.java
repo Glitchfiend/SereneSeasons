@@ -36,13 +36,13 @@ public class SeasonASMHelper
     {
         Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
-        float temperature = biome.getTemperature(pos);
+        float temperature = getFloatTemperature(biome, pos);
 
         if (BiomeConfig.usesTropicalSeasons(biome))
             return false;
 
         //If we're in winter, the temperature can be anything equal to or below 0.7
-        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
+        if (temperature >= 0.15F)
         {
             return false;
         }
@@ -72,13 +72,13 @@ public class SeasonASMHelper
     {
         Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
-        float temperature = biome.getTemperature(pos);
+        float temperature = getFloatTemperature(biome, pos);
 
         if (BiomeConfig.usesTropicalSeasons(biome))
             return false;
 
         //If we're in winter, the temperature can be anything equal to or below 0.7
-        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
+        if (temperature >= 0.15F)
         {
             return false;
         }
@@ -134,7 +134,7 @@ public class SeasonASMHelper
             }
         }
 
-        if (( biome.getEnableSnow() && seasonState.getSeason() != Season.WINTER) || (world.canSnowAt(pos, false)))
+        if (biome.getEnableSnow() || (world.canSnowAt(pos, false)))
         {
             return false;
         }
@@ -152,7 +152,7 @@ public class SeasonASMHelper
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && biome.getDefaultTemperature() >= 0.15F)
+        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F)
         {
 	        switch ((SubSeason) subSeason)
 	        {
@@ -164,15 +164,15 @@ public class SeasonASMHelper
 		    		break;
 	        
 		        case MID_SPRING: case MID_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, 0.15F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, 0.1F, 2.0F);
 		    		break;
 	        
 	        	case EARLY_SPRING: case LATE_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, 0.15F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, 0.0F, 2.0F);
 		    		break;
 	    		
 	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
-	        		biomeTemp = 0.0F;
+	        		biomeTemp = MathHelper.clamp(biomeTemp - 0.8F, 0.0F, 2.0F);
 	        		break;
 	        }
         }
