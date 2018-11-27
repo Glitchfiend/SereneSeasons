@@ -21,7 +21,6 @@ import sereneseasons.handler.season.RandomUpdateHandler;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.handler.season.SeasonSleepHandler;
 import sereneseasons.handler.season.SeasonalCropGrowthHandler;
-import sereneseasons.handler.season.WeatherFrequencyHandler;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColourUtil;
 
@@ -43,11 +42,6 @@ public class ModHandlers
         }
         
         MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
-
-        if (ModConfig.seasons.changeWeatherFrequency)
-        {
-        	MinecraftForge.EVENT_BUS.register(new WeatherFrequencyHandler());
-        }
         
         MinecraftForge.EVENT_BUS.register(new SeasonalCropGrowthHandler());
 
