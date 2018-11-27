@@ -15,9 +15,12 @@ import sereneseasons.core.SereneSeasons;
 public class SeasonsConfig extends ConfigHandler
 {
     public static final String TIME_SETTINGS = "Time Settings";
-    public static final String EVENT_SETTINGS = "Event Settings";
+    public static final String WEATHER_SETTINGS = "Weather Settings";
     public static final String AESTHETIC_SETTINGS = "Aesthetic Settings";
 
+    public boolean generateSnowAndIce;
+    public boolean changeWeatherFrequency;
+    
     public boolean changeGrassColour;
     public boolean changeFoliageColour;
     public boolean changeBirchColour;
@@ -35,6 +38,10 @@ public class SeasonsConfig extends ConfigHandler
             addSyncedValue(SeasonsOption.DAY_DURATION, 24000, TIME_SETTINGS,"The duration of a Minecraft day in ticks", 20, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 7, TIME_SETTINGS,"The duration of a sub season in days", 1, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.STARTING_SUB_SEASON, 1, TIME_SETTINGS,"The starting sub season for new worlds.  0 = Random, 1 - 3 = Early/Mid/Late Spring, 4 - 6 = Early/Mid/Late Summer, 7 - 9 = Early/Mid/Late Autumn, 10 - 12 = Early/Mid/Late Winter", 0, 12);
+            
+            generateSnowAndIce = config.getBoolean("Generate Snow and Ice", WEATHER_SETTINGS, true, "Generate snow and ice during the Winter season");
+            changeWeatherFrequency = config.getBoolean("Change Weather Frequency", WEATHER_SETTINGS, true, "Change the frequency of rain/snow/storms based on the season");
+            
             // Client-only. The server shouldn't get to decide these.
             changeGrassColour = config.getBoolean("Change Grass Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the grass colour based on the current season");
             changeFoliageColour = config.getBoolean("Change Foliage Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the foliage colour based on the current season");

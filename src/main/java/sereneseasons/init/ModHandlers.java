@@ -17,7 +17,6 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.BirchColorHandler;
-import sereneseasons.handler.season.ProviderIceHandler;
 import sereneseasons.handler.season.RandomUpdateHandler;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.handler.season.SeasonSleepHandler;
@@ -37,11 +36,19 @@ public class ModHandlers
         //Handlers for functionality related to seasons
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
-        MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
-        MinecraftForge.TERRAIN_GEN_BUS.register(new ProviderIceHandler());
+        
+        if (ModConfig.seasons.generateSnowAndIce)
+        {
+        	MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
+        }
+        
         MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
 
-        MinecraftForge.EVENT_BUS.register(new WeatherFrequencyHandler());
+        if (ModConfig.seasons.changeWeatherFrequency)
+        {
+        	MinecraftForge.EVENT_BUS.register(new WeatherFrequencyHandler());
+        }
+        
         MinecraftForge.EVENT_BUS.register(new SeasonalCropGrowthHandler());
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)

@@ -8,6 +8,7 @@
 package sereneseasons.api.season;
 
 import net.minecraft.world.World;
+import sereneseasons.init.ModConfig;
 
 public class SeasonHelper 
 {
@@ -44,7 +45,7 @@ public class SeasonHelper
     public static boolean canSnowAtTempInSeason(Season season, float temperature)
     {
         //If we're in winter, the temperature can be anything equal to or below 0.8
-        return temperature < 0.15F || (season == Season.WINTER && temperature <= 0.8F);
+        return temperature < 0.15F || (season == Season.WINTER && temperature <= 0.8F && ModConfig.seasons.generateSnowAndIce);
     }
 
     public interface ISeasonDataProvider

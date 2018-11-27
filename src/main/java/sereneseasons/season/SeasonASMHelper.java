@@ -24,6 +24,7 @@ import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.init.ModConfig;
 
 public class SeasonASMHelper
 {
