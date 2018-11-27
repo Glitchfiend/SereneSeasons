@@ -35,7 +35,7 @@ public class FertilityConfig
 		public boolean ignore_unlisted_crops = false;
 		
 		@Config.Comment({"Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed crops."})
-		public boolean seed_tooltips = true;
+		public boolean crop_tooltips = true;
 		
 		@Config.Comment({"Maximum height greenhouse glass can be above a crop for it to be fertile out of season"})
 		public int greenhouse_glass_max_height = 7;
@@ -44,7 +44,7 @@ public class FertilityConfig
 	public static class SeasonFertility
 	{
 		@Config.Comment({"Crops growable in Spring (List either the seed item for the crop, or the crop block itself)"})
-		public String [] spring_seeds = new String[]
+		public String [] spring_crops = new String[]
 		{
 			"minecraft:potato", "minecraft:carrot", "minecraft:sapling",
 			"harvestcraft:caulifloweritem", "harvestcraft:coffeebeanitem", "harvestcraft:garlicitem", "harvestcraft:beanitem", "harvestcraft:rhubarbitem", 
@@ -61,7 +61,7 @@ public class FertilityConfig
 		};
 		
 		@Config.Comment({"Crops growable in Summer (List either the seed item for the crop, or the crop block itself)"})
-		public String [] summer_seeds = new String[]
+		public String [] summer_crops = new String[]
 		{
 			"minecraft:melon_seeds", "minecraft:wheat_seeds", "minecraft:sapling",
 			"simplecorn:kernels",
@@ -85,7 +85,7 @@ public class FertilityConfig
 		};
 		
 		@Config.Comment({"Crops growable in Autumn (List either the seed item for the crop, or the crop block itself)"})
-		public String [] autumn_seeds = new String[]
+		public String [] autumn_crops = new String[]
 		{
 			"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds", "minecraft:sapling",
 			"simplecorn:kernels",
@@ -101,7 +101,7 @@ public class FertilityConfig
 		};
 		
 		@Config.Comment({"Crops growable in Winter (List either the seed item for the crop, or the crop block itself)"})
-		public String [] winter_seeds = new String[]
+		public String [] winter_crops = new String[]
 		{
 			""
 		};

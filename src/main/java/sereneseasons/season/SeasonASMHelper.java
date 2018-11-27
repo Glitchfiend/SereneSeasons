@@ -151,7 +151,7 @@ public class SeasonASMHelper
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biome.getTemperature(pos) <= 0.8F && biome.getTemperature(pos) >= 0.15F)
+        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && biome.getDefaultTemperature() >= 0.15F)
         {
 	        switch ((SubSeason) subSeason)
 	        {

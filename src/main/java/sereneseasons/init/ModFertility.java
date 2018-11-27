@@ -39,10 +39,10 @@ public class ModFertility
 	public static void init()
 	{
 		//Store crops in hash sets for quick and easy retrieval
-		initSeasonCrops(FertilityConfig.seasonal_fertility.spring_seeds, springPlants, 1);
-		initSeasonCrops(FertilityConfig.seasonal_fertility.summer_seeds, summerPlants, 2);
-		initSeasonCrops(FertilityConfig.seasonal_fertility.autumn_seeds, autumnPlants, 4);
-		initSeasonCrops(FertilityConfig.seasonal_fertility.winter_seeds, winterPlants, 8);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.spring_crops, springPlants, 1);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.summer_crops, summerPlants, 2);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.autumn_crops, autumnPlants, 4);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.winter_crops, winterPlants, 8);
 	}
 
 	public static boolean isCropFertile(String cropName, World world, BlockPos pos)
@@ -189,7 +189,7 @@ public class ModFertility
 	public static void setupTooltips(ItemTooltipEvent event)
 	{
 		//Set up tooltips if enabled and on client side
-		if (FertilityConfig.general_category.seed_tooltips && FertilityConfig.general_category.seasonal_crops)
+		if (FertilityConfig.general_category.crop_tooltips && FertilityConfig.general_category.seasonal_crops)
 		{
 			String name = event.getItemStack().getItem().getRegistryName().toString();
 			if (seedSeasons.containsKey(name))
