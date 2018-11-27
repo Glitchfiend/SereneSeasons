@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.init.ModConfig;
+import sereneseasons.season.SeasonASMHelper;
 
 public class RandomUpdateHandler 
 {
@@ -103,7 +104,7 @@ public class RandomUpdateHandler
                         {
                         	Block block = world.getBlockState(pos).getBlock();
 
-                       		if (block == Blocks.SNOW_LAYER && (world.getBiome(pos).getTemperature(pos) >= 0.15F))
+                       		if (block == Blocks.SNOW_LAYER && SeasonASMHelper.getFloatTemperature(world.getBiome(pos), pos) >= 0.15F)
                        		{
                        			world.setBlockToAir(pos);
                        			break;
@@ -111,7 +112,7 @@ public class RandomUpdateHandler
 
                        		if(!first)
                        		{
-                       			if(block == Blocks.ICE && (world.getBiome(pos).getTemperature(pos) >= 0.15F))
+                       			if(block == Blocks.ICE && SeasonASMHelper.getFloatTemperature(world.getBiome(pos), pos) >= 0.15F)
                        			{
                        				((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
                        				break;
