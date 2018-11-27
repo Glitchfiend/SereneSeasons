@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.init.ModConfig;
 
 public class RandomUpdateHandler 
 {
@@ -32,9 +33,40 @@ public class RandomUpdateHandler
             Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
             Season season = subSeason.getSeason();
             
-            //Only melt when it isn't winter
-            if (season != Season.WINTER)
+            if(season == Season.WINTER)
             {
+            	if (ModConfig.seasons.changeWeatherFrequency)
+            	{
+            		if (event.world.getWorldInfo().isThundering())
+            		{
+            			event.world.getWorldInfo().setThundering(false);;
+            		}
+            		if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000)
+            		{
+            			event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(24000) + 12000);
+            		}
+            	}
+            }
+            else //Only melt when it isn't winter
+            {
+            	if (ModConfig.seasons.changeWeatherFrequency)
+            	{
+            		if (season == Season.SPRING)
+            		{
+            			if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 96000)
+            			{
+            				event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(84000) + 12000);
+            			}
+            		}
+            		else if (season == Season.SUMMER)
+            		{
+            			if (!event.world.getWorldInfo().isThundering() && event.world.getWorldInfo().getThunderTime() > 36000)
+            			{
+            				event.world.getWorldInfo().setThunderTime(event.world.rand.nextInt(24000) + 12000);
+            			}
+            		}
+                }
+            	
             	WorldServer world = (WorldServer)event.world;
                 for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();)
                 {
