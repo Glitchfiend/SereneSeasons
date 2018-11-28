@@ -36,7 +36,7 @@ public class RandomUpdateHandler
             Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
             Season season = subSeason.getSeason();
             
-            if(season == Season.WINTER)
+            if (season == Season.WINTER)
             {
             	if (ModConfig.seasons.changeWeatherFrequency)
             	{
@@ -50,7 +50,7 @@ public class RandomUpdateHandler
             		}
             	}
             }
-            else //Only melt when it isn't winter
+            else
             {
             	if (ModConfig.seasons.changeWeatherFrequency)
             	{

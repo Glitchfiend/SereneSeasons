@@ -45,6 +45,10 @@ public class SeasonASMHelper
         {
             return false;
         }
+        else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
+        {
+        	return false;
+        }
         else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         {
             return false;
@@ -79,6 +83,10 @@ public class SeasonASMHelper
         if (temperature >= 0.15F)
         {
             return false;
+        }
+        else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
+        {
+        	return false;
         }
         else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         {
