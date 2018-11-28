@@ -14,6 +14,7 @@ import net.minecraft.block.BlockIce;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.BiomeConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonASMHelper;
 
@@ -106,25 +108,33 @@ public class RandomUpdateHandler
 	                        while (pos.getY() >= 0)
 	                        {
 	                        	Block block = world.getBlockState(pos).getBlock();
-	
-	                       		if (block == Blocks.SNOW_LAYER && SeasonASMHelper.getFloatTemperature(world.getBiome(pos), pos) >= 0.15F)
-	                       		{
-	                       			world.setBlockToAir(pos);
-	                       			break;
-	                       		}
-	
-	                       		if(!first)
-	                       		{
-	                       			if(block == Blocks.ICE && SeasonASMHelper.getFloatTemperature(world.getBiome(pos), pos) >= 0.15F)
-	                       			{
-	                       				((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
-	                       				break;
-	                       			}
-	                            }
-	                       		else
-	                       			first = false;
-	
-	                       		pos = pos.down();
+	                        	Biome biome = world.getBiome(pos);
+	                        	
+	                        	if (BiomeConfig.enablesSeasonalEffects(biome))
+	                        	{
+		                       		if (block == Blocks.SNOW_LAYER && SeasonASMHelper.getFloatTemperature(biome, pos) >= 0.15F)
+		                       		{
+		                       			world.setBlockToAir(pos);
+		                       			break;
+		                       		}
+		
+		                       		if(!first)
+		                       		{
+		                       			if(block == Blocks.ICE && SeasonASMHelper.getFloatTemperature(biome, pos) >= 0.15F)
+		                       			{
+		                       				((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
+		                       				break;
+		                       			}
+		                            }
+		                       		else
+		                       			first = false;
+		
+		                       		pos = pos.down();
+	                        	}
+	                        	else
+	                        	{
+	                        		break;
+	                        	}
 	                        }
 	                    }
 	                }

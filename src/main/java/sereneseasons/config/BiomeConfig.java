@@ -33,13 +33,13 @@ public class BiomeConfig
         biomeDataMap = JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
     }
 
-    public static boolean hasSeasonalColoring(Biome biome)
+    public static boolean enablesSeasonalEffects(Biome biome)
     {
         String name = biome.getRegistryName().toString();
 
         if (biomeDataMap.containsKey(name))
         {
-            return biomeDataMap.get(name).enableSeasonalColoring;
+            return biomeDataMap.get(name).enableSeasonalEffects;
         }
 
         return true;
@@ -68,7 +68,7 @@ public class BiomeConfig
             if (!map.containsKey(biomeName))
                 map.put(biomeName, new BiomeData(false, false));
             else
-                map.get(biomeName).enableSeasonalColoring = false;
+                map.get(biomeName).enableSeasonalEffects = false;
         }
     }
 

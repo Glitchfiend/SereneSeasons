@@ -37,13 +37,19 @@ public class SeasonASMHelper
         Biome biome = world.getBiome(pos);
         float temperature = getFloatTemperature(biome, pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) || !BiomeConfig.enablesSeasonalEffects(biome))
+        {
             return false;
+        }
 
         //If we're in winter, the temperature can be anything equal to or below 0.7
         if (temperature >= 0.15F)
         {
             return false;
+        }
+        else if (!BiomeConfig.enablesSeasonalEffects(biome))
+        {
+        	return false;
         }
         else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
@@ -76,8 +82,10 @@ public class SeasonASMHelper
         Biome biome = world.getBiome(pos);
         float temperature = getFloatTemperature(biome, pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) || !BiomeConfig.enablesSeasonalEffects(biome))
+        {
             return false;
+        }
 
         //If we're in winter, the temperature can be anything equal to or below 0.7
         if (temperature >= 0.15F)
@@ -123,7 +131,7 @@ public class SeasonASMHelper
     {
         Biome biome = world.getBiome(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
         {
             Season.TropicalSeason tropicalSeason = seasonState.getTropicalSeason();
 
@@ -158,7 +166,7 @@ public class SeasonASMHelper
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F)
+        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
         {
 	        switch ((SubSeason) subSeason)
 	        {
@@ -192,7 +200,7 @@ public class SeasonASMHelper
 
     public static boolean shouldRenderRainSnow(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
@@ -214,7 +222,7 @@ public class SeasonASMHelper
 
     public static boolean shouldAddRainParticles(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 

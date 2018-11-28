@@ -52,7 +52,7 @@ public class ModFertility
 		Season season = SeasonHelper.getSeasonState(world).getSeason();
 		Biome biome = world.getBiome(pos);
 		
-		if (!FertilityConfig.general_category.seasonal_crops)
+		if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome))
 		{
 			return true;
 		}
