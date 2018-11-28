@@ -34,7 +34,6 @@ public class SeasonASMHelper
     
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState)
     {
-        Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
         float temperature = getFloatTemperature(biome, pos);
 
@@ -45,10 +44,6 @@ public class SeasonASMHelper
         if (temperature >= 0.15F)
         {
             return false;
-        }
-        else if (!biome.canRain())
-        {
-        	return false;
         }
         else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         {
@@ -74,7 +69,6 @@ public class SeasonASMHelper
     
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
-        Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
         float temperature = getFloatTemperature(biome, pos);
 
@@ -85,10 +79,6 @@ public class SeasonASMHelper
         if (temperature >= 0.15F)
         {
             return false;
-        }
-        else if (!biome.canRain())
-        {
-        	return false;
         }
         else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         {
@@ -168,19 +158,19 @@ public class SeasonASMHelper
 	        		break;
 	        
 		        case LATE_SPRING: case EARLY_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, 0.15F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, -0.5F, 2.0F);
 		    		break;
 	        
 		        case MID_SPRING: case MID_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, 0.1F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, -0.5F, 2.0F);
 		    		break;
 	        
 	        	case EARLY_SPRING: case LATE_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, 0.0F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, -0.5F, 2.0F);
 		    		break;
 	    		
 	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
-	        		biomeTemp = MathHelper.clamp(biomeTemp - 0.8F, 0.0F, 2.0F);
+	        		biomeTemp = MathHelper.clamp(biomeTemp - 0.8F, -0.5F, 2.0F);
 	        		break;
 	        }
         }

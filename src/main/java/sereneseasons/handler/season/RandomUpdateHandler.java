@@ -32,6 +32,7 @@ public class RandomUpdateHandler
     {
         if (event.phase == Phase.END && event.side == Side.SERVER)
         {
+        	
             Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
             Season season = subSeason.getSeason();
             
