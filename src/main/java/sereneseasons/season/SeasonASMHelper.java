@@ -46,6 +46,10 @@ public class SeasonASMHelper
         {
             return false;
         }
+        else if (!biome.canRain())
+        {
+        	return false;
+        }
         else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         {
             return false;
@@ -81,6 +85,10 @@ public class SeasonASMHelper
         if (temperature >= 0.15F)
         {
             return false;
+        }
+        else if (!biome.canRain())
+        {
+        	return false;
         }
         else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         {
