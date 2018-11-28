@@ -33,7 +33,7 @@ public class SeasonalCropGrowthHandler
 		Block plant = event.getState().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
-		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
 			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
 			{
@@ -52,7 +52,7 @@ public class SeasonalCropGrowthHandler
 		Block plant = event.getBlock().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
-		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
 			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
 			{
@@ -60,23 +60,6 @@ public class SeasonalCropGrowthHandler
 			}
 			
 			event.setCanceled(true);
-		}
-	}
-
-	private boolean isFertilityApplicable(Block block)
-	{
-		if (!FertilityConfig.general_category.seasonal_crops)
-		{
-			return false;
-		}
-		
-		if (block instanceof BlockSapling)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
 		}
 	}
 

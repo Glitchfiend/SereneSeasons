@@ -46,7 +46,8 @@ public class FertilityConfig
 		@Config.Comment({"Crops growable in Spring (List either the seed item for the crop, or the crop block itself)"})
 		public String [] spring_crops = new String[]
 		{
-			"minecraft:potato", "minecraft:carrot",
+			"minecraft:potato", "minecraft:carrot", "minecraft:sapling", "minecraft:nether_wart", "minecraft:tallgrass", "minecraft:grass",
+			"minecraft:red_mushroom", "minecraft:brown_mushroom",
 			"harvestcraft:caulifloweritem", "harvestcraft:coffeebeanitem", "harvestcraft:garlicitem", "harvestcraft:beanitem", "harvestcraft:rhubarbitem", 
 			"harvestcraft:strawberryitem", "harvestcraft:oatsitem", "harvestcraft:celeryitem", "harvestcraft:peasitem", "harvestcraft:broccoliitem", 
 			"harvestcraft:cabbageitem", "harvestcraft:spinachitem", "harvestcraft:zucchiniitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem", 
@@ -63,7 +64,8 @@ public class FertilityConfig
 		@Config.Comment({"Crops growable in Summer (List either the seed item for the crop, or the crop block itself)"})
 		public String [] summer_crops = new String[]
 		{
-			"minecraft:melon_seeds", "minecraft:wheat_seeds", "minecraft:reeds", "minecraft:cocoa",
+			"minecraft:melon_seeds", "minecraft:wheat_seeds", "minecraft:reeds", "minecraft:cocoa", "minecraft:cactus", "minecraft:sapling",
+			"minecraft:nether_wart", "minecraft:tallgrass", "minecraft:grass", "minecraft:red_mushroom", "minecraft:brown_mushroom",
 			"simplecorn:kernels",
 			"harvestcraft:coffeebeanitem", "harvestcraft:beanitem", "harvestcraft:blueberryitem", "harvestcraft:cornitem", "harvestcraft:chilipepperitem", 
 			"harvestcraft:radishitem", "harvestcraft:tomatoitem", "harvestcraft:grapeitem", "harvestcraft:raspberryitem", "harvestcraft:peasitem", 
@@ -87,7 +89,8 @@ public class FertilityConfig
 		@Config.Comment({"Crops growable in Autumn (List either the seed item for the crop, or the crop block itself)"})
 		public String [] autumn_crops = new String[]
 		{
-			"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds",
+			"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds", "minecraft:sapling",
+			"minecraft:nether_wart", "minecraft:grass", "minecraft:red_mushroom", "minecraft:brown_mushroom",
 			"simplecorn:kernels",
 			"harvestcraft:cornitem", "harvestcraft:artichokeitem", "harvestcraft:beetitem", "harvestcraft:cranberryitem", "harvestcraft:eggplantitem", 
 			"harvestcraft:grapeitem", "harvestcraft:whitemushroomitem", "harvestcraft:blackberryitem", "harvestcraft:oatsitem", "harvestcraft:ryeitem", 
@@ -103,7 +106,7 @@ public class FertilityConfig
 		@Config.Comment({"Crops growable in Winter (List either the seed item for the crop, or the crop block itself)"})
 		public String [] winter_crops = new String[]
 		{
-			""
+	        "minecraft:sapling", "minecraft:nether_wart", "minecraft:red_mushroom", "minecraft:brown_mushroom"
 		};
 	}
 }
