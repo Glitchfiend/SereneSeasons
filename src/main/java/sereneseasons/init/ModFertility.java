@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -154,30 +155,35 @@ public class ModFertility
 					seedSeasons.put(seed, bitmask);
 				}
 			}
-			
-			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
-			
-			String plantName = block.toString();
-			cropSet.add(plantName);
-			
-			if (bitmask != 0)
-			{
-				allListedPlants.add(plantName);
-			}
 			else
 			{
-				continue;
-			}
-
-			//Add to seedSeasons
-			if (seedSeasons.containsKey(seed))
-			{
-				int seasons = seedSeasons.get(seed);
-				seedSeasons.put(seed, seasons | bitmask);
-			}
-			else
-			{
-				seedSeasons.put(seed, bitmask);
+				Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
+				
+				if (block != null && block != Blocks.AIR)
+				{
+					String plantName = block.getRegistryName().toString();
+					cropSet.add(plantName);
+					
+					if (bitmask != 0)
+					{
+						allListedPlants.add(plantName);
+					}
+					else
+					{
+						continue;
+					}
+		
+					//Add to seedSeasons
+					if (seedSeasons.containsKey(seed))
+					{
+						int seasons = seedSeasons.get(seed);
+						seedSeasons.put(seed, seasons | bitmask);
+					}
+					else
+					{
+						seedSeasons.put(seed, bitmask);
+					}
+				}
 			}
 		}
 	}
