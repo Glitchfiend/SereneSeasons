@@ -59,9 +59,10 @@ public class BiomeConfig
 
     private static void addBlacklistedBiomes(Map<String, BiomeData> map)
     {
-        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore",
-                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland",
-                "biomesoplenty:flower_island", "biomesoplenty:origin_island", "biomeoplenty:origin_beach");
+        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore", "minecraft:ocean",
+        		"minecraft:deep_ocean", "minecraft:river",
+                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:flower_island",
+                "biomesoplenty:origin_island", "biomeoplenty:origin_beach", "biomesoplenty:coral_reef", "biomesoplenty:kelp_forest");
 
         for (String biomeName : blacklistedBiomes)
         {

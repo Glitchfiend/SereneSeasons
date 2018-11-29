@@ -55,10 +55,6 @@ public class SeasonASMHelper
         {
         	return false;
         }
-        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
-        {
-            return false;
-        }
         else if (checkLight)
         {
             if (pos.getY() >= 0 && pos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, pos) < 10)
@@ -95,10 +91,6 @@ public class SeasonASMHelper
         else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
         	return false;
-        }
-        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
-        {
-            return false;
         }
         else
         {
