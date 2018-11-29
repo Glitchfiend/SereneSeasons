@@ -103,12 +103,15 @@ public class RandomUpdateHandler
 	                        world.updateLCG = world.updateLCG * 3 + 1013904223;
 	                        int randOffset = world.updateLCG >> 2;
 	                        BlockPos pos = world.getPrecipitationHeight(new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
-	                        boolean first = true;
+	                        Biome biome = world.getBiome(pos);
 	
-	                        while (pos.getY() >= 0)
+	                        if(!BiomeConfig.enablesSeasonalEffects(biome))
+	                        	continue;
+	
+	                        boolean first = true;
+	                        for (int y = pos.getY(); y >= 0; y--)
 	                        {
-	                        	Block block = world.getBlockState(pos).getBlock();
-	                        	Biome biome = world.getBiome(pos);
+	                        	Block block = chunk.getBlockState(pos.getX(), y, pos.getZ()).getBlock();
 	                        	
 	                        	if (BiomeConfig.enablesSeasonalEffects(biome))
 	                        	{
@@ -128,8 +131,6 @@ public class RandomUpdateHandler
 		                            }
 		                       		else
 		                       			first = false;
-		
-		                       		pos = pos.down();
 	                        	}
 	                        	else
 	                        	{
