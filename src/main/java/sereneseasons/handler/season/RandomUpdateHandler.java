@@ -113,29 +113,22 @@ public class RandomUpdateHandler
 	                        {
 	                        	Block block = chunk.getBlockState(pos.getX(), y, pos.getZ()).getBlock();
 	                        	
-	                        	if (BiomeConfig.enablesSeasonalEffects(biome))
-	                        	{
-		                       		if (block == Blocks.SNOW_LAYER && SeasonASMHelper.getFloatTemperature(biome, pos) >= 0.15F)
+	                        	if (block == Blocks.SNOW_LAYER && SeasonASMHelper.getFloatTemperature(biome, pos) >= 0.15F)
+		                       	{
+		                       		world.setBlockToAir(pos);
+		                       		break;
+		                       	}
+		
+		                       	if(!first)
+		                       	{
+		                       		if(block == Blocks.ICE && SeasonASMHelper.getFloatTemperature(biome, pos) >= 0.15F)
 		                       		{
-		                       			world.setBlockToAir(pos);
+		                       			((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
 		                       			break;
 		                       		}
-		
-		                       		if(!first)
-		                       		{
-		                       			if(block == Blocks.ICE && SeasonASMHelper.getFloatTemperature(biome, pos) >= 0.15F)
-		                       			{
-		                       				((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
-		                       				break;
-		                       			}
-		                            }
-		                       		else
-		                       			first = false;
-	                        	}
-	                        	else
-	                        	{
-	                        		break;
-	                        	}
+		                        }
+		                       	else
+		                       		first = false;
 	                        }
 	                    }
 	                }
