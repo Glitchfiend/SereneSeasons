@@ -62,7 +62,7 @@ public class BiomeConfig
         List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore", "minecraft:ocean",
         		"minecraft:deep_ocean", "minecraft:river",
                 "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:flower_island",
-                "biomesoplenty:origin_island", "biomeoplenty:origin_beach", "biomesoplenty:coral_reef", "biomesoplenty:kelp_forest",
+                "biomesoplenty:coral_reef", "biomesoplenty:kelp_forest",
         		"thaumcraft:magical_forest", "integrateddynamics:biome_meneglin", "abyssalcraft:darklands", "abyssalcraft:darklands_forest",
         		"abyssalcraft:darklands_plains", "abyssalcraft:darklands_hills", "abyssalcraft:darklands_mountains", "abyssalcraft:coralium_infested_swamp");
 
