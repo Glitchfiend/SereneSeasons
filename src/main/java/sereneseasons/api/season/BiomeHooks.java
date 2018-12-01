@@ -7,13 +7,13 @@ import net.minecraft.world.biome.Biome;
 public class BiomeHooks
 {
     /**
-     * An override of {@link Biome#getFloatTemperature(Biome, BlockPos)}
+     * An override of {@link Biome#getFloatTemperature(World, Biome, BlockPos)}
      */
-    public static float getFloatTemperature(Biome biome, BlockPos pos)
+    public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
         try
         {
-            return (float)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("getFloatTemperature", Biome.class, BlockPos.class).invoke(null, biome, pos);
+            return (float)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("getFloatTemperature", World.class, Biome.class, BlockPos.class).invoke(null, biome, pos);
         }
         catch (Exception e)
         {

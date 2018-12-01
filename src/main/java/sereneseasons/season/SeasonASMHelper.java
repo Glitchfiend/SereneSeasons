@@ -35,7 +35,7 @@ public class SeasonASMHelper
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState)
     {
         Biome biome = world.getBiome(pos);
-        float temperature = getFloatTemperature(biome, pos);
+        float temperature = getFloatTemperature(world, biome, pos);
 
         if (BiomeConfig.usesTropicalSeasons(biome))
             return false;
@@ -74,7 +74,7 @@ public class SeasonASMHelper
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
         Biome biome = world.getBiome(pos);
-        float temperature = getFloatTemperature(biome, pos);
+        float temperature = getFloatTemperature(world, biome, pos);
 
         if (BiomeConfig.usesTropicalSeasons(biome))
             return false;
@@ -152,7 +152,7 @@ public class SeasonASMHelper
     // Biome methods //
     ///////////////////
     
-    public static float getFloatTemperature(Biome biome, BlockPos pos)
+    public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
         SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
