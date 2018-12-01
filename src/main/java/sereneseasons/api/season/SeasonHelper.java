@@ -21,6 +21,7 @@ import net.minecraft.world.biome.Biome;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 
 public class SeasonHelper 
