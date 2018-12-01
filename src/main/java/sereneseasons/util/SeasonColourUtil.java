@@ -65,7 +65,7 @@ public class SeasonColourUtil
     
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (!BiomeConfig.hasSeasonalColoring(biome))
+        if (!BiomeConfig.enablesSeasonalEffects(biome))
             return originalColour;
 
         int overlay = colorProvider.getGrassOverlay();
@@ -81,7 +81,7 @@ public class SeasonColourUtil
     
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (!BiomeConfig.hasSeasonalColoring(biome))
+        if (!BiomeConfig.enablesSeasonalEffects(biome))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();

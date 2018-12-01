@@ -33,13 +33,13 @@ public class BiomeConfig
         biomeDataMap = JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
     }
 
-    public static boolean hasSeasonalColoring(Biome biome)
+    public static boolean enablesSeasonalEffects(Biome biome)
     {
         String name = biome.getRegistryName().toString();
 
         if (biomeDataMap.containsKey(name))
         {
-            return biomeDataMap.get(name).enableSeasonalColoring;
+            return biomeDataMap.get(name).enableSeasonalEffects;
         }
 
         return true;
@@ -59,16 +59,19 @@ public class BiomeConfig
 
     private static void addBlacklistedBiomes(Map<String, BiomeData> map)
     {
-        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore",
-                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland",
-                "biomesoplenty:flower_island", "biomesoplenty:origin_island", "biomeoplenty:origin_beach");
+        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore", "minecraft:ocean",
+        		"minecraft:deep_ocean", "minecraft:river",
+                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:flower_island",
+                "biomesoplenty:coral_reef", "biomesoplenty:kelp_forest",
+        		"thaumcraft:magical_forest", "integrateddynamics:biome_meneglin", "abyssalcraft:darklands", "abyssalcraft:darklands_forest",
+        		"abyssalcraft:darklands_plains", "abyssalcraft:darklands_hills", "abyssalcraft:darklands_mountains", "abyssalcraft:coralium_infested_swamp");
 
         for (String biomeName : blacklistedBiomes)
         {
             if (!map.containsKey(biomeName))
                 map.put(biomeName, new BiomeData(false, false));
             else
-                map.get(biomeName).enableSeasonalColoring = false;
+                map.get(biomeName).enableSeasonalEffects = false;
         }
     }
 

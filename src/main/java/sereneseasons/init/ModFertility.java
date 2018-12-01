@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -39,10 +40,10 @@ public class ModFertility
 	public static void init()
 	{
 		//Store crops in hash sets for quick and easy retrieval
-		initSeasonCrops(FertilityConfig.seasonal_fertility.spring_seeds, springPlants, 1);
-		initSeasonCrops(FertilityConfig.seasonal_fertility.summer_seeds, summerPlants, 2);
-		initSeasonCrops(FertilityConfig.seasonal_fertility.autumn_seeds, autumnPlants, 4);
-		initSeasonCrops(FertilityConfig.seasonal_fertility.winter_seeds, winterPlants, 8);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.spring_crops, springPlants, 1);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.summer_crops, summerPlants, 2);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.autumn_crops, autumnPlants, 4);
+		initSeasonCrops(FertilityConfig.seasonal_fertility.winter_crops, winterPlants, 8);
 	}
 
 	public static boolean isCropFertile(String cropName, World world, BlockPos pos)
@@ -51,7 +52,7 @@ public class ModFertility
 		Season season = SeasonHelper.getSeasonState(world).getSeason();
 		Biome biome = world.getBiome(pos);
 		
-		if (!FertilityConfig.general_category.seasonal_crops)
+		if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome))
 		{
 			return true;
 		}
@@ -154,32 +155,34 @@ public class ModFertility
 					seedSeasons.put(seed, bitmask);
 				}
 			}
-			
-			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
-			
-			if (block instanceof IGrowable)
+			else
 			{
-				String plantName = ((IGrowable) block).toString();
-				cropSet.add(plantName);
+				Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
 				
-				if (bitmask != 0)
+				if (block != null && block != Blocks.AIR)
 				{
-					allListedPlants.add(plantName);
-				}
-				else
-				{
-					continue;
-				}
-
-				//Add to seedSeasons
-				if (seedSeasons.containsKey(seed))
-				{
-					int seasons = seedSeasons.get(seed);
-					seedSeasons.put(seed, seasons | bitmask);
-				}
-				else
-				{
-					seedSeasons.put(seed, bitmask);
+					String plantName = block.getRegistryName().toString();
+					cropSet.add(plantName);
+					
+					if (bitmask != 0)
+					{
+						allListedPlants.add(plantName);
+					}
+					else
+					{
+						continue;
+					}
+		
+					//Add to seedSeasons
+					if (seedSeasons.containsKey(seed))
+					{
+						int seasons = seedSeasons.get(seed);
+						seedSeasons.put(seed, seasons | bitmask);
+					}
+					else
+					{
+						seedSeasons.put(seed, bitmask);
+					}
 				}
 			}
 		}
@@ -189,7 +192,7 @@ public class ModFertility
 	public static void setupTooltips(ItemTooltipEvent event)
 	{
 		//Set up tooltips if enabled and on client side
-		if (FertilityConfig.general_category.seed_tooltips && FertilityConfig.general_category.seasonal_crops)
+		if (FertilityConfig.general_category.crop_tooltips && FertilityConfig.general_category.seasonal_crops)
 		{
 			String name = event.getItemStack().getItem().getRegistryName().toString();
 			if (seedSeasons.containsKey(name))

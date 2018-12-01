@@ -1,0 +1,15 @@
+commands.sereneseasons.usage=/sereneseasons <setseason> [args]
+commands.sereneseasons.setseason.success=Установить сезон на %s
+commands.sereneseasons.setseason.fail=Неверный сезон %s
+commands.sereneseasons.setseason.disabled=Сезоны в настоящее время отключены!
+
+itemGroup.tabSereneSeasons=Serene Seasons
+
+tile.greenhouse_glass.name=Тепличное стекло
+tile.season_sensor_spring.name=Сезонный датчик
+tile.season_sensor_summer.name=Сезонный датчик
+tile.season_sensor_autumn.name=Сезонный датчик
+tile.season_sensor_winter.name=Сезонный датчик
+item.ss_icon.name=СС иконка
+
+item.season_clock.name=Сезонные часы

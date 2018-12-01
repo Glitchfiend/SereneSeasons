@@ -17,6 +17,8 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import sereneseasons.api.config.SeasonsOption;
+import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
@@ -114,6 +116,18 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (savedData == null)
         {
             savedData = new SeasonSavedData(SeasonSavedData.DATA_IDENTIFIER);
+            
+            int startingSeason = SyncedConfig.getIntValue(SeasonsOption.STARTING_SUB_SEASON);
+            
+            if (startingSeason == 0)
+            {
+            	savedData.seasonCycleTicks = (world.rand.nextInt(11)) * SeasonTime.ZERO.getSubSeasonDuration();
+            }
+            if (startingSeason > 0)
+            {
+            	savedData.seasonCycleTicks = (startingSeason - 1) * SeasonTime.ZERO.getSubSeasonDuration();
+            }
+            
             mapStorage.setData(SeasonSavedData.DATA_IDENTIFIER, savedData);
             savedData.markDirty(); // Mark for saving
         }
