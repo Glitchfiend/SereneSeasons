@@ -151,16 +151,20 @@ public class SeasonASMHelper
     ///////////////////
     // Biome methods //
     ///////////////////
-    
+
     public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
-        SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
+        return getFloatTemperature(new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason(), biome, pos);
+    }
+
+    public static float getFloatTemperature(SubSeason subSeason, Biome biome, BlockPos pos)
+    {
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
         if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
         {
-	        switch ((SubSeason) subSeason)
+	        switch (subSeason)
 	        {
 	        	default:
 	        		break;
