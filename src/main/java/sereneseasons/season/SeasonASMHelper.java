@@ -47,10 +47,6 @@ public class SeasonASMHelper
         {
             return false;
         }
-        else if (!BiomeConfig.enablesSeasonalEffects(biome))
-        {
-        	return false;
-        }
         else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
         	return false;
