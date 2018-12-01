@@ -38,7 +38,7 @@ public class SeasonASMHelper
     {
         Biome biome = world.getBiome(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
         {
             Season.TropicalSeason tropicalSeason = seasonState.getTropicalSeason();
 
@@ -55,7 +55,7 @@ public class SeasonASMHelper
             }
         }
 
-        if (( biome.getEnableSnow() && seasonState.getSeason() != Season.WINTER) || (world.canSnowAt(pos, false)))
+        if (biome.getEnableSnow() || (world.canSnowAt(pos, false)))
         {
             return false;
         }
@@ -67,10 +67,14 @@ public class SeasonASMHelper
     // Biome methods //
     ///////////////////
     
-    public static float getFloatTemperature(Biome biome, BlockPos pos)
+    public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
-        SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
-        return SeasonHelper.getSeasonFloatTemperature(biome, pos, subSeason);
+        return SeasonHelper.getFloatTemperature(world, biome, pos);
+    }
+    
+    public static float getFloatTemperature(SubSeason subSeason, Biome biome, BlockPos pos)
+    {
+    	return SeasonHelper.getSeasonFloatTemperature(biome, pos, subSeason);
     }
 
     ////////////////////////////
@@ -79,7 +83,7 @@ public class SeasonASMHelper
 
     public static boolean shouldRenderRainSnow(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
+    	if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
@@ -101,7 +105,7 @@ public class SeasonASMHelper
 
     public static boolean shouldAddRainParticles(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
+    	if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
