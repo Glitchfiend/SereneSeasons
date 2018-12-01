@@ -11,7 +11,6 @@ import jline.internal.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -22,6 +21,7 @@ import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.init.ModConfig;
+import sereneseasons.season.SeasonASMHelper;
 import sereneseasons.season.SeasonTime;
 
 public class SeasonHelper 
@@ -49,63 +49,6 @@ public class SeasonHelper
     }
     
     /**
-     * Checks if the season provided allows snow to fall at a certain
-     * biome temperature.
-     * 
-     * @param season The season to check
-     * @param temperature The biome temperature to check
-     * @return True if suitable, otherwise false
-     */
-//    public static boolean canSnowAtTempInSeason(Season season, float temperature)
-//    {
-//        //If we're in winter, the temperature can be anything equal to or below 0.8
-//        return temperature < 0.15F || (season == Season.WINTER && temperature <= 0.8F );
-//    }
-
-    /**
-     * Shifts temperature down in some biomes like Plains to avoid raining in winter for them.
-     * 
-     * @param temperature temperature as retrieved from {@link Biome#getTemperature} or
-     * {@link Biome#getDefaultTemperature}
-     * @param biome regarded biome
-     * @param season regarded season
-     * @return the modified temperature
-     */
-//    private static float modifyTemperature(float temperature, Biome biome, Season season ) {
-//		if( biome == Biomes.PLAINS && season == Season.WINTER ) {
-//			temperature -= 0.1F;
-//		}
-//		
-//		return temperature;
-//    }
-    
-    /**
-     * Returns a modified temperature by {@link #modifyTemperature(float, Biome, Season)}
-     * returned by {@link Biome#getTemperature(BlockPos)}.
-     * 
-     * @param biome regarded biome
-     * @param season regarded season
-     * @return the modified temperature
-     */
-//    public static float getModifiedTemperatureForBiome(Biome biome, Season season) {
-//		float temperature = biome.getDefaultTemperature();
-//		return modifyTemperature(temperature, biome, season);
-//    }
-    
-    /**
-     * Returns a modified temperature by {@link #modifyTemperature(float, Biome, Season)}
-     * returned by {@link Biome#getDefaultTemperature()}.
-     * 
-     * @param biome regarded biome
-     * @param season regarded season
-     * @return the modified temperature
-     */
-//    public static float getModifiedFloatTemperatureAtPos(Biome biome, BlockPos pos, Season season) {
-//		float temperature = biome.getTemperature(pos);
-//		return modifyTemperature(temperature, biome, season);
-//    }
-
-    /**
      * Returns a current temperature at position.
      * 
      * @param world the world
@@ -132,9 +75,7 @@ public class SeasonHelper
 	public static float getSeasonFloatTemperature(Biome biome, BlockPos pos, SubSeason subSeason) {
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
-//		float biomeTempForCheck = getModifiedFloatTemperatureAtPos(biome, pos, subSeason.getSeason());
 
-//        if (!tropicalBiome && biomeTempForCheck <= 0.8F && biomeTempForCheck > 0.15F)
         if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
         {
 	        switch (subSeason)
@@ -176,7 +117,6 @@ public class SeasonHelper
 	 */
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, boolean allowSnowLayer, @Nullable ISeasonState seasonState)
     {
-//        Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
         float temperature = getFloatTemperature(world, biome, pos);
 
@@ -186,12 +126,10 @@ public class SeasonHelper
         }
 
         //If we're in winter, the temperature can be anything equal to or below 0.7
-//        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
         if (temperature >= 0.15F)
         {
             return false;
         }
-//        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         else if (!BiomeConfig.enablesSeasonalEffects(biome))
         {
         	return false;
@@ -236,7 +174,6 @@ public class SeasonHelper
 	 */
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, boolean allowMeltableIce, @Nullable ISeasonState seasonState)
     {
-//        Season season = seasonState == null ? null : seasonState.getSeason();
         Biome biome = world.getBiome(pos);
         float temperature = getFloatTemperature(world, biome, pos);
 
@@ -246,12 +183,10 @@ public class SeasonHelper
         }
 
         //If we're in winter, the temperature can be anything equal to or below 0.7
-//        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
         if (temperature >= 0.15F)
         {
             return false;
         }
-//        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
         else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
         	return false;
