@@ -27,6 +27,7 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
+import sereneseasons.season.SeasonASMHelper;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
 
@@ -101,8 +102,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         event.setResult(Event.Result.DENY);
         BlockPos blockpos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16).add(8, 0, 8);
-
-    
+        
         for (int k2 = 0; k2 < 16; ++k2)
         {
             for (int j3 = 0; j3 < 16; ++j3)
@@ -115,7 +115,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
                     event.getWorld().setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
                 }
 
-                if (event.getWorld().canSnowAt(blockpos1, true))
+                if (SeasonASMHelper.canSnowAtInSeason(event.getWorld(), blockpos1, true, SeasonHelper.getSeasonState(event.getWorld()), true))
                 {
                     event.getWorld().setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState(), 2);
                 }

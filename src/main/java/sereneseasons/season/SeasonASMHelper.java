@@ -31,13 +31,19 @@ public class SeasonASMHelper
     ///////////////////
     // World methods //
     ///////////////////
-    
+
+    // Legacy
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState)
+    {
+        return canSnowAtInSeason(world, pos, checkLight, seasonState, false);
+    }
+
+    public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
     {
         Biome biome = world.getBiome(pos);
         float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature)
         {
             if (BiomeConfig.usesTropicalSeasons(biome))
             {
