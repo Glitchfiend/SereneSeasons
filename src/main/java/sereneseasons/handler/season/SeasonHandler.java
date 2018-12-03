@@ -97,7 +97,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onPopulateChunk(PopulateChunkEvent.Populate event)
     {
-        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE || !(((ChunkProviderServer)event.getWorld().getChunkProvider()).chunkGenerator instanceof ChunkGeneratorOverworld))
+        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE)
             return;
 
         event.setResult(Event.Result.DENY);
