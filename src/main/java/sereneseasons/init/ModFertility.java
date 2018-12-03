@@ -21,6 +21,7 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
+import sereneseasons.config.SeasonsConfig;
 
 /**
  * Constructs efficient data structures to process, store, and give access to data from the FertilityConfig file
@@ -52,7 +53,7 @@ public class ModFertility
 		Season season = SeasonHelper.getSeasonState(world).getSeason();
 		Biome biome = world.getBiome(pos);
 		
-		if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome))
+		if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
 		{
 			return true;
 		}

@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.SeasonsConfig;
+import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 
 public class ItemSeasonClock extends Item
@@ -51,7 +53,7 @@ public class ItemSeasonClock extends Item
                 {
                     double d0;
                     
-                    if (world.provider.isSurfaceWorld())
+                    if (SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
                     {
                         int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
                         d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());

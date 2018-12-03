@@ -25,6 +25,7 @@ import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonASMHelper;
@@ -38,7 +39,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         World world = event.world;
 
-        if (event.phase == TickEvent.Phase.END && !world.isRemote && world.provider.getDimension() == 0)
+        if (event.phase == TickEvent.Phase.END && !world.isRemote && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
 
@@ -76,7 +77,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         
         int dimension = Minecraft.getMinecraft().player.dimension;
 
-        if (event.phase == TickEvent.Phase.END && dimension == 0)
+        if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
             //Keep ticking as we're synchronized with the server only every second
             if (clientSeasonCycleTicks++ > SeasonTime.ZERO.getCycleDuration())
@@ -97,7 +98,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onPopulateChunk(PopulateChunkEvent.Populate event)
     {
-        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE)
+        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE && !SeasonsConfig.isDimensionWhitelisted(event.getWorld().provider.getDimension()))
             return;
 
         event.setResult(Event.Result.DENY);

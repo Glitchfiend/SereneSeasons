@@ -23,6 +23,7 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.init.ModConfig;
 
@@ -43,7 +44,7 @@ public class SeasonASMHelper
         Biome biome = world.getBiome(pos);
         float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature)
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             if (BiomeConfig.usesTropicalSeasons(biome))
             {
@@ -89,7 +90,7 @@ public class SeasonASMHelper
         Biome biome = world.getBiome(pos);
         float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature)
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             if (BiomeConfig.usesTropicalSeasons(biome))
             {
@@ -138,7 +139,7 @@ public class SeasonASMHelper
     {
         Biome biome = world.getBiome(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = seasonState.getTropicalSeason();
 
@@ -169,6 +170,11 @@ public class SeasonASMHelper
 
     public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
+    	if (!SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+    		{
+    		return biome.getTemperature(pos);
+    		}
+    	
         return getFloatTemperature(new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason(), biome, pos);
     }
 
@@ -211,7 +217,7 @@ public class SeasonASMHelper
 
     public static boolean shouldRenderRainSnow(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
@@ -233,7 +239,7 @@ public class SeasonASMHelper
 
     public static boolean shouldAddRainParticles(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
