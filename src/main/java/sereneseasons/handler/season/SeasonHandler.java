@@ -110,7 +110,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
                 BlockPos blockpos1 = event.getWorld().getPrecipitationHeight(blockpos.add(k2, 0, j3));
                 BlockPos blockpos2 = blockpos1.down();
 
-                if (event.getWorld().canBlockFreezeWater(blockpos2))
+                if (SeasonASMHelper.canBlockFreezeInSeason(event.getWorld(), blockpos2, false, SeasonHelper.getSeasonState(event.getWorld()), true))
                 {
                     event.getWorld().setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
                 }

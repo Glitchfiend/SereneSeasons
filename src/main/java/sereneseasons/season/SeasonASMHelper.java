@@ -81,15 +81,24 @@ public class SeasonASMHelper
     
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
+        return canBlockFreezeInSeason(world, pos, noWaterAdj, seasonState, false);
+    }
+    
+    public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
+    {
         Biome biome = world.getBiome(pos);
-        float temperature = getFloatTemperature(world, biome, pos);
+        float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome) || !BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature)
         {
-            return false;
+            if (BiomeConfig.usesTropicalSeasons(biome))
+            {
+                return false;
+            }
+
+            temperature = getFloatTemperature(world, biome, pos);
         }
 
-        //If we're in winter, the temperature can be anything equal to or below 0.7
         if (temperature >= 0.15F)
         {
             return false;
