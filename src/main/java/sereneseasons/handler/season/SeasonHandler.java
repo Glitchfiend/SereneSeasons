@@ -9,8 +9,14 @@ package sereneseasons.handler.season;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGeneratorOverworld;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -83,6 +89,36 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             {
                 Minecraft.getMinecraft().renderGlobal.loadRenderers();
                 lastSeason = calendar.getSubSeason();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPopulateChunk(PopulateChunkEvent.Populate event)
+    {
+        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE || !(((ChunkProviderServer)event.getWorld().getChunkProvider()).chunkGenerator instanceof ChunkGeneratorOverworld))
+            return;
+
+        event.setResult(Event.Result.DENY);
+        BlockPos blockpos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16).add(8, 0, 8);
+
+    
+        for (int k2 = 0; k2 < 16; ++k2)
+        {
+            for (int j3 = 0; j3 < 16; ++j3)
+            {
+                BlockPos blockpos1 = event.getWorld().getPrecipitationHeight(blockpos.add(k2, 0, j3));
+                BlockPos blockpos2 = blockpos1.down();
+
+                if (event.getWorld().canBlockFreezeWater(blockpos2))
+                {
+                    event.getWorld().setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
+                }
+
+                if (event.getWorld().canSnowAt(blockpos1, true))
+                {
+                    event.getWorld().setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState(), 2);
+                }
             }
         }
     }

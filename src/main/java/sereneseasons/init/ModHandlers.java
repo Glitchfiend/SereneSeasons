@@ -34,6 +34,7 @@ public class ModHandlers
 
         //Handlers for functionality related to seasons
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
+        MinecraftForge.TERRAIN_GEN_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
         
         if (ModConfig.seasons.generateSnowAndIce)
