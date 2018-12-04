@@ -39,7 +39,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         World world = event.world;
 
-        if (event.phase == TickEvent.Phase.END && !world.isRemote && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+        if (event.phase == TickEvent.Phase.END && !world.isRemote)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
 
@@ -98,7 +98,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onPopulateChunk(PopulateChunkEvent.Populate event)
     {
-        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE && !SeasonsConfig.isDimensionWhitelisted(event.getWorld().provider.getDimension()))
+        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE || !SeasonsConfig.isDimensionWhitelisted(event.getWorld().provider.getDimension()))
             return;
 
         event.setResult(Event.Result.DENY);

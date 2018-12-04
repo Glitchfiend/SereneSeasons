@@ -65,10 +65,13 @@ public class SeasonsConfig extends ConfigHandler
     
     public static boolean isDimensionWhitelisted(int dimension)
     {
-    	if (ModConfig.seasons.whitelistedDimensions.toString().contains(Integer.toString(dimension)))
-    	{
-    		return true;
-    	}
+    	for (String dimensions : ModConfig.seasons.whitelistedDimensions)
+		{
+    		if (dimension == Integer.valueOf(dimensions))
+			{
+    			return true;
+			}
+		}
     	
     	return false;
     }
