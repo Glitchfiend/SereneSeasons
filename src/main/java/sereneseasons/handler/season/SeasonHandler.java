@@ -147,7 +147,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             
             if (startingSeason == 0)
             {
-            	savedData.seasonCycleTicks = (world.rand.nextInt(11)) * SeasonTime.ZERO.getSubSeasonDuration();
+            	savedData.seasonCycleTicks = (world.rand.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
             }
             if (startingSeason > 0)
             {
