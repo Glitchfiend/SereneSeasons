@@ -24,7 +24,6 @@ import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.init.ModConfig;
 
 public class SeasonASMHelper
@@ -175,7 +174,7 @@ public class SeasonASMHelper
     		return biome.getTemperature(pos);
     		}
     	
-        return getFloatTemperature(new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason(), biome, pos);
+        return getFloatTemperature(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), biome, pos);
     }
 
     public static float getFloatTemperature(SubSeason subSeason, Biome biome, BlockPos pos)
