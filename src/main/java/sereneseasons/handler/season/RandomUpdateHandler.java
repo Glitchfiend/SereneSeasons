@@ -33,10 +33,7 @@ public class RandomUpdateHandler {
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		if (event.phase == Phase.END && event.side == Side.SERVER) {
 			WorldServer world = (WorldServer) event.world;
-			int dimId = world.provider.getDimension();
-			if (SeasonHandler.isDimensionBlacklisted(dimId))
-				return;
-
+			
 			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
 			Season season = subSeason.getSeason();
 
@@ -44,7 +41,6 @@ public class RandomUpdateHandler {
 				if (ModConfig.seasons.changeWeatherFrequency) {
 					if (event.world.getWorldInfo().isThundering()) {
 						event.world.getWorldInfo().setThundering(false);
-						;
 					}
 					if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000) {
 						event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(24000) + 12000);

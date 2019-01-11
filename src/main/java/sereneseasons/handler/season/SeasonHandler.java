@@ -170,27 +170,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         return savedData;
     }
     
-    public static boolean isDimensionBlacklisted(int dimId) {
-    	for( int i = 0; i < blacklistedDimensions.length; i ++ ) {
-    		if( dimId == blacklistedDimensions[i] )
-    			return true;
-    	}
-    	return false;
-    }
-    
-	public static boolean isWorldBlacklisted(IBlockAccess blockAccess) {
-		if( blockAccess == null )
-			return false;
-		
-		World world = WorldUtils.castToWorld(blockAccess);
-		if( world != null ) {
-			int dimId = world.provider.getDimension();
-			return isDimensionBlacklisted(dimId);
-		}
-		
-		return false;
-	}
-    
     //
     // Used to implement getSeasonState in the API
     //

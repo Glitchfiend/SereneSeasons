@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.BirchColorHandler;
 import sereneseasons.handler.season.RandomUpdateHandler;
@@ -67,7 +68,7 @@ public class ModHandlers
         BiomeColorHelper.GRASS_COLOR = new ISeasonsColorResolver() {
 			@Override
 			public int getColorAtPos(IBlockAccess blockAccess, Biome biome, BlockPos blockPosition) {
-				if( SeasonHandler.isWorldBlacklisted(blockAccess) )
+				if( SeasonsConfig.isWorldWhitelisted(blockAccess) )
 					return originalGrassColorResolver.getColorAtPos(biome, blockPosition);
 	            SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
 	            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
@@ -79,7 +80,7 @@ public class ModHandlers
 
 			@Override
 			public int getColorAtPos(IBlockAccess blockAccess, Biome biome, BlockPos blockPosition) {
-				if( SeasonHandler.isWorldBlacklisted(blockAccess) )
+				if( SeasonsConfig.isWorldWhitelisted(blockAccess) )
 					return originalFoliageColorResolver.getColorAtPos(biome, blockPosition);
 				SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
 	            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();

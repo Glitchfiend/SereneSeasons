@@ -10,11 +10,14 @@ package sereneseasons.config;
 import java.io.File;
 import java.util.ArrayList;
 
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.init.ModConfig;
+import sereneseasons.util.WorldUtils;
 
 public class SeasonsConfig extends ConfigHandler
 {
@@ -79,6 +82,19 @@ public class SeasonsConfig extends ConfigHandler
     	
     	return false;
     }
+    
+	public static boolean isWorldWhitelisted(IBlockAccess blockAccess) {
+		if( blockAccess == null )
+			return false;
+		
+		World world = WorldUtils.castToWorld(blockAccess);
+		if( world != null ) {
+			int dimId = world.provider.getDimension();
+			return isDimensionWhitelisted(dimId);
+		}
+		
+		return false;
+	}
     
     @Override
     public void onConfigurationLoaded() {

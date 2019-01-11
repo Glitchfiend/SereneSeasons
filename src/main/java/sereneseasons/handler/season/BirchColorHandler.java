@@ -40,20 +40,7 @@ public class BirchColorHandler
 	            {
 	            	int birchColor = ColorizerFoliage.getFoliageColorBirch();
 	            	
-	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour)
-	            	{
-	            		if( !SeasonHandler.isWorldBlacklisted(worldIn) ) {
-		            		SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
-			                ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(worldIn.getBiome(pos)) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-			                birchColor = colorProvider.getBirchColor();
-			            }
-	            	}
-	            	
-/*
-	            	int birchColor = ColorizerFoliage.getFoliageColorBirch();
-	            	int dimension = Minecraft.getMinecraft().player.dimension;
-	            	
-	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
+	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isWorldWhitelisted(worldIn))
 	            	{
 	            		Biome biome = worldIn.getBiome(pos);
 	            		
@@ -64,7 +51,6 @@ public class BirchColorHandler
 			                birchColor = colorProvider.getBirchColor(); 
 	            		}
 	            	}
-*/
 	            	
 	                return birchColor;
 	            }

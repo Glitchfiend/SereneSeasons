@@ -30,10 +30,6 @@ public class SeasonalCropGrowthHandler
 	@SubscribeEvent
 	public void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
-        int dimId = event.getWorld().provider.getDimension();
-        if( SeasonHandler.isDimensionBlacklisted(dimId) )
-        	return;
-		
 		Block plant = event.getState().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
@@ -53,10 +49,6 @@ public class SeasonalCropGrowthHandler
 	@SubscribeEvent
 	public void onApplyBonemeal(BonemealEvent event)
 	{
-        int dimId = event.getWorld().provider.getDimension();
-        if( SeasonHandler.isDimensionBlacklisted(dimId) )
-        	return;
-        
         Block plant = event.getBlock().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
