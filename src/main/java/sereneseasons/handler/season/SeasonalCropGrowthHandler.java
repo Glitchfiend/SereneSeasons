@@ -2,12 +2,9 @@ package sereneseasons.handler.season;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockGrass;
-import net.minecraft.block.BlockMushroom;
+import net.minecraft.block.BlockReed;
 import net.minecraft.block.BlockSapling;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -40,9 +37,9 @@ public class SeasonalCropGrowthHandler
 		Block plant = event.getState().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
-		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-			if (FertilityConfig.general_category.crops_break)
+			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}
@@ -54,7 +51,7 @@ public class SeasonalCropGrowthHandler
 	}
 
 	@SubscribeEvent
-	public void onBonemeal(BonemealEvent event)
+	public void onApplyBonemeal(BonemealEvent event)
 	{
         int dimId = event.getWorld().provider.getDimension();
         if( SeasonHandler.isDimensionBlacklisted(dimId) )
@@ -63,38 +60,14 @@ public class SeasonalCropGrowthHandler
         Block plant = event.getBlock().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
-		if (isFertilityApplicable(plant) && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-			if (FertilityConfig.general_category.crops_break)
+			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}
 			
 			event.setCanceled(true);
-		}
-	}
-
-	private boolean isFertilityApplicable(Block block)
-	{
-		if (!FertilityConfig.general_category.seasonal_crops)
-		{
-			return false;
-		}
-		
-		if (!(block instanceof IGrowable))
-		{
-			return false;
-		}
-		else
-		{
-			if (block instanceof BlockCocoa)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
 		}
 	}
 

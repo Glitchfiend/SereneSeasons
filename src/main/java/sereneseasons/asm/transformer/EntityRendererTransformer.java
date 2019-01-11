@@ -52,11 +52,11 @@ public class EntityRendererTransformer implements IClassTransformer
             if (ASMHelper.methodEquals(methodNode, RENDER_RAIN_SNOW_NAMES, "(F)V"))
             {
                 int successCount = 0;
+                int worldVarNum = -1;
 
                 MethodInsnNode targetMethodInsnNode = ASMHelper.getUniqueMethodInsnNode(methodNode, Opcodes.INVOKEVIRTUAL, ObfHelper.unmapType(obfuscatedClass, "net/minecraft/world/biome/Biome"), CAN_RAIN_NAMES, ObfHelper.createMethodDescriptor(obfuscatedClass, "Z"));
 
                 // Replace biome.canRain() || biome.getEnableSnow() check with our own
-                int worldVarNum = -1;
                 if (targetMethodInsnNode != null)
                 {
                     int targetInsnIndex = methodNode.instructions.indexOf(targetMethodInsnNode);

@@ -13,11 +13,11 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeColorHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.WorldUtils;
@@ -48,6 +48,23 @@ public class BirchColorHandler
 			                birchColor = colorProvider.getBirchColor();
 			            }
 	            	}
+	            	
+/*
+	            	int birchColor = ColorizerFoliage.getFoliageColorBirch();
+	            	int dimension = Minecraft.getMinecraft().player.dimension;
+	            	
+	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
+	            	{
+	            		Biome biome = worldIn.getBiome(pos);
+	            		
+	            		if (BiomeConfig.enablesSeasonalEffects(biome))
+	            		{
+		            		SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
+			                ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+			                birchColor = colorProvider.getBirchColor(); 
+	            		}
+	            	}
+*/
 	            	
 	                return birchColor;
 	            }

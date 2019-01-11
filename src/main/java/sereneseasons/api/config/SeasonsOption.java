@@ -11,7 +11,8 @@ public enum SeasonsOption implements ISyncedOption
 {
 	BLACKLIST_DIMENSIONS("Blacklist Dimensions"),
     DAY_DURATION("Day Duration"),
-    SUB_SEASON_DURATION("Sub Season Duration");
+    SUB_SEASON_DURATION("Sub Season Duration"),
+	STARTING_SUB_SEASON("Staring Sub Season");
     
     private final String optionName;
 

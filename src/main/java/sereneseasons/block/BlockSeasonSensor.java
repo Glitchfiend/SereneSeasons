@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 import sereneseasons.api.ISSBlock;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.SeasonsConfig;
+import sereneseasons.init.ModConfig;
 import sereneseasons.item.ItemSSBlock;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.tileentity.TileEntitySeasonSensor;
@@ -79,8 +81,7 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
 
     public void updatePower(World world, BlockPos pos)
     {
-        //Seasons currently only work in the overworld
-        if (world.provider.getDimension() == 0)
+        if (SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             IBlockState currentState = world.getBlockState(pos);
 

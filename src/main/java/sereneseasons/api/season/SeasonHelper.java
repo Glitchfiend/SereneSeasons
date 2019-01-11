@@ -8,6 +8,7 @@
 package sereneseasons.api.season;
 
 import net.minecraft.world.World;
+import sereneseasons.init.ModConfig;
 
 public class SeasonHelper 
 {
@@ -31,20 +32,6 @@ public class SeasonHelper
         }
 
         return data;
-    }
-    
-    /**
-     * Checks if the season provided allows snow to fall at a certain
-     * biome temperature.
-     * 
-     * @param season The season to check
-     * @param temperature The biome temperature to check
-     * @return True if suitable, otherwise false
-     */
-    public static boolean canSnowAtTempInSeason(Season season, float temperature)
-    {
-        //If we're in winter, the temperature can be anything equal to or below 0.8
-        return temperature < 0.15F || (season == Season.WINTER && temperature <= 0.8F);
     }
 
     public interface ISeasonDataProvider
