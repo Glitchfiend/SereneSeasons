@@ -39,7 +39,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-    	// NOTE: Ignore dimension blacklist here. Still need to do timing stuff.
         World world = event.world;
 
         if (event.phase == TickEvent.Phase.END && !world.isRemote)
@@ -77,8 +76,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) 
     {
-    	// NOTE: Ignore dimension blacklist here. Still need to do timing and rendering stuff.
-    	
         //Only do this when in the world
         if (Minecraft.getMinecraft().player == null) return;
         
@@ -133,8 +130,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public static void sendSeasonUpdate(World world)
     {
-    	// NOTE: Ignore dimension blacklist here. Still need to do timing stuff.
-    	
         if (!world.isRemote)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);

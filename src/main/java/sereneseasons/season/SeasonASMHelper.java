@@ -140,9 +140,6 @@ public class SeasonASMHelper
     
     public static boolean isRainingAtInSeason(World world, BlockPos pos, ISeasonState seasonState)
     {
-//        if( !SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()) )
-//        	return isRainingAtVanilla(world, pos);
-        
         Biome biome = world.getBiome(pos);
 
         if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
@@ -169,35 +166,6 @@ public class SeasonASMHelper
 
         return biome.canRain();
     }
-    
-/*    private static boolean isRainingAtVanilla(World world, BlockPos position)
-    {
-        if (!world.isRaining())
-        {
-            return false;
-        }
-        else if (!world.canSeeSky(position))
-        {
-            return false;
-        }
-        else if (world.getPrecipitationHeight(position).getY() > position.getY())
-        {
-            return false;
-        }
-        else
-        {
-            Biome biome = world.getBiome(position);
-
-            if (biome.getEnableSnow())
-            {
-                return false;
-            }
-            else
-            {
-                return world.canSnowAt(position, false) ? false : biome.canRain();
-            }
-        }
-    } */
     
     ///////////////////
     // Biome methods //
