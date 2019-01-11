@@ -58,6 +58,11 @@ public class SeasonHelper
      */
     public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
+    	if (!SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+    	{
+    		return biome.getTemperature(pos);
+    	}
+    		
         SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
         return getSeasonFloatTemperature(biome, pos, subSeason);
     }
@@ -115,22 +120,22 @@ public class SeasonHelper
 	 * @param seasonState the current season state
 	 * @return <code>true</code> iff yes.
 	 */
-    public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, boolean allowSnowLayer, @Nullable ISeasonState seasonState)
+    public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, boolean allowSnowLayer, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
     {
         Biome biome = world.getBiome(pos);
-        float temperature = getFloatTemperature(world, biome, pos);
+        float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome) || !BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
-            return false;
+            if (BiomeConfig.usesTropicalSeasons(biome))
+            {
+                return false;
+            }
+
+            temperature = getFloatTemperature(world, biome, pos);
         }
 
-        //If we're in winter, the temperature can be anything equal to or below 0.7
         if (temperature >= 0.15F)
-        {
-            return false;
-        }
-        else if (!BiomeConfig.enablesSeasonalEffects(biome))
         {
         	return false;
         }
@@ -172,17 +177,21 @@ public class SeasonHelper
 	 * @param seasonState the current season state
 	 * @return <code>true</code> iff yes.
 	 */
-    public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, boolean allowMeltableIce, @Nullable ISeasonState seasonState)
+    public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, boolean allowMeltableIce, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
     {
         Biome biome = world.getBiome(pos);
-        float temperature = getFloatTemperature(world, biome, pos);
+        float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome) || !BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
-            return false;
+            if (BiomeConfig.usesTropicalSeasons(biome))
+            {
+                return false;
+            }
+
+            temperature = getFloatTemperature(world, biome, pos);
         }
 
-        //If we're in winter, the temperature can be anything equal to or below 0.7
         if (temperature >= 0.15F)
         {
             return false;

@@ -37,12 +37,10 @@ public class ModHandlers
         //Handlers for functionality related to seasons
         MinecraftForge.EVENT_BUS.register(new ChunkHandler());
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
+        MinecraftForge.TERRAIN_GEN_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
         
-        if (ModConfig.seasons.generateSnowAndIce)
-        {
-        	MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
-        }
+        MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
         
         MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
         MinecraftForge.EVENT_BUS.register(new SeasonChunkPatchingHandler());

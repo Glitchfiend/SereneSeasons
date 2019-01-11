@@ -7,7 +7,8 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import jline.internal.Nullable;
+import javax.annotation.Nullable;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -22,22 +23,33 @@ public class SeasonASMHelper
     ///////////////////
     // World methods //
     ///////////////////
-    
+
+    // Legacy
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState)
     {
-    	return SeasonHelper.canSnowAtInSeason(world, pos, checkLight, false, seasonState);
+        return canSnowAtInSeason(world, pos, checkLight, seasonState, false);
+    }
+
+    public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
+    {
+    	return SeasonHelper.canSnowAtInSeason(world, pos, checkLight, false, seasonState, useUnmodifiedTemperature);
     }
     
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
-    	return SeasonHelper.canBlockFreezeInSeason(world, pos, noWaterAdj, false, seasonState);
+        return canBlockFreezeInSeason(world, pos, noWaterAdj, seasonState, false);
+    }
+    
+    public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
+    {
+    	return SeasonHelper.canBlockFreezeInSeason(world, pos, noWaterAdj, false, seasonState, useUnmodifiedTemperature);
     }
     
     public static boolean isRainingAtInSeason(World world, BlockPos pos, ISeasonState seasonState)
     {
         Biome biome = world.getBiome(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = seasonState.getTropicalSeason();
 
@@ -82,7 +94,7 @@ public class SeasonASMHelper
 
     public static boolean shouldRenderRainSnow(World world, Biome biome)
     {
-    	if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
@@ -104,7 +116,7 @@ public class SeasonASMHelper
 
     public static boolean shouldAddRainParticles(World world, Biome biome)
     {
-    	if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 

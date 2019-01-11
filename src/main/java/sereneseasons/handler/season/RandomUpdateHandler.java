@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonASMHelper;
 
@@ -72,7 +73,7 @@ public class RandomUpdateHandler
 					}
 				}
 
-				if (ModConfig.seasons.generateSnowAndIce)
+				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.getDimension()))
 				{
 					WorldServer world = (WorldServer)event.world;
 					for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();)

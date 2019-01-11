@@ -15,6 +15,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeColorHelper;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 
@@ -35,8 +36,9 @@ public class BirchColorHandler
 	            else if (plankstype == BlockPlanks.EnumType.BIRCH)
 	            {
 	            	int birchColor = ColorizerFoliage.getFoliageColorBirch();
+	            	int dimension = Minecraft.getMinecraft().player.dimension;
 	            	
-	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour)
+	            	if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
 	            	{
 	            		Biome biome = worldIn.getBiome(pos);
 	            		
