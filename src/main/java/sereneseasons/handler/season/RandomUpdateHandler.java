@@ -27,126 +27,105 @@ import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonASMHelper;
 
-public class RandomUpdateHandler 
-{
-    //Randomly melt ice and snow when it isn't winter
-    @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event)
-    {
-        if (event.phase == Phase.END && event.side == Side.SERVER)
-        {
-            WorldServer world = (WorldServer)event.world;
-            int dimId = world.provider.getDimension();
-            if( SeasonHandler.isDimensionBlacklisted(dimId) )
-            	return;
-            
+public class RandomUpdateHandler {
+	// Randomly melt ice and snow when it isn't winter
+	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event) {
+		if (event.phase == Phase.END && event.side == Side.SERVER) {
+			WorldServer world = (WorldServer) event.world;
+			int dimId = world.provider.getDimension();
+			if (SeasonHandler.isDimensionBlacklisted(dimId))
+				return;
+
 			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
 			Season season = subSeason.getSeason();
 
-			if (season == Season.WINTER)
-			{
-				if (ModConfig.seasons.changeWeatherFrequency)
-				{
-					if (event.world.getWorldInfo().isThundering())
-					{
-						event.world.getWorldInfo().setThundering(false);;
+			if (season == Season.WINTER) {
+				if (ModConfig.seasons.changeWeatherFrequency) {
+					if (event.world.getWorldInfo().isThundering()) {
+						event.world.getWorldInfo().setThundering(false);
+						;
 					}
-					if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000)
-					{
+					if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000) {
 						event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(24000) + 12000);
 					}
 				}
-			}
-			else
-			{
-				if (ModConfig.seasons.changeWeatherFrequency)
-				{
-					if (season == Season.SPRING)
-					{
-						if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 96000)
-						{
+			} else {
+				if (ModConfig.seasons.changeWeatherFrequency) {
+					if (season == Season.SPRING) {
+						if (!event.world.getWorldInfo().isRaining()
+								&& event.world.getWorldInfo().getRainTime() > 96000) {
 							event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(84000) + 12000);
 						}
-					}
-					else if (season == Season.SUMMER)
-					{
-						if (!event.world.getWorldInfo().isThundering() && event.world.getWorldInfo().getThunderTime() > 36000)
-						{
+					} else if (season == Season.SUMMER) {
+						if (!event.world.getWorldInfo().isThundering()
+								&& event.world.getWorldInfo().getThunderTime() > 36000) {
 							event.world.getWorldInfo().setThunderTime(event.world.rand.nextInt(24000) + 12000);
 						}
 					}
 				}
 
-				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.getDimension()))
-            {
-					WorldServer world = (WorldServer)event.world;
-                for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();)
-                {
+				if (ModConfig.seasons.generateSnowAndIce
+						&& SeasonsConfig.isDimensionWhitelisted(event.world.provider.getDimension())) {
+					for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(
+							world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();) {
 						Chunk chunk = iterator.next();
 						int x = chunk.x << 4;
 						int z = chunk.z << 4;
-                    
-                    int rand;
-                    switch (subSeason)
-                    {
-	                    case EARLY_SPRING:
-	                    	rand = 16;
-	                    	break;
-	                    case MID_SPRING:
-	                    	rand = 12;
-	                    	break;
-	                    case LATE_SPRING:
-	                    	rand = 8;
-	                    	break;
-	                    default:
-	                    	rand = 4;
-	                    	break;
-                    }
 
-                    if (world.rand.nextInt(rand) == 0)
-                    {
-                        world.updateLCG = world.updateLCG * 3 + 1013904223;
-                        int randOffset = world.updateLCG >> 2;
-							BlockPos pos = world.getPrecipitationHeight(new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
+						int rand;
+						switch (subSeason) {
+						case EARLY_SPRING:
+							rand = 16;
+							break;
+						case MID_SPRING:
+							rand = 12;
+							break;
+						case LATE_SPRING:
+							rand = 8;
+							break;
+						default:
+							rand = 4;
+							break;
+						}
+
+						if (world.rand.nextInt(rand) == 0) {
+							world.updateLCG = world.updateLCG * 3 + 1013904223;
+							int randOffset = world.updateLCG >> 2;
+							BlockPos pos = world.getPrecipitationHeight(
+									new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
 							Biome biome = world.getBiome(pos);
 
-							if(!BiomeConfig.enablesSeasonalEffects(biome))
+							if (!BiomeConfig.enablesSeasonalEffects(biome))
 								continue;
 
 							boolean first = true;
-							for (int y = pos.getY(); y >= 0; y--)
-                        {
+							for (int y = pos.getY(); y >= 0; y--) {
 								Block block = chunk.getBlockState(pos.getX(), y, pos.getZ()).getBlock();
 
-								if (block == Blocks.SNOW_LAYER)
-                        {
+								if (block == Blocks.SNOW_LAYER) {
 									pos = new BlockPos(pos.getX(), y, pos.getZ());
-									if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
-                        	{
+									if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F) {
 										world.setBlockToAir(pos);
-                        			break;
-                        		}
-                        	}
+										break;
+									}
+								}
 
-								if(!first)
-                        {
-									if(block == Blocks.ICE)
-                        {
+								if (!first) {
+									if (block == Blocks.ICE) {
 										pos = new BlockPos(pos.getX(), y, pos.getZ());
-										if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
-                        	{
-											((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
-                        			break;
-                        		}
-                        	}
-                        }
-								else
+										if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F) {
+											((BlockIce) Blocks.ICE).turnIntoWater(world, pos);
+											break;
+										}
+									}
+								} else
 									first = false;
 							}
 						}
-                    }
-                }
-            }
-        }
-    }
+					}
+				}
+			}
+		}
+	}
 }

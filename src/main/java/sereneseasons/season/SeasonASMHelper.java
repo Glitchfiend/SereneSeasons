@@ -26,6 +26,7 @@ import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.init.ModConfig;
 import sereneseasons.util.ISeasonsColorResolver;
 
@@ -214,9 +215,13 @@ public class SeasonASMHelper
     public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
     	if (!SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
-    		{
+    	{
     		return biome.getTemperature(pos);
-    		}
+    	}
+    	
+    	int dimId = world.provider.getDimension();
+        if( SeasonHandler.isDimensionBlacklisted(dimId) )
+        	return biome.getTemperature(pos);
     	
         return getFloatTemperature(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), biome, pos);
     }
@@ -224,11 +229,6 @@ public class SeasonASMHelper
     public static float getFloatTemperature(SubSeason subSeason, Biome biome, BlockPos pos)
     {
     	float biomeTemp = biome.getTemperature(pos);
-        
-    	int dimId = world.provider.getDimension();
-        if( SeasonHandler.isDimensionBlacklisted(dimId) )
-        	return biomeTemp;
-        
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
 
         if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
