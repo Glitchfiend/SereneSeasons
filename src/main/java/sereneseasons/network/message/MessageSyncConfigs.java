@@ -55,7 +55,6 @@ public class MessageSyncConfigs implements IMessage, IMessageHandler<MessageSync
                 entry.value = message.nbtOptions.getString(key);
                 SereneSeasons.logger.info("SS configuration synchronized with the server");
             }
-            ModConfig.seasons.onConfigurationLoaded();
         }
         
         return null;

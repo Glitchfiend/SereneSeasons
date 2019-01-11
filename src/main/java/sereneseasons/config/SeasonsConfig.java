@@ -45,7 +45,6 @@ public class SeasonsConfig extends ConfigHandler
     {
         try
         {
-        	addSyncedValue(SeasonsOption.BLACKLIST_DIMENSIONS, "", DIMENSION_SETTINGS, "Dimensions in which no seasons should exist");
             addSyncedValue(SeasonsOption.DAY_DURATION, 24000, TIME_SETTINGS, "The duration of a Minecraft day in ticks", 20, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.SUB_SEASON_DURATION, 7, TIME_SETTINGS, "The duration of a sub season in days", 1, Integer.MAX_VALUE);
             addSyncedValue(SeasonsOption.STARTING_SUB_SEASON, 5, TIME_SETTINGS, "The starting sub season for new worlds.  0 = Random, 1 - 3 = Early/Mid/Late Spring, 4 - 6 = Early/Mid/Late Summer, 7 - 9 = Early/Mid/Late Autumn, 10 - 12 = Early/Mid/Late Winter", 0, 12);
@@ -95,29 +94,4 @@ public class SeasonsConfig extends ConfigHandler
 		
 		return false;
 	}
-    
-    @Override
-    public void onConfigurationLoaded() {
-    	updateDimensionBlacklist();
-    }
-    
-    private void updateDimensionBlacklist() {
-    	String listStr = SyncedConfig.getValue(SeasonsOption.BLACKLIST_DIMENSIONS);
-    	String[] list = listStr.split(",");
-    	
-    	ArrayList<Integer> dimList = new ArrayList<>(list.length);
-    	for( String s : list ) {
-    		String s2 = s.trim();
-    		if( s2.isEmpty() )
-    			continue;
-    		try {
-    			dimList.add(Integer.parseInt(s2));
-    		}
-    		catch(NumberFormatException exc) {
-    			SereneSeasons.logger.error("Couldn't parse dimension id from string: " + s2);
-    		}
-    	}
-    	
-    	SeasonHandler.blacklistedDimensions = dimList.toArray(new Integer[dimList.size()]);
-    }
 }
