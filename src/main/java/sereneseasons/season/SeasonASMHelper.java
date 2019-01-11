@@ -17,6 +17,7 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 
 public class SeasonASMHelper
 {

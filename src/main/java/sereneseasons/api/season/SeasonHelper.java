@@ -7,7 +7,8 @@
  ******************************************************************************/
 package sereneseasons.api.season;
 
-import jline.internal.Nullable;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -19,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.config.BiomeConfig;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonASMHelper;

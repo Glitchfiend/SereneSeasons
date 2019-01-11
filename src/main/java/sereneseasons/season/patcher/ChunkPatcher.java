@@ -242,12 +242,12 @@ public class ChunkPatcher {
                     // (where canSnowAtTempInSeason have returned false before).
                     if (world.rand.nextInt(THR_PROB_MAX) < threshold)
                     {
-                        if (SeasonHelper.canBlockFreezeInSeason(world, below, false, false, SubSeason.EARLY_WINTER.getDefaultState()))
+                        if (SeasonHelper.canBlockFreezeInSeason(world, below, false, false, SubSeason.EARLY_WINTER.getDefaultState(), false) )
                         {
                             // NOTE: Is a simplified freeze behavior
                             world.setBlockState(below, Blocks.ICE.getDefaultState(), 2);
                         }
-                        else if (command != 1 && SeasonHelper.canSnowAtInSeason(world, pos, true, false, SubSeason.EARLY_WINTER.getDefaultState()))
+                        else if (command != 1 && SeasonHelper.canSnowAtInSeason(world, pos, true, false, SubSeason.EARLY_WINTER.getDefaultState(), false))
                         {
                             world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState(), 2);
                         }
@@ -264,7 +264,7 @@ public class ChunkPatcher {
                         IBlockState blockState = world.getBlockState(pos);
                         if (blockState.getBlock() == Blocks.SNOW_LAYER)
                         {
-                        	if (!SeasonHelper.canSnowAtInSeason(world, pos, true, true, SubSeason.EARLY_SPRING.getDefaultState()))
+                        	if (!SeasonHelper.canSnowAtInSeason(world, pos, true, true, SubSeason.EARLY_SPRING.getDefaultState(), false))
                         		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
                         }
                         else
@@ -272,7 +272,7 @@ public class ChunkPatcher {
                             blockState = world.getBlockState(below);
                             if (blockState.getBlock() == Blocks.ICE)
                             {
-                            	if (!SeasonHelper.canBlockFreezeInSeason(world, below, false, true, SubSeason.EARLY_SPRING.getDefaultState())) {
+                            	if (!SeasonHelper.canBlockFreezeInSeason(world, below, false, true, SubSeason.EARLY_SPRING.getDefaultState(), false)) {
                                     world.setBlockState(below, Blocks.WATER.getDefaultState(), 2);
                                     world.neighborChanged(below, Blocks.WATER, below);
                             	}
