@@ -8,6 +8,7 @@
 package sereneseasons.network.message;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -16,24 +17,28 @@ import sereneseasons.handler.season.SeasonHandler;
 
 public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<MessageSyncSeasonCycle, IMessage>
 {
+    public int dimension;
     public int seasonCycleTicks;
     
     public MessageSyncSeasonCycle() {}
     
-    public MessageSyncSeasonCycle(int seasonCycleTicks)
+    public MessageSyncSeasonCycle(int dimension, int seasonCycleTicks)
     {
+        this.dimension = dimension;
         this.seasonCycleTicks = seasonCycleTicks;
     }
     
     @Override
     public void fromBytes(ByteBuf buf) 
     {
+        this.dimension = buf.readInt();
         this.seasonCycleTicks = buf.readInt();
     }
 
     @Override
     public void toBytes(ByteBuf buf) 
     {
+        buf.writeInt(this.dimension);
         buf.writeInt(this.seasonCycleTicks);
     }
 
@@ -44,7 +49,11 @@ public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<Message
     	
         if (ctx.side == Side.CLIENT)
         {
-            SeasonHandler.clientSeasonCycleTicks = message.seasonCycleTicks;
+            if (Minecraft.getMinecraft().player == null) return null;
+            int playerDimension = Minecraft.getMinecraft().player.dimension;
+
+            if (playerDimension == message.dimension)
+                SeasonHandler.clientSeasonCycleTicks = message.seasonCycleTicks;
         }
         
         return null;

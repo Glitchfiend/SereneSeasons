@@ -7,11 +7,11 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import jline.internal.Nullable;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -23,31 +23,43 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
-import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.config.SeasonsConfig;
+import sereneseasons.init.ModConfig;
 
 public class SeasonASMHelper
 {
     ///////////////////
     // World methods //
     ///////////////////
-    
+
+    // Legacy
     public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState)
     {
-        Season season = seasonState == null ? null : seasonState.getSeason();
+        return canSnowAtInSeason(world, pos, checkLight, seasonState, false);
+    }
+
+    public static boolean canSnowAtInSeason(World world, BlockPos pos, boolean checkLight, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
+    {
         Biome biome = world.getBiome(pos);
         float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
-            return false;
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+        {
+            if (BiomeConfig.usesTropicalSeasons(biome))
+            {
+                return false;
+            }
 
-        //If we're in winter, the temperature can be anything equal to or below 0.7
-        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
+            temperature = getFloatTemperature(world, biome, pos);
+        }
+
+        if (temperature >= 0.15F)
         {
             return false;
         }
-        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
+        else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
-            return false;
+        	return false;
         }
         else if (checkLight)
         {
@@ -69,21 +81,31 @@ public class SeasonASMHelper
     
     public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
-        Season season = seasonState == null ? null : seasonState.getSeason();
+        return canBlockFreezeInSeason(world, pos, noWaterAdj, seasonState, false);
+    }
+    
+    public static boolean canBlockFreezeInSeason(World world, BlockPos pos, boolean noWaterAdj, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
+    {
         Biome biome = world.getBiome(pos);
         float temperature = biome.getTemperature(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
-            return false;
+        if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+        {
+            if (BiomeConfig.usesTropicalSeasons(biome))
+            {
+                return false;
+            }
 
-        //If we're in winter, the temperature can be anything equal to or below 0.7
-        if (!SeasonHelper.canSnowAtTempInSeason(season, temperature))
+            temperature = getFloatTemperature(world, biome, pos);
+        }
+
+        if (temperature >= 0.15F)
         {
             return false;
         }
-        else if (biome == Biomes.RIVER || biome == Biomes.OCEAN || biome == Biomes.DEEP_OCEAN)
+        else if (biome.getDefaultTemperature() >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
-            return false;
+        	return false;
         }
         else
         {
@@ -116,7 +138,7 @@ public class SeasonASMHelper
     {
         Biome biome = world.getBiome(pos);
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = seasonState.getTropicalSeason();
 
@@ -133,7 +155,7 @@ public class SeasonASMHelper
             }
         }
 
-        if (( biome.getEnableSnow() && seasonState.getSeason() != Season.WINTER) || (world.canSnowAt(pos, false)))
+        if (biome.getEnableSnow() || (world.canSnowAt(pos, false)))
         {
             return false;
         }
@@ -144,34 +166,43 @@ public class SeasonASMHelper
     ///////////////////
     // Biome methods //
     ///////////////////
-    
-    public static float getFloatTemperature(Biome biome, BlockPos pos)
+
+    public static float getFloatTemperature(World world, Biome biome, BlockPos pos)
     {
-        SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
+    	if (!SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+    		{
+    		return biome.getTemperature(pos);
+    		}
+    	
+        return getFloatTemperature(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), biome, pos);
+    }
+
+    public static float getFloatTemperature(SubSeason subSeason, Biome biome, BlockPos pos)
+    {
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biome.getTemperature(pos) <= 0.8F && biome.getTemperature(pos) >= 0.15F)
+        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
         {
-	        switch ((SubSeason) subSeason)
+	        switch (subSeason)
 	        {
 	        	default:
 	        		break;
 	        
 		        case LATE_SPRING: case EARLY_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, 0.15F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.1F, -0.5F, 2.0F);
 		    		break;
 	        
 		        case MID_SPRING: case MID_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, 0.15F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.2F, -0.5F, 2.0F);
 		    		break;
 	        
 	        	case EARLY_SPRING: case LATE_AUTUMN:
-		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, 0.15F, 2.0F);
+		    		biomeTemp = MathHelper.clamp(biomeTemp - 0.4F, -0.5F, 2.0F);
 		    		break;
 	    		
 	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
-	        		biomeTemp = 0.0F;
+	        		biomeTemp = MathHelper.clamp(biomeTemp - 0.8F, -0.5F, 2.0F);
 	        		break;
 	        }
         }
@@ -185,7 +216,7 @@ public class SeasonASMHelper
 
     public static boolean shouldRenderRainSnow(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
@@ -207,7 +238,7 @@ public class SeasonASMHelper
 
     public static boolean shouldAddRainParticles(World world, Biome biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biome) && BiomeConfig.enablesSeasonalEffects(biome) && SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 

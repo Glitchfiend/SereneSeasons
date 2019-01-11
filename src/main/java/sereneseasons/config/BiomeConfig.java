@@ -30,16 +30,17 @@ public class BiomeConfig
         Map<String, BiomeData> defaultBiomeData = Maps.newHashMap();
         addBlacklistedBiomes(defaultBiomeData);
         addTropicalBiomes(defaultBiomeData);
+        addDisabledCropBiomes(defaultBiomeData);
         biomeDataMap = JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
     }
 
-    public static boolean hasSeasonalColoring(Biome biome)
+    public static boolean enablesSeasonalEffects(Biome biome)
     {
         String name = biome.getRegistryName().toString();
 
         if (biomeDataMap.containsKey(name))
         {
-            return biomeDataMap.get(name).enableSeasonalColoring;
+            return biomeDataMap.get(name).enableSeasonalEffects;
         }
 
         return true;
@@ -56,19 +57,34 @@ public class BiomeConfig
 
         return false;
     }
+    
+    public static boolean disablesCrops(Biome biome)
+    {
+        String name = biome.getRegistryName().toString();
+
+        if (biomeDataMap.containsKey(name))
+        {
+            return biomeDataMap.get(name).disableCrops;
+        }
+
+        return false;
+    }
 
     private static void addBlacklistedBiomes(Map<String, BiomeData> map)
     {
-        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore",
-                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland",
-                "biomesoplenty:flower_island", "biomesoplenty:origin_island", "biomeoplenty:origin_beach");
+        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_island", "minecraft:mushroom_island_shore", "minecraft:ocean",
+        		"minecraft:deep_ocean", "minecraft:river",
+                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:flower_island",
+                "biomesoplenty:coral_reef", "biomesoplenty:kelp_forest",
+        		"thaumcraft:magical_forest", "integrateddynamics:biome_meneglin", "abyssalcraft:darklands", "abyssalcraft:darklands_forest",
+        		"abyssalcraft:darklands_plains", "abyssalcraft:darklands_hills", "abyssalcraft:darklands_mountains", "abyssalcraft:coralium_infested_swamp");
 
         for (String biomeName : blacklistedBiomes)
         {
             if (!map.containsKey(biomeName))
-                map.put(biomeName, new BiomeData(false, false));
+                map.put(biomeName, new BiomeData(false, false, false));
             else
-                map.get(biomeName).enableSeasonalColoring = false;
+                map.get(biomeName).enableSeasonalEffects = false;
         }
     }
 
@@ -89,15 +105,28 @@ public class BiomeConfig
                 "biomesoplenty:volcanic_island", "biomesoplenty:oasis", "biomesoplenty:white_beach",
                 
         		"traverse:arid_highland", "traverse:badlands", "traverse:canyon", "traverse:desert_shrubland", "traverse:mini_jungle",
-        		"traverse:mountainous_desert", "traverse:red_desert", "traverse:rocky_plateau",
+        		"traverse:mountainous_desert", "traverse:red_desert",
         		"conquest:bamboo_forest", "conquest:desert_mod", "conquest:jungle_mod", "conquest:mesa_extreme_mod", "conquest:red_desert");
 
         for (String biomeName : tropicalBiomes)
         {
             if (!map.containsKey(biomeName))
-                map.put(biomeName, new BiomeData(true, true));
+                map.put(biomeName, new BiomeData(true, true, false));
             else
                 map.get(biomeName).useTropicalSeasons = true;
+        }
+    }
+    
+    private static void addDisabledCropBiomes(Map<String, BiomeData> map)
+    {
+        List<String> disabledCropBiomes = Lists.newArrayList("biomesoplenty:crag", "biomesoplenty:wasteland", "biomesoplenty:volcanic_island");
+
+        for (String biomeName : disabledCropBiomes)
+        {
+            if (!map.containsKey(biomeName))
+                map.put(biomeName, new BiomeData(false, false, true));
+            else
+                map.get(biomeName).disableCrops = true;
         }
     }
 }

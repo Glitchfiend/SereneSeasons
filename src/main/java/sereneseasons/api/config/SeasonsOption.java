@@ -14,7 +14,8 @@ public enum SeasonsOption implements ISyncedOption
 	// WARNING: Avoid option names which would become ambiguous when converted to their NBT conform versions.
 	
     DAY_DURATION("Day Duration"),
-    SUB_SEASON_DURATION("Sub Season Duration");
+    SUB_SEASON_DURATION("Sub Season Duration"),
+	STARTING_SUB_SEASON("Staring Sub Season");
     
     private final String optionName;
     private final String nbtOptionName;

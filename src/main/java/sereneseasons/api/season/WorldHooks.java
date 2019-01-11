@@ -12,7 +12,7 @@ public class WorldHooks
     {
         try
         {
-            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("canSnowAtInSeason", World.class, BlockPos.class, Boolean.class, Season.class).invoke(null, world, pos, checkLight, seasonState);
+            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("canSnowAtInSeason", World.class, BlockPos.class, Boolean.class, ISeasonState.class).invoke(null, world, pos, checkLight, seasonState);
         }
         catch (Exception e)
         {
@@ -27,7 +27,7 @@ public class WorldHooks
     {
         try
         {
-            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("canBlockFreezeInSeason", World.class, BlockPos.class, Boolean.class, Season.class).invoke(null, world, pos, noWaterAdj, seasonState);
+            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("canBlockFreezeInSeason", World.class, BlockPos.class, Boolean.class, ISeasonState.class).invoke(null, world, pos, noWaterAdj, seasonState);
         }
         catch (Exception e)
         {
@@ -42,7 +42,7 @@ public class WorldHooks
     {
         try
         {
-            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("isRainingAtInSeason", World.class, BlockPos.class, Season.class).invoke(null, world, pos, seasonState);
+            return (Boolean)Class.forName("sereneseasons.season.SeasonASMHelper").getMethod("isRainingAtInSeason", World.class, BlockPos.class, ISeasonState.class).invoke(null, world, pos, seasonState);
         }
         catch (Exception e)
         {
