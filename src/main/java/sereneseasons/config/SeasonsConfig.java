@@ -10,6 +10,7 @@ package sereneseasons.config;
 import java.io.File;
 
 import sereneseasons.api.config.SeasonsOption;
+import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.init.ModConfig;
 
@@ -39,6 +40,8 @@ public class SeasonsConfig extends ConfigHandler
     @Override
     protected void loadConfiguration()
     {
+    	// SYNC: Keep it up-to-date if sereneseasons.handler.season.SeasonChunkPatchingHandler.isEnabled() changes.
+    	
         try
         {
             addSyncedValue(SeasonsOption.DAY_DURATION, 24000, TIME_SETTINGS, "The duration of a Minecraft day in ticks", 20, Integer.MAX_VALUE);
@@ -57,6 +60,11 @@ public class SeasonsConfig extends ConfigHandler
             changeBirchColour = config.getBoolean("Change Birch Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the birch colour based on the current season");
         
             whitelistedDimensions = config.getStringList("Whitelisted Dimensions", DIMENSION_SETTINGS, new String[] { "0" }, "Seasons will only apply to dimensons listed here");
+            
+            // Print some warnings for incompatible configs
+            if( !generateSnowAndIce && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_GLOBAL_FROST) ) {
+            	SereneSeasons.logger.warn("Configuration field \"Enable Global Frost\" is not compatible with disabled \"Generate Snow and Ice\". It will be ignored.");
+            }
         }
         catch (Exception e)
         {

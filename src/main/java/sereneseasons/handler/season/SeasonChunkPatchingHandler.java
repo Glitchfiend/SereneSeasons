@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
+import sereneseasons.init.ModConfig;
 import sereneseasons.season.patcher.ChunkPatchingManager;
 
 /**
@@ -184,11 +185,11 @@ public class SeasonChunkPatchingHandler
     }
     
     /**
-     * Returns whether global weather effects are enabled.
+     * Returns whether global weather effects are enabled. Only works if "generateSnowAndIce is turned on."
      * 
      * @return <code>true</code> iff yes.
      */
     public boolean isEnabled() {
-    	return SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_GLOBAL_FROST);
+    	return ModConfig.seasons.generateSnowAndIce && SyncedConfig.getBooleanValue(SeasonsOption.ENABLE_GLOBAL_FROST);
     }
 }
