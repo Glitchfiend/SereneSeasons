@@ -65,7 +65,7 @@ public class SeasonHelper
     		return biome.getTemperature(pos);
     	}
     		
-        SubSeason subSeason = new SeasonTime(SeasonHandler.clientSeasonCycleTicks).getSubSeason();
+        SubSeason subSeason = new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason();
         return getSeasonFloatTemperature(biome, pos, subSeason);
     }
 
