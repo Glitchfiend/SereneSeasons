@@ -48,6 +48,7 @@ public class FertilityConfig
 		{
 			"minecraft:potato", "minecraft:carrot", "minecraft:sapling", "minecraft:nether_wart", "minecraft:tallgrass", "minecraft:grass",
 			"minecraft:red_mushroom", "minecraft:brown_mushroom",
+			
 			"harvestcraft:caulifloweritem", "harvestcraft:coffeebeanitem", "harvestcraft:garlicitem", "harvestcraft:beanitem", "harvestcraft:rhubarbitem", 
 			"harvestcraft:strawberryitem", "harvestcraft:oatsitem", "harvestcraft:celeryitem", "harvestcraft:peasitem", "harvestcraft:broccoliitem", 
 			"harvestcraft:cabbageitem", "harvestcraft:spinachitem", "harvestcraft:zucchiniitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem", 
@@ -58,8 +59,12 @@ public class FertilityConfig
 			"harvestcraft:cabbageseeditem", "harvestcraft:spinachseeditem", "harvestcraft:zucchiniseeditem", "harvestcraft:teaseeditem", 
 			"harvestcraft:sweetpotatoseeditem", "harvestcraft:turnipseeditem", "harvestcraft:leekseeditem", "harvestcraft:brusselsproutseeditem", 
 			"harvestcraft:asparagusseeditem", "harvestcraft:barleyseeditem", "harvestcraft:onionseeditem", "harvestcraft:parsnipseeditem",
-			"harvestcraft:scallionitem", "harvestcraft:scallionseeditem", "harvestcraft:kaleitem", "harvestcraft:kaleseeditem", "growthcraft_rice:rice",
-			"growthcraft_rice:riceCrop"
+			"harvestcraft:scallionitem", "harvestcraft:scallionseeditem", "harvestcraft:kaleitem", "harvestcraft:kaleseeditem", "harvestcraft:chickpeaitem",
+			"harvestcraft:flaxitem", "harvestcraft:jicamaitem", "harvestcraft:kohlrabiitem", "harvestcraft:lentilitem", "harvestcraft:quinoaitem",
+			"harvestcraft:chickpeaseeditem", "harvestcraft:flaxseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
+			"harvestcraft:lentilseeditem", "harvestcraft:quinoaseeditem",
+			
+			"growthcraft_rice:rice", "growthcraft_rice:riceCrop"
 		};
 		
 		@Config.Comment({"Crops growable in Summer (List either the seed item for the crop, or the crop block itself)"})
@@ -68,6 +73,7 @@ public class FertilityConfig
 			"minecraft:melon_seeds", "minecraft:wheat_seeds", "minecraft:reeds", "minecraft:cocoa", "minecraft:cactus", "minecraft:sapling",
 			"minecraft:nether_wart", "minecraft:tallgrass", "minecraft:grass", "minecraft:red_mushroom", "minecraft:brown_mushroom",
 			"simplecorn:kernels",
+			
 			"harvestcraft:coffeebeanitem", "harvestcraft:beanitem", "harvestcraft:blueberryitem", "harvestcraft:cornitem", "harvestcraft:chilipepperitem", 
 			"harvestcraft:radishitem", "harvestcraft:tomatoitem", "harvestcraft:grapeitem", "harvestcraft:raspberryitem", "harvestcraft:peasitem", 
 			"harvestcraft:cottonitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem", "harvestcraft:spiceleafitem", "harvestcraft:riceitem", 
@@ -84,9 +90,15 @@ public class FertilityConfig
 			"harvestcraft:soybeanseeditem", "harvestcraft:barleyseeditem", "harvestcraft:cucumberseeditem", "harvestcraft:mustardseeditem", 
 			"harvestcraft:onionseeditem", "harvestcraft:peanutseeditem", "harvestcraft:bellpepperseeditem", "harvestcraft:lettuceseeditem",
 			"harvestcraft:cactusfruititem", "harvestcraft:cactusfruitseeditem", "harvestcraft:candleberryitem", "harvestcraft:candleberryseeditem",
-			"harvestcraft:gigapickleitem", "harvestcraft:gigapickleseeditem", "growthcraft_apples:apple_crop", "growthcraft_apples:apple_sapling",
-			"growthcraft_apples:apple_leaves", "growthcraft_hops:hop_seeds", "growthcraft_hops:hops", "growthcraft_milk:thistle_seed",
-			"growthcraft_milk:thistle", "growthcraft_rice:rice", "growthcraft_rice:riceCrop"
+			"harvestcraft:gigapickleitem", "harvestcraft:gigapickleseeditem", "harvestcraft:agaveitem", "harvestcraft:amaranthitem",
+			"harvestcraft:cassavaitem", "harvestcraft:greengrapeitem", "harvestcraft:juteitem", "harvestcraft:kenafitem", "harvestcraft:kohlrabiitem",
+			"harvestcraft:milletitem", "harvestcraft:mulberryitem", "harvestcraft:sisalitem", "harvestcraft:taroitem", "harvestcraft:agaveseeditem",
+			"harvestcraft:amaranthseeditem", "harvestcraft:cassavaseeditem", "harvestcraft:greengrapeseeditem", "harvestcraft:juteseeditem",
+			"harvestcraft:kenafseeditem", "harvestcraft:kohlrabiseeditem", "harvestcraft:milletseeditem", "harvestcraft:mulberryseeditem",
+			"harvestcraft:sisalseeditem", "harvestcraft:taroseeditem",
+			
+			"growthcraft_apples:apple_crop", "growthcraft_apples:apple_sapling", "growthcraft_apples:apple_leaves", "growthcraft_hops:hop_seeds",
+			"growthcraft_hops:hops", "growthcraft_milk:thistle_seed", "growthcraft_milk:thistle", "growthcraft_rice:rice", "growthcraft_rice:riceCrop"
 		};
 		
 		@Config.Comment({"Crops growable in Autumn (List either the seed item for the crop, or the crop block itself)"})
@@ -95,6 +107,7 @@ public class FertilityConfig
 			"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds", "minecraft:sapling",
 			"minecraft:nether_wart", "minecraft:grass", "minecraft:red_mushroom", "minecraft:brown_mushroom",
 			"simplecorn:kernels",
+			
 			"harvestcraft:cornitem", "harvestcraft:artichokeitem", "harvestcraft:beetitem", "harvestcraft:cranberryitem", "harvestcraft:eggplantitem", 
 			"harvestcraft:grapeitem", "harvestcraft:whitemushroomitem", "harvestcraft:blackberryitem", "harvestcraft:oatsitem", "harvestcraft:ryeitem", 
 			"harvestcraft:peasitem", "harvestcraft:spinachitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem", "harvestcraft:gingeritem", 
@@ -103,10 +116,16 @@ public class FertilityConfig
 			"harvestcraft:whitemushroomseeditem", "harvestcraft:blackberryseeditem", "harvestcraft:oatsseeditem", "harvestcraft:ryeseeditem",
 			"harvestcraft:peasseeditem", "harvestcraft:spinachseeditem", "harvestcraft:teaseeditem", "harvestcraft:sweetpotatoseeditem", 
 			"harvestcraft:gingerseeditem", "harvestcraft:wintersquashseeditem", "harvestcraft:onionseeditem", "harvestcraft:rutabagaitem",
-			"harvestcraft:rutabagaseeditem", "growthcraft_apples:apple_crop", "growthcraft_apples:apple_sapling", "growthcraft_apples:apple_leaves",
-			"growthcraft_grapes:grape_seed", "growthcraft_grapes:native_grape_vine0", "growthcraft_grapes:native_grape_vine1",
-			"growthcraft_grapes:native_grape_vine_leaves", "growthcraft_hops:hop_seeds", "growthcraft_hops:hops", "growthcraft_milk:thistle_seed",
-			"growthcraft_milk:thistle", "growthcraft_rice:rice", "growthcraft_rice:riceCrop"
+			"harvestcraft:rutabagaseeditem", "harvestcraft:amaranthitem", "harvestcraft:arrowrootitem", "harvestcraft:elderberryitem",
+			"harvestcraft:greengrapeitem", "harvestcraft:huckleberryitem", "harvestcraft:jicamaitem", "harvestcraft:kohlrabiitem",
+			"harvestcraft:quinoaitem", "harvestcraft:amaranthseeditem", "harvestcraft:arrowrootseeditem", "harvestcraft:elderberryseeditem",
+			"harvestcraft:greengrapeseeditem", "harvestcraft:huckleberryseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
+			"harvestcraft:quinoaseeditem",
+			
+			"growthcraft_apples:apple_crop", "growthcraft_apples:apple_sapling", "growthcraft_apples:apple_leaves", "growthcraft_grapes:grape_seed",
+			"growthcraft_grapes:native_grape_vine0", "growthcraft_grapes:native_grape_vine1", "growthcraft_grapes:native_grape_vine_leaves",
+			"growthcraft_hops:hop_seeds", "growthcraft_hops:hops", "growthcraft_milk:thistle_seed", "growthcraft_milk:thistle", "growthcraft_rice:rice",
+			"growthcraft_rice:riceCrop"
 		};
 		
 		@Config.Comment({"Crops growable in Winter (List either the seed item for the crop, or the crop block itself)"})
