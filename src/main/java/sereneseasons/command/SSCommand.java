@@ -62,7 +62,7 @@ public class SSCommand extends CommandBase
         EntityPlayerMP player = getCommandSenderAsPlayer(sender);
         Season.SubSeason newSeason = null;
 
-        for (Season.SubSeason season : Season.SubSeason.values())
+        for (Season.SubSeason season : Season.SubSeason.VALUES)
         {
             if (season.toString().toLowerCase().equals(args[1].toLowerCase()))
             {
