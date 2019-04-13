@@ -45,7 +45,7 @@ public final class SeasonTime implements ISeasonState
     @Override
     public int getCycleDuration()
     {
-        return getSubSeasonDuration() * Season.SubSeason.values().length;
+        return getSubSeasonDuration() * Season.SubSeason.VALUES.length;
     }
     
     @Override
@@ -63,8 +63,8 @@ public final class SeasonTime implements ISeasonState
     @Override
     public Season.SubSeason getSubSeason()
     {
-        int index = (this.time / getSubSeasonDuration()) % Season.SubSeason.values().length;
-        return Season.SubSeason.values()[index];
+        int index = (this.time / getSubSeasonDuration()) % Season.SubSeason.VALUES.length;
+        return Season.SubSeason.VALUES[index];
     }
 
     @Override
@@ -76,7 +76,7 @@ public final class SeasonTime implements ISeasonState
     @Override
     public Season.TropicalSeason getTropicalSeason()
     {
-        int index = ((((this.time / getSubSeasonDuration()) + 11) / 2) + 5) % Season.TropicalSeason.values().length;
-        return Season.TropicalSeason.values()[index];
+        int index = ((((this.time / getSubSeasonDuration()) + 11) / 2) + 5) % Season.TropicalSeason.VALUES.length;
+        return Season.TropicalSeason.VALUES[index];
     }
 }
