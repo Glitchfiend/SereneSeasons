@@ -18,12 +18,14 @@ import sereneseasons.util.SeasonColourUtil;
 import sereneseasons.util.config.JsonUtil;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BiomeConfig
 {
-    public static Map<String, BiomeData> biomeDataMap = Maps.newHashMap();
+    // We use a HashMap for maximum performance as JsonUtil#getOrCreateConfigFile will return a LinkedHashMap
+    public static final Map<ResourceLocation, BiomeData> biomeDataMap = Maps.newHashMap();
 
     public static void init(File configDir)
     {
@@ -31,12 +33,25 @@ public class BiomeConfig
         addBlacklistedBiomes(defaultBiomeData);
         addTropicalBiomes(defaultBiomeData);
         addDisabledCropBiomes(defaultBiomeData);
-        biomeDataMap = JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
+
+        biomeDataMap.clear();
+
+        Map<String, BiomeData> tmpBiomeDataMap = JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
+
+        if (tmpBiomeDataMap != null && !tmpBiomeDataMap.isEmpty())
+        {
+            // We convert our keys to ResourceLocations here as to avoid calling `ResourceLocation#toString()` everywhere
+            // This reduces CPU overhead and garbage collector pressure
+            for (Map.Entry<String, BiomeData> entry : tmpBiomeDataMap.entrySet())
+            {
+                biomeDataMap.put(new ResourceLocation(entry.getKey()), entry.getValue());
+            }
+        }
     }
 
     public static boolean enablesSeasonalEffects(Biome biome)
     {
-        String name = biome.getRegistryName().toString();
+        ResourceLocation name = biome.getRegistryName();
 
         if (biomeDataMap.containsKey(name))
         {
@@ -48,7 +63,7 @@ public class BiomeConfig
 
     public static boolean usesTropicalSeasons(Biome biome)
     {
-        String name = biome.getRegistryName().toString();
+        ResourceLocation name = biome.getRegistryName();
 
         if (biomeDataMap.containsKey(name))
         {
@@ -57,10 +72,10 @@ public class BiomeConfig
 
         return false;
     }
-    
+
     public static boolean disablesCrops(Biome biome)
     {
-        String name = biome.getRegistryName().toString();
+        ResourceLocation name = biome.getRegistryName();
 
         if (biomeDataMap.containsKey(name))
         {
@@ -96,17 +111,17 @@ public class BiomeConfig
                 "minecraft:mesa_clear_rock", "minecraft:mutated_mesa", "minecraft:mutated_mesa_rock",
                 "minecraft:mutated_mesa_clear_rock", "minecraft:savanna", "minecraft:savanna_rock",
                 "minecraft:mutated_savanna", "minecraft:mutated_savanna_rock", "minecraft:mushroom_island", "minecraft:mushroom_island_shore",
-                
+
                 "biomesoplenty:bamboo_forest", "biomesoplenty:bayou", "biomesoplenty:brushland", "biomesoplenty:eucalyptus_forest",
                 "biomesoplenty:floodplains", "biomesoplenty:lush_desert", "biomesoplenty:mangrove", "biomesoplenty:outback",
                 "biomesoplenty:overgrown_cliffs", "biomesoplenty:rainforest", "biomesoplenty:sacred_springs", "biomesoplenty:scrubland",
                 "biomesoplenty:tropical_rainforest", "biomesoplenty:wasteland", "biomesoplenty:xeric_shrubland", "biomesoplenty:flower_island",
                 "biomesoplenty:tropical_island", "biomesoplenty:volcanic_island", "biomesoplenty:oasis", "biomesoplenty:white_beach",
-                
+
         		"traverse:arid_highland", "traverse:badlands", "traverse:canyon", "traverse:desert_shrubland", "traverse:mini_jungle",
         		"traverse:mountainous_desert", "traverse:red_desert",
         		"conquest:bamboo_forest", "conquest:desert_mod", "conquest:jungle_mod", "conquest:mesa_extreme_mod", "conquest:red_desert",
-        		
+
         		"climaticbiomesjbg:subtropical_forest", "climaticbiomesjbg:subtropical_forest_hills", "climaticbiomesjbg:tropical_forest",
         		"climaticbiomesjbg:tropical_forest_hills", "climaticbiomesjbg:pine_swamp", "climaticbiomesjbg:dense_scrub",
         		"climaticbiomesjbg:dense_scrub_hills", "climaticbiomesjbg:dense_scrub_hills", "climaticbiomesjbg:dry_scrub",
@@ -120,7 +135,7 @@ public class BiomeConfig
                 map.get(biomeName).useTropicalSeasons = true;
         }
     }
-    
+
     private static void addDisabledCropBiomes(Map<String, BiomeData> map)
     {
         List<String> disabledCropBiomes = Lists.newArrayList("biomesoplenty:crag", "biomesoplenty:wasteland", "biomesoplenty:volcanic_island");
