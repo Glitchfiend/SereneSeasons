@@ -1,5 +1,5 @@
 commands.sereneseasons.usage=/sereneseasons <setseason> [argumentos]
-commands.sereneseasons.setseason.success=A estação do ano foi alterada para %s
+commands.sereneseasons.setseason.success=Estação do ano alterada para %s
 commands.sereneseasons.setseason.fail=A estação "%s" é inválida
 commands.sereneseasons.setseason.disabled=As estações do ano estão desativadas!
 
