@@ -11,7 +11,7 @@ public enum SeasonsOption implements ISyncedOption
 {
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration"),
-	STARTING_SUB_SEASON("Staring Sub Season");
+	STARTING_SUB_SEASON("Starting Sub Season");
     
     private final String optionName;
 
