@@ -12,7 +12,7 @@ public enum SeasonsOption implements ISyncedOption
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration"),
 	STARTING_SUB_SEASON("Staring Sub Season"),
-	PROGRESS_SEASON_WHILE_OFFLINE("If the season should progress on a server with no players");
+	PROGRESS_SEASON_WHILE_OFFLINE("Progress Season while offline");
     
     private final String optionName;
 
