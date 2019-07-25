@@ -41,7 +41,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         if (event.phase == TickEvent.Phase.END && !world.isRemote)
         {
-            if(!SyncedConfig.getBooleanValue(SeasonsOption.PROGRESS_SEASON_WHILE_OFFLINE))
+            if (!SyncedConfig.getBooleanValue(SeasonsOption.PROGRESS_SEASON_WHILE_OFFLINE))
             {
                 MinecraftServer server = world.getMinecraftServer();
                 if(server != null && server.getPlayerList().getCurrentPlayerCount() == 0)
