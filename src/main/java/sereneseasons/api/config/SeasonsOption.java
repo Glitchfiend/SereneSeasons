@@ -11,8 +11,8 @@ public enum SeasonsOption implements ISyncedOption
 {
     DAY_DURATION("Day Duration"),
     SUB_SEASON_DURATION("Sub Season Duration"),
-    STARTING_SUB_SEASON("Staring Sub Season"),
-    PROGRESS_SEASON_WHILE_OFFLINE("Progress Season while offline");
+    STARTING_SUB_SEASON("Starting Sub Season");
+    PROGRESS_SEASON_WHILE_OFFLINE("Progress Season While Offline");
     
     private final String optionName;
 
