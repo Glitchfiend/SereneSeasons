@@ -62,14 +62,14 @@ public class ModHandlers
 
         BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) ->
         {
-            SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
+            SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
             return SeasonColourUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColorAtPos(biome, blockPosition));
         };
 
         BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) ->
         {
-            SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
+            SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
             return SeasonColourUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColorAtPos(biome, blockPosition));
         };

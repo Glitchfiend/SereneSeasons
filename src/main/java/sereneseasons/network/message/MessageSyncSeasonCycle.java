@@ -51,7 +51,7 @@ public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<Message
             int playerDimension = Minecraft.getMinecraft().player.dimension;
 
             if (playerDimension == message.dimension)
-                SeasonHandler.clientSeasonCycleTicks = message.seasonCycleTicks;
+                SeasonHandler.clientSeasonCycleTicks.replace(playerDimension, message.seasonCycleTicks);
         }
         
         return null;
