@@ -1,0 +1,15 @@
+commands.sereneseasons.usage=/sereneseasons <setseason> [args]
+commands.sereneseasons.setseason.success=Ustawiono porę roku na %s
+commands.sereneseasons.setseason.fail=Nieprawidłowa pora roku %s
+commands.sereneseasons.setseason.disabled=Pory roku są obecnie wyłączone!
+
+itemGroup.tabSereneSeasons=Serene Seasons
+
+tile.greenhouse_glass.name=Szkło Szklarniowe
+tile.season_sensor_spring.name=Wiosenny Czujnik
+tile.season_sensor_summer.name=Letni Czujnik
+tile.season_sensor_autumn.name=Jesienny Czujnik
+tile.season_sensor_winter.name=Zimowy Czujnik
+item.ss_icon.name=SS Icon
+
+item.season_clock.name=egar Pór Roku
