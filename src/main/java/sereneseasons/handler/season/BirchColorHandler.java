@@ -44,7 +44,7 @@ public class BirchColorHandler
 	            		
 	            		if (BiomeConfig.enablesSeasonalEffects(biome))
 	            		{
-		            		SeasonTime calendar = new SeasonTime(SeasonHandler.clientSeasonCycleTicks);
+		            		SeasonTime calendar = SeasonHandler.getClientSeasonTime();
 			                ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 			                birchColor = colorProvider.getBirchColor(); 
 	            		}

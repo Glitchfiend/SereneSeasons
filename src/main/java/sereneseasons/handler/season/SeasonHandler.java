@@ -7,13 +7,14 @@
  ******************************************************************************/
 package sereneseasons.handler.season;
 
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -74,7 +75,10 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     private Season.SubSeason lastSeason = null;
-    public static int clientSeasonCycleTicks = 0;
+    public static HashMap<Integer, Integer> clientSeasonCycleTicks = new HashMap<>();
+    public static SeasonTime getClientSeasonTime() {
+    	return new SeasonTime(clientSeasonCycleTicks.get(0));
+    }
     
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) 
@@ -86,13 +90,19 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
+        	
+        	if(!clientSeasonCycleTicks.containsKey(dimension))
+        		clientSeasonCycleTicks.put(dimension, 0);
+        	
+        	clientSeasonCycleTicks.replace(dimension, clientSeasonCycleTicks.get(dimension) + 1);
+        	
             //Keep ticking as we're synchronized with the server only every second
-            if (clientSeasonCycleTicks++ > SeasonTime.ZERO.getCycleDuration())
+            if (clientSeasonCycleTicks.get(dimension) > SeasonTime.ZERO.getCycleDuration())
             {
-                clientSeasonCycleTicks = 0;
+                clientSeasonCycleTicks.replace(dimension, 0);
             }
             
-            SeasonTime calendar = new SeasonTime(clientSeasonCycleTicks);
+            SeasonTime calendar = new SeasonTime(clientSeasonCycleTicks.get(dimension));
             
             if (calendar.getSubSeason() != lastSeason)
             {
@@ -180,6 +190,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public ISeasonState getClientSeasonState()
     {
-        return new SeasonTime(clientSeasonCycleTicks);
+        return new SeasonTime(clientSeasonCycleTicks.get(0));
     }
 }
