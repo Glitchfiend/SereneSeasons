@@ -75,9 +75,10 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     private Season.SubSeason lastSeason = null;
-    public static HashMap<Integer, Integer> clientSeasonCycleTicks = new HashMap<>();
+    public static final HashMap<Integer, Integer> clientSeasonCycleTicks = new HashMap<>();
     public static SeasonTime getClientSeasonTime() {
-    	return new SeasonTime(clientSeasonCycleTicks.get(0));
+        Integer i = clientSeasonCycleTicks.get(0);
+    	return new SeasonTime(i == null ? 0 : i);
     }
     
     @SubscribeEvent
@@ -90,16 +91,12 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
-        	
-        	if(!clientSeasonCycleTicks.containsKey(dimension))
-        		clientSeasonCycleTicks.put(dimension, 0);
-        	
-        	clientSeasonCycleTicks.replace(dimension, clientSeasonCycleTicks.get(dimension) + 1);
+            clientSeasonCycleTicks.compute(dimension, (k, v) -> v == null ? 0 : v + 1);
         	
             //Keep ticking as we're synchronized with the server only every second
             if (clientSeasonCycleTicks.get(dimension) > SeasonTime.ZERO.getCycleDuration())
             {
-                clientSeasonCycleTicks.replace(dimension, 0);
+                clientSeasonCycleTicks.put(dimension, 0);
             }
             
             SeasonTime calendar = new SeasonTime(clientSeasonCycleTicks.get(dimension));
@@ -190,6 +187,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public ISeasonState getClientSeasonState()
     {
-        return new SeasonTime(clientSeasonCycleTicks.get(0));
+        Integer i = clientSeasonCycleTicks.get(0);
+    	return new SeasonTime(i == null ? 0 : i);
     }
 }
