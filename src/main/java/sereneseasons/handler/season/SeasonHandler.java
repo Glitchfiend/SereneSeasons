@@ -150,7 +150,9 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (!world.isRemote)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
-            PacketHandler.instance.sendToAll(new MessageSyncSeasonCycle(world.provider.getDimension(), savedData.seasonCycleTicks));
+            int dimension = world.provider.getDimension();
+            int seasonCycleTick = SeasonsConfig.isDimensionLocked(dimension) ? SeasonsConfig.getDimensionTimelock(dimension) : savedData.seasonCycleTicks;
+        	PacketHandler.instance.sendToAll(new MessageSyncSeasonCycle(world.provider.getDimension(), seasonCycleTick));
         }
     }
     

@@ -9,9 +9,13 @@ package sereneseasons.config;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import sereneseasons.api.config.SeasonsOption;
+import sereneseasons.api.config.SyncedConfig;
+import sereneseasons.api.season.Season;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.init.ModConfig;
 
@@ -29,7 +33,7 @@ public class SeasonsConfig extends ConfigHandler
     public boolean changeFoliageColour;
     public boolean changeBirchColour;
     
-    public String[] whitelistedDimensions;
+    public Set<Integer> whitelistedDimensions;
     public Map<Integer, Integer> lockedDimensions;
 
     public SeasonsConfig(File configFile)
@@ -54,12 +58,29 @@ public class SeasonsConfig extends ConfigHandler
             changeGrassColour = config.getBoolean("Change Grass Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the grass colour based on the current season");
             changeFoliageColour = config.getBoolean("Change Foliage Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the foliage colour based on the current season");
             changeBirchColour = config.getBoolean("Change Birch Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the birch colour based on the current season");
-        
-            whitelistedDimensions = config.getStringList("Whitelisted Dimensions", DIMENSION_SETTINGS, new String[] { "0" }, "Seasons will only apply to dimensons listed here");
+            
+            whitelistedDimensions = new HashSet<>();
             lockedDimensions = new HashMap<>();
-            for (String str : config.getStringList("Locked Dimensions", DIMENSION_SETTINGS, new String[] {""}, "Lock specifics dimensions at a given time of the season cycle. The dimension must be whitelisted as well. Format: dimensionID:time. time must be between 0 and day_duration * sub_season_duration * 12. If not, it will be considered being 0."))
+            
+            String[] dimensionList = config.getStringList("Whitelisted Dimensions", DIMENSION_SETTINGS, new String[] { "0" }, "Seasons will only apply to dimensons listed here");
+            for (String dimensionString : dimensionList)
             {
-            	lockedDimensions.put(Integer.valueOf(str.split(":")[0]), Integer.valueOf(str.split(":")[1]));
+            	whitelistedDimensions.add(Integer.valueOf(dimensionString));
+            }
+            
+            String[] dimensionLockList = config.getStringList("Locked Dimensions", DIMENSION_SETTINGS, new String[] {""}, "Lock specific dimensions at a given time of the season cycle. The dimensions will be whitelisted automatically. Format: dimensionID:time. time must be between 0 and day_duration * sub_season_duration * 12. If not, it will be considered being 0.");
+            for (String dimensionLockString : dimensionLockList)
+            {
+            	int dimension = Integer.valueOf(dimensionLockString.split(":")[0]);
+            	int timelock = Integer.valueOf(dimensionLockString.split(":")[1]);
+            	
+            	whitelistedDimensions.add(dimension);
+            	if (timelock > Season.SubSeason.VALUES.length * SyncedConfig.getIntValue(SeasonsOption.SUB_SEASON_DURATION) * SyncedConfig.getIntValue(SeasonsOption.DAY_DURATION))
+            	{
+            		SereneSeasons.logger.warn(String.format("Dimension %d has been locked to a time beyond the season cycle, treating as 0"));
+            		timelock = 0;
+            	}
+            	lockedDimensions.put(dimension, timelock);
             }
             
         }
@@ -75,22 +96,17 @@ public class SeasonsConfig extends ConfigHandler
     
     public static boolean isDimensionWhitelisted(int dimension)
     {
-    	for (String dimensions : ModConfig.seasons.whitelistedDimensions)
-		{
-    		if (dimension == Integer.valueOf(dimensions))
-			{
-    			return true;
-			}
-		}
-    	
-    	return false;
+    	return ModConfig.seasons.whitelistedDimensions.contains(dimension);
     }
     
-   public static boolean isDimensionLocked(int dimension) {
+   public static boolean isDimensionLocked(int dimension)
+   {
 	   return ModConfig.seasons.lockedDimensions.containsKey(dimension);
    }
    
-   public static int getDimensionTimelock(int dimension) {
+   public static int getDimensionTimelock(int dimension)
+   {
 	   return ModConfig.seasons.lockedDimensions.get(dimension);
-   }
+   }  
+   
 }
