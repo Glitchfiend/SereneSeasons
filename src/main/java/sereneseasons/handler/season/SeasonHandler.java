@@ -91,7 +91,14 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
-            clientSeasonCycleTicks.compute(dimension, (k, v) -> v == null ? 0 : v + 1);
+        	if (SeasonsConfig.isDimensionLocked(dimension))
+        	{
+        		clientSeasonCycleTicks.put(dimension, SeasonsConfig.getDimensionTimelock(dimension));
+        	}
+        	else
+        	{
+        		clientSeasonCycleTicks.compute(dimension, (k, v) -> v == null ? 0 : v + 1);
+        	}
         	
             //Keep ticking as we're synchronized with the server only every second
             if (clientSeasonCycleTicks.get(dimension) > SeasonTime.ZERO.getCycleDuration())
@@ -182,7 +189,14 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public ISeasonState getServerSeasonState(World world)
     {
         SeasonSavedData savedData = getSeasonSavedData(world);
-        return new SeasonTime(savedData.seasonCycleTicks);
+        if (SeasonsConfig.isDimensionLocked(world.provider.getDimension()))
+        {
+        	return new SeasonTime(SeasonsConfig.getDimensionTimelock(world.provider.getDimension()));
+        }
+        else
+        {
+        	return new SeasonTime(savedData.seasonCycleTicks);
+        }
     }
     
     public ISeasonState getClientSeasonState()
