@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.item.ItemSeasonClock;
-import sereneseasons.util.inventory.CreativeTabSS;
+import sereneseasons.util.inventory.ItemGroupSS;
 
 import static sereneseasons.api.SSItems.*;
 
@@ -30,7 +30,7 @@ public class ModItems
 
     public static Item registerItem(Item item, String name)
     {
-        return registerItem(item, name, CreativeTabSS.instance);
+        return registerItem(item, name, ItemGroupSS.instance);
     }
 
     public static Item registerItem(Item item, String name, CreativeTabs tab)
@@ -38,7 +38,7 @@ public class ModItems
         item.setUnlocalizedName(name);
         if (tab != null)
         {
-            item.setCreativeTab(CreativeTabSS.instance);
+            item.setCreativeTab(ItemGroupSS.instance);
         }
 
         item.setRegistryName(new ResourceLocation(SereneSeasons.MOD_ID, name));

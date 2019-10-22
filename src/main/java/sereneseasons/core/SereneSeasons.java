@@ -20,14 +20,11 @@ import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModHandlers;
 import sereneseasons.init.ModItems;
 
-@Mod(modid = SereneSeasons.MOD_ID, version = SereneSeasons.MOD_VERSION, name = SereneSeasons.MOD_NAME, dependencies = "required-after:forge@[1.0.0.0,)")
+@Mod(value = SereneSeasons.MOD_ID)
 public class SereneSeasons
 {
-    public static final String MOD_NAME = "Serene Seasons";
     public static final String MOD_ID = "sereneseasons";
-    public static final String MOD_VERSION = "@MOD_VERSION@";
 
-    @Instance(MOD_ID)
     public static SereneSeasons instance;
 
     @SidedProxy(clientSide = "sereneseasons.core.ClientProxy", serverSide = "sereneseasons.core.CommonProxy")

@@ -18,8 +18,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sereneseasons.api.ISSBlock;
-import sereneseasons.item.ItemSSBlock;
 
 public class BlockGreenhouseGlass extends BlockBreakable implements ISSBlock
 {

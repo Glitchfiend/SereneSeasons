@@ -7,29 +7,30 @@
  ******************************************************************************/
 package sereneseasons.handler.season;
 
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
+
+import javafx.geometry.Side;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 import sereneseasons.season.SeasonSavedData;
 
+@Mod.EventBusSubscriber
 public class SeasonSleepHandler 
 {
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if (event.phase == Phase.START && event.side == Side.SERVER)
+        if (event.phase == TickEvent.Phase.START && event.side == LogicalSide.SERVER.SERVER)
         {
-            WorldServer world = (WorldServer)event.world;
+            ServerWorld world = (ServerWorld)event.world;
 
             //Called before all players are awoken for the next day
             if (world.areAllPlayersAsleep())
             {
                 SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-                long timeDiff = 24000L - ((world.getWorldInfo().getWorldTime() + 24000L) % 24000L);
+                long timeDiff = 24000L - ((world.getWorldInfo().getDayTime() + 24000L) % 24000L);
                 seasonData.seasonCycleTicks += timeDiff;
                 seasonData.markDirty();
                 SeasonHandler.sendSeasonUpdate(world);

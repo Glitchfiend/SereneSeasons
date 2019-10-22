@@ -17,8 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import sereneseasons.api.ISSBlock;
-import sereneseasons.util.inventory.CreativeTabSS;
+import sereneseasons.util.inventory.ItemGroupSS;
 
 public class ClientProxy extends CommonProxy
 {
@@ -63,7 +62,7 @@ public class ClientProxy extends CommonProxy
         if (item.getHasSubtypes())
         {
             NonNullList<ItemStack> subItems = NonNullList.create();
-            item.getSubItems(CreativeTabSS.instance, subItems);
+            item.getSubItems(ItemGroupSS.instance, subItems);
             for (ItemStack subItem : subItems)
             {
                 String subItemName = item.getUnlocalizedName(subItem);

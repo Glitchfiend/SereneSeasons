@@ -1,27 +1,28 @@
 package sereneseasons.handler.season;
 
+import javafx.geometry.Side;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.BlockGrass;
-import net.minecraft.block.BlockReed;
-import net.minecraft.block.BlockSapling;
+import net.minecraft.block.GrassBlock;
+import net.minecraft.block.SugarCaneBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
 
+@Mod.EventBusSubscriber
 public class SeasonalCropGrowthHandler
 {
 	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void onItemTooltipAdded(ItemTooltipEvent event)
 	{
 		ModFertility.setupTooltips(event);
@@ -31,11 +32,12 @@ public class SeasonalCropGrowthHandler
 	public void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
 		Block plant = event.getState().getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
+		World world = (World)event.getWorld();
+		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), world, event.getPos());
 		
-		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(world, event.getPos()))
 		{
-			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
+			if (FertilityConfig.general_category.crops_break && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}
@@ -54,7 +56,7 @@ public class SeasonalCropGrowthHandler
 		
 		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
+			if (FertilityConfig.general_category.crops_break && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}

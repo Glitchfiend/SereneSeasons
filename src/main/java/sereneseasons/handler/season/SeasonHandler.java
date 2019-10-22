@@ -9,18 +9,15 @@ package sereneseasons.handler.season;
 
 import java.util.HashMap;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.MapStorage;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
@@ -85,9 +82,8 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public void onClientTick(TickEvent.ClientTickEvent event) 
     {
         //Only do this when in the world
-        if (Minecraft.getMinecraft().player == null) return;
-        
-        int dimension = Minecraft.getMinecraft().player.dimension;
+        if (Minecraft.getInstance().player == null) return;
+        DimensionType dimension = Minecraft.getInstance().player.dimension;
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
@@ -103,7 +99,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             
             if (calendar.getSubSeason() != lastSeason)
             {
-                Minecraft.getMinecraft().renderGlobal.loadRenderers();
+                Minecraft.getInstance().renderGlobal.loadRenderers();
                 lastSeason = calendar.getSubSeason();
             }
         }

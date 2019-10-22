@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.biome.Biome;
-import org.lwjgl.util.Color;
 
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
@@ -68,7 +67,7 @@ public class SeasonColourUtil
     
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().player.dimension))
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getInstance().player.dimension))
             return originalColour;
 
         int overlay = colorProvider.getGrassOverlay();
@@ -84,7 +83,7 @@ public class SeasonColourUtil
     
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().player.dimension))
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getInstance().player.dimension))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();

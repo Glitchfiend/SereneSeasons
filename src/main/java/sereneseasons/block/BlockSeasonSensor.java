@@ -11,6 +11,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -29,16 +30,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import sereneseasons.api.ISSBlock;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.init.ModConfig;
-import sereneseasons.item.ItemSSBlock;
 import sereneseasons.season.SeasonTime;
-import sereneseasons.tileentity.TileEntitySeasonSensor;
+import sereneseasons.tileentity.SeasonSensorTileEntity;
 
-public class BlockSeasonSensor extends BlockContainer implements ISSBlock
+public class BlockSeasonSensor extends ContainerBlock
 {
     public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
     public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D);
@@ -160,7 +158,7 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
     @Override
     public TileEntity createNewTileEntity(World world, int meta)
     {
-        return new TileEntitySeasonSensor();
+        return new SeasonSensorTileEntity();
     }
 
     // map from state to meta and vice verca
