@@ -1,0 +1,12 @@
+{
+  "package": "sereneseasons.mixins",
+  "refmap": "mixins.seasons.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.7",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+	  "WorldMixin",
+	  "BiomeMixin",
+	  "BlockMixin"
+  ]
+}

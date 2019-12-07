@@ -1,114 +1,92 @@
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+	}
 	dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
+		classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
+	}
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven'
-
-// define the properties file
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-     // read config.  it shall from now on be referenced as simply config or as project.config
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
+repositories {
+	maven {
+		url = "http://repo.spongepowered.org/maven/"
+	}
 }
+
+apply plugin: "forge"
 
 group = "com.github.glitchfiend.biomesoplenty"
-version = "${config.minecraft_version}-${config.mod_version}.${System.getenv().BUILD_NUMBER}"
+
 archivesBaseName = "SereneSeasons"
 
-config.build_number = (System.getenv().BUILD_NUMBER) ? System.getenv().BUILD_NUMBER : ""
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = mod_version
 
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version
-    useDepAts = true
-	mappings = project.config.mappings_version
-
-    // gradle complains if this isn't set when setting up/using IDEA workspace
-    runDir = "run"
-    // set a full version string with appended build number to be used in mod registration
-    def buildnum = (config.build_number!="") ? '.' + config.build_number : ""
-    
-    replace '@MOD_VERSION@', config.mod_version + buildnum
-    replace '1.0.0.0', config.forge_version
-    replaceIn 'SereneSeasons.java'
+	version = "1.7.10-10.13.4.1558-1.7.10"
+	replace '@MOD_VERSION@', mod_version
+	replace '1.0.0.0', forge_version
+	replaceIn 'SereneSeasons.java'
+	runDir = "rundir"
 }
 
-def commonManifest = {
-		attributes (
-			"FMLCorePlugin": 'sereneseasons.asm.SSLoadingPlugin',
-			"FMLCorePluginContainsFMLMod": 'true',
-			"ForceLoadAsMod": 'true',
-			"FMLAT": 'sereneseasons_at.cfg'
-		)
+configurations {
+	shade
+	shadeClient
+	buildDep
+	compile.extendsFrom buildDep, shade, shadeClient
 }
+
+repositories {
+	maven
+	{
+		name = "applecore"
+		url = "http://www.ryanliptak.com/maven/"
+	}
+}
+
+dependencies {
+	compile "applecore:AppleCore:1.7.10-3.1.1:deobf"
+	shade group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
+	shadeClient group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
+}
+
+def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + "mixins.seasons.refmap.json"
 
 jar {
-	manifest commonManifest
-    classifier = 'universal'
+	appendix = minecraft.version
+
+	from refMap
+
+	configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
+		from (zipTree(artifact))
+	}
+
+	manifest {
+		attributes (
+			"FMLCorePluginContainsFMLMod": "true",
+			"FMLCorePlugin": 'sereneseasons.asm.SSLoadingPlugin',
+			"ForceLoadAsMod": "true",
+			"TweakOrder": "0",
+			"MixinConfigs": "mixins.seasons.json",
+			"TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+			"FMLAT": 'sereneseasons_at.cfg'
+		)
+	}
 }
 
-processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        include '**/*.info'
-        include '**/*.properties'
+def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
 
-        // replaces
-        expand ([
-            'modid': project.archivesBaseName,
-            'mod_version': project.config.mod_version,
-            'minecraft_version': project.config.minecraft_version,
-            'build_number': project.config.build_number
-        ])
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.info'
-        exclude '**/*.properties'
-    }
+reobf {
+	addExtraSrgFile mixinSrg
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    from (sourceSets.main.output) {
-        include 'LICENSE.txt'
-    }
-
-    classifier = 'sources'
-}
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-
-    manifest commonManifest
-    classifier = 'deobf'
-}
-
-task apiJar(type: Jar) {
-    from(sourceSets.main.allJava) {
-        include 'sereneseasons/api/**'
-    }
-    from (sourceSets.main.output) {
-        include 'LICENSE.txt'
-        include 'sereneseasons/api/**'
-    }
-
-    classifier = 'api'
-}
-
-artifacts {
-    archives sourcesJar
-    archives deobfJar
-	archives apiJar
+afterEvaluate {
+	tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${mixinSrg}", "-AoutRefMapFile=${refMap}"]
 }

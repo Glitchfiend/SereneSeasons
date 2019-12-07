@@ -7,22 +7,14 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import net.minecraft.world.biome.BiomeColorHelper;
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.PacketHandler;
-import sereneseasons.handler.season.BirchColorHandler;
 import sereneseasons.handler.season.RandomUpdateHandler;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.handler.season.SeasonSleepHandler;
 import sereneseasons.handler.season.SeasonalCropGrowthHandler;
-import sereneseasons.season.SeasonTime;
-import sereneseasons.util.SeasonColourUtil;
 
 public class ModHandlers
 {
@@ -33,53 +25,18 @@ public class ModHandlers
         PacketHandler.init();
 
         //Handlers for functionality related to seasons
-        MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
+        FMLCommonHandler.instance().bus().register(SEASON_HANDLER);
         MinecraftForge.TERRAIN_GEN_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
         
-        MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
+        FMLCommonHandler.instance().bus().register(new RandomUpdateHandler());
         
-        MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
+        FMLCommonHandler.instance().bus().register(new SeasonSleepHandler());
         
         MinecraftForge.EVENT_BUS.register(new SeasonalCropGrowthHandler());
-
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-        {
-            registerSeasonColourHandlers();
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static BiomeColorHelper.ColorResolver originalGrassColorResolver;
-    @SideOnly(Side.CLIENT)
-    private static BiomeColorHelper.ColorResolver originalFoliageColorResolver;
-
-    @SideOnly(Side.CLIENT)
-    private static void registerSeasonColourHandlers()
-    {
-        originalGrassColorResolver = BiomeColorHelper.GRASS_COLOR;
-        originalFoliageColorResolver = BiomeColorHelper.FOLIAGE_COLOR;
-
-        BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) ->
-        {
-            SeasonTime calendar = SeasonHandler.getClientSeasonTime();
-            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColourUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColorAtPos(biome, blockPosition));
-        };
-
-        BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) ->
-        {
-            SeasonTime calendar = SeasonHandler.getClientSeasonTime();
-            ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColourUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColorAtPos(biome, blockPosition));
-        };
     }
     
     public static void postInit()
     {
-    	if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-        {
-    		BirchColorHandler.init();
-        }
     }
 }

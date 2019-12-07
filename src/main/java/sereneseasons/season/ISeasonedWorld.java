@@ -7,12 +7,11 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import net.minecraft.util.math.BlockPos;
 import sereneseasons.api.season.Season;
 
 /** Now with extra seasoning*/
 public interface ISeasonedWorld 
 {
-    boolean canSnowAtInSeason(BlockPos pos, boolean checkLight, Season season);
-    boolean canBlockFreezeInSeason(BlockPos pos, boolean noWaterAdj, Season season);
+    boolean canSnowAtInSeason(int x, int y, int z, boolean checkLight, Season season);
+    boolean canBlockFreezeInSeason(int x, int y, int z, boolean noWaterAdj, Season season);
 }

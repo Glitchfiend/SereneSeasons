@@ -8,21 +8,15 @@
 package sereneseasons.util;
 
 
-import com.google.common.collect.Lists;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.biome.Biome;
 import org.lwjgl.util.Color;
 
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.biome.BiomeGenBase;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
-
-import java.util.List;
 
 public class SeasonColourUtil 
 {
@@ -66,9 +60,9 @@ public class SeasonColourUtil
         return getIntFromColour(newColour);
     }
     
-    public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
+    public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, BiomeGenBase biome, int originalColour)
     {
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().player.dimension))
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().thePlayer.dimension))
             return originalColour;
 
         int overlay = colorProvider.getGrassOverlay();
@@ -82,9 +76,9 @@ public class SeasonColourUtil
         return saturationMultiplier != -1 ? saturateColour(newColour, saturationMultiplier) : newColour;
     }
     
-    public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
+    public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, BiomeGenBase biome, int originalColour)
     {
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().player.dimension))
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().thePlayer.dimension))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();

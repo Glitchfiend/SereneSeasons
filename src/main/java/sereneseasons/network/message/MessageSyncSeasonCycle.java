@@ -7,12 +7,12 @@
  ******************************************************************************/
 package sereneseasons.network.message;
 
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.handler.season.SeasonHandler;
 
 public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<MessageSyncSeasonCycle, IMessage>
@@ -47,8 +47,8 @@ public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<Message
     {
         if (ctx.side == Side.CLIENT)
         {
-            if (Minecraft.getMinecraft().player == null) return null;
-            int playerDimension = Minecraft.getMinecraft().player.dimension;
+            if (Minecraft.getMinecraft().thePlayer == null) return null;
+            int playerDimension = Minecraft.getMinecraft().thePlayer.dimension;
 
             if (playerDimension == message.dimension)
                 SeasonHandler.clientSeasonCycleTicks.replace(playerDimension, message.seasonCycleTicks);

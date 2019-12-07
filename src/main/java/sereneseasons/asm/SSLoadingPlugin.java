@@ -9,14 +9,14 @@ package sereneseasons.asm;
 
 import java.util.Map;
 
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 public class SSLoadingPlugin implements IFMLLoadingPlugin
 {
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[] { "sereneseasons.asm.transformer.EntityRendererTransformer", "sereneseasons.asm.transformer.WorldTransformer" };
+        return new String[] { "sereneseasons.asm.transformer.ColorTransformer", "sereneseasons.asm.transformer.WeatherTransformer" };
     }
 
     @Override

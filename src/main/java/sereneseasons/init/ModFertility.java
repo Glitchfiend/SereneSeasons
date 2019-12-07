@@ -3,22 +3,21 @@ package sereneseasons.init;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.IGrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.asm.IBiomeMixin;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
@@ -47,17 +46,18 @@ public class ModFertility
 		initSeasonCrops(FertilityConfig.seasonal_fertility.winter_crops, winterPlants, 8);
 	}
 
-	public static boolean isCropFertile(String cropName, World world, BlockPos pos)
+	public static boolean isCropFertile(String cropName, World world, int x, int y, int z)
 	{
 		//Get season
 		Season season = SeasonHelper.getSeasonState(world).getSeason();
-		Biome biome = world.getBiome(pos);
+		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		IBiomeMixin biomeMixin = (IBiomeMixin)biome;
 		
 		if (BiomeConfig.disablesCrops(biome))
 		{
 			return false;
 		}
-		else if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+		else if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(world.provider.dimensionId))
 		{
 			return true;
 		}
@@ -75,7 +75,7 @@ public class ModFertility
 		}
 		else 
 		{
-			if (biome.getTemperature(pos) < 0.15F)
+			if (biomeMixin.getFloatTemperatureOld(x, y, z) < 0.15F)
 			{
 				if (winterPlants.contains(cropName))
 				{
@@ -133,11 +133,13 @@ public class ModFertility
 	{
 		for (String seed : seeds)
 		{
-			Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(seed));
+			ResourceLocation loc = new ResourceLocation(seed);
+			Item item = GameRegistry.findItem(loc.getResourceDomain(), loc.getResourcePath());
 			
 			if (item instanceof IPlantable)
 			{
-				String plantName = ((IPlantable) item).getPlant(null, null).getBlock().getRegistryName().toString();
+			    Block plantBlock = ((IPlantable) item).getPlant(null, 0, 0, 0);
+				String plantName = GameRegistry.findUniqueIdentifierFor(plantBlock).toString();
 				cropSet.add(plantName);
 				
 				if (bitmask != 0)
@@ -162,11 +164,11 @@ public class ModFertility
 			}
 			else
 			{
-				Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
+				Block block = GameRegistry.findBlock(loc.getResourceDomain(),  loc.getResourcePath());
 				
-				if (block != null && block != Blocks.AIR)
+				if (block != null && block != Blocks.air)
 				{
-					String plantName = block.getRegistryName().toString();
+					String plantName = GameRegistry.findUniqueIdentifierFor(block).toString();
 					cropSet.add(plantName);
 					
 					if (bitmask != 0)
@@ -199,34 +201,34 @@ public class ModFertility
 		//Set up tooltips if enabled and on client side
 		if (FertilityConfig.general_category.crop_tooltips && FertilityConfig.general_category.seasonal_crops)
 		{
-			String name = event.getItemStack().getItem().getRegistryName().toString();
+		    String name = GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem()).toString();
 			if (seedSeasons.containsKey(name))
 			{
 				int mask = seedSeasons.get(name);
 				
-				event.getToolTip().add("Fertile Seasons:");
+				event.toolTip.add("Fertile Seasons:");
 				
 				if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
 				{
-					event.getToolTip().add(TextFormatting.LIGHT_PURPLE + " Year-Round");
+					event.toolTip.add(EnumChatFormatting.LIGHT_PURPLE + " Year-Round");
 				}
 				else
 				{
 					if ((mask & 1) != 0)
 					{
-						event.getToolTip().add(TextFormatting.GREEN + " Spring");
+						event.toolTip.add(EnumChatFormatting.GREEN + " Spring");
 					}
 					if ((mask & 2) != 0)
 					{
-						event.getToolTip().add(TextFormatting.YELLOW + " Summer");
+						event.toolTip.add(EnumChatFormatting.YELLOW + " Summer");
 					}
 					if ((mask & 4) != 0)
 					{
-						event.getToolTip().add(TextFormatting.GOLD + " Autumn");
+						event.toolTip.add(EnumChatFormatting.GOLD + " Autumn");
 					}
 					if ((mask & 8) != 0)
 					{
-						event.getToolTip().add(TextFormatting.AQUA + " Winter");
+						event.toolTip.add(EnumChatFormatting.AQUA + " Winter");
 					}
 				}
 			}

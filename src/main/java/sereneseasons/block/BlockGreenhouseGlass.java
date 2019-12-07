@@ -9,16 +9,16 @@ package sereneseasons.block;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.IIcon;
 import sereneseasons.api.ISSBlock;
+import sereneseasons.core.SereneSeasons;
 import sereneseasons.item.ItemSSBlock;
 
 public class BlockGreenhouseGlass extends BlockBreakable implements ISSBlock
@@ -26,21 +26,28 @@ public class BlockGreenhouseGlass extends BlockBreakable implements ISSBlock
     // implement ISSBlock
     @Override
     public Class<? extends ItemBlock> getItemClass() { return ItemSSBlock.class; }
-    @Override
-    public IProperty[] getPresetProperties() { return new IProperty[] {}; }
-    @Override
-    public IProperty[] getNonRenderingProperties() { return null; }
-    @Override
-    public String getStateName(IBlockState state) {return "";}
-    
+
+    IIcon icon;
+
     public BlockGreenhouseGlass()
     {
-        super(Material.GLASS, false);
+        super("", Material.glass, false);
         this.setHardness(0.3F);
         this.setHarvestLevel("pickaxe", 0);
-        this.setSoundType(SoundType.GLASS);
+        this.setStepSound(Block.soundTypeGlass);
     }
-    
+
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister ir)
+    {
+        this.icon = ir.registerIcon(SereneSeasons.MOD_ID + ":greenhouse_glass");
+    }
+
+    public IIcon getIcon(int i, int m)
+    {
+        return this.icon;
+    }
+
     /**
      * Returns the quantity of items to drop on block destruction.
      */
@@ -50,19 +57,8 @@ public class BlockGreenhouseGlass extends BlockBreakable implements ISSBlock
         return 0;
     }
 
-    /**
-     * Gets the render layer this block will render on. SOLID for solid blocks, CUTOUT or CUTOUT_MIPPED for on-off
-     * transparency (glass, reeds), TRANSLUCENT for fully blended transparency (stained glass)
-     */
     @Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer()
-    {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
-
-    @Override
-    public boolean isFullCube(IBlockState state)
+    public boolean isOpaqueCube()
     {
         return false;
     }

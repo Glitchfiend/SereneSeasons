@@ -7,19 +7,20 @@
  ******************************************************************************/
 package sereneseasons.handler.season;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockIce;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
@@ -29,6 +30,19 @@ import sereneseasons.season.SeasonASMHelper;
 
 public class RandomUpdateHandler
 {
+	void turnIntoWater(World worldIn, int x, int y, int z)
+	{
+		if (worldIn.provider.isHellWorld)
+		{
+			worldIn.setBlockToAir(x, y, z);
+		}
+		else
+		{
+			worldIn.setBlock(x, y, z, Blocks.water);
+			worldIn.notifyBlockOfNeighborChange(x, y, z, Blocks.water);
+		}
+	}
+
 	//Randomly melt ice and snow when it isn't winter
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
@@ -45,7 +59,7 @@ public class RandomUpdateHandler
 				{
 					if (event.world.getWorldInfo().isThundering())
 					{
-						event.world.getWorldInfo().setThundering(false);;
+						event.world.getWorldInfo().setThundering(false);
 					}
 					if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000)
 					{
@@ -73,14 +87,15 @@ public class RandomUpdateHandler
 					}
 				}
 
-				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.getDimension()))
+				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.dimensionId))
 				{
 					WorldServer world = (WorldServer)event.world;
-					for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();)
+					List chunks = new ArrayList(world.theChunkProviderServer.loadedChunks);
+					for (Iterator<Chunk> iterator = chunks.iterator(); iterator.hasNext();)
 					{
 						Chunk chunk = iterator.next();
-						int x = chunk.x << 4;
-						int z = chunk.z << 4;
+						int x = chunk.xPosition << 4;
+						int z = chunk.zPosition << 4;
 
 						int rand;
 						switch (subSeason)
@@ -103,35 +118,35 @@ public class RandomUpdateHandler
 						{
 							world.updateLCG = world.updateLCG * 3 + 1013904223;
 							int randOffset = world.updateLCG >> 2;
-							BlockPos pos = world.getPrecipitationHeight(new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
-							Biome biome = world.getBiome(pos);
+							x += randOffset & 15;
+							z += randOffset >> 8 & 15;
+							int yMax = world.getPrecipitationHeight(x, z);
+							BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 
 							if(!BiomeConfig.enablesSeasonalEffects(biome))
 								continue;
 
 							boolean first = true;
-							for (int y = pos.getY(); y >= 0; y--)
+							for (int y = yMax; y >= 0; y--)
 							{
-								Block block = chunk.getBlockState(pos.getX(), y, pos.getZ()).getBlock();
+								Block block = chunk.getBlock(x & 0xF, y, z & 0xF);
 
-								if (block == Blocks.SNOW_LAYER)
+								if (block == Blocks.snow_layer)
 								{
-									pos = new BlockPos(pos.getX(), y, pos.getZ());
-									if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
+									if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
 									{
-										world.setBlockToAir(pos);
+										world.setBlockToAir(x, y, z);
 										break;
 									}
 								}
 
 								if(!first)
 								{
-									if(block == Blocks.ICE)
+									if(block == Blocks.ice)
 									{
-										pos = new BlockPos(pos.getX(), y, pos.getZ());
-										if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
+										if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
 										{
-											((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
+											turnIntoWater(world, x, y, z);
 											break;
 										}
 									}

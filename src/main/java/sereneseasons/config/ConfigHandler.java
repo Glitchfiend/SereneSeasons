@@ -7,16 +7,16 @@
  ******************************************************************************/
 package sereneseasons.config;
 
+import java.io.File;
+
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import sereneseasons.api.config.ISyncedOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.init.ModConfig;
-
-import java.io.File;
 
 public abstract class ConfigHandler
 {
@@ -62,7 +62,7 @@ public abstract class ConfigHandler
     @SubscribeEvent
     public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.getModID().equalsIgnoreCase(SereneSeasons.MOD_ID))
+        if (event.modID.equalsIgnoreCase(SereneSeasons.MOD_ID))
         {
             loadConfiguration();
         }
