@@ -16,16 +16,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
-import sereneseasons.season.SeasonASMHelper;
 
 public class RandomUpdateHandler
 {
@@ -33,7 +32,7 @@ public class RandomUpdateHandler
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
 	{
-		if (event.phase == Phase.END && event.side == Side.SERVER)
+		if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER)
 		{
 
 			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();

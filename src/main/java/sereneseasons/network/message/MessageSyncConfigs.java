@@ -7,55 +7,50 @@
  ******************************************************************************/
 package sereneseasons.network.message;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
 
-public class MessageSyncConfigs implements IMessage, IMessageHandler<MessageSyncConfigs, IMessage>
+import java.util.function.Supplier;
+
+public class MessageSyncConfigs
 {
-    public NBTTagCompound nbtOptions;
-    
-    public MessageSyncConfigs() {}
-    
-    public MessageSyncConfigs(NBTTagCompound nbtOptions)
+    public CompoundNBT nbtOptions;
+
+    public MessageSyncConfigs(CompoundNBT nbtOptions)
     {
         this.nbtOptions = nbtOptions;
     }
-    
-    @Override
-    public void fromBytes(ByteBuf buf) 
+
+    public static void encode(MessageSyncConfigs packet, PacketBuffer buf)
     {
-        this.nbtOptions = ByteBufUtils.readTag(buf);
+        buf.writeCompoundTag(packet.nbtOptions);
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) 
+    public static MessageSyncConfigs decode(PacketBuffer buf)
     {
-        ByteBufUtils.writeTag(buf, nbtOptions);
+        return new MessageSyncConfigs(buf.readCompoundTag());
     }
 
-    @Override
-    public IMessage onMessage(MessageSyncConfigs message, MessageContext ctx)
+    public static class Handler
     {
-        if (ctx.side == Side.CLIENT)
+        public static void handle(final MessageSyncConfigs packet, Supplier<NetworkEvent.Context> context)
         {
-            for (String key : message.nbtOptions.getKeySet())
+            context.get().enqueueWork(() ->
             {
-                SyncedConfig.SyncedConfigEntry entry = SyncedConfig.optionsToSync.get(key);
-                
-                if (entry == null) SereneSeasons.logger.error("Option " + key + " does not exist locally!");
-                
-                entry.value = message.nbtOptions.getString(key);
-                SereneSeasons.logger.info("SS configuration synchronized with the server");
-            }
+                for (String key : packet.nbtOptions.keySet())
+                {
+                    SyncedConfig.SyncedConfigEntry entry = SyncedConfig.optionsToSync.get(key);
+
+                    if (entry == null) SereneSeasons.logger.error("Option " + key + " does not exist locally!");
+
+                    entry.value = packet.nbtOptions.getString(key);
+                    SereneSeasons.logger.info("SS configuration synchronized with the server");
+                }
+            });
+            context.get().setPacketHandled(true);
         }
-        
-        return null;
     }
 }

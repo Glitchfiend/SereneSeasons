@@ -7,15 +7,14 @@
  ******************************************************************************/
 package sereneseasons.network.message;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 import sereneseasons.handler.season.SeasonHandler;
 
-public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<MessageSyncSeasonCycle, IMessage>
+import java.util.function.Supplier;
+
+public class MessageSyncSeasonCycle
 {
     public int dimension;
     public int seasonCycleTicks;
@@ -27,33 +26,31 @@ public class MessageSyncSeasonCycle implements IMessage, IMessageHandler<Message
         this.dimension = dimension;
         this.seasonCycleTicks = seasonCycleTicks;
     }
-    
-    @Override
-    public void fromBytes(ByteBuf buf) 
+
+    public static void encode(MessageSyncSeasonCycle packet, PacketBuffer buf)
     {
-        this.dimension = buf.readInt();
-        this.seasonCycleTicks = buf.readInt();
+        buf.writeInt(packet.dimension);
+        buf.writeInt(packet.seasonCycleTicks);
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) 
+    public static MessageSyncSeasonCycle decode(PacketBuffer buf)
     {
-        buf.writeInt(this.dimension);
-        buf.writeInt(this.seasonCycleTicks);
+        return new MessageSyncSeasonCycle(buf.readInt(), buf.readInt());
     }
 
-    @Override
-    public IMessage onMessage(MessageSyncSeasonCycle message, MessageContext ctx)
+    public static class Handler
     {
-        if (ctx.side == Side.CLIENT)
+        public static void handle(final MessageSyncSeasonCycle packet, Supplier<NetworkEvent.Context> context)
         {
-            if (Minecraft.getMinecraft().player == null) return null;
-            int playerDimension = Minecraft.getMinecraft().player.dimension;
+            context.get().enqueueWork(() ->
+            {
+                if (Minecraft.getInstance().player == null) return;
+                int playerDimension = Minecraft.getInstance().player.dimension.getId();
 
-            if (playerDimension == message.dimension)
-                SeasonHandler.clientSeasonCycleTicks.replace(playerDimension, message.seasonCycleTicks);
+                if (playerDimension == packet.dimension)
+                    SeasonHandler.clientSeasonCycleTicks.replace(playerDimension, packet.seasonCycleTicks);
+            });
+            context.get().setPacketHandled(true);
         }
-        
-        return null;
     }
 }
