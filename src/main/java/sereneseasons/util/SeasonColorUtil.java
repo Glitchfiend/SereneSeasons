@@ -23,7 +23,7 @@ import sereneseasons.init.ModConfig;
 
 import java.util.List;
 
-public class SeasonColourUtil 
+public class SeasonColorUtil
 {
     public static int multiplyColours(int colour1, int colour2)
     {
@@ -58,16 +58,17 @@ public class SeasonColourUtil
     
     public static int saturateColour(int colour, float saturationMultiplier)
     {
-        Color newColour = getColourFromInt(colour);
-        float[] hsb = newColour.toHSB(null);
-        hsb[1] *= saturationMultiplier;
-        newColour.fromHSB(hsb[0], hsb[1], hsb[2]);
-        return getIntFromColour(newColour);
+        Color newColor = new Color(colour);
+        double[] hsv = newColor.toHSV();
+        hsv[1] *= saturationMultiplier;
+        newColor = Color.convertHSVtoRGB(hsv[0], hsv[1], hsv[2]);
+        return newColor.toInt();
     }
     
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getInstance().player.dimension))
+        int dimensionId =  Minecraft.getInstance().world.getDimension().getType().getId();
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimensionId))
             return originalColour;
 
         int overlay = colorProvider.getGrassOverlay();
@@ -83,7 +84,8 @@ public class SeasonColourUtil
     
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getInstance().player.dimension))
+        int dimensionId =  Minecraft.getInstance().world.getDimension().getType().getId();
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimensionId))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();
@@ -95,15 +97,5 @@ public class SeasonColourUtil
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
         return saturationMultiplier != -1 ? saturateColour(newColour, saturationMultiplier) : newColour;
-    }
-    
-    private static Color getColourFromInt(int colour)
-    {
-        return new Color((colour >> 16) & 255, (colour >> 8) & 255, colour & 255);
-    }
-    
-    private static int getIntFromColour(Color colour)
-    {
-        return (colour.getRed() & 255) << 16 | (colour.getGreen() & 255) << 8 | colour.getBlue() & 255;
     }
 }

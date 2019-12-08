@@ -8,35 +8,37 @@
 package sereneseasons.item;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 
 public class ItemSeasonClock extends Item
 {
-    public ItemSeasonClock()
+    public ItemSeasonClock(Item.Properties builder)
     {
+        super(builder);
+
         this.addPropertyOverride(new ResourceLocation("time"), new IItemPropertyGetter()
         {
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             double field_185088_a;
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             double field_185089_b;
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             int ticks;
+
             @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, World world, EntityLivingBase entity)
+            @OnlyIn(Dist.CLIENT)
+            public float call(ItemStack stack, World world, LivingEntity entity)
             {
                 Entity holder = (Entity)(entity != null ? entity : stack.getItemFrame());
 
@@ -53,7 +55,7 @@ public class ItemSeasonClock extends Item
                 {
                     double d0;
                     
-                    if (SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+                    if (SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
                     {
                         int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
                         d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
@@ -67,12 +69,12 @@ public class ItemSeasonClock extends Item
                     return MathHelper.positiveModulo((float)d0, 1.0F);
                 }
             }
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             private double actualFrame(World world, double frame)
             {
-                if (world.getTotalWorldTime() != this.ticks)
+                if (world.getGameTime() != this.ticks)
                 {
-                    this.ticks = (int)world.getTotalWorldTime();
+                    this.ticks = (int)world.getGameTime();
                     double newFrame = frame - this.field_185088_a;
 
                     if (newFrame < -0.5D)
