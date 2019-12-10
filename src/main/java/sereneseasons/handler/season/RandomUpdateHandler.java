@@ -7,25 +7,27 @@
  ******************************************************************************/
 package sereneseasons.handler.season;
 
-import java.util.Iterator;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockIce;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.IceBlock;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
 
+import java.util.Iterator;
+
+@Mod.EventBusSubscriber
 public class RandomUpdateHandler
 {
 	//Randomly melt ice and snow when it isn't winter
@@ -72,14 +74,14 @@ public class RandomUpdateHandler
 					}
 				}
 
-				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.getDimension()))
+				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.getDimension().getType().getId()))
 				{
-					WorldServer world = (WorldServer)event.world;
+					ServerWorld world = (ServerWorld)event.world;
 					for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();)
 					{
 						Chunk chunk = iterator.next();
-						int x = chunk.x << 4;
-						int z = chunk.z << 4;
+						int x = chunk.getPos().x << 4;
+						int z = chunk.getPos().z << 4;
 
 						int rand;
 						switch (subSeason)
@@ -102,7 +104,7 @@ public class RandomUpdateHandler
 						{
 							world.updateLCG = world.updateLCG * 3 + 1013904223;
 							int randOffset = world.updateLCG >> 2;
-							BlockPos pos = world.getPrecipitationHeight(new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
+							BlockPos pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
 							Biome biome = world.getBiome(pos);
 
 							if(!BiomeConfig.enablesSeasonalEffects(biome))
@@ -111,11 +113,12 @@ public class RandomUpdateHandler
 							boolean first = true;
 							for (int y = pos.getY(); y >= 0; y--)
 							{
-								Block block = chunk.getBlockState(pos.getX(), y, pos.getZ()).getBlock();
+								Block block = chunk.getBlockState(new BlockPos(pos.getX(), y, pos.getZ())).getBlock();
 
-								if (block == Blocks.SNOW_LAYER)
+								if (block == Blocks.SNOW)
 								{
 									pos = new BlockPos(pos.getX(), y, pos.getZ());
+
 									if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
 									{
 										world.setBlockToAir(pos);
@@ -128,9 +131,10 @@ public class RandomUpdateHandler
 									if(block == Blocks.ICE)
 									{
 										pos = new BlockPos(pos.getX(), y, pos.getZ());
+										// TODO
 										if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
 										{
-											((BlockIce)Blocks.ICE).turnIntoWater(world, pos);
+											((IceBlock) Blocks.ICE).turnIntoWater(world, pos);
 											break;
 										}
 									}

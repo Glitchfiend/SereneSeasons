@@ -8,10 +8,12 @@
 package sereneseasons.init;
 
 import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.ISeasonColorProvider;
@@ -45,41 +47,41 @@ public class ModHandlers
         
         MinecraftForge.EVENT_BUS.register(new SeasonalCropGrowthHandler());
 
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+        if (FMLEnvironment.dist == Dist.CLIENT)
         {
             registerSeasonColourHandlers();
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static BiomeColorHelper.ColorResolver originalGrassColorResolver;
+    private static BiomeColors.IColorResolver originalGrassColorResolver;
     @OnlyIn(Dist.CLIENT)
-    private static BiomeColorHelper.ColorResolver originalFoliageColorResolver;
+    private static BiomeColors.IColorResolver originalFoliageColorResolver;
 
     @OnlyIn(Dist.CLIENT)
     private static void registerSeasonColourHandlers()
     {
-        originalGrassColorResolver = BiomeColorHelper.GRASS_COLOR;
-        originalFoliageColorResolver = BiomeColorHelper.FOLIAGE_COLOR;
+        originalGrassColorResolver = BiomeColors.GRASS_COLOR;
+        originalFoliageColorResolver = BiomeColors.FOLIAGE_COLOR;
 
-        BiomeColorHelper.GRASS_COLOR = (biome, blockPosition) ->
+        BiomeColors.GRASS_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColorAtPos(biome, blockPosition));
+            return SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColor(biome, blockPosition));
         };
 
-        BiomeColorHelper.FOLIAGE_COLOR = (biome, blockPosition) ->
+        BiomeColors.FOLIAGE_COLOR = (biome, blockPosition) ->
         {
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-            return SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColorAtPos(biome, blockPosition));
+            return SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColor(biome, blockPosition));
         };
     }
     
     public static void postInit()
     {
-    	if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+        if (FMLEnvironment.dist == Dist.CLIENT)
         {
     		BirchColorHandler.init();
         }

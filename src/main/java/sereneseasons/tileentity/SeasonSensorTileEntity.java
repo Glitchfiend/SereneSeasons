@@ -9,11 +9,17 @@ package sereneseasons.tileentity;
 
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.block.BlockSeasonSensor;
 
 public class SeasonSensorTileEntity extends TileEntity implements ITickableTileEntity
 {
+    public SeasonSensorTileEntity(TileEntityType<?> tileEntityTypeIn)
+    {
+        super(tileEntityTypeIn);
+    }
+
     @Override
     public void tick()
     {

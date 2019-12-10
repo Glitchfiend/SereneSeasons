@@ -1,27 +1,27 @@
 package sereneseasons.init;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.IGrowable;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Constructs efficient data structures to process, store, and give access to data from the FertilityConfig file
@@ -57,7 +57,7 @@ public class ModFertility
 		{
 			return false;
 		}
-		else if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+		else if (!FertilityConfig.general_category.seasonal_crops || !BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
 		{
 			return true;
 		}
@@ -193,7 +193,7 @@ public class ModFertility
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static void setupTooltips(ItemTooltipEvent event)
 	{
 		//Set up tooltips if enabled and on client side
@@ -204,29 +204,29 @@ public class ModFertility
 			{
 				int mask = seedSeasons.get(name);
 				
-				event.getToolTip().add("Fertile Seasons:");
+				event.getToolTip().add(new StringTextComponent("Fertile Seasons:"));
 				
 				if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
 				{
-					event.getToolTip().add(TextFormatting.LIGHT_PURPLE + " Year-Round");
+					event.getToolTip().add(new StringTextComponent(TextFormatting.LIGHT_PURPLE + " Year-Round"));
 				}
 				else
 				{
 					if ((mask & 1) != 0)
 					{
-						event.getToolTip().add(TextFormatting.GREEN + " Spring");
+						event.getToolTip().add(new StringTextComponent(TextFormatting.GREEN + " Spring"));
 					}
 					if ((mask & 2) != 0)
 					{
-						event.getToolTip().add(TextFormatting.YELLOW + " Summer");
+						event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " Summer"));
 					}
 					if ((mask & 4) != 0)
 					{
-						event.getToolTip().add(TextFormatting.GOLD + " Autumn");
+						event.getToolTip().add(new StringTextComponent(TextFormatting.GOLD + " Autumn"));
 					}
 					if ((mask & 8) != 0)
 					{
-						event.getToolTip().add(TextFormatting.AQUA + " Winter");
+						event.getToolTip().add(new StringTextComponent(TextFormatting.AQUA + " Winter"));
 					}
 				}
 			}

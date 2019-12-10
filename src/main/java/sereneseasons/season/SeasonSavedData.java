@@ -13,6 +13,7 @@ import net.minecraft.world.storage.WorldSavedData;
 public class SeasonSavedData extends WorldSavedData
 {
     public static final String DATA_IDENTIFIER = "seasons";
+    public static final int VERSION = 0;
     
     public int seasonCycleTicks;
     

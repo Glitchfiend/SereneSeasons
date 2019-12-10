@@ -22,12 +22,12 @@ public class SeasonSleepHandler
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.START && event.side == LogicalSide.SERVER.SERVER)
+        if (event.phase == TickEvent.Phase.START && event.side == LogicalSide.SERVER)
         {
             ServerWorld world = (ServerWorld)event.world;
 
             //Called before all players are awoken for the next day
-            if (world.areAllPlayersAsleep())
+            if (world.allPlayersSleeping)
             {
                 SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
                 long timeDiff = 24000L - ((world.getWorldInfo().getDayTime() + 24000L) % 24000L);

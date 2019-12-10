@@ -1,26 +1,19 @@
 package sereneseasons.handler.season;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.FoliageColors;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeColorHelper;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
+
+import javax.annotation.Nullable;
 
 public class BirchColorHandler
 {
@@ -28,35 +21,22 @@ public class BirchColorHandler
     {
 		Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) ->
 		{
-			BlockPlanks.EnumType plankstype = (BlockPlanks.EnumType) state.getValue(BlockOldLeaf.VARIANT);
+			int birchColor = FoliageColors.getBirch();
+			int dimension = Minecraft.getInstance().player.dimension.getId();
 
-			if (plankstype == BlockPlanks.EnumType.SPRUCE)
+			if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
 			{
-				return ColorizerFoliage.getFoliageColorPine();
-			}
-			else if (plankstype == BlockPlanks.EnumType.BIRCH)
-			{
-				int birchColor = ColorizerFoliage.getFoliageColorBirch();
-				int dimension = Minecraft.getMinecraft().player.dimension;
+				Biome biome = worldIn.getBiome(pos);
 
-				if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
+				if (BiomeConfig.enablesSeasonalEffects(biome))
 				{
-					Biome biome = worldIn.getBiome(pos);
-
-					if (BiomeConfig.enablesSeasonalEffects(biome))
-					{
-						SeasonTime calendar = SeasonHandler.getClientSeasonTime();
-						ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-						birchColor = colorProvider.getBirchColor();
-					}
+					SeasonTime calendar = SeasonHandler.getClientSeasonTime();
+					ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+					birchColor = colorProvider.getBirchColor();
 				}
+			}
 
-				return birchColor;
-			}
-			else
-			{
-				return worldIn != null && pos != null ? BiomeColorHelper.getFoliageColorAtPos(worldIn, pos) : ColorizerFoliage.getFoliageColorBasic();
-			}
+			return birchColor;
 		}, Blocks.BIRCH_LEAVES);
     }
 }

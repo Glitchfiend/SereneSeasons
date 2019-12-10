@@ -40,19 +40,6 @@ public class BlockSeasonSensor extends ContainerBlock
 {
     public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
     public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D);
-
-    // implement ITANBlock
-    @Override
-    public Class<? extends ItemBlock> getItemClass() { return ItemSSBlock.class; }
-    @Override
-    public IProperty[] getPresetProperties() { return new IProperty[] {}; }
-    @Override
-    public IProperty[] getNonRenderingProperties() { return new IProperty[] { POWER }; }
-    @Override
-    public String getStateName(IBlockState state)
-    {
-        return type.getName();
-    }
     
     private final DetectorType type;
     

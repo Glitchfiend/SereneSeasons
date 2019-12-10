@@ -11,11 +11,17 @@ import java.util.HashMap;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.world.storage.MapData;
+import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import sereneseasons.api.config.SeasonsOption;
@@ -40,7 +46,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         {
             if (!SyncedConfig.getBooleanValue(SeasonsOption.PROGRESS_SEASON_WHILE_OFFLINE))
             {
-                MinecraftServer server = world.getMinecraftServer();
+                MinecraftServer server = world.getServer();
                 if (server != null && server.getPlayerList().getCurrentPlayerCount() == 0)
                     return;
             }
@@ -62,9 +68,9 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
     
     @SubscribeEvent
-    public void onPlayerLogin(PlayerLoggedInEvent event)
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
-        EntityPlayer player = event.player;
+        PlayerEntity player = event.getPlayer();
         World world = player.world;
         
         sendSeasonUpdate(world);
@@ -82,7 +88,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         //Only do this when in the world
         if (Minecraft.getInstance().player == null) return;
-        DimensionType dimension = Minecraft.getInstance().player.dimension;
+        int dimension = Minecraft.getInstance().player.dimension.getId();
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
@@ -98,7 +104,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             
             if (calendar.getSubSeason() != lastSeason)
             {
-                Minecraft.getInstance().renderGlobal.loadRenderers();
+                Minecraft.getInstance().worldRenderer.loadRenderers();
                 lastSeason = calendar.getSubSeason();
             }
         }
@@ -144,8 +150,11 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public static SeasonSavedData getSeasonSavedData(World world)
     {
-        MapStorage mapStorage = world.getPerWorldStorage();
-        SeasonSavedData savedData = (SeasonSavedData)mapStorage.getOrLoadData(SeasonSavedData.class, SeasonSavedData.DATA_IDENTIFIER);
+        if (!world.isRemote)
+            return null;
+
+        DimensionSavedDataManager saveDataManager = ((ServerWorld)world).getChunkProvider().getSavedData();
+        WorldSavedData mapData = .getOrCreate(SeasonSavedData::new, SeasonSavedData.DATA_IDENTIFIER);
 
         //If the saved data file hasn't been created before, create it
         if (savedData == null)
