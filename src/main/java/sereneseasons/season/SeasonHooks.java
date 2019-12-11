@@ -18,6 +18,15 @@ import net.minecraft.world.LightType;
 
 public class SeasonHooks
 {
+    public float getTemperature(BlockPos pos) {
+        if (pos.getY() > 64) {
+            float f = (float)(TEMPERATURE_NOISE.getValue((double)((float)pos.getX() / 8.0F), (double)((float)pos.getZ() / 8.0F)) * 4.0D);
+            return this.getDefaultTemperature() - (f + (float)pos.getY() - 64.0F) * 0.05F / 30.0F;
+        } else {
+            return this.getDefaultTemperature();
+        }
+    }
+
     public boolean doesWaterFreeze(IWorldReader worldIn, BlockPos water, boolean mustBeAtEdge) {
         if (this.func_225486_c(water) >= 0.15F) {
             return false;

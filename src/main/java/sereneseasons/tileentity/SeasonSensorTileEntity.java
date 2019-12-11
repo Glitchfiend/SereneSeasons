@@ -10,14 +10,15 @@ package sereneseasons.tileentity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.block.BlockSeasonSensor;
 
 public class SeasonSensorTileEntity extends TileEntity implements ITickableTileEntity
 {
-    public SeasonSensorTileEntity(TileEntityType<?> tileEntityTypeIn)
+    public SeasonSensorTileEntity()
     {
-        super(tileEntityTypeIn);
+        super(SSBlocks.season_sensor_tile_entity);
     }
 
     @Override

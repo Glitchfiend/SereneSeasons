@@ -31,14 +31,9 @@ public class SereneSeasons
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 
-        ModHandlers.init();
-
-        proxy.registerRenderers();
-
+        ModHandlers.setup();
         ModConfig.init(configDirectory);
-
-        ModFertility.init();
-        ModHandlers.postInit();
+        ModFertility.setup();
     }
 
     public void serverStarting(FMLServerStartingEvent evt)

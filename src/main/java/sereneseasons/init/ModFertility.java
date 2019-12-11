@@ -38,7 +38,7 @@ public class ModFertility
 	//Maps seed name to all fertile seasons via byte
 	private static HashMap<String, Integer> seedSeasons = new HashMap<String, Integer>();
 
-	public static void init()
+	public static void setup()
 	{
 		//Store crops in hash sets for quick and easy retrieval
 		initSeasonCrops(FertilityConfig.seasonal_fertility.spring_crops, springPlants, 1);

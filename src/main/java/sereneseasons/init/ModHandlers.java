@@ -7,24 +7,16 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.handler.PacketHandler;
-import sereneseasons.handler.season.BirchColorHandler;
-import sereneseasons.handler.season.RandomUpdateHandler;
-import sereneseasons.handler.season.SeasonHandler;
-import sereneseasons.handler.season.SeasonSleepHandler;
-import sereneseasons.handler.season.SeasonalCropGrowthHandler;
+import sereneseasons.handler.season.*;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColorUtil;
 
@@ -32,13 +24,12 @@ public class ModHandlers
 {
     private static final SeasonHandler SEASON_HANDLER = new SeasonHandler();
 
-    public static void init()
+    public static void setup()
     {
         PacketHandler.init();
 
         //Handlers for functionality related to seasons
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
-        MinecraftForge.TERRAIN_GEN_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
         
         MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
@@ -50,6 +41,7 @@ public class ModHandlers
         if (FMLEnvironment.dist == Dist.CLIENT)
         {
             registerSeasonColourHandlers();
+            BirchColorHandler.init();
         }
     }
 
@@ -77,13 +69,5 @@ public class ModHandlers
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
             return SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biome, originalFoliageColorResolver.getColor(biome, blockPosition));
         };
-    }
-    
-    public static void postInit()
-    {
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
-    		BirchColorHandler.init();
-        }
     }
 }

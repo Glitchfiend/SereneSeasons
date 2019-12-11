@@ -7,90 +7,92 @@
  ******************************************************************************/
 package sereneseasons.block;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.DaylightDetectorTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.season.SeasonTime;
-import sereneseasons.tileentity.SeasonSensorTileEntity;
 
 public class BlockSeasonSensor extends ContainerBlock
 {
-    public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
-    public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D);
-    
+    public static final IntegerProperty POWER;
+    protected static final VoxelShape SHAPE;
+
     private final DetectorType type;
-    
-    public BlockSeasonSensor(DetectorType type)
+
+    public BlockSeasonSensor(Properties properties, DetectorType type)
     {
-        super(Material.WOOD);
+        super(properties);
+        this.setDefaultState(this.stateContainer.getBaseState().with(POWER, 0));
         this.type = type;
-        this.setHardness(0.2F);
-        this.setSoundType(SoundType.WOOD);
-        this.setDefaultState( this.blockState.getBaseState().withProperty(POWER, Integer.valueOf(0)) );        
-    }
-    
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return BOUNDING_BOX;
     }
 
     @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext selectionContext)
     {
-        return ((Integer)blockState.getValue(POWER)).intValue();
+        return SHAPE;
+    }
+
+    @Override
+    public boolean func_220074_n(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getWeakPower(BlockState state, IBlockReader reader, BlockPos pos, Direction direction)
+    {
+        return state.get(POWER);
     }
 
     public void updatePower(World world, BlockPos pos)
     {
-        if (SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+        BlockState state = world.getBlockState(pos);
+
+        if (SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
         {
-            IBlockState currentState = world.getBlockState(pos);
+            BlockState currentState = world.getBlockState(pos);
 
             int power = 0;
             int startTicks = this.type.ordinal() * SeasonTime.ZERO.getSeasonDuration();
             int endTicks = (this.type.ordinal() + 1) * SeasonTime.ZERO.getSeasonDuration();
             int currentTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
-            
+
             if (currentTicks >= startTicks && currentTicks <= endTicks)
             {
                 float delta = (float)(currentTicks - startTicks) / (float)SeasonTime.ZERO.getSeasonDuration();
                 power = (int)Math.min(delta * 15.0F + 1.0F, 15.0F);
             }
-            
+
             //Only update the state if the power level has actually changed
-            if (((Integer)currentState.getValue(POWER)).intValue() != power)
+            if ((currentState.get(POWER)).intValue() != power)
             {
-                world.setBlockState(pos, currentState.withProperty(POWER, Integer.valueOf(power)), 3);
+                world.setBlockState(pos, currentState.with(POWER, Integer.valueOf(power)), 3);
             }
         }
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
     {
         if (player.isAllowEdit())
         {
@@ -101,73 +103,48 @@ public class BlockSeasonSensor extends ContainerBlock
             else
             {
                 Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
-                world.setBlockState(pos, nextBlock.getDefaultState().withProperty(POWER, state.getValue(POWER)), 4);
+                world.setBlockState(pos, nextBlock.getDefaultState().with(POWER, state.get(POWER)), 4);
                 ((BlockSeasonSensor)nextBlock).updatePower(world, pos);
                 return true;
             }
         }
         else
         {
-            return super.onBlockActivated(world, pos, state, player, hand, side, hitX, hitY, hitZ);
+            return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
         }
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    public BlockRenderType getRenderType(BlockState state)
     {
-        return Item.getItemFromBlock(SSBlocks.season_sensors[0]);
+        return BlockRenderType.MODEL;
     }
 
     @Override
-    public boolean isFullCube(IBlockState state)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
-        return EnumBlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean canProvidePower(IBlockState state)
+    public boolean canProvidePower(BlockState state)
     {
         return true;
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int meta)
+    public TileEntity createNewTileEntity(IBlockReader reader)
     {
-        return new SeasonSensorTileEntity();
+        return new DaylightDetectorTileEntity();
     }
 
-    // map from state to meta and vice verca
     @Override
-    public IBlockState getStateFromMeta(int meta)
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        return this.getDefaultState().withProperty(POWER, meta);
+        builder.add(new IProperty[]{POWER});
     }
-    
-    @Override
-    public int getMetaFromState(IBlockState state)
+
+    static
     {
-        return state.getValue(POWER);
+        POWER = BlockStateProperties.POWER_0_15;
+        SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
     }
-    
-    @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] { POWER });
-    }
-    
-    public static enum DetectorType implements IStringSerializable
+
+    public enum DetectorType implements IStringSerializable
     {
         SPRING, SUMMER, AUTUMN, WINTER;
         @Override
