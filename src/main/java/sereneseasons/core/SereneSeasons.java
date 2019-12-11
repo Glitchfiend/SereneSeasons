@@ -26,7 +26,7 @@ import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModHandlers;
 import sereneseasons.init.ModItems;
 
-@Mod(modid = SereneSeasons.MOD_ID, version = SereneSeasons.MOD_VERSION, name = SereneSeasons.MOD_NAME, dependencies = "required-after:AppleCore")
+@Mod(modid = SereneSeasons.MOD_ID, version = SereneSeasons.MOD_VERSION, name = SereneSeasons.MOD_NAME)
 public class SereneSeasons
 {
     public static final String MOD_NAME = "Serene Seasons";

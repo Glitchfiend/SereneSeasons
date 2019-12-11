@@ -43,16 +43,7 @@ configurations {
 	compile.extendsFrom buildDep, shade, shadeClient
 }
 
-repositories {
-	maven
-	{
-		name = "applecore"
-		url = "http://www.ryanliptak.com/maven/"
-	}
-}
-
 dependencies {
-	compile "applecore:AppleCore:1.7.10-3.1.1:deobf"
 	shade group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
 	shadeClient group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
 }
