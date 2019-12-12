@@ -42,7 +42,7 @@ public class SeasonASMHelper
     {
         BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
         IBiomeMixin biomeMixin = (IBiomeMixin) biome;
-        float temperature = biomeMixin.getFloatTemperatureOld(x,  y,  z);
+        float temperature = biomeMixin.getFloatTemperatureOld(x, y, z);
 
         if (BiomeConfig.enablesSeasonalEffects(biome) && !useUnmodifiedTemperature && SeasonsConfig.isDimensionWhitelisted(world.provider.dimensionId))
         {
@@ -60,7 +60,7 @@ public class SeasonASMHelper
         }
         else if (biome.temperature >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
-        	return false;
+            return false;
         }
         else if (checkLight)
         {
@@ -76,15 +76,15 @@ public class SeasonASMHelper
 
             return false;
         }
-        
+
         return true;
     }
-    
+
     public static boolean canBlockFreezeInSeason(World world, int x, int y, int z, boolean noWaterAdj, @Nullable ISeasonState seasonState)
     {
         return canBlockFreezeInSeason(world, x, y, z, noWaterAdj, seasonState, false);
     }
-    
+
     public static boolean canBlockFreezeInSeason(World world, int x, int y, int z, boolean noWaterAdj, @Nullable ISeasonState seasonState, boolean useUnmodifiedTemperature)
     {
         BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
@@ -107,11 +107,11 @@ public class SeasonASMHelper
         }
         else if (biome.temperature >= 0.15F && !ModConfig.seasons.generateSnowAndIce)
         {
-        	return false;
+            return false;
         }
         else
         {
-            if (y>= 0 && y < 256 && world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, x, y, z) < 10)
+            if (y >= 0 && y < 256 && world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, x, y, z) < 10)
             {
                 Block block = world.getBlock(x, y, z);
                 int meta = world.getBlockMetadata(x, y, z);
@@ -135,7 +135,7 @@ public class SeasonASMHelper
             return false;
         }
     }
-    
+
     private static boolean isWater(IBlockAccess world, int x, int y, int z)
     {
         return world.getBlock(x, y, z).getMaterial() == Material.water;
@@ -152,14 +152,14 @@ public class SeasonASMHelper
 
             switch ((Season.TropicalSeason) tropicalSeason)
             {
-	            case MID_DRY:
-	            	return false;
-	            	
-	            case MID_WET:
-	            	return true;
-	            	
-	            default:
-	            	return biome.enableRain;
+            case MID_DRY:
+                return false;
+
+            case MID_WET:
+                return true;
+
+            default:
+                return biome.enableRain;
             }
         }
 
@@ -170,7 +170,7 @@ public class SeasonASMHelper
 
         return biome.enableRain;
     }
-    
+
     ///////////////////
     // Biome methods //
     ///////////////////
@@ -182,7 +182,7 @@ public class SeasonASMHelper
             IBiomeMixin biomeMixin = (IBiomeMixin) biome;
             return biomeMixin.getFloatTemperatureOld(x, y, z);
         }
-    	
+
         return getFloatTemperature(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), biome, x, y, z);
     }
 
@@ -194,29 +194,34 @@ public class SeasonASMHelper
 
         if (!tropicalBiome && biome.temperature <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
         {
-	        switch (subSeason)
-	        {
-	        	default:
-	        		break;
-	        
-		        case LATE_SPRING: case EARLY_AUTUMN:
-		    		biomeTemp = MathHelper.clamp_float(biomeTemp - 0.1F, -0.5F, 2.0F);
-		    		break;
-	        
-		        case MID_SPRING: case MID_AUTUMN:
-		    		biomeTemp = MathHelper.clamp_float(biomeTemp - 0.2F, -0.5F, 2.0F);
-		    		break;
-	        
-	        	case EARLY_SPRING: case LATE_AUTUMN:
-		    		biomeTemp = MathHelper.clamp_float(biomeTemp - 0.4F, -0.5F, 2.0F);
-		    		break;
-	    		
-	        	case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
-		    		biomeTemp = MathHelper.clamp_float(biomeTemp - 0.8F, -0.5F, 2.0F);
-	        		break;
-	        }
+            switch (subSeason)
+            {
+            default:
+                break;
+
+            case LATE_SPRING:
+            case EARLY_AUTUMN:
+                biomeTemp = MathHelper.clamp_float(biomeTemp - 0.1F, -0.5F, 2.0F);
+                break;
+
+            case MID_SPRING:
+            case MID_AUTUMN:
+                biomeTemp = MathHelper.clamp_float(biomeTemp - 0.2F, -0.5F, 2.0F);
+                break;
+
+            case EARLY_SPRING:
+            case LATE_AUTUMN:
+                biomeTemp = MathHelper.clamp_float(biomeTemp - 0.4F, -0.5F, 2.0F);
+                break;
+
+            case EARLY_WINTER:
+            case MID_WINTER:
+            case LATE_WINTER:
+                biomeTemp = MathHelper.clamp_float(biomeTemp - 0.8F, -0.5F, 2.0F);
+                break;
+            }
         }
-        
+
         return biomeTemp;
     }
 
@@ -233,14 +238,14 @@ public class SeasonASMHelper
 
             switch ((Season.TropicalSeason) tropicalSeason)
             {
-	            case MID_DRY:
-	            	return false;
-	            	
-	            case MID_WET:
-	            	return true;
-	            	
-	            default:
-	            	return biome.enableRain || biomeMixin.getEnableSnowOld();
+            case MID_DRY:
+                return false;
+
+            case MID_WET:
+                return true;
+
+            default:
+                return biome.enableRain || biomeMixin.getEnableSnowOld();
             }
         }
 
@@ -255,14 +260,14 @@ public class SeasonASMHelper
 
             switch ((Season.TropicalSeason) tropicalSeason)
             {
-	            case MID_DRY:
-	            	return false;
-	            	
-	            case MID_WET:
-	            	return true;
-	            	
-	            default:
-	            	return biome.enableRain;
+            case MID_DRY:
+                return false;
+
+            case MID_WET:
+                return true;
+
+            default:
+                return biome.enableRain;
             }
         }
 

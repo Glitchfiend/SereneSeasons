@@ -2,9 +2,9 @@ package sereneseasons.asm;
 
 public interface IBiomeMixin
 {
-	public boolean canSpawnLightningBoltOld();
+    public boolean canSpawnLightningBoltOld();
 
-	public boolean getEnableSnowOld();
+    public boolean getEnableSnowOld();
 
-	public float getFloatTemperatureOld(int x, int y, int z);
+    public float getFloatTemperatureOld(int x, int y, int z);
 }

@@ -1,20 +1,20 @@
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
-		}
-	}
-	dependencies {
-		classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
-	}
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
+    }
 }
 
 repositories {
-	maven {
-		url = "http://repo.spongepowered.org/maven/"
-	}
+    maven {
+        url = "http://repo.spongepowered.org/maven/"
+    }
 }
 
 apply plugin: "forge"
@@ -29,55 +29,55 @@ targetCompatibility = 1.8
 version = mod_version
 
 minecraft {
-	version = "1.7.10-10.13.4.1558-1.7.10"
-	replace '@MOD_VERSION@', mod_version
-	replace '1.0.0.0', forge_version
-	replaceIn 'SereneSeasons.java'
-	runDir = "rundir"
+    version = "1.7.10-10.13.4.1558-1.7.10"
+    replace '@MOD_VERSION@', mod_version
+    replace '1.0.0.0', forge_version
+    replaceIn 'SereneSeasons.java'
+    runDir = "rundir"
 }
 
 configurations {
-	shade
-	shadeClient
-	buildDep
-	compile.extendsFrom buildDep, shade, shadeClient
+    shade
+    shadeClient
+    buildDep
+    compile.extendsFrom buildDep, shade, shadeClient
 }
 
 dependencies {
-	shade group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
-	shadeClient group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
+    shade group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
+    shadeClient group: "org.spongepowered", name: "mixin", version: "0.7-SNAPSHOT", changing: true
 }
 
 def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + "mixins.seasons.refmap.json"
 
 jar {
-	appendix = minecraft.version
+    appendix = minecraft.version
 
-	from refMap
+    from refMap
 
-	configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
-		from (zipTree(artifact))
-	}
+    configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
+        from (zipTree(artifact))
+    }
 
-	manifest {
-		attributes (
-			"FMLCorePluginContainsFMLMod": "true",
-			"FMLCorePlugin": 'sereneseasons.asm.SSLoadingPlugin',
-			"ForceLoadAsMod": "true",
-			"TweakOrder": "0",
-			"MixinConfigs": "mixins.seasons.json",
-			"TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-			"FMLAT": 'sereneseasons_at.cfg'
-		)
-	}
+    manifest {
+        attributes (
+            "FMLCorePluginContainsFMLMod": "true",
+            "FMLCorePlugin": 'sereneseasons.asm.SSLoadingPlugin',
+            "ForceLoadAsMod": "true",
+            "TweakOrder": "0",
+            "MixinConfigs": "mixins.seasons.json",
+            "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+            "FMLAT": 'sereneseasons_at.cfg'
+        )
+    }
 }
 
 def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
 
 reobf {
-	addExtraSrgFile mixinSrg
+    addExtraSrgFile mixinSrg
 }
 
 afterEvaluate {
-	tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${mixinSrg}", "-AoutRefMapFile=${refMap}"]
+    tasks.compileJava.options.compilerArgs += ["-AreobfSrgFile=${tasks.reobf.srg}", "-AoutSrgFile=${mixinSrg}", "-AoutRefMapFile=${refMap}"]
 }

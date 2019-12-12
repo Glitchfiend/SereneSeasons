@@ -35,7 +35,10 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
 {
     // implement ITANBlock
     @Override
-    public Class<? extends ItemBlock> getItemClass() { return ItemSSBlock.class; }
+    public Class<? extends ItemBlock> getItemClass()
+    {
+        return ItemSSBlock.class;
+    }
 
     private final DetectorType type;
 
@@ -55,7 +58,7 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
     @Override
     public void registerBlockIcons(IIconRegister ir)
     {
-        switch(type)
+        switch (type)
         {
         case SPRING:
             this.iconTop = ir.registerIcon(SereneSeasons.MOD_ID + ":season_sensor_spring_top");
@@ -72,7 +75,7 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
         }
         this.iconSide = ir.registerIcon(SereneSeasons.MOD_ID + ":season_sensor_side");
     }
-    
+
     @Override
     public IIcon getIcon(int i, int m)
     {
@@ -97,14 +100,14 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
             int startTicks = this.type.ordinal() * SeasonTime.ZERO.getSeasonDuration();
             int endTicks = (this.type.ordinal() + 1) * SeasonTime.ZERO.getSeasonDuration();
             int currentTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
-            
+
             if (currentTicks >= startTicks && currentTicks <= endTicks)
             {
-                float delta = (float)(currentTicks - startTicks) / (float)SeasonTime.ZERO.getSeasonDuration();
-                power = (int)Math.min(delta * 15.0F + 1.0F, 15.0F);
+                float delta = (float) (currentTicks - startTicks) / (float) SeasonTime.ZERO.getSeasonDuration();
+                power = (int) Math.min(delta * 15.0F + 1.0F, 15.0F);
             }
-            
-            //Only update the state if the power level has actually changed
+
+            // Only update the state if the power level has actually changed
             if (meta != power)
             {
                 world.setBlockMetadataWithNotify(x, y, z, power, 3);
@@ -123,7 +126,7 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
         {
             Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
             world.setBlock(x, y, z, nextBlock);
-            ((BlockSeasonSensor)nextBlock).updatePower(world, x, y, z);
+            ((BlockSeasonSensor) nextBlock).updatePower(world, x, y, z);
             return true;
         }
     }
@@ -151,14 +154,16 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
     {
         return new TileEntitySeasonSensor();
     }
-    
+
     public static enum DetectorType
     {
         SPRING, SUMMER, AUTUMN, WINTER;
+
         public String getName()
         {
             return this.name().toLowerCase();
         }
+
         @Override
         public String toString()
         {

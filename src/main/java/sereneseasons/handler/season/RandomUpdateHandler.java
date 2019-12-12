@@ -30,134 +30,134 @@ import sereneseasons.season.SeasonASMHelper;
 
 public class RandomUpdateHandler
 {
-	void turnIntoWater(World worldIn, int x, int y, int z)
-	{
-		if (worldIn.provider.isHellWorld)
-		{
-			worldIn.setBlockToAir(x, y, z);
-		}
-		else
-		{
-			worldIn.setBlock(x, y, z, Blocks.water);
-			worldIn.notifyBlockOfNeighborChange(x, y, z, Blocks.water);
-		}
-	}
+    void turnIntoWater(World worldIn, int x, int y, int z)
+    {
+        if (worldIn.provider.isHellWorld)
+        {
+            worldIn.setBlockToAir(x, y, z);
+        }
+        else
+        {
+            worldIn.setBlock(x, y, z, Blocks.water);
+            worldIn.notifyBlockOfNeighborChange(x, y, z, Blocks.water);
+        }
+    }
 
-	//Randomly melt ice and snow when it isn't winter
-	@SubscribeEvent
-	public void onWorldTick(TickEvent.WorldTickEvent event)
-	{
-		if (event.phase == Phase.END && event.side == Side.SERVER)
-		{
+    // Randomly melt ice and snow when it isn't winter
+    @SubscribeEvent
+    public void onWorldTick(TickEvent.WorldTickEvent event)
+    {
+        if (event.phase == Phase.END && event.side == Side.SERVER)
+        {
 
-			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
-			Season season = subSeason.getSeason();
+            Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
+            Season season = subSeason.getSeason();
 
-			if (season == Season.WINTER)
-			{
-				if (ModConfig.seasons.changeWeatherFrequency)
-				{
-					if (event.world.getWorldInfo().isThundering())
-					{
-						event.world.getWorldInfo().setThundering(false);
-					}
-					if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000)
-					{
-						event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(24000) + 12000);
-					}
-				}
-			}
-			else
-			{
-				if (ModConfig.seasons.changeWeatherFrequency)
-				{
-					if (season == Season.SPRING)
-					{
-						if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 96000)
-						{
-							event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(84000) + 12000);
-						}
-					}
-					else if (season == Season.SUMMER)
-					{
-						if (!event.world.getWorldInfo().isThundering() && event.world.getWorldInfo().getThunderTime() > 36000)
-						{
-							event.world.getWorldInfo().setThunderTime(event.world.rand.nextInt(24000) + 12000);
-						}
-					}
-				}
+            if (season == Season.WINTER)
+            {
+                if (ModConfig.seasons.changeWeatherFrequency)
+                {
+                    if (event.world.getWorldInfo().isThundering())
+                    {
+                        event.world.getWorldInfo().setThundering(false);
+                    }
+                    if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000)
+                    {
+                        event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(24000) + 12000);
+                    }
+                }
+            }
+            else
+            {
+                if (ModConfig.seasons.changeWeatherFrequency)
+                {
+                    if (season == Season.SPRING)
+                    {
+                        if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 96000)
+                        {
+                            event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(84000) + 12000);
+                        }
+                    }
+                    else if (season == Season.SUMMER)
+                    {
+                        if (!event.world.getWorldInfo().isThundering() && event.world.getWorldInfo().getThunderTime() > 36000)
+                        {
+                            event.world.getWorldInfo().setThunderTime(event.world.rand.nextInt(24000) + 12000);
+                        }
+                    }
+                }
 
-				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.dimensionId))
-				{
-					WorldServer world = (WorldServer)event.world;
-					List chunks = new ArrayList(world.theChunkProviderServer.loadedChunks);
-					for (Iterator<Chunk> iterator = chunks.iterator(); iterator.hasNext();)
-					{
-						Chunk chunk = iterator.next();
-						int x = chunk.xPosition << 4;
-						int z = chunk.zPosition << 4;
+                if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.provider.dimensionId))
+                {
+                    WorldServer world = (WorldServer) event.world;
+                    List chunks = new ArrayList(world.theChunkProviderServer.loadedChunks);
+                    for (Iterator<Chunk> iterator = chunks.iterator(); iterator.hasNext();)
+                    {
+                        Chunk chunk = iterator.next();
+                        int x = chunk.xPosition << 4;
+                        int z = chunk.zPosition << 4;
 
-						int rand;
-						switch (subSeason)
-						{
-							case EARLY_SPRING:
-								rand = 16;
-								break;
-							case MID_SPRING:
-								rand = 12;
-								break;
-							case LATE_SPRING:
-								rand = 8;
-								break;
-							default:
-								rand = 4;
-								break;
-						}
+                        int rand;
+                        switch (subSeason)
+                        {
+                        case EARLY_SPRING:
+                            rand = 16;
+                            break;
+                        case MID_SPRING:
+                            rand = 12;
+                            break;
+                        case LATE_SPRING:
+                            rand = 8;
+                            break;
+                        default:
+                            rand = 4;
+                            break;
+                        }
 
-						if (world.rand.nextInt(rand) == 0)
-						{
-							world.updateLCG = world.updateLCG * 3 + 1013904223;
-							int randOffset = world.updateLCG >> 2;
-							x += randOffset & 15;
-							z += randOffset >> 8 & 15;
-							int yMax = world.getPrecipitationHeight(x, z);
-							BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+                        if (world.rand.nextInt(rand) == 0)
+                        {
+                            world.updateLCG = world.updateLCG * 3 + 1013904223;
+                            int randOffset = world.updateLCG >> 2;
+                            x += randOffset & 15;
+                            z += randOffset >> 8 & 15;
+                            int yMax = world.getPrecipitationHeight(x, z);
+                            BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 
-							if(!BiomeConfig.enablesSeasonalEffects(biome))
-								continue;
+                            if (!BiomeConfig.enablesSeasonalEffects(biome))
+                                continue;
 
-							boolean first = true;
-							for (int y = yMax; y >= 0; y--)
-							{
-								Block block = chunk.getBlock(x & 0xF, y, z & 0xF);
+                            boolean first = true;
+                            for (int y = yMax; y >= 0; y--)
+                            {
+                                Block block = chunk.getBlock(x & 0xF, y, z & 0xF);
 
-								if (block == Blocks.snow_layer)
-								{
-									if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
-									{
-										world.setBlockToAir(x, y, z);
-										break;
-									}
-								}
+                                if (block == Blocks.snow_layer)
+                                {
+                                    if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
+                                    {
+                                        world.setBlockToAir(x, y, z);
+                                        break;
+                                    }
+                                }
 
-								if(!first)
-								{
-									if(block == Blocks.ice)
-									{
-										if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
-										{
-											turnIntoWater(world, x, y, z);
-											break;
-										}
-									}
-								}
-								else
-									first = false;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                                if (!first)
+                                {
+                                    if (block == Blocks.ice)
+                                    {
+                                        if (SeasonASMHelper.getFloatTemperature(world, biome, x, y, z) >= 0.15F)
+                                        {
+                                            turnIntoWater(world, x, y, z);
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                    first = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

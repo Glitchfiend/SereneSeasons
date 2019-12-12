@@ -9,9 +9,10 @@ package sereneseasons.season;
 
 import sereneseasons.api.season.Season;
 
-/** Now with extra seasoning*/
-public interface ISeasonedWorld 
+/** Now with extra seasoning */
+public interface ISeasonedWorld
 {
     boolean canSnowAtInSeason(int x, int y, int z, boolean checkLight, Season season);
+
     boolean canBlockFreezeInSeason(int x, int y, int z, boolean noWaterAdj, Season season);
 }

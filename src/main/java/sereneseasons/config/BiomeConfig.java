@@ -15,23 +15,22 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class BiomeConfig
 {
-	public static void init(File configDir)
-	{
+    public static void init(File configDir)
+    {
+    }
 
-	}
+    public static boolean enablesSeasonalEffects(BiomeGenBase biome)
+    {
+        return true;
+    }
 
-	public static boolean enablesSeasonalEffects(BiomeGenBase biome)
-	{
-		return true;
-	}
+    public static boolean usesTropicalSeasons(BiomeGenBase biome)
+    {
+        return BiomeDictionary.isBiomeOfType(biome, Type.SANDY);
+    }
 
-	public static boolean usesTropicalSeasons(BiomeGenBase biome)
-	{
-		return BiomeDictionary.isBiomeOfType(biome, Type.SANDY);
-	}
-
-	public static boolean disablesCrops(BiomeGenBase biome)
-	{
-		return BiomeDictionary.isBiomeOfType(biome, Type.DEAD) || BiomeDictionary.isBiomeOfType(biome, Type.WASTELAND);
-	}
+    public static boolean disablesCrops(BiomeGenBase biome)
+    {
+        return BiomeDictionary.isBiomeOfType(biome, Type.DEAD) || BiomeDictionary.isBiomeOfType(biome, Type.WASTELAND);
+    }
 }

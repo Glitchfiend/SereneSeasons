@@ -9,8 +9,8 @@ import sereneseasons.handler.season.SeasonalCropGrowthHandler;
 
 public class Hooks
 {
-	public static Result fireAllowPlantGrowthEvent(Block block, World world, int x, int y, int z, Random random)
-	{
-		return SeasonalCropGrowthHandler.onCropGrowth(block, world, x, y, z);
-	}
+    public static Result fireAllowPlantGrowthEvent(Block block, World world, int x, int y, int z, Random random)
+    {
+        return SeasonalCropGrowthHandler.onCropGrowth(block, world, x, y, z);
+    }
 }

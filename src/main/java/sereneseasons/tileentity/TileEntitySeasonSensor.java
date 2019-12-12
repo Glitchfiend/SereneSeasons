@@ -18,7 +18,7 @@ public class TileEntitySeasonSensor extends TileEntity
     {
         if (this.worldObj != null && !this.worldObj.isRemote && SeasonHelper.getSeasonState(this.worldObj).getSeasonCycleTicks() % 20L == 0L)
         {
-            ((BlockSeasonSensor)this.getBlockType()).updatePower(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            ((BlockSeasonSensor) this.getBlockType()).updatePower(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
         }
     }
 }
