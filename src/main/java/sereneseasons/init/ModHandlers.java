@@ -41,7 +41,6 @@ public class ModHandlers
         if (FMLEnvironment.dist == Dist.CLIENT)
         {
             registerSeasonColourHandlers();
-            BirchColorHandler.init();
         }
     }
 

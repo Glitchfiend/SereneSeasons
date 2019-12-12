@@ -154,7 +154,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public static SeasonSavedData getSeasonSavedData(World world)
     {
-        if (!world.isRemote)
+        if (world.isRemote)
             return null;
 
         DimensionSavedDataManager saveDataManager = ((ServerWorld)world).getChunkProvider().getSavedData();

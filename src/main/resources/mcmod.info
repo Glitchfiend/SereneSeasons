@@ -1,9 +1,0 @@
-[{
-    "modid": "sereneseasons",
-    "name": "Serene Seasons",
-    "description": "Adds seasons with changing colors, temperature shifting, and more!",
-    "version": "${mod_version}",
-    "mcversion": "${minecraft_version}",
-    "authorList": ["Adubbz", "Forstride"],
-    "logoFile": "assets/sereneseasons/textures/gui/logo.png"
-}]

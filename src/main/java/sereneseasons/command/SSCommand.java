@@ -9,7 +9,7 @@ public class SSCommand
     public SSCommand(CommandDispatcher<CommandSource> dispatcher)
     {
         dispatcher.register(
-            LiteralArgumentBuilder.<CommandSource>literal("bop")
+            LiteralArgumentBuilder.<CommandSource>literal("ss")
                 .requires(cs -> cs.hasPermissionLevel(2))
                 .then(CommandSetSeason.register())
         );

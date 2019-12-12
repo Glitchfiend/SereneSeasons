@@ -7,6 +7,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.FoliageColors;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
@@ -19,24 +21,27 @@ public class BirchColorHandler
 {
 	public static void init()
     {
-		Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) ->
+		if (FMLEnvironment.dist == Dist.CLIENT)
 		{
-			int birchColor = FoliageColors.getBirch();
-			int dimension = Minecraft.getInstance().player.dimension.getId();
-
-			if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
+			Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) ->
 			{
-				Biome biome = worldIn.getBiome(pos);
+				int birchColor = FoliageColors.getBirch();
+				int dimension = Minecraft.getInstance().player.dimension.getId();
 
-				if (BiomeConfig.enablesSeasonalEffects(biome))
+				if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
 				{
-					SeasonTime calendar = SeasonHandler.getClientSeasonTime();
-					ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-					birchColor = colorProvider.getBirchColor();
-				}
-			}
+					Biome biome = worldIn.getBiome(pos);
 
-			return birchColor;
-		}, Blocks.BIRCH_LEAVES);
+					if (BiomeConfig.enablesSeasonalEffects(biome))
+					{
+						SeasonTime calendar = SeasonHandler.getClientSeasonTime();
+						ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+						birchColor = colorProvider.getBirchColor();
+					}
+				}
+
+				return birchColor;
+			}, Blocks.BIRCH_LEAVES);
+		}
     }
 }

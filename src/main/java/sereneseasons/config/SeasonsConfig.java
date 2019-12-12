@@ -27,7 +27,7 @@ public class SeasonsConfig extends ConfigHandler
     public boolean changeFoliageColour = true;
     public boolean changeBirchColour = true;
     
-    public String[] whitelistedDimensions;
+    public String[] whitelistedDimensions = new String[] { "0" };
 
     public SeasonsConfig(File configFile)
     {

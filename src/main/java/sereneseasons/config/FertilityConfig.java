@@ -45,8 +45,6 @@ public class FertilityConfig
 			"harvestcraft:flaxitem", "harvestcraft:jicamaitem", "harvestcraft:kohlrabiitem", "harvestcraft:lentilitem", "harvestcraft:quinoaitem",
 			"harvestcraft:chickpeaseeditem", "harvestcraft:flaxseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
 			"harvestcraft:lentilseeditem", "harvestcraft:quinoaseeditem",
-			
-			"growthcraft_rice:rice", "growthcraft_rice:riceCrop"
 		};
 		
 //		@Config.Comment({"Crops growable in Summer (List either the seed item for the crop, or the crop block itself)"})
@@ -78,9 +76,6 @@ public class FertilityConfig
 			"harvestcraft:amaranthseeditem", "harvestcraft:cassavaseeditem", "harvestcraft:greengrapeseeditem", "harvestcraft:juteseeditem",
 			"harvestcraft:kenafseeditem", "harvestcraft:kohlrabiseeditem", "harvestcraft:milletseeditem", "harvestcraft:mulberryseeditem",
 			"harvestcraft:sisalseeditem", "harvestcraft:taroseeditem",
-			
-			"growthcraft_apples:apple_crop", "growthcraft_apples:apple_sapling", "growthcraft_apples:apple_leaves", "growthcraft_hops:hop_seeds",
-			"growthcraft_hops:hops", "growthcraft_milk:thistle_seed", "growthcraft_milk:thistle", "growthcraft_rice:rice", "growthcraft_rice:riceCrop"
 		};
 		
 //		@Config.Comment({"Crops growable in Autumn (List either the seed item for the crop, or the crop block itself)"})
@@ -103,11 +98,6 @@ public class FertilityConfig
 			"harvestcraft:quinoaitem", "harvestcraft:amaranthseeditem", "harvestcraft:arrowrootseeditem", "harvestcraft:elderberryseeditem",
 			"harvestcraft:greengrapeseeditem", "harvestcraft:huckleberryseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
 			"harvestcraft:quinoaseeditem",
-			
-			"growthcraft_apples:apple_crop", "growthcraft_apples:apple_sapling", "growthcraft_apples:apple_leaves", "growthcraft_grapes:grape_seed",
-			"growthcraft_grapes:native_grape_vine0", "growthcraft_grapes:native_grape_vine1", "growthcraft_grapes:native_grape_vine_leaves",
-			"growthcraft_hops:hop_seeds", "growthcraft_hops:hops", "growthcraft_milk:thistle_seed", "growthcraft_milk:thistle", "growthcraft_rice:rice",
-			"growthcraft_rice:riceCrop"
 		};
 		
 //		@Config.Comment({"Crops growable in Winter (List either the seed item for the crop, or the crop block itself)"})

@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[24,)"
+issueTrackerURL="https://github.com/Glitchfiend/SereneSeasons/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/serene-seasons"
+logoFile="assets/sereneseasons/textures/gui/logo.png"
+
+[[mods]]
+    modId="sereneseasons"
+    version="${version}"
+    displayName="Serene Seasons"
+	authors="Forstride, Adubbz"
+    description='''
+    Adds seasons with changing colors, temperature shifting, and more!
+    '''
+
+[[dependencies.sereneseasons]]
+    modId="forge"
+    mandatory=true
+    versionRange="[24,)"
+    ordering="NONE"
+    side="BOTH"
