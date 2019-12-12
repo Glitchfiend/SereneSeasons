@@ -38,6 +38,6 @@ public class SereneSeasons
 
     public void serverStarting(FMLServerStartingEvent evt)
     {
-        event.registerServerCommand(new SSCommand());
+        new SSCommand(evt.getCommandDispatcher());
     }
 }

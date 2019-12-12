@@ -8,6 +8,7 @@
 package sereneseasons.handler.season;
 
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -24,6 +25,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.PacketDistributor;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
@@ -110,41 +113,42 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         }
     }
 
-    @SubscribeEvent
-    public void onPopulateChunk(PopulateChunkEvent.Populate event)
-    {
-        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE || !SeasonsConfig.isDimensionWhitelisted(event.getWorld().provider.getDimension()))
-            return;
-
-        event.setResult(Event.Result.DENY);
-        BlockPos blockpos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16).add(8, 0, 8);
-        
-        for (int k2 = 0; k2 < 16; ++k2)
-        {
-            for (int j3 = 0; j3 < 16; ++j3)
-            {
-                BlockPos blockpos1 = event.getWorld().getPrecipitationHeight(blockpos.add(k2, 0, j3));
-                BlockPos blockpos2 = blockpos1.down();
-
-                if (SeasonASMHelper.canBlockFreezeInSeason(event.getWorld(), blockpos2, false, SeasonHelper.getSeasonState(event.getWorld()), true))
-                {
-                    event.getWorld().setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
-                }
-
-                if (SeasonASMHelper.canSnowAtInSeason(event.getWorld(), blockpos1, true, SeasonHelper.getSeasonState(event.getWorld()), true))
-                {
-                    event.getWorld().setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState(), 2);
-                }
-            }
-        }
-    }
+    // TODO: Chunk population. See ChunkStatus
+//    @SubscribeEvent
+//    public void onPopulateChunk(PopulateChunkEvent.Populate event)
+//    {
+//        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE || !SeasonsConfig.isDimensionWhitelisted(event.getWorld().provider.getDimension()))
+//            return;
+//
+//        event.setResult(Event.Result.DENY);
+//        BlockPos blockpos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16).add(8, 0, 8);
+//
+//        for (int k2 = 0; k2 < 16; ++k2)
+//        {
+//            for (int j3 = 0; j3 < 16; ++j3)
+//            {
+//                BlockPos blockpos1 = event.getWorld().getPrecipitationHeight(blockpos.add(k2, 0, j3));
+//                BlockPos blockpos2 = blockpos1.down();
+//
+//                if (SeasonASMHelper.canBlockFreezeInSeason(event.getWorld(), blockpos2, false, SeasonHelper.getSeasonState(event.getWorld()), true))
+//                {
+//                    event.getWorld().setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
+//                }
+//
+//                if (SeasonASMHelper.canSnowAtInSeason(event.getWorld(), blockpos1, true, SeasonHelper.getSeasonState(event.getWorld()), true))
+//                {
+//                    event.getWorld().setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState(), 2);
+//                }
+//            }
+//        }
+//    }
     
     public static void sendSeasonUpdate(World world)
     {
         if (!world.isRemote)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
-            PacketHandler.instance.sendToAll(new MessageSyncSeasonCycle(world.provider.getDimension(), savedData.seasonCycleTicks));
+            PacketHandler.HANDLER.send(PacketDistributor.ALL.noArg(), new MessageSyncSeasonCycle(world.getDimension().getType().getId(), savedData.seasonCycleTicks));
         }
     }
     
@@ -154,29 +158,27 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             return null;
 
         DimensionSavedDataManager saveDataManager = ((ServerWorld)world).getChunkProvider().getSavedData();
-        WorldSavedData mapData = .getOrCreate(SeasonSavedData::new, SeasonSavedData.DATA_IDENTIFIER);
 
-        //If the saved data file hasn't been created before, create it
-        if (savedData == null)
+        Supplier<SeasonSavedData> defaultSaveDataSupplier = () ->
         {
-            savedData = new SeasonSavedData(SeasonSavedData.DATA_IDENTIFIER);
-            
+            SeasonSavedData savedData = new SeasonSavedData(SeasonSavedData.DATA_IDENTIFIER);
+
             int startingSeason = SyncedConfig.getIntValue(SeasonsOption.STARTING_SUB_SEASON);
-            
+
             if (startingSeason == 0)
             {
-            	savedData.seasonCycleTicks = (world.rand.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
+                savedData.seasonCycleTicks = (world.rand.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
             }
             if (startingSeason > 0)
             {
-            	savedData.seasonCycleTicks = (startingSeason - 1) * SeasonTime.ZERO.getSubSeasonDuration();
+                savedData.seasonCycleTicks = (startingSeason - 1) * SeasonTime.ZERO.getSubSeasonDuration();
             }
-            
-            mapStorage.setData(SeasonSavedData.DATA_IDENTIFIER, savedData);
+
             savedData.markDirty(); //Mark for saving
-        }
-        
-        return savedData;
+            return savedData;
+        };
+
+        return (SeasonSavedData)saveDataManager.getOrCreate(defaultSaveDataSupplier, SeasonSavedData.DATA_IDENTIFIER);
     }
     
     //

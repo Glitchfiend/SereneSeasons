@@ -8,6 +8,7 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IceBlock;
 import net.minecraft.entity.EntityClassification;
@@ -36,6 +37,7 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
+import sereneseasons.season.SeasonHooks;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -49,13 +51,14 @@ public class RandomUpdateHandler
 		{
 			if (ModConfig.seasons.changeWeatherFrequency)
 			{
-				if (event.world.getWorldInfo().isThundering())
+				if (world.getWorldInfo().isThundering())
 				{
-					event.world.getWorldInfo().setThundering(false);;
+					world.getWorldInfo().setThundering(false);
+					;
 				}
-				if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 36000)
+				if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 36000)
 				{
-					event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(24000) + 12000);
+					world.getWorldInfo().setRainTime(world.rand.nextInt(24000) + 12000);
 				}
 			}
 		}
@@ -65,16 +68,16 @@ public class RandomUpdateHandler
 			{
 				if (season == Season.SPRING)
 				{
-					if (!event.world.getWorldInfo().isRaining() && event.world.getWorldInfo().getRainTime() > 96000)
+					if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 96000)
 					{
-						event.world.getWorldInfo().setRainTime(event.world.rand.nextInt(84000) + 12000);
+						world.getWorldInfo().setRainTime(world.rand.nextInt(84000) + 12000);
 					}
 				}
 				else if (season == Season.SUMMER)
 				{
-					if (!event.world.getWorldInfo().isThundering() && event.world.getWorldInfo().getThunderTime() > 36000)
+					if (!world.getWorldInfo().isThundering() && world.getWorldInfo().getThunderTime() > 36000)
 					{
-						event.world.getWorldInfo().setThunderTime(event.world.rand.nextInt(24000) + 12000);
+						world.getWorldInfo().setThunderTime(world.rand.nextInt(24000) + 12000);
 					}
 				}
 			}
@@ -83,6 +86,7 @@ public class RandomUpdateHandler
 
 	private void meltInChunk(ChunkManager chunkManager, Chunk chunkIn, Season.SubSeason subSeason)
 	{
+		ServerWorld world = chunkManager.world;
 		ChunkPos chunkpos = chunkIn.getPos();
 		int i = chunkpos.getXStart();
 		int j = chunkpos.getZStart();
@@ -104,64 +108,30 @@ public class RandomUpdateHandler
 				break;
 		}
 
-		if (this.rand.nextInt(meltRand) == 0)
+		if (world.rand.nextInt(meltRand) == 0)
 		{
-			BlockPos blockpos2 = this.getHeight(Heightmap.Type.MOTION_BLOCKING, this.func_217383_a(i, 0, j, 15));
-			BlockPos blockpos3 = blockpos2.down();
-			Biome biome = this.getBiome(blockpos2);
-			if (this.isAreaLoaded(blockpos2, 1)) // Forge: check area to avoid loading neighbors in unloaded chunks
+			BlockPos topAirPos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, world.func_217383_a(i, 0, j, 15));
+			BlockPos topGroundPos = topAirPos.down();
+			BlockState groundState = world.getBlockState(topGroundPos);
+			Biome biome = world.getBiome(topAirPos);
+
+			if (!BiomeConfig.enablesSeasonalEffects(biome))
+				return;
+
+			if (groundState.getBlock() == Blocks.SNOW)
 			{
-				if (biome.doesWaterFreeze(this, blockpos3))
+				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 				{
-					this.setBlockState(blockpos3, Blocks.ICE.getDefaultState());
+					world.setBlockState(topGroundPos, Blocks.AIR.getDefaultState());
 				}
 			}
-
-			if (flag && biome.doesSnowGenerate(this, blockpos2))
+			else if (groundState.getBlock() == Blocks.ICE)
 			{
-				this.setBlockState(blockpos2, Blocks.SNOW.getDefaultState());
-			}
-
-			if (flag && this.getBiome(blockpos3).getPrecipitation() == Biome.RainType.RAIN)
-			{
-				this.getBlockState(blockpos3).getBlock().fillWithRain(this, blockpos3);
-			}
-		}
-
-		if(!BiomeConfig.enablesSeasonalEffects(biome))
-			continue;
-
-		boolean first = true;
-		for (int y = pos.getY(); y >= 0; y--)
-		{
-			Block block = chunk.getBlockState(new BlockPos(pos.getX(), y, pos.getZ())).getBlock();
-
-			if (block == Blocks.SNOW)
-			{
-				pos = new BlockPos(pos.getX(), y, pos.getZ());
-
-				if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
+				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 				{
-					world.setBlockToAir(pos);
-					break;
+					((IceBlock) Blocks.ICE).turnIntoWater(groundState, world, topGroundPos);
 				}
 			}
-
-			if(!first)
-			{
-				if(block == Blocks.ICE)
-				{
-					pos = new BlockPos(pos.getX(), y, pos.getZ());
-					// TODO
-					if (SeasonASMHelper.getFloatTemperature(world, biome, pos) >= 0.15F)
-					{
-						((IceBlock) Blocks.ICE).turnIntoWater(world, pos);
-						break;
-					}
-				}
-			}
-			else
-				first = false;
 		}
 	}
 
@@ -181,39 +151,23 @@ public class RandomUpdateHandler
 			{
 				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.getDimension().getType().getId()))
 				{
-					ServerWorld world = (ServerWorld)event.world;
+					ServerWorld world = (ServerWorld) event.world;
 					ChunkManager chunkManager = world.getChunkProvider().chunkManager;
 
 					// Replicate the behaviour of ServerChunkProvider
-					chunkManager.func_223491_f().forEach((chunkHolder) -> {
+					chunkManager.func_223491_f().forEach((chunkHolder) ->
+					{
 						Optional<Chunk> optional = chunkHolder.func_219297_b().getNow(ChunkHolder.UNLOADED_CHUNK).left();
-						if (optional.isPresent()) {
+						if (optional.isPresent())
+						{
 							Chunk chunk = optional.get();
 							ChunkPos chunkpos = chunkHolder.getPosition();
-							if (!chunkManager.isOutsideSpawningRadius(chunkpos)) {
-								this.snowInChunk(chunk);
+							if (!chunkManager.isOutsideSpawningRadius(chunkpos))
+							{
+								this.meltInChunk(chunkManager, chunk, subSeason);
 							}
 						}
-
-					for (Iterator<Chunk> iterator = world.getPersistentChunkIterable(world.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();)
-					{
-						Chunk chunk = iterator.next();
-						int x = chunk.getPos().x << 4;
-						int z = chunk.getPos().z << 4;
-
-						int rand;
-
-
-						if (world.rand.nextInt(rand) == 0)
-						{
-							world.updateLCG = world.updateLCG * 3 + 1013904223;
-							int randOffset = world.updateLCG >> 2;
-							BlockPos pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x + (randOffset & 15), 0, z + (randOffset >> 8 & 15)));
-							Biome biome = world.getBiome(pos);
-
-
-						}
-					}
+					});
 				}
 			}
 		}

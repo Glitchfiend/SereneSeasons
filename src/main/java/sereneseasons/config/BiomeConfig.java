@@ -12,7 +12,6 @@ import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sereneseasons.config.json.BiomeData;
 import sereneseasons.util.config.JsonUtil;
 
