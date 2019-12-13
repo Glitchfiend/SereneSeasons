@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "sereneseasons:greenhouse_glass" }
+        "": { "model": "sereneseasons:block/greenhouse_glass" }
     }
 }

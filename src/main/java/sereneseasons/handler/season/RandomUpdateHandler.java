@@ -112,17 +112,18 @@ public class RandomUpdateHandler
 		{
 			BlockPos topAirPos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, world.func_217383_a(i, 0, j, 15));
 			BlockPos topGroundPos = topAirPos.down();
+			BlockState aboveGroundState = world.getBlockState(topAirPos);
 			BlockState groundState = world.getBlockState(topGroundPos);
 			Biome biome = world.getBiome(topAirPos);
 
 			if (!BiomeConfig.enablesSeasonalEffects(biome))
 				return;
 
-			if (groundState.getBlock() == Blocks.SNOW)
+			if (aboveGroundState.getBlock() == Blocks.SNOW)
 			{
 				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 				{
-					world.setBlockState(topGroundPos, Blocks.AIR.getDefaultState());
+					world.setBlockState(topAirPos, Blocks.AIR.getDefaultState());
 				}
 			}
 			else if (groundState.getBlock() == Blocks.ICE)

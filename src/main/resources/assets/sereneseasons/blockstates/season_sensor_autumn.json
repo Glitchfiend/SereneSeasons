@@ -1,5 +1,20 @@
 {
     "variants": {
-        "normal": { "model": "sereneseasons:season_sensor_autumn" }
+        "power=0": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=1": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=2": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=3": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=4": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=5": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=6": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=7": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=8": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=9": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=10": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=11": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=12": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=13": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=14": { "model": "sereneseasons:block/season_sensor_autumn" },
+        "power=15": { "model": "sereneseasons:block/season_sensor_autumn" }
     }
 }

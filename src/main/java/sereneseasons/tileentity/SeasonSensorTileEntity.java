@@ -7,6 +7,9 @@
  ******************************************************************************/
 package sereneseasons.tileentity;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.DaylightDetectorBlock;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -26,7 +29,12 @@ public class SeasonSensorTileEntity extends TileEntity implements ITickableTileE
     {
         if (this.world != null && !this.world.isRemote && SeasonHelper.getSeasonState(this.world).getSeasonCycleTicks() % 20L == 0L)
         {
-            ((BlockSeasonSensor)this.getBlockState().getBlock()).updatePower(this.world, this.pos);
+            BlockState blockstate = this.getBlockState();
+            Block block = blockstate.getBlock();
+            if (block instanceof BlockSeasonSensor)
+            {
+                ((BlockSeasonSensor)block).updatePower(this.world, this.pos);
+            }
         }
     }
 }

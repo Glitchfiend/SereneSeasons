@@ -1,0 +1,17 @@
+{
+  "commands.sereneseasons.usage": "/sereneseasons <setseason> [args]",
+  "commands.sereneseasons.setseason.success": "Set season to %s",
+  "commands.sereneseasons.setseason.fail": "Invalid season %s",
+  "commands.sereneseasons.setseason.disabled": "Seasons are currently disabled!",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.greenhouse_glass": "Greenhouse Glass",
+  "block.sereneseasons.season_sensor_spring": "Season Sensor",
+  "block.sereneseasons.season_sensor_summer": "Season Sensor",
+  "block.sereneseasons.season_sensor_autumn": "Season Sensor",
+  "block.sereneseasons.season_sensor_winter": "Season Sensor",
+  "item.sereneseasons.ss_icon": "SS Icon",
+
+  "item.sereneseasons.season_clock": "Season Clock"
+}

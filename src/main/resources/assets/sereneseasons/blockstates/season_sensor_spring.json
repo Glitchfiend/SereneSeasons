@@ -1,5 +1,20 @@
 {
     "variants": {
-        "normal": { "model": "sereneseasons:season_sensor_spring" }
+        "power=0": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=1": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=2": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=3": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=4": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=5": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=6": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=7": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=8": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=9": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=10": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=11": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=12": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=13": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=14": { "model": "sereneseasons:block/season_sensor_spring" },
+        "power=15": { "model": "sereneseasons:block/season_sensor_spring" }
     }
 }

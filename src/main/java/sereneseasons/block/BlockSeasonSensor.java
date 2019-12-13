@@ -31,6 +31,7 @@ import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.season.SeasonTime;
+import sereneseasons.tileentity.SeasonSensorTileEntity;
 
 public class BlockSeasonSensor extends ContainerBlock
 {
@@ -129,7 +130,7 @@ public class BlockSeasonSensor extends ContainerBlock
     @Override
     public TileEntity createNewTileEntity(IBlockReader reader)
     {
-        return new DaylightDetectorTileEntity();
+        return new SeasonSensorTileEntity();
     }
 
     @Override
