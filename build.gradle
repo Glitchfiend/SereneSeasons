@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'maven'
 
-group = "com.github.glitchfiend.sereneseasons"
+group = "com.github.glitchfiend.biomesoplenty"
 archivesBaseName = "SereneSeasons"
 
 def getGitHash = {
@@ -129,15 +129,15 @@ artifacts {
 uploadArchives {
     repositories {
         mavenDeployer {
-			if (project.hasProperty('forgeMavenPassword')) {
-				repository(url: "https://files.minecraftforge.net/maven/manage/upload") {
-					authentication(userName: project.getProperty('forgeMavenUsername'), password: project.getProperty('forgeMavenPassword'))
-				}
-			}
-			else {
-				// local repo folder. Might wanna juset use  gradle install   if you wanans end it to maven-local
-				repository(url: 'file://localhost/' + project.file('repo').getAbsolutePath())
-			}
+            if (project.hasProperty('forgeMavenPassword')) {
+                repository(url: "https://files.minecraftforge.net/maven/manage/upload") {
+                    authentication(userName: project.getProperty('forgeMavenUsername'), password: project.getProperty('forgeMavenPassword'))
+                }
+            }
+            else {
+                // local repo folder. Might wanna juset use  gradle install   if you wanans end it to maven-local
+                repository(url: 'file://localhost/' + project.file('repo').getAbsolutePath())
+            }
 
             pom {
                 groupId = project.group
