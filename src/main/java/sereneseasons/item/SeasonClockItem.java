@@ -21,9 +21,9 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.season.SeasonTime;
 
-public class ItemSeasonClock extends Item
+public class SeasonClockItem extends Item
 {
-    public ItemSeasonClock(Item.Properties builder)
+    public SeasonClockItem(Item.Properties builder)
     {
         super(builder);
 

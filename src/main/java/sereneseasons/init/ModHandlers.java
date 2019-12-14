@@ -24,7 +24,7 @@ public class ModHandlers
 {
     private static final SeasonHandler SEASON_HANDLER = new SeasonHandler();
 
-    public static void setup()
+    public static void init()
     {
         PacketHandler.init();
 

@@ -9,13 +9,11 @@ package sereneseasons.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.DaylightDetectorBlock;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.block.BlockSeasonSensor;
+import sereneseasons.block.SeasonSensorBlock;
 
 public class SeasonSensorTileEntity extends TileEntity implements ITickableTileEntity
 {
@@ -31,9 +29,9 @@ public class SeasonSensorTileEntity extends TileEntity implements ITickableTileE
         {
             BlockState blockstate = this.getBlockState();
             Block block = blockstate.getBlock();
-            if (block instanceof BlockSeasonSensor)
+            if (block instanceof SeasonSensorBlock)
             {
-                ((BlockSeasonSensor)block).updatePower(this.world, this.pos);
+                ((SeasonSensorBlock)block).updatePower(this.world, this.pos);
             }
         }
     }

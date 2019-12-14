@@ -7,6 +7,7 @@
  ******************************************************************************/
 package sereneseasons.api.season;
 
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import sereneseasons.init.ModConfig;
 
@@ -22,7 +23,7 @@ public class SeasonHelper
     {
         ISeasonState data;
 
-        if (!world.isRemote)
+        if (!world.isRemote())
         {
             data = dataProvider.getServerSeasonState(world);
         }

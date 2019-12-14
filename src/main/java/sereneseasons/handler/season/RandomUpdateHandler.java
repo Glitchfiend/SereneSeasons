@@ -47,38 +47,35 @@ public class RandomUpdateHandler
 {
 	private void adjustWeatherFrequency(World world, Season season)
 	{
+		if (!SeasonsConfig.changeWeatherFrequency.get())
+			return;
+
 		if (season == Season.WINTER)
 		{
-			if (ModConfig.seasons.changeWeatherFrequency)
+			if (world.getWorldInfo().isThundering())
 			{
-				if (world.getWorldInfo().isThundering())
-				{
-					world.getWorldInfo().setThundering(false);
-					;
-				}
-				if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 36000)
-				{
-					world.getWorldInfo().setRainTime(world.rand.nextInt(24000) + 12000);
-				}
+				world.getWorldInfo().setThundering(false);
+				;
+			}
+			if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 36000)
+			{
+				world.getWorldInfo().setRainTime(world.rand.nextInt(24000) + 12000);
 			}
 		}
 		else
 		{
-			if (ModConfig.seasons.changeWeatherFrequency)
+			if (season == Season.SPRING)
 			{
-				if (season == Season.SPRING)
+				if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 96000)
 				{
-					if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 96000)
-					{
-						world.getWorldInfo().setRainTime(world.rand.nextInt(84000) + 12000);
-					}
+					world.getWorldInfo().setRainTime(world.rand.nextInt(84000) + 12000);
 				}
-				else if (season == Season.SUMMER)
+			}
+			else if (season == Season.SUMMER)
+			{
+				if (!world.getWorldInfo().isThundering() && world.getWorldInfo().getThunderTime() > 36000)
 				{
-					if (!world.getWorldInfo().isThundering() && world.getWorldInfo().getThunderTime() > 36000)
-					{
-						world.getWorldInfo().setThunderTime(world.rand.nextInt(24000) + 12000);
-					}
+					world.getWorldInfo().setThunderTime(world.rand.nextInt(24000) + 12000);
 				}
 			}
 		}
@@ -150,7 +147,7 @@ public class RandomUpdateHandler
 
 			if (season != Season.WINTER)
 			{
-				if (ModConfig.seasons.generateSnowAndIce && SeasonsConfig.isDimensionWhitelisted(event.world.getDimension().getType().getId()))
+				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.getDimension().getType().getId()))
 				{
 					ServerWorld world = (ServerWorld) event.world;
 					ChunkManager chunkManager = world.getChunkProvider().chunkManager;

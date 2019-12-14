@@ -15,6 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
@@ -152,12 +154,13 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         }
     }
     
-    public static SeasonSavedData getSeasonSavedData(World world)
+    public static SeasonSavedData getSeasonSavedData(World w)
     {
-        if (world.isRemote)
+        if (w.isRemote() || !(w instanceof ServerWorld))
             return null;
 
-        DimensionSavedDataManager saveDataManager = ((ServerWorld)world).getChunkProvider().getSavedData();
+        ServerWorld world = (ServerWorld)w;
+        DimensionSavedDataManager saveDataManager = world.getChunkProvider().getSavedData();
 
         Supplier<SeasonSavedData> defaultSaveDataSupplier = () ->
         {

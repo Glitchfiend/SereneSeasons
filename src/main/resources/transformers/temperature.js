@@ -22,7 +22,7 @@ function log(message)
 function initializeCoreMod()
 {
 	return {
-		"biome_transformer": {
+		"temperature_transformer": {
 			"target": {
 				"type": "CLASS",
 				"names": function(listofclasses) { return Object.keys(TRANSFORMATIONS); }

@@ -31,6 +31,11 @@ public class SeasonHooks
 
     public static float getBiomeTemperatureCachedHook(Biome biome, BlockPos pos, IWorldReader world)
     {
+        if (!(world instanceof World))
+        {
+            return biome.getTemperature(pos);
+        }
+
         return getBiomeTemperature((World)world, biome, pos);
     }
 

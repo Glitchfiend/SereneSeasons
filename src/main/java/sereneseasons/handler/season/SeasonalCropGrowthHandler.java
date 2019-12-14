@@ -35,9 +35,9 @@ public class SeasonalCropGrowthHandler
 		World world = (World)event.getWorld();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), world, event.getPos());
 		
-		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(world, event.getPos()))
+		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGreenhouseGlassAboveBlock(world, event.getPos()))
 		{
-			if (FertilityConfig.general_category.crops_break && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
+			if (FertilityConfig.cropsBreak.get() && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}
@@ -54,9 +54,9 @@ public class SeasonalCropGrowthHandler
 		Block plant = event.getBlock().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
-		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-			if (FertilityConfig.general_category.crops_break && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
+			if (FertilityConfig.cropsBreak.get() && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}
@@ -67,7 +67,7 @@ public class SeasonalCropGrowthHandler
 
 	private boolean isGreenhouseGlassAboveBlock(World world, BlockPos cropPos)
 	{
-		for (int i = 0; i < FertilityConfig.general_category.greenhouse_glass_max_height; i++)
+		for (int i = 0; i < FertilityConfig.greenhouseGlassMaxHeight.get(); i++)
 		{
 			if (world.getBlockState(cropPos.add(0, i + 1, 0)).getBlock().equals(SSBlocks.greenhouse_glass))
 			{

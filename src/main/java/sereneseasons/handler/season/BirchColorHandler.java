@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
 public class BirchColorHandler
 {
-	public static void init()
+	public static void setup()
     {
 		if (FMLEnvironment.dist == Dist.CLIENT)
 		{
@@ -28,7 +28,7 @@ public class BirchColorHandler
 				int birchColor = FoliageColors.getBirch();
 				int dimension = Minecraft.getInstance().player.dimension.getId();
 
-				if (worldIn != null && pos != null && ModConfig.seasons.changeBirchColour && SeasonsConfig.isDimensionWhitelisted(dimension))
+				if (worldIn != null && pos != null && SeasonsConfig.changeBirchColor.get() && SeasonsConfig.isDimensionWhitelisted(dimension))
 				{
 					Biome biome = worldIn.getBiome(pos);
 

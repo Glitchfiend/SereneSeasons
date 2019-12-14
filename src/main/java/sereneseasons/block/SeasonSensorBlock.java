@@ -16,7 +16,6 @@ import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.DaylightDetectorTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -33,14 +32,14 @@ import sereneseasons.config.SeasonsConfig;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.tileentity.SeasonSensorTileEntity;
 
-public class BlockSeasonSensor extends ContainerBlock
+public class SeasonSensorBlock extends ContainerBlock
 {
     public static final IntegerProperty POWER;
     protected static final VoxelShape SHAPE;
 
     private final DetectorType type;
 
-    public BlockSeasonSensor(Properties properties, DetectorType type)
+    public SeasonSensorBlock(Properties properties, DetectorType type)
     {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(POWER, 0));
@@ -105,7 +104,7 @@ public class BlockSeasonSensor extends ContainerBlock
             {
                 Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
                 world.setBlockState(pos, nextBlock.getDefaultState().with(POWER, state.get(POWER)), 4);
-                ((BlockSeasonSensor)nextBlock).updatePower(world, pos);
+                ((SeasonSensorBlock)nextBlock).updatePower(world, pos);
                 return true;
             }
         }
