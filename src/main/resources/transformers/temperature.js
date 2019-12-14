@@ -93,15 +93,15 @@ function patchGetTemperatureCachedCalls(method)
 
 function buildWorldLoad(method)
 {
-	for (var i = method.instructions.size() - 1; i >= 0; i--) {
-		var instruction = method.instructions.get(i);
+    for (var i = method.instructions.size() - 1; i >= 0; i--) {
+        var instruction = method.instructions.get(i);
 
-		if (instruction.getOpcode() == Opcodes.GETFIELD && instruction.desc == "Lnet/minecraft/world/World;") {
-		    var newInstructions = new InsnList();
-		    newInstructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
-		    newInstructions.add(instruction.clone(null));
+        if (instruction.getOpcode() == Opcodes.GETFIELD && instruction.desc == "Lnet/minecraft/world/World;") {
+            var newInstructions = new InsnList();
+            newInstructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+            newInstructions.add(instruction.clone(null));
             return newInstructions;
-		}
+        }
     }
 
     // NOTE: This is potentially dangerous if the first call is executed after getTemperatureCached.

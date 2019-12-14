@@ -8,7 +8,6 @@
 package sereneseasons.handler.season;
 
 
-import javafx.geometry.Side;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

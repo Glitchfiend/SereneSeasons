@@ -1,6 +1,5 @@
 package sereneseasons.handler.season;
 
-import javafx.geometry.Side;
 import net.minecraft.block.Block;
 import net.minecraft.block.GrassBlock;
 import net.minecraft.block.SugarCaneBlock;
