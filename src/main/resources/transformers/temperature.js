@@ -21,13 +21,13 @@ function log(message)
 
 function initializeCoreMod()
 {
-	return {
-		"temperature_transformer": {
-			"target": {
-				"type": "CLASS",
-				"names": function(listofclasses) { return Object.keys(TRANSFORMATIONS); }
-			},
-			"transformer": function(classNode) {
+    return {
+        "temperature_transformer": {
+            "target": {
+                "type": "CLASS",
+                "names": function(listofclasses) { return Object.keys(TRANSFORMATIONS); }
+            },
+            "transformer": function(classNode) {
                 for each (var method in classNode.methods) {
                     var methodsToTransform = TRANSFORMATIONS[classNode.name.split('/').join('.')];
 
@@ -37,10 +37,10 @@ function initializeCoreMod()
                     }
                 }
 
-				return classNode;
-			}
-		}
-	};
+                return classNode;
+            }
+        }
+    };
 }
 
 function patchGetTemperatureCachedCalls(method)
