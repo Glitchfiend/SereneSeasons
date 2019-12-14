@@ -25,9 +25,18 @@ import sereneseasons.config.SeasonsConfig;
 
 public class SeasonHooks
 {
-    /**
-     * Biome hooks
-     */
+    //
+    // Hooks called by ASM
+    //
+
+    public static float getBiomeTemperatureCachedHook(Biome biome, BlockPos pos, IWorldReader world)
+    {
+        return getBiomeTemperature((World)world, biome, pos);
+    }
+
+    //
+    // General utilities
+    //
 
     public static float getBiomeTemperature(World world, Biome biome, BlockPos pos)
     {
