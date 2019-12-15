@@ -97,7 +97,7 @@ curseforge {
     if (project.hasProperty('curseApiKey')) {
         apiKey = project.getProperty('curseApiKey')
         project {
-            id = '220318'
+            id = '291874'
 
             if (changelog_file.exists()) {
                 changelog = changelog_file
