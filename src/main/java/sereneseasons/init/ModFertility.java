@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
@@ -209,29 +210,29 @@ public class ModFertility
             {
                 int mask = seedSeasons.get(name);
 
-                event.getToolTip().add(new StringTextComponent("Fertile Seasons:"));
+                event.getToolTip().add(new TranslationTextComponent("desc.sereneseasons.fertile_seasons").appendText(":"));
 
                 if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
                 {
-                    event.getToolTip().add(new StringTextComponent(TextFormatting.LIGHT_PURPLE + " Year-Round"));
+                    event.getToolTip().add(new StringTextComponent(TextFormatting.LIGHT_PURPLE + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.year_round")));
                 }
                 else
                 {
                     if ((mask & 1) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.GREEN + " Spring"));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.GREEN + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.spring")));
                     }
                     if ((mask & 2) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " Summer"));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.summer")));
                     }
                     if ((mask & 4) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.GOLD + " Autumn"));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.GOLD + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.autumn")));
                     }
                     if ((mask & 8) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.AQUA + " Winter"));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.AQUA + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.winter")));
                     }
                 }
             }

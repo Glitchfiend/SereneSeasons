@@ -13,5 +13,12 @@
   "block.sereneseasons.season_sensor_winter": "Season Sensor",
   "item.sereneseasons.ss_icon": "SS Icon",
 
-  "item.sereneseasons.season_clock": "Season Clock"
+  "item.sereneseasons.season_clock": "Season Clock",
+
+  "desc.sereneseasons.fertile_seasons": "Fertile Seasons",
+  "desc.sereneseasons.year_round": "Year-Round",
+  "desc.sereneseasons.spring": "Spring",
+  "desc.sereneseasons.summer": "Summer",
+  "desc.sereneseasons.autumn": "Autumn",
+  "desc.sereneseasons.winter": "Winter"
 }
