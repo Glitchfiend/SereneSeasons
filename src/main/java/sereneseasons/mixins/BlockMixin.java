@@ -39,7 +39,7 @@ public abstract class BlockMixin
         return colorMultiplierOld(blockAccess, x, y, z);
     }
 
-    int handleGras(IBlockAccess blockAccess, int x, int y, int z)
+    int handleGrass(IBlockAccess blockAccess, int x, int y, int z)
     {
         BiomeGenBase biome = blockAccess.getBiomeGenForCoords(x, z);
         if (BiomeConfig.enablesSeasonalEffects(biome))
@@ -62,12 +62,12 @@ public abstract class BlockMixin
 
         if (block instanceof BlockGrass)
         {
-            return handleGras(blockAccess, x, y, z);
+            return handleGrass(blockAccess, x, y, z);
         }
 
         if (block instanceof BlockBush)
         {
-            return handleGras(blockAccess, x, y, z);
+            return handleGrass(blockAccess, x, y, z);
         }
 
         if (block instanceof BlockVine)
