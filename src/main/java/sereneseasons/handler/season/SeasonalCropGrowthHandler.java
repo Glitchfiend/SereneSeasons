@@ -1,78 +1,83 @@
 package sereneseasons.handler.season;
 
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockReed;
-import net.minecraft.block.BlockSapling;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
+import squeek.applecore.api.plants.PlantGrowthEvent;
 
 public class SeasonalCropGrowthHandler
 {
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void onItemTooltipAdded(ItemTooltipEvent event)
-	{
-		ModFertility.setupTooltips(event);
-	}
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onItemTooltipAdded(ItemTooltipEvent event)
+    {
+        ModFertility.setupTooltips(event);
+    }
 
-	@SubscribeEvent
-	public void onCropGrowth(BlockEvent.CropGrowEvent event)
-	{
-		Block plant = event.getState().getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
-		
-		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
-		{
-			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
-			{
-				event.getWorld().destroyBlock(event.getPos(), true);
-			}
-			else
-			{
-				event.setResult(Event.Result.DENY);
-			}
-		}
-	}
+    @SubscribeEvent
+    public void onCropGrowthAppleCore(PlantGrowthEvent.AllowGrowthTick event)
+    {
+        event.setResult(onCropGrowth(event.block, event.world, event.x, event.y, event.z));
+    }
 
-	@SubscribeEvent
-	public void onApplyBonemeal(BonemealEvent event)
-	{
-		Block plant = event.getBlock().getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
-		
-		if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
-		{
-			if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
-			{
-				event.getWorld().destroyBlock(event.getPos(), true);
-			}
-			
-			event.setCanceled(true);
-		}
-	}
+    public static Event.Result onCropGrowth(Block block, World world, int x, int y, int z)
+    {
+        String name = GameRegistry.findUniqueIdentifierFor(block).toString();
+        boolean isFertile = ModFertility.isCropFertile(name, world, x, y, z);
 
-	private boolean isGreenhouseGlassAboveBlock(World world, BlockPos cropPos)
-	{
-		for (int i = 0; i < FertilityConfig.general_category.greenhouse_glass_max_height; i++)
-		{
-			if (world.getBlockState(cropPos.add(0, i + 1, 0)).getBlock().equals(SSBlocks.greenhouse_glass))
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}
+        if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(world, x, y, z))
+        {
+            if (FertilityConfig.general_category.crops_break && !(block instanceof BlockGrass) && !(block instanceof BlockReed))
+            {
+                world.func_147480_a(x, y, z, true);
+            }
+            else
+            {
+                return Event.Result.DENY;
+            }
+        }
+        return Event.Result.DEFAULT;
+    }
+
+    @SubscribeEvent
+    public void onApplyBonemeal(BonemealEvent event)
+    {
+        Block plant = event.block;
+        String plantName = GameRegistry.findUniqueIdentifierFor(plant).toString();
+        boolean isFertile = ModFertility.isCropFertile(plantName, event.world, event.x, event.y, event.z);
+
+        if (FertilityConfig.general_category.seasonal_crops && !isFertile && !isGreenhouseGlassAboveBlock(event.world, event.x, event.y, event.z))
+        {
+            if (FertilityConfig.general_category.crops_break && !(plant instanceof BlockGrass) && !(plant instanceof BlockReed))
+            {
+                event.world.func_147480_a(event.x, event.y, event.z, true);
+            }
+
+            event.setCanceled(true);
+        }
+    }
+
+    private static boolean isGreenhouseGlassAboveBlock(World world, int x, int y, int z)
+    {
+        for (int i = 0; i < FertilityConfig.general_category.greenhouse_glass_max_height; i++)
+        {
+            if (world.getBlock(x, y + i + 1, z).equals(SSBlocks.greenhouse_glass))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

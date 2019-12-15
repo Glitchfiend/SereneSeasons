@@ -19,13 +19,14 @@ public class SeasonsConfig extends ConfigHandler
     public static final String WEATHER_SETTINGS = "Weather Settings";
     public static final String AESTHETIC_SETTINGS = "Aesthetic Settings";
     public static final String DIMENSION_SETTINGS = "Dimension Settings";
+    public static final String CROP_FERTILITY_GENERAL = "Crop Fertility General Settings";
+    public static final String CROP_FERTILITY_SEASONAL = "Crop Fertility Seasonal Settings";
 
     public boolean generateSnowAndIce;
     public boolean changeWeatherFrequency;
     
     public boolean changeGrassColour;
     public boolean changeFoliageColour;
-    public boolean changeBirchColour;
     
     public String[] whitelistedDimensions;
 
@@ -50,9 +51,10 @@ public class SeasonsConfig extends ConfigHandler
             // Client-only. The server shouldn't get to decide these.
             changeGrassColour = config.getBoolean("Change Grass Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the grass colour based on the current season");
             changeFoliageColour = config.getBoolean("Change Foliage Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the foliage colour based on the current season");
-            changeBirchColour = config.getBoolean("Change Birch Colour Seasonally", AESTHETIC_SETTINGS, true, "Change the birch colour based on the current season");
-        
+
             whitelistedDimensions = config.getStringList("Whitelisted Dimensions", DIMENSION_SETTINGS, new String[] { "0" }, "Seasons will only apply to dimensons listed here");
+
+            loadFertilityConfig();
         }
         catch (Exception e)
         {
@@ -64,6 +66,20 @@ public class SeasonsConfig extends ConfigHandler
         }
     }
     
+    private void loadFertilityConfig()
+    {
+        FertilityConfig.general_category.seasonal_crops = config.getBoolean("seasonal_crops", CROP_FERTILITY_GENERAL, FertilityConfig.general_category.seasonal_crops, "Whether crops are affected by seasons.");
+        FertilityConfig.general_category.crops_break = config.getBoolean("crops_break", CROP_FERTILITY_GENERAL, FertilityConfig.general_category.crops_break, "Whether crops break if out of season. If false, they simply don't grow");
+        FertilityConfig.general_category.ignore_unlisted_crops = config.getBoolean("ignore_unlisted_crops", CROP_FERTILITY_GENERAL, FertilityConfig.general_category.ignore_unlisted_crops, "Whether unlisted seeds are fertile every season. False means they're fertile every season except Winter");
+        FertilityConfig.general_category.crop_tooltips = config.getBoolean("crop_tooltips", CROP_FERTILITY_GENERAL, FertilityConfig.general_category.crop_tooltips, "Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed crops.");
+        FertilityConfig.general_category.greenhouse_glass_max_height = config.getInt("greenhouse_glass_max_height", CROP_FERTILITY_GENERAL, FertilityConfig.general_category.greenhouse_glass_max_height, 1, 255, "Maximum height greenhouse glass can be above a crop for it to be fertile out of season");
+
+        FertilityConfig.seasonal_fertility.spring_crops = config.getStringList("spring_crops", CROP_FERTILITY_SEASONAL, FertilityConfig.seasonal_fertility.spring_crops, "Crops growable in Spring (List either the seed item for the crop, or the crop block itself)");
+        FertilityConfig.seasonal_fertility.summer_crops = config.getStringList("summer_crops", CROP_FERTILITY_SEASONAL, FertilityConfig.seasonal_fertility.summer_crops, "Crops growable in Summer (List either the seed item for the crop, or the crop block itself)");
+        FertilityConfig.seasonal_fertility.autumn_crops = config.getStringList("autumn_crops", CROP_FERTILITY_SEASONAL, FertilityConfig.seasonal_fertility.autumn_crops, "Crops growable in Autumn (List either the seed item for the crop, or the crop block itself)");
+        FertilityConfig.seasonal_fertility.winter_crops = config.getStringList("winter_crops", CROP_FERTILITY_SEASONAL, FertilityConfig.seasonal_fertility.winter_crops, "Crops growable in Winter (List either the seed item for the crop, or the crop block itself)");
+    }
+
     public static boolean isDimensionWhitelisted(int dimension)
     {
     	for (String dimensions : ModConfig.seasons.whitelistedDimensions)

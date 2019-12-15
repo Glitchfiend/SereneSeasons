@@ -8,7 +8,6 @@
 package sereneseasons.api.season;
 
 import net.minecraft.world.World;
-import sereneseasons.init.ModConfig;
 
 public class SeasonHelper 
 {

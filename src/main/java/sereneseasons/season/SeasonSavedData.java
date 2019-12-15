@@ -8,7 +8,7 @@
 package sereneseasons.season;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.WorldSavedData;
 
 public class SeasonSavedData extends WorldSavedData
 {
@@ -34,10 +34,8 @@ public class SeasonSavedData extends WorldSavedData
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) 
+    public void writeToNBT(NBTTagCompound nbt)
     {
         nbt.setInteger("SeasonCycleTicks", this.seasonCycleTicks);
-        
-        return nbt;
     }
 }

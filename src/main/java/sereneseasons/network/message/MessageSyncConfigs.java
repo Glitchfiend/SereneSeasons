@@ -7,13 +7,13 @@
  ******************************************************************************/
 package sereneseasons.network.message;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
 
@@ -45,8 +45,9 @@ public class MessageSyncConfigs implements IMessage, IMessageHandler<MessageSync
     {
         if (ctx.side == Side.CLIENT)
         {
-            for (String key : message.nbtOptions.getKeySet())
+            for (Object keyObj : message.nbtOptions.func_150296_c())
             {
+                String key = (String)keyObj;
                 SyncedConfig.SyncedConfigEntry entry = SyncedConfig.optionsToSync.get(key);
                 
                 if (entry == null) SereneSeasons.logger.error("Option " + key + " does not exist locally!");

@@ -1,39 +1,36 @@
 package sereneseasons.command;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
+import net.minecraft.util.ChatComponentTranslation;
 import sereneseasons.api.season.Season;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
 
-import java.util.List;
-
 public class SSCommand extends CommandBase
 {
     @Override
-    public String getName()
+    public String getCommandName()
     {
         return "sereneseasons";
     }
 
     @Override
-    public List getAliases()
+    public List getCommandAliases()
     {
         return Lists.newArrayList("ss");
     }
 
     @Override
-    public String getUsage(ICommandSender sender)
+    public String getCommandUsage(ICommandSender sender)
     {
         return "commands.sereneseasons.usage";
     }
@@ -45,7 +42,7 @@ public class SSCommand extends CommandBase
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException
     {
         if (args.length < 1)
         {
@@ -73,20 +70,20 @@ public class SSCommand extends CommandBase
 
         if (newSeason != null)
         {
-            SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.world);
+            SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.worldObj);
             seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * newSeason.ordinal();
             seasonData.markDirty();
-            SeasonHandler.sendSeasonUpdate(player.world);
-            sender.sendMessage(new TextComponentTranslation("commands.sereneseasons.setseason.success", args[1]));
+            SeasonHandler.sendSeasonUpdate(player.worldObj);
+            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.setseason.success", args[1]));
         }
         else
         {
-            sender.sendMessage(new TextComponentTranslation("commands.sereneseasons.setseason.fail", args[1]));
+            sender.addChatMessage(new ChatComponentTranslation("commands.sereneseasons.setseason.fail", args[1]));
         }
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+    public List addTabCompletionOptions(ICommandSender sender, String[] args)
     {
         if (args.length == 1)
         {

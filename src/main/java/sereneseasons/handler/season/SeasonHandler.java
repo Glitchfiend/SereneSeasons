@@ -9,18 +9,18 @@ package sereneseasons.handler.season;
 
 import java.util.HashMap;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
@@ -44,8 +44,8 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         {
             if (!SyncedConfig.getBooleanValue(SeasonsOption.PROGRESS_SEASON_WHILE_OFFLINE))
             {
-                MinecraftServer server = world.getMinecraftServer();
-                if (server != null && server.getPlayerList().getCurrentPlayerCount() == 0)
+                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+                if (server != null && server.getCurrentPlayerCount() == 0)
                     return;
             }
                 
@@ -69,7 +69,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public void onPlayerLogin(PlayerLoggedInEvent event)
     {
         EntityPlayer player = event.player;
-        World world = player.world;
+        World world = player.worldObj;
         
         sendSeasonUpdate(world);
     }
@@ -85,9 +85,9 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public void onClientTick(TickEvent.ClientTickEvent event) 
     {
         //Only do this when in the world
-        if (Minecraft.getMinecraft().player == null) return;
+        if (Minecraft.getMinecraft().thePlayer == null) return;
         
-        int dimension = Minecraft.getMinecraft().player.dimension;
+        int dimension = Minecraft.getMinecraft().thePlayer.dimension;
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
@@ -112,27 +112,27 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onPopulateChunk(PopulateChunkEvent.Populate event)
     {
-        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE || !SeasonsConfig.isDimensionWhitelisted(event.getWorld().provider.getDimension()))
+        if (!event.world.isRemote && event.type != PopulateChunkEvent.Populate.EventType.ICE || !SeasonsConfig.isDimensionWhitelisted(event.world.provider.dimensionId))
             return;
 
         event.setResult(Event.Result.DENY);
-        BlockPos blockpos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16).add(8, 0, 8);
+        int x = event.chunkX * 16 + 8;
+        int z = event.chunkZ * 16 + 8;
         
         for (int k2 = 0; k2 < 16; ++k2)
         {
             for (int j3 = 0; j3 < 16; ++j3)
             {
-                BlockPos blockpos1 = event.getWorld().getPrecipitationHeight(blockpos.add(k2, 0, j3));
-                BlockPos blockpos2 = blockpos1.down();
+                int y = event.world.getPrecipitationHeight(x + k2, z + j3);
 
-                if (SeasonASMHelper.canBlockFreezeInSeason(event.getWorld(), blockpos2, false, SeasonHelper.getSeasonState(event.getWorld()), true))
+                if (SeasonASMHelper.canBlockFreezeInSeason(event.world, x, y - 1, z, false, SeasonHelper.getSeasonState(event.world), true))
                 {
-                    event.getWorld().setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
+                    event.world.setBlock(x, y - 1, z, Blocks.ice);
                 }
 
-                if (SeasonASMHelper.canSnowAtInSeason(event.getWorld(), blockpos1, true, SeasonHelper.getSeasonState(event.getWorld()), true))
+                if (SeasonASMHelper.canSnowAtInSeason(event.world, x, y, z, true, SeasonHelper.getSeasonState(event.world), true))
                 {
-                    event.getWorld().setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState(), 2);
+                    event.world.setBlock(x, y, z, Blocks.snow_layer);
                 }
             }
         }
@@ -143,14 +143,14 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (!world.isRemote)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
-            PacketHandler.instance.sendToAll(new MessageSyncSeasonCycle(world.provider.getDimension(), savedData.seasonCycleTicks));
+            PacketHandler.instance.sendToAll(new MessageSyncSeasonCycle(world.provider.dimensionId, savedData.seasonCycleTicks));
         }
     }
     
     public static SeasonSavedData getSeasonSavedData(World world)
     {
-        MapStorage mapStorage = world.getPerWorldStorage();
-        SeasonSavedData savedData = (SeasonSavedData)mapStorage.getOrLoadData(SeasonSavedData.class, SeasonSavedData.DATA_IDENTIFIER);
+        MapStorage mapStorage = world.perWorldStorage;
+        SeasonSavedData savedData = (SeasonSavedData)mapStorage.loadData(SeasonSavedData.class, SeasonSavedData.DATA_IDENTIFIER);
 
         //If the saved data file hasn't been created before, create it
         if (savedData == null)

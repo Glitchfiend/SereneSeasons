@@ -9,150 +9,142 @@ package sereneseasons.block;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import sereneseasons.api.ISSBlock;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.init.ModConfig;
+import sereneseasons.core.SereneSeasons;
 import sereneseasons.item.ItemSSBlock;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.tileentity.TileEntitySeasonSensor;
 
 public class BlockSeasonSensor extends BlockContainer implements ISSBlock
 {
-    public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
-    public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D);
-
     // implement ITANBlock
     @Override
-    public Class<? extends ItemBlock> getItemClass() { return ItemSSBlock.class; }
-    @Override
-    public IProperty[] getPresetProperties() { return new IProperty[] {}; }
-    @Override
-    public IProperty[] getNonRenderingProperties() { return new IProperty[] { POWER }; }
-    @Override
-    public String getStateName(IBlockState state)
+    public Class<? extends ItemBlock> getItemClass()
     {
-        return type.getName();
+        return ItemSSBlock.class;
     }
-    
+
     private final DetectorType type;
-    
+
+    IIcon iconSide;
+    IIcon iconTop;
+
     public BlockSeasonSensor(DetectorType type)
     {
-        super(Material.WOOD);
+        super(Material.wood);
         this.type = type;
         this.setHardness(0.2F);
-        this.setSoundType(SoundType.WOOD);
-        this.setDefaultState( this.blockState.getBaseState().withProperty(POWER, Integer.valueOf(0)) );        
-    }
-    
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return BOUNDING_BOX;
+        this.setStepSound(Block.soundTypeWood);
+        this.setBlockBounds(0, 0, 0, 1, 0.375f, 1);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    public void registerBlockIcons(IIconRegister ir)
     {
-        return ((Integer)blockState.getValue(POWER)).intValue();
-    }
-
-    public void updatePower(World world, BlockPos pos)
-    {
-        if (SeasonsConfig.isDimensionWhitelisted(world.provider.getDimension()))
+        switch (type)
         {
-            IBlockState currentState = world.getBlockState(pos);
+        case SPRING:
+            this.iconTop = ir.registerIcon(SereneSeasons.MOD_ID + ":season_sensor_spring_top");
+            break;
+        case SUMMER:
+            this.iconTop = ir.registerIcon(SereneSeasons.MOD_ID + ":season_sensor_summer_top");
+            break;
+        case AUTUMN:
+            this.iconTop = ir.registerIcon(SereneSeasons.MOD_ID + ":season_sensor_autumn_top");
+            break;
+        case WINTER:
+            this.iconTop = ir.registerIcon(SereneSeasons.MOD_ID + ":season_sensor_winter_top");
+            break;
+        }
+        this.iconSide = ir.registerIcon(SereneSeasons.MOD_ID + ":season_sensor_side");
+    }
+
+    @Override
+    public IIcon getIcon(int i, int m)
+    {
+        if (i == 1)
+            return this.iconTop;
+        return this.iconSide;
+    }
+
+    @Override
+    public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y, int z, int side)
+    {
+        return blockAccess.getBlockMetadata(x, y, z);
+    }
+
+    public void updatePower(World world, int x, int y, int z)
+    {
+        if (SeasonsConfig.isDimensionWhitelisted(world.provider.dimensionId))
+        {
+            int meta = world.getBlockMetadata(x, y, z);
 
             int power = 0;
             int startTicks = this.type.ordinal() * SeasonTime.ZERO.getSeasonDuration();
             int endTicks = (this.type.ordinal() + 1) * SeasonTime.ZERO.getSeasonDuration();
             int currentTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
-            
+
             if (currentTicks >= startTicks && currentTicks <= endTicks)
             {
-                float delta = (float)(currentTicks - startTicks) / (float)SeasonTime.ZERO.getSeasonDuration();
-                power = (int)Math.min(delta * 15.0F + 1.0F, 15.0F);
+                float delta = (float) (currentTicks - startTicks) / (float) SeasonTime.ZERO.getSeasonDuration();
+                power = (int) Math.min(delta * 15.0F + 1.0F, 15.0F);
             }
-            
-            //Only update the state if the power level has actually changed
-            if (((Integer)currentState.getValue(POWER)).intValue() != power)
+
+            // Only update the state if the power level has actually changed
+            if (meta != power)
             {
-                world.setBlockState(pos, currentState.withProperty(POWER, Integer.valueOf(power)), 3);
+                world.setBlockMetadataWithNotify(x, y, z, power, 3);
             }
         }
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
-        if (player.isAllowEdit())
+        if (world.isRemote)
         {
-            if (world.isRemote)
-            {
-                return true;
-            }
-            else
-            {
-                Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
-                world.setBlockState(pos, nextBlock.getDefaultState().withProperty(POWER, state.getValue(POWER)), 4);
-                ((BlockSeasonSensor)nextBlock).updatePower(world, pos);
-                return true;
-            }
+            return true;
         }
         else
         {
-            return super.onBlockActivated(world, pos, state, player, hand, side, hitX, hitY, hitZ);
+            Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
+            world.setBlock(x, y, z, nextBlock);
+            ((BlockSeasonSensor) nextBlock).updatePower(world, x, y, z);
+            return true;
         }
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    public Item getItemDropped(int meta, Random rand, int fortune)
     {
         return Item.getItemFromBlock(SSBlocks.season_sensors[0]);
     }
 
     @Override
-    public boolean isFullCube(IBlockState state)
+    public boolean isOpaqueCube()
     {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
-        return EnumBlockRenderType.MODEL;
-    }
-
-    @Override
-    public boolean canProvidePower(IBlockState state)
+    public boolean canProvidePower()
     {
         return true;
     }
@@ -163,33 +155,15 @@ public class BlockSeasonSensor extends BlockContainer implements ISSBlock
         return new TileEntitySeasonSensor();
     }
 
-    // map from state to meta and vice verca
-    @Override
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return this.getDefaultState().withProperty(POWER, meta);
-    }
-    
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        return state.getValue(POWER);
-    }
-    
-    @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] { POWER });
-    }
-    
-    public static enum DetectorType implements IStringSerializable
+    public static enum DetectorType
     {
         SPRING, SUMMER, AUTUMN, WINTER;
-        @Override
+
         public String getName()
         {
             return this.name().toLowerCase();
         }
+
         @Override
         public String toString()
         {

@@ -1,27 +1,26 @@
 package sereneseasons.init;
 
+import static sereneseasons.api.SSItems.ss_icon;
+import static sereneseasons.api.SSItems.season_clock;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.item.ItemSeasonClock;
 import sereneseasons.util.inventory.CreativeTabSS;
-
-import static sereneseasons.api.SSItems.*;
 
 public class ModItems
 {
     public static void init()
     {
     	registerItems();
-        //setupModels();
     }
     
     public static void registerItems()
     {
-    	// SS Creative Tab Icon
-    	ss_icon = registerItem(new Item(), "ss_icon");
+        // SS Creative Tab Icon
+        ss_icon = registerItem(new Item(), "ss_icon").setTextureName("sereneseasons:ss_icon");
         ss_icon.setCreativeTab(null);
 
         // Main Items
@@ -41,8 +40,8 @@ public class ModItems
             item.setCreativeTab(CreativeTabSS.instance);
         }
 
-        item.setRegistryName(new ResourceLocation(SereneSeasons.MOD_ID, name));
-        ForgeRegistries.ITEMS.register(item);
+        item.setUnlocalizedName(name);
+        GameRegistry.registerItem(item, name);
         SereneSeasons.proxy.registerItemSided(item);
 
         return item;

@@ -7,16 +7,29 @@
  ******************************************************************************/
 package sereneseasons.asm;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
 
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.common.asm.transformers.ModAccessTransformer;
+import cpw.mods.fml.relauncher.CoreModManager;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import sereneseasons.asm.crops.PlantGrowthTransformer;
 
 public class SSLoadingPlugin implements IFMLLoadingPlugin
 {
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[] { "sereneseasons.asm.transformer.EntityRendererTransformer", "sereneseasons.asm.transformer.WorldTransformer" };
+        return new String[]
+        {
+            "sereneseasons.asm.transformer.ColorTransformer",
+            "sereneseasons.asm.transformer.WeatherTransformer",
+            "sereneseasons.asm.crops.PlantGrowthTransformer"
+        };
     }
 
     @Override
@@ -31,9 +44,65 @@ public class SSLoadingPlugin implements IFMLLoadingPlugin
         return null;
     }
 
-    @Override
-    public void injectData(Map<String, Object> data) 
+    private boolean isAppleCore(String pathJar)
     {
+        File modsDir = null;
+        try
+        {
+            Field field = CoreModManager.class.getDeclaredField("mcDir");
+            field.setAccessible(true);
+            modsDir = (File) field.get(null);
+            modsDir = new File(modsDir, "mods");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+        JarFile jar = null;
+        try
+        {
+            String jarPath = new File(modsDir, pathJar).getAbsolutePath();
+            jar = new JarFile(jarPath);
+            if (jar.getManifest() == null)
+                return false;
+            ModAccessTransformer.addJar(jar);
+            Attributes mfAttributes = jar.getManifest().getMainAttributes();
+            String plugin = mfAttributes.getValue("FMLCorePlugin");
+            if (plugin == null)
+                return false;
+            return plugin.equals("squeek.applecore.AppleCore");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (jar != null)
+            {
+                try
+                {
+                    jar.close();
+                }
+                catch (IOException e)
+                {
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void injectData(Map<String, Object> data)
+    {
+        boolean hasAppleCore = false;
+        for (String mod : CoreModManager.getReparseableCoremods())
+        {
+            if (isAppleCore(mod))
+                hasAppleCore = true;
+        }
+        PlantGrowthTransformer.HasAppleCore = hasAppleCore;
     }
 
     @Override
