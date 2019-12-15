@@ -2,6 +2,7 @@ package sereneseasons.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +20,7 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.core.SereneSeasons;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -136,10 +138,11 @@ public class ModFertility
         for (String seed : seeds)
         {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(seed));
+            BlockItem blockItem = (item instanceof BlockItem) ? (BlockItem)item : null;
 
-            if (item instanceof IPlantable)
+            if (blockItem != null && blockItem.getBlock() instanceof IPlantable)
             {
-                String plantName = ((IPlantable) item).getPlant(null, null).getBlock().getRegistryName().toString();
+                String plantName = blockItem.getBlock().getRegistryName().toString();
                 cropSet.add(plantName);
 
                 if (bitmask != 0)
@@ -162,7 +165,7 @@ public class ModFertility
                     seedSeasons.put(seed, bitmask);
                 }
             }
-            else
+            else // Not a BlockItem with an IPlantable block, but uses same registry key as seeds
             {
                 Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
 
@@ -205,8 +208,6 @@ public class ModFertility
             if (seedSeasons.containsKey(name))
             {
                 int mask = seedSeasons.get(name);
-
-                event.getToolTip().add(new StringTextComponent("Fertile Seasons:"));
 
                 if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
                 {
