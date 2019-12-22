@@ -5,13 +5,17 @@ import net.minecraft.block.GlassBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.block.SeasonSensorBlock;
 import sereneseasons.core.SereneSeasons;
@@ -29,12 +33,18 @@ public class ModBlocks
     public static void registerBlocks(RegistryEvent.Register<Block> event)
     {
         SereneSeasons.logger.info("Registering blocks...");
-    	greenhouse_glass = registerBlock(new GlassBlock(Block.Properties.create(Material.GLASS, MaterialColor.GREEN).hardnessAndResistance(0.3F).sound(SoundType.GLASS)), "greenhouse_glass");
-    	
+    	greenhouse_glass = registerBlock(new GlassBlock(Block.Properties.create(Material.GLASS, MaterialColor.GREEN).hardnessAndResistance(0.3F).sound(SoundType.GLASS).func_226896_b_()), "greenhouse_glass");
+
         season_sensors[0] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.SPRING), "season_sensor_spring");
         season_sensors[1] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.SUMMER), "season_sensor_summer");
         season_sensors[2] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.AUTUMN), "season_sensor_autumn");
         season_sensors[3] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.WINTER), "season_sensor_winter");
+
+        if (FMLEnvironment.dist == Dist.CLIENT)
+        {
+            RenderType translucentRenderType = RenderType.func_228645_f_();
+            RenderTypeLookup.setRenderLayer(greenhouse_glass, translucentRenderType);
+        }
     }
 
     @SubscribeEvent
