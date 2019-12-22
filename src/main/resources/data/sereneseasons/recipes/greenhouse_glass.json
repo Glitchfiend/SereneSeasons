@@ -1,0 +1,22 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "#G#",
+    "GWG",
+    "#G#"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:dyes/cyan"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "G": {
+      "tag": "forge:glass/colorless"
+    }
+  },
+  "result": {
+    "item": "sereneseasons:greenhouse_glass"
+  }
+}
