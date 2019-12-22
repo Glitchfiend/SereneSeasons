@@ -5,7 +5,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.FoliageColors;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.ILightReader;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -23,14 +25,15 @@ public class BirchColorHandler
     {
 		if (FMLEnvironment.dist == Dist.CLIENT)
 		{
-			Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) ->
+			Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable ILightReader lightReader, @Nullable BlockPos pos, int tintIndex) ->
 			{
 				int birchColor = FoliageColors.getBirch();
+				World world = Minecraft.getInstance().player.world;
 				int dimension = Minecraft.getInstance().player.dimension.getId();
 
-				if (worldIn != null && pos != null && SeasonsConfig.changeBirchColor.get() && SeasonsConfig.isDimensionWhitelisted(dimension))
+				if (world != null && pos != null && SeasonsConfig.changeBirchColor.get() && SeasonsConfig.isDimensionWhitelisted(dimension))
 				{
-					Biome biome = worldIn.getBiome(pos);
+					Biome biome = world.func_226691_t_(pos);
 
 					if (BiomeConfig.enablesSeasonalEffects(biome))
 					{

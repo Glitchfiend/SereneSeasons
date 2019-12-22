@@ -5,7 +5,7 @@ var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 var GET_TEMPERATURE_CACHED = ASM.mapMethod("func_225486_c");
-var GET_BIOME = ASM.mapMethod("func_180494_b");
+var GET_BIOME = ASM.mapMethod("func_226691_t_");
 var GET_BLOCK_STATE = ASM.mapMethod("func_180495_p");
 var TRANSFORMATIONS = {
     "net.minecraft.block.CauldronBlock": [ ASM.mapMethod("func_176224_k") ], // fillWithRain

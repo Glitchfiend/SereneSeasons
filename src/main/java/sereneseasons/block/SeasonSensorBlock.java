@@ -17,6 +17,7 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
@@ -92,25 +93,25 @@ public class SeasonSensorBlock extends ContainerBlock
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
+    public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
     {
         if (player.isAllowEdit())
         {
             if (world.isRemote)
             {
-                return true;
+                return ActionResultType.SUCCESS;
             }
             else
             {
                 Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
                 world.setBlockState(pos, nextBlock.getDefaultState().with(POWER, state.get(POWER)), 4);
                 ((SeasonSensorBlock)nextBlock).updatePower(world, pos);
-                return true;
+                return ActionResultType.SUCCESS;
             }
         }
         else
         {
-            return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
+            return super.func_225533_a_(state, world, pos, player, hand, rayTraceResult);
         }
     }
 

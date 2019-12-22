@@ -111,7 +111,7 @@ public class RandomUpdateHandler
 			BlockPos topGroundPos = topAirPos.down();
 			BlockState aboveGroundState = world.getBlockState(topAirPos);
 			BlockState groundState = world.getBlockState(topGroundPos);
-			Biome biome = world.getBiome(topAirPos);
+			Biome biome = world.func_226691_t_(topAirPos);
 
 			if (!BiomeConfig.enablesSeasonalEffects(biome))
 				return;

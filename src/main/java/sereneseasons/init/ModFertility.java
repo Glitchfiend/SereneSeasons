@@ -55,7 +55,7 @@ public class ModFertility
     {
         //Get season
         Season season = SeasonHelper.getSeasonState(world).getSeason();
-        Biome biome = world.getBiome(pos);
+        Biome biome = world.func_226691_t_(pos);
 
         if (BiomeConfig.disablesCrops(biome))
         {
