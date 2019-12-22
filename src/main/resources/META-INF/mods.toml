@@ -2,7 +2,7 @@ modLoader="javafml"
 loaderVersion="[24,)"
 issueTrackerURL="https://github.com/Glitchfiend/SereneSeasons/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/serene-seasons"
-logoFile="logo.png"
+logoFile="ss_logo.png"
 
 [[mods]]
     modId="sereneseasons"
