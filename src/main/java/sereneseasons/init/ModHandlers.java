@@ -34,10 +34,9 @@ public class ModHandlers
         SeasonHelper.dataProvider = SEASON_HANDLER;
         
         MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
-        
         MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
-        
         MinecraftForge.EVENT_BUS.register(new SeasonalCropGrowthHandler());
+        MinecraftForge.EVENT_BUS.register(new TimeSkipHandler());
 
         if (FMLEnvironment.dist == Dist.CLIENT)
         {
