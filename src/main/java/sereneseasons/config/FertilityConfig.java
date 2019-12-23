@@ -113,7 +113,7 @@ public class FertilityConfig
 		cropsBreak = BUILDER.comment("Whether crops break if out of season. If false, they simply don't grow.").define("crops_break", false);
 		ignoreUnlistedCrops = BUILDER.comment("Whether unlisted seeds are fertile every season. False means they're fertile every season except Winter").define("ignore_unlisted_crops", false);
 		cropTooltips = BUILDER.comment("Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed crops.").define("crop_tooltips", true);
-		greenhouseGlassMaxHeight = BUILDER.comment("Maximum height greenhouse glass can be above a crop for it to be fertile out of season").defineInRange("greenhouse_glass_max_height", 7, 1, Integer.MAX_VALUE);
+		greenhouseGlassMaxHeight = BUILDER.comment("Maximum height greenhouse glass can be above a crop for it to be fertile out of season").defineInRange("greenhouse_glass_max_height", 16, 1, Integer.MAX_VALUE);
 		BUILDER.pop();
 
 		BUILDER.push("seasonal_fertility");

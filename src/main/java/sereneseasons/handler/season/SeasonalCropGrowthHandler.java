@@ -1,8 +1,6 @@
 package sereneseasons.handler.season;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.GrassBlock;
-import net.minecraft.block.SugarCaneBlock;
+import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,7 +34,7 @@ public class SeasonalCropGrowthHandler
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGreenhouseGlassAboveBlock(world, event.getPos()))
 		{
-			if (FertilityConfig.cropsBreak.get() && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
+			if (FertilityConfig.cropsBreak.get() && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}
@@ -55,7 +53,7 @@ public class SeasonalCropGrowthHandler
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-			if (FertilityConfig.cropsBreak.get() && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock))
+			if (FertilityConfig.cropsBreak.get() && !(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))
 			{
 				event.getWorld().destroyBlock(event.getPos(), true);
 			}
