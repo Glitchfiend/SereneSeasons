@@ -9,7 +9,7 @@ var GET_BIOME = ASM.mapMethod("func_226691_t_");
 var GET_BLOCK_STATE = ASM.mapMethod("func_180495_p");
 var TRANSFORMATIONS = {
     "net.minecraft.block.CauldronBlock": [ ASM.mapMethod("func_176224_k") ], // fillWithRain
-    "net.minecraft.client.renderer.GameRenderer": [ ASM.mapMethod("func_78484_h"), ASM.mapMethod("func_78474_d") ], // addRainParticles, renderRainSnow
+    "net.minecraft.client.renderer.WorldRenderer": [ ASM.mapMethod("func_228436_a_"), ASM.mapMethod("func_228438_a_") ], // addRainParticles, renderRainSnow
     "net.minecraft.entity.passive.SnowGolemEntity": [ ASM.mapMethod("func_70636_d")], // livingTick
     "net.minecraft.world.biome.Biome": [ ASM.mapMethod("func_201854_a"), ASM.mapMethod("func_201850_b") ] // doesWaterFreeze, doesSnowGenerate
     }
