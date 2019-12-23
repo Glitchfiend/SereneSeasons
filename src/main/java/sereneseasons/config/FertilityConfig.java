@@ -25,27 +25,33 @@ public class FertilityConfig
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> autumnCrops;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> winterCrops;
 
-	private static List<String> defaultSpringCrops = Lists.newArrayList("minecraft:potato", "minecraft:carrot", "minecraft:sapling", "minecraft:nether_wart", "minecraft:tallgrass", "minecraft:grass",
-			"minecraft:red_mushroom", "minecraft:brown_mushroom",
+	private static List<String> defaultSpringCrops = Lists.newArrayList(
+		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
+		"minecraft:red_mushroom", "minecraft:brown_mushroom", "minecraft:nether_wart", "minecraft:seagrass", "minecraft:sea_pickle", "minecraft:sweet_berries",
+		"minecraft:grass_block", "minecraft:grass", "minecraft:fern", "minecraft:bamboo", "minecraft:bamboo_sapling",
+		"minecraft:carrot", "minecraft:potato",
 
-			"harvestcraft:caulifloweritem", "harvestcraft:coffeebeanitem", "harvestcraft:garlicitem", "harvestcraft:beanitem", "harvestcraft:rhubarbitem",
-			"harvestcraft:strawberryitem", "harvestcraft:oatsitem", "harvestcraft:celeryitem", "harvestcraft:peasitem", "harvestcraft:broccoliitem",
-			"harvestcraft:cabbageitem", "harvestcraft:spinachitem", "harvestcraft:zucchiniitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem",
-			"harvestcraft:turnipitem", "harvestcraft:leekitem", "harvestcraft:brusselsproutitem", "harvestcraft:asparagusitem", "harvestcraft:barleyitem",
-			"harvestcraft:onionitem", "harvestcraft:parsnipitem", "harvestcraft:cauliflowerseeditem", "harvestcraft:coffeeseeditem",
-			"harvestcraft:garlicseeditem", "harvestcraft:beanseeditem", "harvestcraft:rhubarbseeditem", "harvestcraft:strawberryseeditem",
-			"harvestcraft:oatsseeditem", "harvestcraft:celeryseeditem", "harvestcraft:peasseeditem", "harvestcraft:broccoliseeditem",
-			"harvestcraft:cabbageseeditem", "harvestcraft:spinachseeditem", "harvestcraft:zucchiniseeditem", "harvestcraft:teaseeditem",
-			"harvestcraft:sweetpotatoseeditem", "harvestcraft:turnipseeditem", "harvestcraft:leekseeditem", "harvestcraft:brusselsproutseeditem",
-			"harvestcraft:asparagusseeditem", "harvestcraft:barleyseeditem", "harvestcraft:onionseeditem", "harvestcraft:parsnipseeditem",
-			"harvestcraft:scallionitem", "harvestcraft:scallionseeditem", "harvestcraft:kaleitem", "harvestcraft:kaleseeditem", "harvestcraft:chickpeaitem",
-			"harvestcraft:flaxitem", "harvestcraft:jicamaitem", "harvestcraft:kohlrabiitem", "harvestcraft:lentilitem", "harvestcraft:quinoaitem",
-			"harvestcraft:chickpeaseeditem", "harvestcraft:flaxseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
-			"harvestcraft:lentilseeditem", "harvestcraft:quinoaseeditem");
+		"harvestcraft:caulifloweritem", "harvestcraft:coffeebeanitem", "harvestcraft:garlicitem", "harvestcraft:beanitem", "harvestcraft:rhubarbitem",
+		"harvestcraft:strawberryitem", "harvestcraft:oatsitem", "harvestcraft:celeryitem", "harvestcraft:peasitem", "harvestcraft:broccoliitem",
+		"harvestcraft:cabbageitem", "harvestcraft:spinachitem", "harvestcraft:zucchiniitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem",
+		"harvestcraft:turnipitem", "harvestcraft:leekitem", "harvestcraft:brusselsproutitem", "harvestcraft:asparagusitem", "harvestcraft:barleyitem",
+		"harvestcraft:onionitem", "harvestcraft:parsnipitem", "harvestcraft:cauliflowerseeditem", "harvestcraft:coffeeseeditem",
+		"harvestcraft:garlicseeditem", "harvestcraft:beanseeditem", "harvestcraft:rhubarbseeditem", "harvestcraft:strawberryseeditem",
+		"harvestcraft:oatsseeditem", "harvestcraft:celeryseeditem", "harvestcraft:peasseeditem", "harvestcraft:broccoliseeditem",
+		"harvestcraft:cabbageseeditem", "harvestcraft:spinachseeditem", "harvestcraft:zucchiniseeditem", "harvestcraft:teaseeditem",
+		"harvestcraft:sweetpotatoseeditem", "harvestcraft:turnipseeditem", "harvestcraft:leekseeditem", "harvestcraft:brusselsproutseeditem",
+		"harvestcraft:asparagusseeditem", "harvestcraft:barleyseeditem", "harvestcraft:onionseeditem", "harvestcraft:parsnipseeditem",
+		"harvestcraft:scallionitem", "harvestcraft:scallionseeditem", "harvestcraft:kaleitem", "harvestcraft:kaleseeditem", "harvestcraft:chickpeaitem",
+		"harvestcraft:flaxitem", "harvestcraft:jicamaitem", "harvestcraft:kohlrabiitem", "harvestcraft:lentilitem", "harvestcraft:quinoaitem",
+		"harvestcraft:chickpeaseeditem", "harvestcraft:flaxseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
+		"harvestcraft:lentilseeditem", "harvestcraft:quinoaseeditem");
 
 	private static List<String> defaultSummerCrops = Lists.newArrayList(
-		"minecraft:melon_seeds", "minecraft:wheat_seeds", "minecraft:reeds", "minecraft:cocoa", "minecraft:cactus", "minecraft:sapling",
-		"minecraft:nether_wart", "minecraft:tallgrass", "minecraft:grass", "minecraft:red_mushroom", "minecraft:brown_mushroom",
+		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
+		"minecraft:red_mushroom", "minecraft:brown_mushroom", "minecraft:nether_wart", "minecraft:seagrass", "minecraft:sea_pickle", "minecraft:sweet_berries",
+		"minecraft:grass_block", "minecraft:grass", "minecraft:fern", "minecraft:bamboo", "minecraft:bamboo_sapling", "minecraft:cactus", "minecraft:sugar_cane", "minecraft:cocoa",
+		"minecraft:wheat_seeds", "minecraft:melon_seeds", "minecraft:cocoa_beans",
+
 		"simplecorn:kernels",
 
 		"harvestcraft:coffeebeanitem", "harvestcraft:beanitem", "harvestcraft:blueberryitem", "harvestcraft:cornitem", "harvestcraft:chilipepperitem",
@@ -72,8 +78,11 @@ public class FertilityConfig
 		"harvestcraft:sisalseeditem", "harvestcraft:taroseeditem");
 
 	private static List<String> defaultAutumnCrops = Lists.newArrayList(
-		"minecraft:carrot", "minecraft:pumpkin_seeds", "minecraft:wheat_seeds", "minecraft:beetroot_seeds", "minecraft:sapling",
-		"minecraft:nether_wart", "minecraft:grass", "minecraft:red_mushroom", "minecraft:brown_mushroom",
+		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
+		"minecraft:red_mushroom", "minecraft:brown_mushroom", "minecraft:nether_wart", "minecraft:seagrass", "minecraft:sea_pickle", "minecraft:sweet_berries",
+		"minecraft:grass_block", "minecraft:grass", "minecraft:fern",
+		"minecraft:wheat_seeds", "minecraft:pumpkin_seeds", "minecraft:beetroot_seeds", "minecraft:carrot",
+
 		"simplecorn:kernels",
 
 		"harvestcraft:cornitem", "harvestcraft:artichokeitem", "harvestcraft:beetitem", "harvestcraft:cranberryitem", "harvestcraft:eggplantitem",
@@ -91,7 +100,8 @@ public class FertilityConfig
 		"harvestcraft:quinoaseeditem");
 
 	private static List<String> defaultWinterCrops = Lists.newArrayList(
-"minecraft:sapling", "minecraft:nether_wart", "minecraft:red_mushroom", "minecraft:brown_mushroom"
+		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
+		"minecraft:red_mushroom", "minecraft:brown_mushroom", "minecraft:nether_wart", "minecraft:seagrass", "minecraft:sea_pickle", "minecraft:sweet_berries"
 	);
 
 	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryCreate(obj.toString()) != null;
