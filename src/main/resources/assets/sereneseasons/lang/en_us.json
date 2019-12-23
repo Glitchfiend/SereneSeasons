@@ -1,5 +1,6 @@
 {
-  "commands.sereneseasons.usage": "/sereneseasons <setseason> [args]",
+  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
+  "commands.sereneseasons.getseason.success": "Current season is %s, day %s/%s, tick %s/%s",
   "commands.sereneseasons.setseason.success": "Set season to %s",
   "commands.sereneseasons.setseason.fail": "Invalid season %s",
   "commands.sereneseasons.setseason.disabled": "Seasons are currently disabled!",

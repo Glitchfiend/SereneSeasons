@@ -60,7 +60,7 @@ public class SeasonsConfig
     static
     {
         BUILDER.push("time_settings");
-        dayDuration = BUILDER.comment("The duration of a Minecraft day in ticks").defineInRange("day_duration", 24000, 20, Integer.MAX_VALUE);
+        dayDuration = BUILDER.comment("The duration of a Minecraft day in ticks.\nThis only adjusts the internal length of a day used by the season cycle.\nIt is intended to be used in conjunction with another mod which adjusts the actual length of a Minecraft day.").defineInRange("day_duration", 24000, 20, Integer.MAX_VALUE);
         subSeasonDuration = BUILDER.comment("The duration of a sub season in days").defineInRange("sub_season_duration", 7, 1, Integer.MAX_VALUE);
         startingSubSeason = BUILDER.comment("The starting sub season for new worlds.  0 = Random, 1 - 3 = Early/Mid/Late Spring, 4 - 6 = Early/Mid/Late Summer, 7 - 9 = Early/Mid/Late Autumn, 10 - 12 = Early/Mid/Late Winter").defineInRange("starting_sub_season", 5, 0, 12);
         progressSeasonWhileOffline = BUILDER.comment("If the season should progress on a server with no players online").define("progress_season_while_offline", true);

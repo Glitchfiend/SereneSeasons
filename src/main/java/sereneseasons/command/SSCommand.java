@@ -12,6 +12,7 @@ public class SSCommand
             LiteralArgumentBuilder.<CommandSource>literal("ss")
                 .requires(cs -> cs.hasPermissionLevel(2))
                 .then(CommandSetSeason.register())
+                .then(CommandGetSeason.register())
         );
     }
 }
