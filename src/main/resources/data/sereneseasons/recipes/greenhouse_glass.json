@@ -1,14 +1,11 @@
 {
   "type": "crafting_shaped",
   "pattern": [
-    "#G#",
+    " G ",
     "GWG",
-    "#G#"
+    " G "
   ],
   "key": {
-    "#": {
-      "tag": "forge:dyes/cyan"
-    },
     "W": {
       "tag": "minecraft:planks"
     },

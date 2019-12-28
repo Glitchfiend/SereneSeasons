@@ -56,16 +56,9 @@ public class CalendarItem extends Item
                 else
                 {
                     double d0;
-                    
-                    if (SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
-                    {
-                        int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
-                        d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
-                    }
-                    else
-                    {
-                        d0 = Math.random();
-                    }
+
+                    int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
+                    d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
 
                     return MathHelper.positiveModulo((float)d0, 1.0F);
                 }

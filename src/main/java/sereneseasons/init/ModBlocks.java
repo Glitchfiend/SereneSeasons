@@ -35,10 +35,10 @@ public class ModBlocks
         SereneSeasons.logger.info("Registering blocks...");
     	greenhouse_glass = registerBlock(new GlassBlock(Block.Properties.create(Material.GLASS, MaterialColor.GREEN).hardnessAndResistance(0.3F).sound(SoundType.GLASS).func_226896_b_()), "greenhouse_glass");
 
-        season_sensors[0] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.SPRING), "season_sensor_spring");
-        season_sensors[1] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.SUMMER), "season_sensor_summer");
-        season_sensors[2] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.AUTUMN), "season_sensor_autumn");
-        season_sensors[3] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).sound(SoundType.WOOD), SeasonSensorBlock.DetectorType.WINTER), "season_sensor_winter");
+        season_sensors[0] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SPRING), "season_sensor_spring");
+        season_sensors[1] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SUMMER), "season_sensor_summer");
+        season_sensors[2] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.AUTUMN), "season_sensor_autumn");
+        season_sensors[3] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.WINTER), "season_sensor_winter");
 
         if (FMLEnvironment.dist == Dist.CLIENT)
         {
@@ -57,6 +57,16 @@ public class ModBlocks
     public static Block registerBlock(Block block, String name)
     {
         BlockItem itemBlock = new BlockItem(block, new Item.Properties().group(ItemGroupSS.instance));
+        block.setRegistryName(name);
+        itemBlock.setRegistryName(name);
+        ForgeRegistries.BLOCKS.register(block);
+        ForgeRegistries.ITEMS.register(itemBlock);
+        return block;
+    }
+
+    public static Block registerBlockNoGroup(Block block, String name)
+    {
+        BlockItem itemBlock = new BlockItem(block, new Item.Properties().group(null));
         block.setRegistryName(name);
         itemBlock.setRegistryName(name);
         ForgeRegistries.BLOCKS.register(block);
