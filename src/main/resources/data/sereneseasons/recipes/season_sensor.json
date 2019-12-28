@@ -2,7 +2,7 @@
   "type": "crafting_shaped",
   "pattern": [
     "GGG",
-    "QSQ",
+    "QCQ",
     "###"
   ],
   "key": {
@@ -10,8 +10,8 @@
       "item": "minecraft:cobblestone_slab",
       "data": 3
     },
-    "S": {
-      "item": "sereneseasons:season_clock"
+    "C": {
+      "item": "sereneseasons:calendar"
     },
     "Q": {
       "tag": "forge:gems/quartz"

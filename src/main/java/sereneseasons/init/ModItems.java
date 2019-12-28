@@ -5,10 +5,10 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import sereneseasons.item.SeasonClockItem;
+import sereneseasons.item.CalendarItem;
 import sereneseasons.util.inventory.ItemGroupSS;
 
-import static sereneseasons.api.SSItems.season_clock;
+import static sereneseasons.api.SSItems.calendar;
 import static sereneseasons.api.SSItems.ss_icon;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -21,7 +21,7 @@ public class ModItems
         ss_icon = registerItem(new Item(new Item.Properties()), "ss_icon");
 
         // Main Items
-        season_clock = registerItem(new SeasonClockItem(new Item.Properties().maxStackSize(1).group(ItemGroupSS.instance)), "season_clock");
+        calendar = registerItem(new CalendarItem(new Item.Properties().maxStackSize(1).group(ItemGroupSS.instance)), "calendar");
     }
 
     public static Item registerItem(Item item, String name)

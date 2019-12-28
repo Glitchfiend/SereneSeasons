@@ -11,12 +11,12 @@
         "recipe": "sereneseasons:season_sensor"
       }
     },
-    "has_quartz": {
+    "has_calendar": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:quartz"
+            "item": "sereneseasons:calendar"
           }
         ]
       }
@@ -25,7 +25,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_quartz"
+      "has_calendar"
     ]
   ]
 }

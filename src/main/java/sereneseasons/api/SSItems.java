@@ -11,6 +11,6 @@ import net.minecraft.item.Item;
 
 public class SSItems
 {
-    public static Item season_clock;
+    public static Item calendar;
     public static Item ss_icon;
 }
