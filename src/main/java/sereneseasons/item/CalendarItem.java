@@ -87,7 +87,7 @@ public class CalendarItem extends Item
 
                 if (world == null)
                 {
-                    return 0.0F;
+                    return 2.0F;
                 }
                 else
                 {
@@ -115,7 +115,7 @@ public class CalendarItem extends Item
                     }
                     else
                     {
-                        seasontype = 0.0F;
+                        seasontype = 2.0F;
                     }
 
                     return seasontype;

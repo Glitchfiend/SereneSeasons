@@ -27,6 +27,7 @@
         { "predicate": { "seasontype": 1, "time": 0.6666666 }, "model": "sereneseasons:item/tropical_calendar_05" },
         { "predicate": { "seasontype": 1, "time": 0.7500000 }, "model": "sereneseasons:item/tropical_calendar_00" },
         { "predicate": { "seasontype": 1, "time": 0.8333333 }, "model": "sereneseasons:item/tropical_calendar_00" },
-        { "predicate": { "seasontype": 1, "time": 0.9166666 }, "model": "sereneseasons:item/tropical_calendar_01" }
+        { "predicate": { "seasontype": 1, "time": 0.9166666 }, "model": "sereneseasons:item/tropical_calendar_01" },
+		{ "predicate": { "seasontype": 2, "time": 0.0000000 }, "model": "sereneseasons:item/calendar_null" }
     ]
 }
