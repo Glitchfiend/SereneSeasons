@@ -37,6 +37,8 @@ public class FertilityConfig
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
 
+		"xlfoodmod:onion", "xlfoodmod:strawberry_seeds",
+
 		"harvestcraft:caulifloweritem", "harvestcraft:coffeebeanitem", "harvestcraft:garlicitem", "harvestcraft:beanitem", "harvestcraft:rhubarbitem",
 		"harvestcraft:strawberryitem", "harvestcraft:oatsitem", "harvestcraft:celeryitem", "harvestcraft:peasitem", "harvestcraft:broccoliitem",
 		"harvestcraft:cabbageitem", "harvestcraft:spinachitem", "harvestcraft:zucchiniitem", "harvestcraft:tealeafitem", "harvestcraft:sweetpotatoitem",
@@ -62,6 +64,9 @@ public class FertilityConfig
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
+
+		"xlfoodmod:onion", "xlfoodmod:tomato_seeds", "xlfoodmod:lettuce_seeds", "xlfoodmod:cucumber_seeds", "xlfoodmod:pepper_seeds", "xlfoodmod:corn_seeds",
+		"xlfoodmod:rice",
 
 		"simplecorn:kernels",
 
@@ -98,6 +103,8 @@ public class FertilityConfig
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
+
+		"xlfoodmod:onion", "xlfoodmod:corn_seeds",
 
 		"simplecorn:kernels",
 
