@@ -52,7 +52,13 @@ public class FertilityConfig
 		"harvestcraft:scallionitem", "harvestcraft:scallionseeditem", "harvestcraft:kaleitem", "harvestcraft:kaleseeditem", "harvestcraft:chickpeaitem",
 		"harvestcraft:flaxitem", "harvestcraft:jicamaitem", "harvestcraft:kohlrabiitem", "harvestcraft:lentilitem", "harvestcraft:quinoaitem",
 		"harvestcraft:chickpeaseeditem", "harvestcraft:flaxseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
-		"harvestcraft:lentilseeditem", "harvestcraft:quinoaseeditem");
+		"harvestcraft:lentilseeditem", "harvestcraft:quinoaseeditem",
+	
+		"simplefarming:corn_seeds", "simplefarming:cassava_seeds", "simplefarming:carrot_seeds", "simplefarming:barley_seeds", "simplefarming:quinoa_seeds",
+		"simplefarming:zucchini_seeds", "simplefarming:turnip_seeds", "simplefarming:yam_seeds", "simplefarming:tomato_seeds", "simplefarming:sweet_potato_seeds",
+		"simplefarming:squash_seeds", "simplefarming:spinach_seeds", "simplefarming:rye_seeds", "simplefarming:ginger_seeds", "simplefarming:lettuce_seeds",
+		"simplefarming:oat_seeds", "simplefarming:onion_seeds", "simplefarming:pea_seeds", "simplefarming:peanut_seeds", "simplefarming:pepper_seeds",
+		"simplefarming:potato_seeds", "simplefarming:radish_seeds", "simplefarming:eggplant_seeds", "simplefarming:cucumber_seeds");
 
 	private static List<String> defaultSummerCrops = Lists.newArrayList(
 		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
@@ -91,7 +97,18 @@ public class FertilityConfig
 		"harvestcraft:milletitem", "harvestcraft:mulberryitem", "harvestcraft:sisalitem", "harvestcraft:taroitem", "harvestcraft:agaveseeditem",
 		"harvestcraft:amaranthseeditem", "harvestcraft:cassavaseeditem", "harvestcraft:greengrapeseeditem", "harvestcraft:juteseeditem",
 		"harvestcraft:kenafseeditem", "harvestcraft:kohlrabiseeditem", "harvestcraft:milletseeditem", "harvestcraft:mulberryseeditem",
-		"harvestcraft:sisalseeditem", "harvestcraft:taroseeditem");
+		"harvestcraft:sisalseeditem", "harvestcraft:taroseeditem",
+	
+		"simplefarming:corn_seeds", "simplefarming:cassava_seeds", "simplefarming:carrot_seeds", "simplefarming:barley_seeds", "simplefarming:quinoa_seeds", 
+		"simplefarming:zucchini_seeds", "simplefarming:turnip_seeds", "simplefarming:yam_seeds", "simplefarming:tomato_seeds", "simplefarming:sweet_potato_seeds", 
+		"simplefarming:squash_seeds", "simplefarming:spinach_seeds", "simplefarming:rye_seeds", "simplefarming:ginger_seeds", "simplefarming:lettuce_seeds", 
+		"simplefarming:onion_seeds", "simplefarming:pea_seeds", "simplefarming:peanut_seeds", "simplefarming:pepper_seeds", "simplefarming:potato_seeds", 
+		"simplefarming:radish_seeds", "simplefarming:eggplant_seeds", "simplefarming:cucumber_seeds", "simplefarming:cantaloupe_seeds", "simplefarming:broccoli_seeds", 
+		"simplefarming:sunflower_seeds", "simplefarming:cumin_seeds", "simplefarming:soybean_seeds", "simplefarming:sorghum_seeds", "simplefarming:rice_seeds", 
+		"simplefarming:honeydew_seeds", "simplefarming:grape_seeds", "simplefarming:kenaf_seeds", "simplefarming:cotton_seeds", "simplefarming:apple_sapling",
+		"simplefarming:apricot_sapling", "simplefarming:banana_sapling", "simplefarming:cherry_sapling", "simplefarming:mango_sapling", "simplefarming:olive_sapling",
+		"simplefarming:orange_sapling", "simplefarming:pear_sapling", "simplefarming:plum_sapling", "simplefarming:blackberry_bush", "simplefarming:blueberry_bush",
+		"simplefarming:raspberry_bush", "simplefarming:strawberry_bush");
 
 	private static List<String> defaultAutumnCrops = Lists.newArrayList(
 		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
@@ -120,7 +137,11 @@ public class FertilityConfig
 		"harvestcraft:greengrapeitem", "harvestcraft:huckleberryitem", "harvestcraft:jicamaitem", "harvestcraft:kohlrabiitem",
 		"harvestcraft:quinoaitem", "harvestcraft:amaranthseeditem", "harvestcraft:arrowrootseeditem", "harvestcraft:elderberryseeditem",
 		"harvestcraft:greengrapeseeditem", "harvestcraft:huckleberryseeditem", "harvestcraft:jicamaseeditem", "harvestcraft:kohlrabiseeditem",
-		"harvestcraft:quinoaseeditem");
+		"harvestcraft:quinoaseeditem",
+	
+		"simplefarming:carrot_seeds", "simplefarming:quinoa_seeds", "simplefarming:zucchini_seeds", "simplefarming:turnip_seeds", "simplefarming:sweet_potato_seeds", 
+		"simplefarming:squash_seeds", "simplefarming:spinach_seeds", "simplefarming:soybean_seeds", "simplefarming:rye_seeds", "simplefarming:ginger_seeds", 
+		"simplefarming:lettuce_seeds", "simplefarming:oat_seeds", "simplefarming:onion_seeds", "simplefarming:peanut_seeds", "simplefarming:potato_seeds");
 
 	private static List<String> defaultWinterCrops = Lists.newArrayList(
 		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
@@ -129,8 +150,9 @@ public class FertilityConfig
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling"
-	);
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
+		
+		"simplefarming:carrot_seeds", "simplefarming:turnip_seeds", "simplefarming:oat_seeds", "simplefarming:onion_seeds", "simplefarming:potato_seeds");
 
 	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryCreate(obj.toString()) != null;
 
