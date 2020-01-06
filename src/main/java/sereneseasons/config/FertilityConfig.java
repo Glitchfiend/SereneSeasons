@@ -149,9 +149,7 @@ public class FertilityConfig
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
-		
-		"simplefarming:carrot_seeds", "simplefarming:turnip_seeds", "simplefarming:oat_seeds", "simplefarming:onion_seeds", "simplefarming:potato_seeds");
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling");
 
 	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryCreate(obj.toString()) != null;
 
