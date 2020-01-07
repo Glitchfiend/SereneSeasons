@@ -32,7 +32,7 @@ public class FertilityConfig
 		"minecraft:grass_block", "minecraft:grass", "minecraft:fern", "minecraft:bamboo", "minecraft:bamboo_sapling",
 		"minecraft:carrot", "minecraft:potato",
 
-		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
+		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
@@ -66,7 +66,7 @@ public class FertilityConfig
 		"minecraft:grass_block", "minecraft:grass", "minecraft:fern", "minecraft:bamboo", "minecraft:bamboo_sapling", "minecraft:cactus", "minecraft:sugar_cane", "minecraft:cocoa",
 		"minecraft:wheat_seeds", "minecraft:melon_seeds", "minecraft:cocoa_beans",
 
-		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
+		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
@@ -115,7 +115,7 @@ public class FertilityConfig
 		"minecraft:grass_block", "minecraft:grass", "minecraft:fern",
 		"minecraft:wheat_seeds", "minecraft:pumpkin_seeds", "minecraft:beetroot_seeds", "minecraft:carrot",
 
-		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
+		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
@@ -141,13 +141,13 @@ public class FertilityConfig
 		"simplefarming:carrot_seeds", "simplefarming:corn_seeds", "simplefarming:eggplant_seeds", "simplefarming:ginger_seeds", "simplefarming:grape_seeds",
 		"simplefarming:oat_seeds", "simplefarming:onion_seeds", "simplefarming:pea_seeds", "simplefarming:quinoa_seeds", "simplefarming:rye_seeds",
 		"simplefarming:spinach_seeds", "simplefarming:squash_seeds", "simplefarming:sunflower_seeds", "simplefarming:sweet_potato_seeds", "simplefarming:yam_seeds",
-		"simplefarming:apple_sapling", "simplefarming:pear_sapling", "simplefarming:plum_sapling", "simplefarming:blackberry_bush", "simplefarming:blueberry_bush");
+		"simplefarming:apple_sapling", "simplefarming:pear_sapling", "simplefarming:plum_sapling", "simplefarming:blackberry_bush");
 
 	private static List<String> defaultWinterCrops = Lists.newArrayList(
 		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
 		"minecraft:red_mushroom", "minecraft:brown_mushroom", "minecraft:nether_wart", "minecraft:seagrass", "minecraft:sea_pickle", "minecraft:sweet_berries",
 
-		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
+		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling");
