@@ -10,6 +10,8 @@ package sereneseasons.util;
 
 import org.lwjgl.util.Color;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.biome.BiomeGenBase;
 import sereneseasons.api.season.ISeasonColorProvider;
@@ -60,6 +62,7 @@ public class SeasonColourUtil
         return getIntFromColour(newColour);
     }
     
+    @SideOnly(Side.CLIENT)
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, BiomeGenBase biome, int originalColour)
     {
         if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().thePlayer.dimension))
@@ -76,6 +79,7 @@ public class SeasonColourUtil
         return saturationMultiplier != -1 ? saturateColour(newColour, saturationMultiplier) : newColour;
     }
     
+    @SideOnly(Side.CLIENT)
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, BiomeGenBase biome, int originalColour)
     {
         if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(Minecraft.getMinecraft().thePlayer.dimension))
