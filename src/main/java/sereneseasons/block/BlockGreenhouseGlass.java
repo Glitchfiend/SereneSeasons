@@ -7,12 +7,10 @@
  ******************************************************************************/
 package sereneseasons.block;
 
-import java.util.Random;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBreakable;
+import net.minecraft.block.BlockGlass;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemBlock;
@@ -21,17 +19,20 @@ import sereneseasons.api.ISSBlock;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.item.ItemSSBlock;
 
-public class BlockGreenhouseGlass extends BlockBreakable implements ISSBlock
+public class BlockGreenhouseGlass extends BlockGlass implements ISSBlock
 {
     // implement ISSBlock
     @Override
-    public Class<? extends ItemBlock> getItemClass() { return ItemSSBlock.class; }
+    public Class<? extends ItemBlock> getItemClass()
+    {
+        return ItemSSBlock.class;
+    }
 
     IIcon icon;
 
     public BlockGreenhouseGlass()
     {
-        super("", Material.glass, false);
+        super(Material.glass, false);
         this.setHardness(0.3F);
         this.setHarvestLevel("pickaxe", 0);
         this.setStepSound(Block.soundTypeGlass);
@@ -48,25 +49,9 @@ public class BlockGreenhouseGlass extends BlockBreakable implements ISSBlock
         return this.icon;
     }
 
-    /**
-     * Returns the quantity of items to drop on block destruction.
-     */
-    @Override
-    public int quantityDropped(Random random)
+    @SideOnly(Side.CLIENT)
+    public int getRenderBlockPass()
     {
-        return 0;
+        return 1;
     }
-
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    @Override
-    protected boolean canSilkHarvest()
-    {
-        return true;
-    }
-
 }

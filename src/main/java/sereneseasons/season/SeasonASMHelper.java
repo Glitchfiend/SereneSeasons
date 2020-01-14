@@ -64,7 +64,7 @@ public class SeasonASMHelper
         }
         else if (checkLight)
         {
-            if (y >= 0 && y < 256 && world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, x, y, z) < 10)
+            if (y >= 0 && y < 256 && world.getSavedLightValue(EnumSkyBlock.Block, x, y, z) < 10)
             {
                 Block block = world.getBlock(x, y, z);
 
@@ -111,7 +111,7 @@ public class SeasonASMHelper
         }
         else
         {
-            if (y >= 0 && y < 256 && world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, x, y, z) < 10)
+            if (y >= 0 && y < 256 && world.getSavedLightValue(EnumSkyBlock.Block, x, y, z) < 10)
             {
                 Block block = world.getBlock(x, y, z);
                 int meta = world.getBlockMetadata(x, y, z);

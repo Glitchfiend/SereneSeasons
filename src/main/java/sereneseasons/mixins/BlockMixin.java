@@ -3,6 +3,8 @@ package sereneseasons.mixins;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockGrass;
@@ -56,6 +58,7 @@ public abstract class BlockMixin
      * @reason Redirect to our coloring handlers.
      */
     @Overwrite
+    @SideOnly(Side.CLIENT)
     public int colorMultiplier(IBlockAccess blockAccess, int x, int y, int z)
     {
         Block block = (Block) (Object) this;

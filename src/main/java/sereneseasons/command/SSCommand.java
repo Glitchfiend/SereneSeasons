@@ -9,7 +9,9 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import sereneseasons.api.season.Season;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
@@ -41,6 +43,12 @@ public class SSCommand extends CommandBase
         return 2;
     }
 
+    String[] getSeasons()
+    {
+        return new String[]
+        { "early_spring", "mid_spring", "late_spring", "early_summer", "mid_summer", "late_summer", "early_autum", "mid_autumn", "late_autumn", "early_winter", "mid_winter", "late_winter" };
+    }
+
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException
     {
@@ -50,6 +58,12 @@ public class SSCommand extends CommandBase
         }
         else if ("setseason".equals(args[0]))
         {
+            if (args.length < 2)
+            {
+                sender.addChatMessage(new ChatComponentText("Available seasons:"));
+                sender.addChatMessage(new ChatComponentText(String.join(" ", getSeasons())));
+                return;
+            }
             setSeason(sender, args);
         }
     }
@@ -88,6 +102,11 @@ public class SSCommand extends CommandBase
         if (args.length == 1)
         {
             return getListOfStringsMatchingLastWord(args, "setseason");
+        }
+
+        if (args.length == 2)
+        {
+            return getListOfStringsMatchingLastWord(args, getSeasons());
         }
 
         return null;

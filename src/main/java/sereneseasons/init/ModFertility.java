@@ -207,7 +207,16 @@ public class ModFertility
         // Set up tooltips if enabled and on client side
         if (FertilityConfig.general_category.crop_tooltips && FertilityConfig.general_category.seasonal_crops)
         {
-            String name = GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem()).toString();
+            String name;
+            try
+            {
+                // Some mods register items with null as name. This crashes inside findUniqueIdentifierFor, so we need to catch that...
+                name = GameRegistry.findUniqueIdentifierFor(event.itemStack.getItem()).toString();
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
             if (seedSeasons.containsKey(name))
             {
                 int mask = seedSeasons.get(name);

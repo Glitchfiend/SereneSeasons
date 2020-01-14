@@ -4,6 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -57,6 +59,7 @@ public abstract class BiomeMixin implements IBiomeMixin
      * @reason Redirect to our coloring handlers.
      */
     @Overwrite
+    @SideOnly(Side.CLIENT)
     public boolean canSpawnLightningBolt()
     {
         World world = Minecraft.getMinecraft().theWorld;
@@ -72,6 +75,7 @@ public abstract class BiomeMixin implements IBiomeMixin
      * @reason Redirect to our coloring handlers.
      */
     @Overwrite
+    @SideOnly(Side.CLIENT)
     public boolean getEnableSnow()
     {
         World world = Minecraft.getMinecraft().theWorld;
@@ -87,6 +91,7 @@ public abstract class BiomeMixin implements IBiomeMixin
      * @reason Redirect to our coloring handlers.
      */
     @Overwrite
+    @SideOnly(Side.CLIENT)
     public float getFloatTemperature(int x, int y, int z)
     {
         World world = Minecraft.getMinecraft().theWorld;

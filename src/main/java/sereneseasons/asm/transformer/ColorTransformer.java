@@ -14,7 +14,6 @@ import net.minecraft.launchwrapper.IClassTransformer;
 
 public class ColorTransformer implements IClassTransformer
 {
-
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes)
     {
@@ -43,7 +42,10 @@ public class ColorTransformer implements IClassTransformer
                     if (instruction.getOpcode() == Opcodes.INVOKESPECIAL)
                     {
                         MethodInsnNode superCall = (MethodInsnNode) instruction;
-                        superCall.name = "colorMultiplierOld";
+                        if (superCall.name.equals("colorMultiplier") || superCall.name.equals("func_149720_d") || (superCall.name.equals("d") && superCall.desc.equals("(Lahl;III)I")))
+                        {
+                            superCall.name = "colorMultiplierOld";
+                        }
                     }
                 }
             }
