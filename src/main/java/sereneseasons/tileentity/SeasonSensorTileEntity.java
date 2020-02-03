@@ -25,13 +25,13 @@ public class SeasonSensorTileEntity extends TileEntity implements ITickableTileE
     @Override
     public void tick()
     {
-        if (this.world != null && !this.world.isRemote && SeasonHelper.getSeasonState(this.world).getSeasonCycleTicks() % 20L == 0L)
+        if (this.level != null && !this.level.isClientSide && SeasonHelper.getSeasonState(this.level).getSeasonCycleTicks() % 20L == 0L)
         {
             BlockState blockstate = this.getBlockState();
             Block block = blockstate.getBlock();
             if (block instanceof SeasonSensorBlock)
             {
-                ((SeasonSensorBlock)block).updatePower(this.world, this.pos);
+                ((SeasonSensorBlock)block).updatePower(this.level, this.worldPosition);
             }
         }
     }

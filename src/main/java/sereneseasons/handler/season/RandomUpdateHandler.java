@@ -52,30 +52,30 @@ public class RandomUpdateHandler
 
 		if (season == Season.WINTER)
 		{
-			if (world.getWorldInfo().isThundering())
+			if (world.getLevelData().isThundering())
 			{
-				world.getWorldInfo().setThundering(false);
+				world.getLevelData().setThundering(false);
 				;
 			}
-			if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 36000)
+			if (!world.getLevelData().isRaining() && world.getLevelData().getRainTime() > 36000)
 			{
-				world.getWorldInfo().setRainTime(world.rand.nextInt(24000) + 12000);
+				world.getLevelData().setRainTime(world.random.nextInt(24000) + 12000);
 			}
 		}
 		else
 		{
 			if (season == Season.SPRING)
 			{
-				if (!world.getWorldInfo().isRaining() && world.getWorldInfo().getRainTime() > 96000)
+				if (!world.getLevelData().isRaining() && world.getLevelData().getRainTime() > 96000)
 				{
-					world.getWorldInfo().setRainTime(world.rand.nextInt(84000) + 12000);
+					world.getLevelData().setRainTime(world.random.nextInt(84000) + 12000);
 				}
 			}
 			else if (season == Season.SUMMER)
 			{
-				if (!world.getWorldInfo().isThundering() && world.getWorldInfo().getThunderTime() > 36000)
+				if (!world.getLevelData().isThundering() && world.getLevelData().getThunderTime() > 36000)
 				{
-					world.getWorldInfo().setThunderTime(world.rand.nextInt(24000) + 12000);
+					world.getLevelData().setThunderTime(world.random.nextInt(24000) + 12000);
 				}
 			}
 		}
@@ -83,10 +83,10 @@ public class RandomUpdateHandler
 
 	private void meltInChunk(ChunkManager chunkManager, Chunk chunkIn, Season.SubSeason subSeason)
 	{
-		ServerWorld world = chunkManager.world;
+		ServerWorld world = chunkManager.level;
 		ChunkPos chunkpos = chunkIn.getPos();
-		int i = chunkpos.getXStart();
-		int j = chunkpos.getZStart();
+		int i = chunkpos.getMinBlockX();
+		int j = chunkpos.getMinBlockZ();
 		int meltRand;
 
 		switch (subSeason)
@@ -105,13 +105,13 @@ public class RandomUpdateHandler
 				break;
 		}
 
-		if (world.rand.nextInt(meltRand) == 0)
+		if (world.random.nextInt(meltRand) == 0)
 		{
-			BlockPos topAirPos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, world.func_217383_a(i, 0, j, 15));
-			BlockPos topGroundPos = topAirPos.down();
+			BlockPos topAirPos = world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, world.getBlockRandomPos(i, 0, j, 15));
+			BlockPos topGroundPos = topAirPos.below();
 			BlockState aboveGroundState = world.getBlockState(topAirPos);
 			BlockState groundState = world.getBlockState(topGroundPos);
-			Biome biome = world.func_226691_t_(topAirPos);
+			Biome biome = world.getBiome(topAirPos);
 
 			if (!BiomeConfig.enablesSeasonalEffects(biome))
 				return;
@@ -120,14 +120,14 @@ public class RandomUpdateHandler
 			{
 				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 				{
-					world.setBlockState(topAirPos, Blocks.AIR.getDefaultState());
+					world.setBlockAndUpdate(topAirPos, Blocks.AIR.defaultBlockState());
 				}
 			}
 			else if (groundState.getBlock() == Blocks.ICE)
 			{
 				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 				{
-					((IceBlock) Blocks.ICE).turnIntoWater(groundState, world, topGroundPos);
+					((IceBlock) Blocks.ICE).melt(groundState, world, topGroundPos);
 				}
 			}
 		}
@@ -150,17 +150,17 @@ public class RandomUpdateHandler
 				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.getDimension().getType().getId()))
 				{
 					ServerWorld world = (ServerWorld) event.world;
-					ChunkManager chunkManager = world.getChunkProvider().chunkManager;
+					ChunkManager chunkManager = world.getChunkSource().chunkMap;
 
 					// Replicate the behaviour of ServerChunkProvider
-					chunkManager.func_223491_f().forEach((chunkHolder) ->
+					chunkManager.getChunks().forEach((chunkHolder) ->
 					{
-						Optional<Chunk> optional = chunkHolder.func_219297_b().getNow(ChunkHolder.UNLOADED_CHUNK).left();
+						Optional<Chunk> optional = chunkHolder.getEntityTickingChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left();
 						if (optional.isPresent())
 						{
 							Chunk chunk = optional.get();
-							ChunkPos chunkpos = chunkHolder.getPosition();
-							if (!chunkManager.isOutsideSpawningRadius(chunkpos))
+							ChunkPos chunkpos = chunkHolder.getPos();
+							if (!chunkManager.noPlayersCloseForSpawning(chunkpos))
 							{
 								this.meltInChunk(chunkManager, chunk, subSeason);
 							}

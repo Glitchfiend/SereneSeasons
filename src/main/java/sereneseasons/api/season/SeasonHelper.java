@@ -23,7 +23,7 @@ public class SeasonHelper
     {
         ISeasonState data;
 
-        if (!world.isRemote())
+        if (!world.isClientSide())
         {
             data = dataProvider.getServerSeasonState(world);
         }

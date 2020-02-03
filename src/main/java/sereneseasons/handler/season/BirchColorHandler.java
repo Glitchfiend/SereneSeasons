@@ -27,13 +27,13 @@ public class BirchColorHandler
 		{
 			Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable ILightReader lightReader, @Nullable BlockPos pos, int tintIndex) ->
 			{
-				int birchColor = FoliageColors.getBirch();
-				World world = Minecraft.getInstance().player.world;
+				int birchColor = FoliageColors.getBirchColor();
+				World world = Minecraft.getInstance().player.level;
 				int dimension = Minecraft.getInstance().player.dimension.getId();
 
 				if (world != null && pos != null && SeasonsConfig.changeBirchColor.get() && SeasonsConfig.isDimensionWhitelisted(dimension))
 				{
-					Biome biome = world.func_226691_t_(pos);
+					Biome biome = world.getBiome(pos);
 
 					if (BiomeConfig.enablesSeasonalEffects(biome))
 					{

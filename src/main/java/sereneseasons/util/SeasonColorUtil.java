@@ -67,7 +67,7 @@ public class SeasonColorUtil
     
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        int dimensionId =  Minecraft.getInstance().world.getDimension().getType().getId();
+        int dimensionId =  Minecraft.getInstance().level.getDimension().getType().getId();
         if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimensionId))
             return originalColour;
 
@@ -84,7 +84,7 @@ public class SeasonColorUtil
     
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
     {
-        int dimensionId =  Minecraft.getInstance().world.getDimension().getType().getId();
+        int dimensionId =  Minecraft.getInstance().level.getDimension().getType().getId();
         if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimensionId))
             return originalColour;
 

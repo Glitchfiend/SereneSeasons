@@ -33,16 +33,16 @@ public class ModBlocks
     public static void registerBlocks(RegistryEvent.Register<Block> event)
     {
         SereneSeasons.logger.info("Registering blocks...");
-    	greenhouse_glass = registerBlock(new GlassBlock(Block.Properties.create(Material.GLASS, MaterialColor.GREEN).hardnessAndResistance(0.3F).sound(SoundType.GLASS).func_226896_b_()), "greenhouse_glass");
+    	greenhouse_glass = registerBlock(new GlassBlock(Block.Properties.of(Material.GLASS, MaterialColor.COLOR_GREEN).strength(0.3F).sound(SoundType.GLASS).noOcclusion()), "greenhouse_glass");
 
-        season_sensors[0] = registerBlock(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SPRING), "season_sensor_spring");
-        season_sensors[1] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SUMMER), "season_sensor_summer");
-        season_sensors[2] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.AUTUMN), "season_sensor_autumn");
-        season_sensors[3] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.WINTER), "season_sensor_winter");
+        season_sensors[0] = registerBlock(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SPRING), "season_sensor_spring");
+        season_sensors[1] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SUMMER), "season_sensor_summer");
+        season_sensors[2] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.AUTUMN), "season_sensor_autumn");
+        season_sensors[3] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.WINTER), "season_sensor_winter");
 
         if (FMLEnvironment.dist == Dist.CLIENT)
         {
-            RenderType translucentRenderType = RenderType.func_228645_f_();
+            RenderType translucentRenderType = RenderType.translucent();
             RenderTypeLookup.setRenderLayer(greenhouse_glass, translucentRenderType);
         }
     }
@@ -56,7 +56,7 @@ public class ModBlocks
 
     public static Block registerBlock(Block block, String name)
     {
-        BlockItem itemBlock = new BlockItem(block, new Item.Properties().group(ItemGroupSS.instance));
+        BlockItem itemBlock = new BlockItem(block, new Item.Properties().tab(ItemGroupSS.instance));
         block.setRegistryName(name);
         itemBlock.setRegistryName(name);
         ForgeRegistries.BLOCKS.register(block);
@@ -66,7 +66,7 @@ public class ModBlocks
 
     public static Block registerBlockNoGroup(Block block, String name)
     {
-        BlockItem itemBlock = new BlockItem(block, new Item.Properties().group(null));
+        BlockItem itemBlock = new BlockItem(block, new Item.Properties().tab(null));
         block.setRegistryName(name);
         itemBlock.setRegistryName(name);
         ForgeRegistries.BLOCKS.register(block);
@@ -76,7 +76,7 @@ public class ModBlocks
 
     public static <T extends TileEntity> TileEntityType<T> registerTileEntityType(String name, Supplier<? extends T> factoryIn, Block... validBlocks)
     {
-        TileEntityType type = TileEntityType.Builder.create(factoryIn, validBlocks).build(null);
+        TileEntityType type = TileEntityType.Builder.of(factoryIn, validBlocks).build(null);
         type.setRegistryName(name);
         ForgeRegistries.TILE_ENTITIES.register(type);
         return type;

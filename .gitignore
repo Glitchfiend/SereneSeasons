@@ -18,3 +18,10 @@
 *.iws
 src/main/resources/META-INF/biomesoplenty_at.cfg
 *.launch
+
+mappings/.gradle/
+mappings/mcp/
+mappings/build/
+mappings/*.csv
+mappings/.project
+mappings/last_updated.json

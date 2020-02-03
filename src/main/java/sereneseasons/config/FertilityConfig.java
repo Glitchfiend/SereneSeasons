@@ -125,7 +125,7 @@ public class FertilityConfig
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling"
 	);
 
-	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryCreate(obj.toString()) != null;
+	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryParse(obj.toString()) != null;
 
 	static
 	{

@@ -35,6 +35,7 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.core.SereneSeasons;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonSavedData;
@@ -47,12 +48,12 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         World world = event.world;
 
-        if (event.phase == TickEvent.Phase.END && !world.isRemote)
+        if (event.phase == TickEvent.Phase.END && !world.isClientSide)
         {
             if (!SyncedConfig.getBooleanValue(SeasonsOption.PROGRESS_SEASON_WHILE_OFFLINE))
             {
                 MinecraftServer server = world.getServer();
-                if (server != null && server.getPlayerList().getCurrentPlayerCount() == 0)
+                if (server != null && server.getPlayerList().getPlayerCount() == 0)
                     return;
             }
                 
@@ -68,7 +69,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
                 sendSeasonUpdate(world);
             }
 
-            savedData.markDirty();
+            savedData.setDirty();
         }
     }
     
@@ -76,7 +77,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
         PlayerEntity player = event.getPlayer();
-        World world = player.world;
+        World world = player.level;
         
         sendSeasonUpdate(world);
     }
@@ -109,7 +110,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             
             if (calendar.getSubSeason() != lastSeason)
             {
-                Minecraft.getInstance().worldRenderer.loadRenderers();
+                Minecraft.getInstance().levelRenderer.allChanged();
                 lastSeason = calendar.getSubSeason();
             }
         }
@@ -147,7 +148,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public static void sendSeasonUpdate(World world)
     {
-        if (!world.isRemote)
+        if (!world.isClientSide)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
             PacketHandler.HANDLER.send(PacketDistributor.ALL.noArg(), new MessageSyncSeasonCycle(world.getDimension().getType().getId(), savedData.seasonCycleTicks));
@@ -156,11 +157,13 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public static SeasonSavedData getSeasonSavedData(World w)
     {
-        if (w.isRemote() || !(w instanceof ServerWorld))
+        if (w.isClientSide() || !(w instanceof ServerWorld))
+        {
             return null;
+        }
 
         ServerWorld world = (ServerWorld)w;
-        DimensionSavedDataManager saveDataManager = world.getChunkProvider().getSavedData();
+        DimensionSavedDataManager saveDataManager = world.getChunkSource().getDataStorage();
 
         Supplier<SeasonSavedData> defaultSaveDataSupplier = () ->
         {
@@ -170,18 +173,18 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
             if (startingSeason == 0)
             {
-                savedData.seasonCycleTicks = (world.rand.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
+                savedData.seasonCycleTicks = (world.random.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
             }
             if (startingSeason > 0)
             {
                 savedData.seasonCycleTicks = (startingSeason - 1) * SeasonTime.ZERO.getSubSeasonDuration();
             }
 
-            savedData.markDirty(); //Mark for saving
+            savedData.setDirty(); //Mark for saving
             return savedData;
         };
 
-        return (SeasonSavedData)saveDataManager.getOrCreate(defaultSaveDataSupplier, SeasonSavedData.DATA_IDENTIFIER);
+        return saveDataManager.computeIfAbsent(defaultSaveDataSupplier, SeasonSavedData.DATA_IDENTIFIER);
     }
     
     //

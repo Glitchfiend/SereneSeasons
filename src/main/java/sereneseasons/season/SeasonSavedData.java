@@ -29,13 +29,13 @@ public class SeasonSavedData extends WorldSavedData
     }
 
     @Override
-    public void read(CompoundNBT nbt)
+    public void load(CompoundNBT nbt)
     {
         this.seasonCycleTicks = nbt.getInt("SeasonCycleTicks");
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt)
+    public CompoundNBT save(CompoundNBT nbt)
     {
         nbt.putInt("SeasonCycleTicks", this.seasonCycleTicks);
         return nbt;

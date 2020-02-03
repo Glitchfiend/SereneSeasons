@@ -52,17 +52,17 @@ public class ModHandlers
     @OnlyIn(Dist.CLIENT)
     private static void registerSeasonColourHandlers()
     {
-        originalGrassColorResolver = BiomeColors.GRASS_COLOR;
-        originalFoliageColorResolver = BiomeColors.FOLIAGE_COLOR;
+        originalGrassColorResolver = BiomeColors.GRASS_COLOR_RESOLVER;
+        originalFoliageColorResolver = BiomeColors.FOLIAGE_COLOR_RESOLVER;
 
-        BiomeColors.GRASS_COLOR = (biome, x, z) ->
+        BiomeColors.GRASS_COLOR_RESOLVER = (biome, x, z) ->
         {
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
             return SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biome, originalGrassColorResolver.getColor(biome, x, z));
         };
 
-        BiomeColors.FOLIAGE_COLOR = (biome, x, z) ->
+        BiomeColors.FOLIAGE_COLOR_RESOLVER = (biome, x, z) ->
         {
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();

@@ -66,7 +66,7 @@ public class SeasonalCropGrowthHandler
 	{
 		for (int i = 0; i < FertilityConfig.greenhouseGlassMaxHeight.get(); i++)
 		{
-			if (world.getBlockState(cropPos.add(0, i + 1, 0)).getBlock().equals(SSBlocks.greenhouse_glass))
+			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).getBlock().equals(SSBlocks.greenhouse_glass))
 			{
 				return true;
 			}

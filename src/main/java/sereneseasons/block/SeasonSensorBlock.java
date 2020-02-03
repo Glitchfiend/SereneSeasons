@@ -43,7 +43,7 @@ public class SeasonSensorBlock extends ContainerBlock
     public SeasonSensorBlock(Properties properties, DetectorType type)
     {
         super(properties);
-        this.setDefaultState(this.stateContainer.getBaseState().with(POWER, 0));
+        this.registerDefaultState(this.stateDefinition.any().setValue(POWER, 0));
         this.type = type;
     }
 
@@ -54,15 +54,15 @@ public class SeasonSensorBlock extends ContainerBlock
     }
 
     @Override
-    public boolean func_220074_n(BlockState state)
+    public boolean useShapeForLightOcclusion(BlockState state)
     {
         return true;
     }
 
     @Override
-    public int getWeakPower(BlockState state, IBlockReader reader, BlockPos pos, Direction direction)
+    public int getSignal(BlockState state, IBlockReader reader, BlockPos pos, Direction direction)
     {
-        return state.get(POWER);
+        return state.getValue(POWER);
     }
 
     public void updatePower(World world, BlockPos pos)
@@ -85,78 +85,78 @@ public class SeasonSensorBlock extends ContainerBlock
             }
 
             //Only update the state if the power level has actually changed
-            if ((currentState.get(POWER)).intValue() != power)
+            if ((currentState.getValue(POWER)).intValue() != power)
             {
-                world.setBlockState(pos, currentState.with(POWER, Integer.valueOf(power)), 3);
+                world.setBlock(pos, currentState.setValue(POWER, Integer.valueOf(power)), 3);
             }
         }
     }
 
     @Override
-    public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
     {
-        if (player.isAllowEdit())
+        if (player.mayBuild())
         {
-            if (world.isRemote)
+            if (world.isClientSide)
             {
                 return ActionResultType.SUCCESS;
             }
             else
             {
                 Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
-                world.setBlockState(pos, nextBlock.getDefaultState().with(POWER, state.get(POWER)), 4);
+                world.setBlock(pos, nextBlock.defaultBlockState().setValue(POWER, state.getValue(POWER)), 4);
                 ((SeasonSensorBlock)nextBlock).updatePower(world, pos);
                 return ActionResultType.SUCCESS;
             }
         }
         else
         {
-            return super.func_225533_a_(state, world, pos, player, hand, rayTraceResult);
+            return super.use(state, world, pos, player, hand, rayTraceResult);
         }
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state)
+    public BlockRenderType getRenderShape(BlockState state)
     {
         return BlockRenderType.MODEL;
     }
 
     @Override
-    public boolean canProvidePower(BlockState state)
+    public boolean isSignalSource(BlockState state)
     {
         return true;
     }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader reader)
+    public TileEntity newBlockEntity(IBlockReader reader)
     {
         return new SeasonSensorTileEntity();
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(new IProperty[]{POWER});
     }
 
     static
     {
-        POWER = BlockStateProperties.POWER_0_15;
-        SHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
+        POWER = BlockStateProperties.POWER;
+        SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
     }
 
     public enum DetectorType implements IStringSerializable
     {
         SPRING, SUMMER, AUTUMN, WINTER;
         @Override
-        public String getName()
+        public String getSerializedName()
         {
             return this.name().toLowerCase();
         }
         @Override
         public String toString()
         {
-            return this.getName();
+            return this.getSerializedName();
         }
     };
 }

@@ -26,7 +26,7 @@ public class CommandSetSeason
         return Commands.literal("setseason")
             .then(Commands.argument("season", EnumArgument.enumArgument(Season.SubSeason.class))
             .executes(ctx -> {
-                ServerPlayerEntity player = ctx.getSource().asPlayer();
+                ServerPlayerEntity player = ctx.getSource().getPlayerOrException();
                 return setSeason(ctx.getSource(), player, ctx.getArgument("season", Season.SubSeason.class));
             }));
     }
@@ -35,15 +35,15 @@ public class CommandSetSeason
     {
         if (season != null)
         {
-            SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.world);
+            SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.level);
             seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * season.ordinal();
-            seasonData.markDirty();
-            SeasonHandler.sendSeasonUpdate(player.world);
-            cs.sendFeedback(new TranslationTextComponent("commands.sereneseasons.setseason.success", season.toString()), true);
+            seasonData.setDirty();
+            SeasonHandler.sendSeasonUpdate(player.level);
+            cs.sendSuccess(new TranslationTextComponent("commands.sereneseasons.setseason.success", season.toString()), true);
         }
         else
         {
-            cs.sendFeedback(new TranslationTextComponent("commands.sereneseasons.setseason.fail", season.toString()), true);
+            cs.sendFailure(new TranslationTextComponent("commands.sereneseasons.setseason.fail", season.toString()));
         }
 
         return 1;

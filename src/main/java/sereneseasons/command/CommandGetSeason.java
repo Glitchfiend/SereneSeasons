@@ -27,17 +27,17 @@ public class CommandGetSeason
     {
         return Commands.literal("getseason")
             .executes(ctx -> {
-                ServerPlayerEntity player = ctx.getSource().asPlayer();
+                ServerPlayerEntity player = ctx.getSource().getPlayerOrException();
                 return getSeason(ctx.getSource(), player);
             });
     }
 
     private static int getSeason(CommandSource cs, ServerPlayerEntity player) throws CommandException
     {
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.world);
+        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.level);
         SeasonTime time = new SeasonTime(seasonData.seasonCycleTicks);
         int subSeasonDuration = SyncedConfig.getIntValue(SeasonsOption.SUB_SEASON_DURATION);
-        cs.sendFeedback(new TranslationTextComponent("commands.sereneseasons.getseason.success", time.getSubSeason().toString(), time.getDay() % subSeasonDuration, subSeasonDuration, time.getSeasonCycleTicks() % time.getDayDuration(), time.getDayDuration()), true);
+        cs.sendSuccess(new TranslationTextComponent("commands.sereneseasons.getseason.success", time.getSubSeason().toString(), time.getDay() % subSeasonDuration, subSeasonDuration, time.getSeasonCycleTicks() % time.getDayDuration(), time.getDayDuration()), true);
 
         return 1;
     }

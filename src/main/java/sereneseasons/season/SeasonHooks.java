@@ -58,7 +58,7 @@ public class SeasonHooks
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biome.getDefaultTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
+        if (!tropicalBiome && biome.getTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
         {
             switch (subSeason)
             {

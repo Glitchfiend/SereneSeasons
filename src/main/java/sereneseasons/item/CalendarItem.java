@@ -29,7 +29,7 @@ public class CalendarItem extends Item
     {
         super(builder);
 
-        this.addPropertyOverride(new ResourceLocation("time"), new IItemPropertyGetter()
+        this.addProperty(new ResourceLocation("time"), new IItemPropertyGetter()
         {
             @OnlyIn(Dist.CLIENT)
             double field_185088_a;
@@ -42,11 +42,11 @@ public class CalendarItem extends Item
             @OnlyIn(Dist.CLIENT)
             public float call(ItemStack stack, World world, LivingEntity entity)
             {
-                Entity holder = (Entity)(entity != null ? entity : stack.getItemFrame());
+                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
 
                 if (world == null && holder != null)
                 {
-                    world = holder.world;
+                    world = holder.level;
                 }
 
                 if (world == null)
@@ -65,7 +65,7 @@ public class CalendarItem extends Item
             }
         });
 
-        this.addPropertyOverride(new ResourceLocation("seasontype"), new IItemPropertyGetter()
+        this.addProperty(new ResourceLocation("seasontype"), new IItemPropertyGetter()
         {
             @OnlyIn(Dist.CLIENT)
             double field_185088_a;
@@ -78,11 +78,11 @@ public class CalendarItem extends Item
             @OnlyIn(Dist.CLIENT)
             public float call(ItemStack stack, World world, LivingEntity entity)
             {
-                Entity holder = (Entity)(entity != null ? entity : stack.getItemFrame());
+                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
 
                 if (world == null && holder != null)
                 {
-                    world = holder.world;
+                    world = holder.level;
                 }
 
                 if (world == null)
@@ -97,7 +97,7 @@ public class CalendarItem extends Item
                     {
                         if (holder != null)
                         {
-                            Biome biome = world.func_226691_t_(holder.getPosition());
+                            Biome biome = world.getBiome(holder.getCommandSenderBlockPosition());
 
                             if (BiomeConfig.usesTropicalSeasons(biome))
                             {

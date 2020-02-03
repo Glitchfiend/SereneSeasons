@@ -26,14 +26,14 @@ public class TimeSkipHandler
         if (event.phase == TickEvent.Phase.START && event.side == LogicalSide.SERVER)
         {
             ServerWorld world = (ServerWorld)event.world;
-            long dayTime = world.getWorldInfo().getDayTime();
+            long dayTime = world.getLevelData().getDayTime();
 
             if (lastDayTime == -1)
             {
                 lastDayTime = dayTime;
             }
 
-            long difference = world.getWorldInfo().getDayTime() - lastDayTime;
+            long difference = world.getLevelData().getDayTime() - lastDayTime;
 
             if (difference < 0)
             {
@@ -45,7 +45,7 @@ public class TimeSkipHandler
             {
                 SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
                 seasonData.seasonCycleTicks += difference;
-                seasonData.markDirty();
+                seasonData.setDirty();
                 SeasonHandler.sendSeasonUpdate(world);
                 SereneSeasons.logger.info("Season time skipped by " + difference);
             }

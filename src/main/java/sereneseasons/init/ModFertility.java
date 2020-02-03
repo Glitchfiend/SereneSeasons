@@ -55,7 +55,7 @@ public class ModFertility
     {
         //Get season
         Season season = SeasonHelper.getSeasonState(world).getSeason();
-        Biome biome = world.func_226691_t_(pos);
+        Biome biome = world.getBiome(pos);
 
         if (FertilityConfig.undergroundFertilityLevel.get() > -1 && pos.getY() < FertilityConfig.undergroundFertilityLevel.get())
         {
@@ -215,29 +215,29 @@ public class ModFertility
             {
                 int mask = seedSeasons.get(name);
 
-                event.getToolTip().add(new TranslationTextComponent("desc.sereneseasons.fertile_seasons").appendText(":"));
+                event.getToolTip().add(new TranslationTextComponent("desc.sereneseasons.fertile_seasons").append(":"));
 
                 if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
                 {
-                    event.getToolTip().add(new StringTextComponent(TextFormatting.LIGHT_PURPLE + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.year_round")));
+                    event.getToolTip().add(new StringTextComponent(TextFormatting.LIGHT_PURPLE + " ").append(new TranslationTextComponent("desc.sereneseasons.year_round")));
                 }
                 else
                 {
                     if ((mask & 1) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.GREEN + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.spring")));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.GREEN + " ").append(new TranslationTextComponent("desc.sereneseasons.spring")));
                     }
                     if ((mask & 2) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.summer")));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " ").append(new TranslationTextComponent("desc.sereneseasons.summer")));
                     }
                     if ((mask & 4) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.GOLD + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.autumn")));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.GOLD + " ").append(new TranslationTextComponent("desc.sereneseasons.autumn")));
                     }
                     if ((mask & 8) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.AQUA + " ").appendSibling(new TranslationTextComponent("desc.sereneseasons.winter")));
+                        event.getToolTip().add(new StringTextComponent(TextFormatting.AQUA + " ").append(new TranslationTextComponent("desc.sereneseasons.winter")));
                     }
                 }
             }

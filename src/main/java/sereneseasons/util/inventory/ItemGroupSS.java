@@ -6,7 +6,7 @@ import sereneseasons.api.SSItems;
 
 public class ItemGroupSS extends ItemGroup
 {
-    public static final ItemGroupSS instance = new ItemGroupSS(ItemGroup.GROUPS.length, "tabSereneSeasons");
+    public static final ItemGroupSS instance = new ItemGroupSS(ItemGroup.TABS.length, "tabSereneSeasons");
 
     private ItemGroupSS(int index, String label)
     {
@@ -14,7 +14,7 @@ public class ItemGroupSS extends ItemGroup
     }
 
     @Override
-    public ItemStack createIcon()
+    public ItemStack makeIcon()
     {
         return new ItemStack(SSItems.ss_icon);
     }

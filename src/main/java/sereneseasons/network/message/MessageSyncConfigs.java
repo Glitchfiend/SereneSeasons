@@ -26,12 +26,12 @@ public class MessageSyncConfigs
 
     public static void encode(MessageSyncConfigs packet, PacketBuffer buf)
     {
-        buf.writeCompoundTag(packet.nbtOptions);
+        buf.writeNbt(packet.nbtOptions);
     }
 
     public static MessageSyncConfigs decode(PacketBuffer buf)
     {
-        return new MessageSyncConfigs(buf.readCompoundTag());
+        return new MessageSyncConfigs(buf.readNbt());
     }
 
     public static class Handler
@@ -40,7 +40,7 @@ public class MessageSyncConfigs
         {
             context.get().enqueueWork(() ->
             {
-                for (String key : packet.nbtOptions.keySet())
+                for (String key : packet.nbtOptions.getAllKeys())
                 {
                     SyncedConfig.SyncedConfigEntry entry = SyncedConfig.optionsToSync.get(key);
 

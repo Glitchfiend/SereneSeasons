@@ -10,7 +10,7 @@ public class SSCommand
     {
         dispatcher.register(
             LiteralArgumentBuilder.<CommandSource>literal("ss")
-                .requires(cs -> cs.hasPermissionLevel(2))
+                .requires(cs -> cs.hasPermission(2))
                 .then(CommandSetSeason.register())
                 .then(CommandGetSeason.register())
         );

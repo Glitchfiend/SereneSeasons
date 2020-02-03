@@ -33,9 +33,9 @@ public class SeasonSleepHandler
                 System.out.println("Time change");
                 lastAllPlayersSleeping = true;
                 SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
-                long timeDiff = 24000L - ((world.getWorldInfo().getDayTime() + 24000L) % 24000L);
+                long timeDiff = 24000L - ((world.getLevelData().getDayTime() + 24000L) % 24000L);
                 seasonData.seasonCycleTicks += timeDiff;
-                seasonData.markDirty();
+                seasonData.setDirty();
                 SeasonHandler.sendSeasonUpdate(world);
             }
             else if (!world.allPlayersSleeping)

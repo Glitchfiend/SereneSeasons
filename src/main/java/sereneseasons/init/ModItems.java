@@ -21,7 +21,7 @@ public class ModItems
         ss_icon = registerItem(new Item(new Item.Properties()), "ss_icon");
 
         // Main Items
-        calendar = registerItem(new CalendarItem(new Item.Properties().maxStackSize(1).group(ItemGroupSS.instance)), "calendar");
+        calendar = registerItem(new CalendarItem(new Item.Properties().stacksTo(1).tab(ItemGroupSS.instance)), "calendar");
     }
 
     public static Item registerItem(Item item, String name)
