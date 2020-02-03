@@ -89,7 +89,7 @@ public class BiomeConfig
                 "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean",
                 "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
 
-                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:wasteland");
+                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:rainbow_valley", "biomesoplenty:wasteland");
 
         for (String biomeName : blacklistedBiomes)
         {
