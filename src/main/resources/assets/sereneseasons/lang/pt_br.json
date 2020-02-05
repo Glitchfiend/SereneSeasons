@@ -1,0 +1,25 @@
+{
+  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
+  "commands.sereneseasons.getseason.success": "A estação atual é %s, dia %s/%s, tick %s/%s",
+  "commands.sereneseasons.setseason.success": "A estação atual foi mudada para %s",
+  "commands.sereneseasons.setseason.fail": "%s não é uma estação válida",
+  "commands.sereneseasons.setseason.disabled": "As estações estão desativadas no momento!",
+
+  "itemGroup.tabSereneSeasons": "Estações Serenas",
+
+  "block.sereneseasons.greenhouse_glass": "Vidro de estufa",
+  "block.sereneseasons.season_sensor_spring": "Sensor de estação",
+  "block.sereneseasons.season_sensor_summer": "Sensor de estação",
+  "block.sereneseasons.season_sensor_autumn": "Sensor de estação",
+  "block.sereneseasons.season_sensor_winter": "Sensor de estação",
+  "item.sereneseasons.ss_icon": "Ícone do ES",
+
+  "item.sereneseasons.calendar": "Calendário",
+
+  "desc.sereneseasons.fertile_seasons": "Estações férteis",
+  "desc.sereneseasons.year_round": "Durante o ano",
+  "desc.sereneseasons.spring": "Primavera",
+  "desc.sereneseasons.summer": "Verão",
+  "desc.sereneseasons.autumn": "Outono",
+  "desc.sereneseasons.winter": "Inverno"
+}
