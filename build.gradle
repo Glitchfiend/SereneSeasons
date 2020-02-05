@@ -19,6 +19,8 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'maven'
 
+repositories { mavenLocal() }
+
 group = "com.github.glitchfiend.biomesoplenty"
 archivesBaseName = "SereneSeasons"
 
