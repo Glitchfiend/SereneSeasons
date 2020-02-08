@@ -35,7 +35,6 @@ public class SereneSeasons
 
         ModHandlers.init();
         ModConfig.init();
-        ModFertility.init();
     }
 
     private void clientSetup(final FMLClientSetupEvent event)
@@ -46,6 +45,7 @@ public class SereneSeasons
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         ModConfig.setup();
+        ModFertility.init();
     }
 
     public void serverStarting(FMLServerStartingEvent evt)
