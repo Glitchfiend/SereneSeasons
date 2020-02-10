@@ -67,7 +67,7 @@ public class BiomeConfig
             return biomeDataMap.get(name).useTropicalSeasons;
         }
 
-        return false;
+        return biome.getTemperature() > 0.8f;
     }
 
     public static boolean disablesCrops(Biome biome)
