@@ -67,7 +67,7 @@ public class BiomeConfig
             return biomeDataMap.get(name).useTropicalSeasons;
         }
 
-        return biome.getTemperature() > 0.8f;
+        return biome.getTemperature() > 0.8F;
     }
 
     public static boolean disablesCrops(Biome biome)
@@ -89,7 +89,8 @@ public class BiomeConfig
                 "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean",
                 "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
 
-                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:rainbow_valley", "biomesoplenty:wasteland");
+                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:origin_beach", "biomesoplenty:origin_hills",
+                "biomesoplenty:rainbow_valley");
 
         for (String biomeName : blacklistedBiomes)
         {
@@ -102,18 +103,7 @@ public class BiomeConfig
 
     private static void addTropicalBiomes(Map<String, BiomeData> map)
     {
-        List<String> tropicalBiomes = Lists.newArrayList(
-                "minecraft:jungle", "minecraft:jungle_hills", "minecraft:modified_jungle", "minecraft:jungle_edge", "minecraft:modified_jungle_edge",
-                "minecraft:bamboo_jungle", "minecraft:bamboo_jungle_hills", "minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:desert",
-                "minecraft:desert_hills", "minecraft:desert_lakes", "minecraft:savanna", "minecraft:savanna_plateau", "minecraft:shattered_savanna",
-                "minecraft:shattered_savanna_plateau", "minecraft:badlands", "minecraft:badlands_plateau", "minecraft:modified_badlands_plateau",
-                "minecraft:wooded_badlands_plateau", "minecraft:modified_wooded_badlands_plateau", "minecraft:eroded_badlands",
-                "minecraft:warm_ocean", "minecraft:deep_warm_ocean",
-
-                "biomesoplenty:bayou", "biomesoplenty:brushland", "biomesoplenty:floodplain", "biomesoplenty:lush_grassland", "biomesoplenty:lush_swamp", "biomesoplenty:mangrove",
-                "biomesoplenty:outback", "biomesoplenty:overgrown_cliffs", "biomesoplenty:rainforest", "biomesoplenty:scrubland",
-                "biomesoplenty:tropical_rainforest", "biomesoplenty:wasteland", "biomesoplenty:xeric_shrubland",
-                "biomesoplenty:tropics", "biomesoplenty:volcano", "biomesoplenty:oasis", "biomesoplenty:white_beach");
+        List<String> tropicalBiomes = Lists.newArrayList("minecraft:warm_ocean", "minecraft:deep_warm_ocean");
 
         for (String biomeName : tropicalBiomes)
         {
@@ -126,7 +116,7 @@ public class BiomeConfig
 
     private static void addDisabledCropBiomes(Map<String, BiomeData> map)
     {
-        List<String> disabledCropBiomes = Lists.newArrayList("biomesoplenty:wasteland", "biomesoplenty:volcano");
+        List<String> disabledCropBiomes = Lists.newArrayList("biomesoplenty:wasteland", "biomesoplenty:volcano", "biomesoplenty:volcano_edge");
 
         for (String biomeName : disabledCropBiomes)
         {
