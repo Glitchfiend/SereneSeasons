@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "sereneseasons:items/calendar_00"
+        "layer0": "sereneseasons:item/calendar_00"
     },
     "overrides": [
         { "predicate": { "seasontype": 0, "time": 0.0000000 }, "model": "sereneseasons:item/calendar" },

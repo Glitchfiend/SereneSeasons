@@ -1,8 +1,8 @@
 {   "parent": "block/thin_block",
     "textures": {
-        "particle": "sereneseasons:blocks/season_sensor_spring_top",
-        "top": "sereneseasons:blocks/season_sensor_spring_top",
-        "side": "sereneseasons:blocks/season_sensor_side"
+        "particle": "sereneseasons:block/season_sensor_spring_top",
+        "top": "sereneseasons:block/season_sensor_spring_top",
+        "side": "sereneseasons:block/season_sensor_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
