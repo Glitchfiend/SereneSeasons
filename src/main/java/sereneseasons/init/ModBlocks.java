@@ -32,25 +32,15 @@ public class ModBlocks
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event)
     {
-        SereneSeasons.logger.info("Registering blocks...");
-    	greenhouse_glass = registerBlock(new GlassBlock(Block.Properties.of(Material.GLASS, MaterialColor.COLOR_GREEN).strength(0.3F).sound(SoundType.GLASS).noOcclusion()), "greenhouse_glass");
-
         season_sensors[0] = registerBlock(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SPRING), "season_sensor_spring");
         season_sensors[1] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SUMMER), "season_sensor_summer");
         season_sensors[2] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.AUTUMN), "season_sensor_autumn");
         season_sensors[3] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.WINTER), "season_sensor_winter");
-
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
-            RenderType translucentRenderType = RenderType.translucent();
-            RenderTypeLookup.setRenderLayer(greenhouse_glass, translucentRenderType);
-        }
     }
 
     @SubscribeEvent
     public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event)
     {
-        SereneSeasons.logger.info("Registering tile entities...");
         season_sensor_tile_entity = registerTileEntityType("season_sensor", SeasonSensorTileEntity::new, season_sensors);
     }
 

@@ -17,7 +17,6 @@ public class FertilityConfig
 	public static ForgeConfigSpec.BooleanValue ignoreUnlistedCrops;
 	public static ForgeConfigSpec.BooleanValue cropTooltips;
 	public static ForgeConfigSpec.IntValue outOfSeasonCropBehavior;
-	public static ForgeConfigSpec.IntValue greenhouseGlassMaxHeight;
 	public static ForgeConfigSpec.IntValue undergroundFertilityLevel;
 
 	// Seasonal fertility congig options
@@ -358,7 +357,6 @@ public class FertilityConfig
 		ignoreUnlistedCrops = BUILDER.comment("Whether unlisted seeds are fertile every season. False means they're fertile every season except Winter").define("ignore_unlisted_crops", false);
 		cropTooltips = BUILDER.comment("Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed crops.").define("crop_tooltips", true);
 		outOfSeasonCropBehavior = BUILDER.comment("How crops behave when out of season.  0 = Can't grow, 1 = Grow slowly, 2 = Break when trying to grow").defineInRange("out_of_season_crop_behavior", 0, 0, 2);
-		greenhouseGlassMaxHeight = BUILDER.comment("Maximum height greenhouse glass can be above a crop for it to be fertile out of season").defineInRange("greenhouse_glass_max_height", 16, 1, Integer.MAX_VALUE);
 		undergroundFertilityLevel = BUILDER.comment("Maximum underground Y level out of season crops can be grown below.  Set to -1 to disable feature").defineInRange("underground_fertility_level", 48, -1, Integer.MAX_VALUE);
 		BUILDER.pop();
 

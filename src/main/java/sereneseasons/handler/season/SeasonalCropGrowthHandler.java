@@ -32,7 +32,7 @@ public class SeasonalCropGrowthHandler
 		World world = (World)event.getWorld();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), world, event.getPos());
 		
-		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGreenhouseGlassAboveBlock(world, event.getPos()))
+		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, event.getPos()))
 		{
 		    if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
             {
@@ -66,7 +66,7 @@ public class SeasonalCropGrowthHandler
 		Block plant = event.getBlock().getBlock();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
-		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGreenhouseGlassAboveBlock(event.getWorld(), event.getPos()))
+		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
             if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
             {
@@ -94,11 +94,11 @@ public class SeasonalCropGrowthHandler
 		}
 	}
 
-	private boolean isGreenhouseGlassAboveBlock(World world, BlockPos cropPos)
+	private boolean isGlassAboveBlock(World world, BlockPos cropPos)
 	{
-		for (int i = 0; i < FertilityConfig.greenhouseGlassMaxHeight.get(); i++)
+		for (int i = 0; i < 16; i++)
 		{
-			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).getBlock().equals(SSBlocks.greenhouse_glass))
+			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).getBlock() instanceof AbstractGlassBlock)
 			{
 				return true;
 			}
