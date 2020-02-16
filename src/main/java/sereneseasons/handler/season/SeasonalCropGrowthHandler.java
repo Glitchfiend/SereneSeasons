@@ -34,17 +34,17 @@ public class SeasonalCropGrowthHandler
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, event.getPos()))
 		{
-		    if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
-            {
-                event.setResult(Event.Result.DENY);
-            }
-			if (FertilityConfig.outOfSeasonCropBehavior.get() == 1)
+			if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
 			{
-				if (world.getRandom().nextInt(3) != 0)
+				if (world.getRandom().nextInt(4) != 0)
 				{
 					event.setResult(Event.Result.DENY);
 				}
 			}
+		    if (FertilityConfig.outOfSeasonCropBehavior.get() == 1)
+            {
+                event.setResult(Event.Result.DENY);
+            }
 		    if (FertilityConfig.outOfSeasonCropBehavior.get() == 2)
             {
                 if (!(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))
@@ -68,17 +68,17 @@ public class SeasonalCropGrowthHandler
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
-            if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
-            {
-                event.setCanceled(true);
-            }
-			if (FertilityConfig.outOfSeasonCropBehavior.get() == 1)
+			if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
 			{
 				if (event.getWorld().getRandom().nextInt(6) != 0)
 				{
 					event.setResult(Event.Result.ALLOW);
 				}
 			}
+            if (FertilityConfig.outOfSeasonCropBehavior.get() == 1)
+            {
+                event.setCanceled(true);
+            }
             if (FertilityConfig.outOfSeasonCropBehavior.get() == 2)
             {
                 if (!(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))

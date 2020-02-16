@@ -356,15 +356,15 @@ public class FertilityConfig
 		seasonalCrops = BUILDER.comment("Whether crops are affected by seasons.").define("seasonal_crops", true);
 		ignoreUnlistedCrops = BUILDER.comment("Whether unlisted seeds are fertile every season. False means they're fertile every season except Winter").define("ignore_unlisted_crops", false);
 		cropTooltips = BUILDER.comment("Whether to include tooltips on crops listing which seasons they're fertile in. Note: This only applies to listed crops.").define("crop_tooltips", true);
-		outOfSeasonCropBehavior = BUILDER.comment("How crops behave when out of season.  0 = Can't grow, 1 = Grow slowly, 2 = Break when trying to grow").defineInRange("out_of_season_crop_behavior", 0, 0, 2);
+		outOfSeasonCropBehavior = BUILDER.comment("How crops behave when out of season.\n0 = Grow slowly\n1 = Can't grow\n2 = Break when trying to grow").defineInRange("out_of_season_crop_behavior", 0, 0, 2);
 		undergroundFertilityLevel = BUILDER.comment("Maximum underground Y level out of season crops can be grown below.  Set to -1 to disable feature").defineInRange("underground_fertility_level", 48, -1, Integer.MAX_VALUE);
 		BUILDER.pop();
 
 		BUILDER.push("seasonal_fertility");
-		springCrops = BUILDER.comment("Crops growable in Spring (List either the seed item for the crop, or the crop block itself)").defineList("spring_crops", defaultSpringCrops, CROP_VALIDATOR);
-		summerCrops = BUILDER.comment("Crops growable in Summer (List either the seed item for the crop, or the crop block itself)").defineList("summer_crops", defaultSummerCrops, CROP_VALIDATOR);
-		autumnCrops = BUILDER.comment("Crops growable in Autumn (List either the seed item for the crop, or the crop block itself)").defineList("autumn_crops", defaultAutumnCrops, CROP_VALIDATOR);
-		winterCrops = BUILDER.comment("Crops growable in Winter (List either the seed item for the crop, or the crop block itself)").defineList("winter_crops", defaultWinterCrops, CROP_VALIDATOR);
+		springCrops = BUILDER.comment("Crops growable in Spring\n(List either the seed item for the crop, or the crop block itself)").defineList("spring_crops", defaultSpringCrops, CROP_VALIDATOR);
+		summerCrops = BUILDER.comment("Crops growable in Summer\n(List either the seed item for the crop, or the crop block itself)").defineList("summer_crops", defaultSummerCrops, CROP_VALIDATOR);
+		autumnCrops = BUILDER.comment("Crops growable in Autumn\n(List either the seed item for the crop, or the crop block itself)").defineList("autumn_crops", defaultAutumnCrops, CROP_VALIDATOR);
+		winterCrops = BUILDER.comment("Crops growable in Winter\n(List either the seed item for the crop, or the crop block itself)").defineList("winter_crops", defaultWinterCrops, CROP_VALIDATOR);
 		BUILDER.pop();
 
 		SPEC = BUILDER.build();
