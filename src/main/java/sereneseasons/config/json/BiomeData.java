@@ -16,14 +16,10 @@ public class BiomeData
 
     @SerializedName("use_tropical_seasons")
     public boolean useTropicalSeasons;
-    
-    @SerializedName("infertileBiome")
-    public boolean infertileBiome;
 
-    public BiomeData(boolean enableSeasonalEffects, boolean useTropicalSeasons, boolean infertileBiome)
+    public BiomeData(boolean enableSeasonalEffects, boolean useTropicalSeasons)
     {
         this.enableSeasonalEffects = enableSeasonalEffects;
         this.useTropicalSeasons = useTropicalSeasons;
-        this.infertileBiome = infertileBiome;
     }
 }

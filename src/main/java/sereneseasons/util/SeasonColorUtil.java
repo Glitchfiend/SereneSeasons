@@ -8,20 +8,12 @@
 package sereneseasons.util;
 
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.biome.Biome;
-
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.init.ModConfig;
-
-import java.util.List;
 
 public class SeasonColorUtil
 {
@@ -55,6 +47,32 @@ public class SeasonColorUtil
         
         return (r & 255) << 16 | (g & 255) << 8 | (b & 255);
     }
+
+    public static int mixColours(int a, int b, float ratio) {
+        if (ratio > 1f) {
+            ratio = 1f;
+        } else if (ratio < 0f) {
+            ratio = 0f;
+        }
+        float iRatio = 1.0f - ratio;
+
+        int aA = (a >> 24 & 0xff);
+        int aR = ((a & 0xff0000) >> 16);
+        int aG = ((a & 0xff00) >> 8);
+        int aB = (a & 0xff);
+
+        int bA = (b >> 24 & 0xff);
+        int bR = ((b & 0xff0000) >> 16);
+        int bG = ((b & 0xff00) >> 8);
+        int bB = (b & 0xff);
+
+        int A = (int)((aA * iRatio) + (bA * ratio));
+        int R = (int)((aR * iRatio) + (bR * ratio));
+        int G = (int)((aG * iRatio) + (bG * ratio));
+        int B = (int)((aB * iRatio) + (bB * ratio));
+
+        return A << 24 | R << 16 | G << 8 | B;
+    }
     
     public static int saturateColour(int colour, float saturationMultiplier)
     {
@@ -79,7 +97,13 @@ public class SeasonColorUtil
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getGrassSaturationMultiplier();
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
-        return saturationMultiplier != -1 ? saturateColour(newColour, saturationMultiplier) : newColour;
+        int fixedColour = newColour;
+        if (BiomeConfig.lessColorChange(biome))
+        {
+            fixedColour = mixColours(newColour, originalColour, 0.75F);
+        }
+
+        return saturationMultiplier != -1 ? saturateColour(fixedColour, saturationMultiplier) : fixedColour;
     }
     
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
@@ -96,6 +120,12 @@ public class SeasonColorUtil
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getFoliageSaturationMultiplier();
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
-        return saturationMultiplier != -1 ? saturateColour(newColour, saturationMultiplier) : newColour;
+        int fixedColour = newColour;
+        if (BiomeConfig.lessColorChange(biome))
+        {
+            fixedColour = mixColours(newColour, originalColour, 0.75F);
+        }
+
+        return saturationMultiplier != -1 ? saturateColour(fixedColour, saturationMultiplier) : fixedColour;
     }
 }

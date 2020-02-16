@@ -29,7 +29,6 @@ public class BiomeConfig
         Map<String, BiomeData> defaultBiomeData = Maps.newHashMap();
         addBlacklistedBiomes(defaultBiomeData);
         addTropicalBiomes(defaultBiomeData);
-        addInfertileBiomes(defaultBiomeData);
 
         biomeDataMap.clear();
 
@@ -72,11 +71,30 @@ public class BiomeConfig
 
     public static boolean infertileBiome(Biome biome)
     {
-        ResourceLocation name = biome.getRegistryName();
+        List<String> infertileBiomes = Lists.newArrayList("minecraft:nether", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
+                "minecraft:end_highlands", "minecraft:end_barrens", "minecraft:the_void",
+                "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:volcano", "biomesoplenty:volcano_edge");
 
-        if (biomeDataMap.containsKey(name))
+        String name = biome.getRegistryName().toString();
+
+        if (infertileBiomes.contains(name))
         {
-            return biomeDataMap.get(name).infertileBiome;
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean lessColorChange(Biome biome)
+    {
+        List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
+                "biomesoplenty:bog", "biomesoplenty:mire", "biomesoplenty:ominous_woods");
+
+        String name = biome.getRegistryName().toString();
+
+        if (lessColorChangeBiomes.contains(name))
+        {
+            return true;
         }
 
         return false;
@@ -84,18 +102,16 @@ public class BiomeConfig
 
     private static void addBlacklistedBiomes(Map<String, BiomeData> map)
     {
-        List<String> blacklistedBiomes = Lists.newArrayList(
-                "minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:ocean", "minecraft:deep_ocean", "minecraft:frozen_ocean",
-                "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean",
-                "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river", "minecraft:the_void",
+        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:ocean",
+                "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean",
+                "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river", "minecraft:the_void",
 
-                "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:origin_beach", "biomesoplenty:origin_hills",
-                "biomesoplenty:rainbow_valley");
+                "biomesoplenty:mystic_grove", "biomesoplenty:origin_beach", "biomesoplenty:origin_hills", "biomesoplenty:rainbow_valley");
 
         for (String biomeName : blacklistedBiomes)
         {
             if (!map.containsKey(biomeName))
-                map.put(biomeName, new BiomeData(false, false, false));
+                map.put(biomeName, new BiomeData(false, false));
             else
                 map.get(biomeName).enableSeasonalEffects = false;
         }
@@ -108,24 +124,9 @@ public class BiomeConfig
         for (String biomeName : tropicalBiomes)
         {
             if (!map.containsKey(biomeName))
-                map.put(biomeName, new BiomeData(true, true, false));
+                map.put(biomeName, new BiomeData(true, true));
             else
                 map.get(biomeName).useTropicalSeasons = true;
-        }
-    }
-
-    private static void addInfertileBiomes(Map<String, BiomeData> map)
-    {
-        List<String> infertileBiomes = Lists.newArrayList("minecraft:nether", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
-                "minecraft:end_highlands", "minecraft:end_barrens", "minecraft:the_void",
-                "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:volcano", "biomesoplenty:volcano_edge");
-
-        for (String biomeName : infertileBiomes)
-        {
-            if (!map.containsKey(biomeName))
-                map.put(biomeName, new BiomeData(false, false, true));
-            else
-                map.get(biomeName).infertileBiome = true;
         }
     }
 }
