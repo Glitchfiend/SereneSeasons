@@ -50,7 +50,7 @@ public class SeasonalCropGrowthHandler
                 if (!(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))
                 {
 					event.setResult(Event.Result.DENY);
-                    event.getWorld().destroyBlock(event.getPos(), true);
+                    event.getWorld().destroyBlock(event.getPos(), false);
                 }
                 else
                 {
@@ -84,7 +84,7 @@ public class SeasonalCropGrowthHandler
                 if (!(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))
                 {
 					event.setResult(Event.Result.ALLOW);
-                    event.getWorld().destroyBlock(event.getPos(), true);
+                    event.getWorld().destroyBlock(event.getPos(), false);
                 }
                 else
                 {
