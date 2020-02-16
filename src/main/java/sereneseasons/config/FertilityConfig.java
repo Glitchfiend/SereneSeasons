@@ -49,7 +49,7 @@ public class FertilityConfig
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
 
 		"pamhc2crops:asparagusitem",
 		"pamhc2crops:asparagusseeditem",
@@ -148,7 +148,7 @@ public class FertilityConfig
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
 
 		"pamhc2crops:agaveitem",
 		"pamhc2crops:agaveseeditem",
@@ -255,15 +255,30 @@ public class FertilityConfig
 		"xlfoodmod:rice");
 
 	private static List<String> defaultAutumnCrops = Lists.newArrayList(
-		"minecraft:oak_sapling", "minecraft:birch_sapling", "minecraft:spruce_sapling", "minecraft:jungle_sapling", "minecraft:acacia_sapling", "minecraft:dark_oak_sapling",
-		"minecraft:red_mushroom", "minecraft:brown_mushroom", "minecraft:nether_wart", "minecraft:seagrass", "minecraft:sea_pickle", "minecraft:sweet_berries",
-		"minecraft:grass_block", "minecraft:grass", "minecraft:fern",
-		"minecraft:wheat_seeds", "minecraft:pumpkin_seeds", "minecraft:beetroot_seeds", "minecraft:carrot",
+		"minecraft:oak_sapling",
+		"minecraft:birch_sapling",
+		"minecraft:spruce_sapling",
+		"minecraft:jungle_sapling",
+		"minecraft:acacia_sapling",
+		"minecraft:dark_oak_sapling",
+		"minecraft:red_mushroom",
+		"minecraft:brown_mushroom",
+		"minecraft:nether_wart",
+		"minecraft:seagrass",
+		"minecraft:sea_pickle",
+		"minecraft:sweet_berries",
+		"minecraft:grass_block",
+		"minecraft:grass",
+		"minecraft:fern",
+		"minecraft:wheat_seeds",
+		"minecraft:pumpkin_seeds",
+		"minecraft:beetroot_seeds",
+		"minecraft:carrot",
 
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling",
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
 
 		"pamhc2crops:amaranthitem",
 		"pamhc2crops:amaranthseeditem",
@@ -341,12 +356,11 @@ public class FertilityConfig
 		"minecraft:nether_wart",
 		"minecraft:seagrass",
 		"minecraft:sea_pickle",
-		"minecraft:sweet_berries",
 
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling");
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom");
 
 	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryParse(obj.toString()) != null;
 

@@ -36,7 +36,7 @@ public class SeasonalCropGrowthHandler
 		{
 			if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
 			{
-				if (world.getRandom().nextInt(4) != 0)
+				if (world.getRandom().nextInt(6) != 0)
 				{
 					event.setResult(Event.Result.DENY);
 				}

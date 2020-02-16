@@ -29,7 +29,7 @@ public class BiomeConfig
         Map<String, BiomeData> defaultBiomeData = Maps.newHashMap();
         addBlacklistedBiomes(defaultBiomeData);
         addTropicalBiomes(defaultBiomeData);
-        addDisabledCropBiomes(defaultBiomeData);
+        addInfertileBiomes(defaultBiomeData);
 
         biomeDataMap.clear();
 
@@ -70,13 +70,13 @@ public class BiomeConfig
         return biome.getTemperature() > 0.8F;
     }
 
-    public static boolean disablesCrops(Biome biome)
+    public static boolean infertileBiome(Biome biome)
     {
         ResourceLocation name = biome.getRegistryName();
 
         if (biomeDataMap.containsKey(name))
         {
-            return biomeDataMap.get(name).disableCrops;
+            return biomeDataMap.get(name).infertileBiome;
         }
 
         return false;
@@ -87,7 +87,7 @@ public class BiomeConfig
         List<String> blacklistedBiomes = Lists.newArrayList(
                 "minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:ocean", "minecraft:deep_ocean", "minecraft:frozen_ocean",
                 "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean",
-                "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
+                "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river", "minecraft:the_void",
 
                 "biomesoplenty:mystic_grove", "biomesoplenty:ominous_woods", "biomesoplenty:origin_beach", "biomesoplenty:origin_hills",
                 "biomesoplenty:rainbow_valley");
@@ -114,16 +114,18 @@ public class BiomeConfig
         }
     }
 
-    private static void addDisabledCropBiomes(Map<String, BiomeData> map)
+    private static void addInfertileBiomes(Map<String, BiomeData> map)
     {
-        List<String> disabledCropBiomes = Lists.newArrayList("biomesoplenty:wasteland", "biomesoplenty:volcano", "biomesoplenty:volcano_edge");
+        List<String> infertileBiomes = Lists.newArrayList("minecraft:nether", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
+                "minecraft:end_highlands", "minecraft:end_barrens", "minecraft:the_void",
+                "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:volcano", "biomesoplenty:volcano_edge");
 
-        for (String biomeName : disabledCropBiomes)
+        for (String biomeName : infertileBiomes)
         {
             if (!map.containsKey(biomeName))
                 map.put(biomeName, new BiomeData(false, false, true));
             else
-                map.get(biomeName).disableCrops = true;
+                map.get(biomeName).infertileBiome = true;
         }
     }
 }

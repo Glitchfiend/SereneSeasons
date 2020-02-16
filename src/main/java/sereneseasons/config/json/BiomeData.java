@@ -17,13 +17,13 @@ public class BiomeData
     @SerializedName("use_tropical_seasons")
     public boolean useTropicalSeasons;
     
-    @SerializedName("disable_crops")
-    public boolean disableCrops;
+    @SerializedName("infertileBiome")
+    public boolean infertileBiome;
 
-    public BiomeData(boolean enableSeasonalEffects, boolean useTropicalSeasons, boolean disableCrops)
+    public BiomeData(boolean enableSeasonalEffects, boolean useTropicalSeasons, boolean infertileBiome)
     {
         this.enableSeasonalEffects = enableSeasonalEffects;
         this.useTropicalSeasons = useTropicalSeasons;
-        this.disableCrops = disableCrops;
+        this.infertileBiome = infertileBiome;
     }
 }

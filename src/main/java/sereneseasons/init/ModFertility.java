@@ -62,7 +62,7 @@ public class ModFertility
             return true;
         }
 
-        if (BiomeConfig.disablesCrops(biome))
+        if (BiomeConfig.infertileBiome(biome))
         {
             return false;
         }
