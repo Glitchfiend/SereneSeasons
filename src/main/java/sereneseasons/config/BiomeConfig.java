@@ -73,7 +73,8 @@ public class BiomeConfig
     {
         List<String> infertileBiomes = Lists.newArrayList("minecraft:nether", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
                 "minecraft:end_highlands", "minecraft:end_barrens", "minecraft:the_void",
-                "biomesoplenty:ominous_woods", "biomesoplenty:wasteland", "biomesoplenty:volcano", "biomesoplenty:volcano_edge");
+                "biomesoplenty:ashen_inferno", "biomesoplenty:ominous_woods", "biomesoplenty:undergarden", "biomesoplenty:visceral_heap", "biomesoplenty:volcano",
+                "biomesoplenty:volcano_edge", "biomesoplenty:wasteland");
 
         String name = biome.getRegistryName().toString();
 
