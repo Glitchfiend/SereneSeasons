@@ -12,9 +12,11 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.AttachFace;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -35,16 +37,14 @@ import sereneseasons.tileentity.SeasonSensorTileEntity;
 
 public class SeasonSensorBlock extends ContainerBlock
 {
-    public static final IntegerProperty POWER;
-    protected static final VoxelShape SHAPE;
+    public static final IntegerProperty POWER = BlockStateProperties.POWER;
+    protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
+    private static final IntegerProperty SEASON = IntegerProperty.create("season", 0, 3);
 
-    private final DetectorType type;
-
-    public SeasonSensorBlock(Properties properties, DetectorType type)
+    public SeasonSensorBlock(Properties properties)
     {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(POWER, 0));
-        this.type = type;
+        this.registerDefaultState(this.stateDefinition.any().setValue(POWER, 0).setValue(SEASON, 0));
     }
 
     @Override
@@ -74,8 +74,8 @@ public class SeasonSensorBlock extends ContainerBlock
             BlockState currentState = world.getBlockState(pos);
 
             int power = 0;
-            int startTicks = this.type.ordinal() * SeasonTime.ZERO.getSeasonDuration();
-            int endTicks = (this.type.ordinal() + 1) * SeasonTime.ZERO.getSeasonDuration();
+            int startTicks = currentState.getValue(SEASON) * SeasonTime.ZERO.getSeasonDuration();
+            int endTicks = (currentState.getValue(SEASON) + 1) * SeasonTime.ZERO.getSeasonDuration();
             int currentTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
 
             if (currentTicks >= startTicks && currentTicks <= endTicks)
@@ -103,9 +103,9 @@ public class SeasonSensorBlock extends ContainerBlock
             }
             else
             {
-                Block nextBlock = SSBlocks.season_sensors[(this.type.ordinal() + 1) % DetectorType.values().length];
-                world.setBlock(pos, nextBlock.defaultBlockState().setValue(POWER, state.getValue(POWER)), 4);
-                ((SeasonSensorBlock)nextBlock).updatePower(world, pos);
+                BlockState blockstate = state.cycle(SEASON);
+                world.setBlock(pos, blockstate, 4);
+                updatePower(world, pos);
                 return ActionResultType.SUCCESS;
             }
         }
@@ -136,27 +136,6 @@ public class SeasonSensorBlock extends ContainerBlock
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(new IProperty[]{POWER});
+        builder.add(new IProperty[]{POWER, SEASON});
     }
-
-    static
-    {
-        POWER = BlockStateProperties.POWER;
-        SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
-    }
-
-    public enum DetectorType implements IStringSerializable
-    {
-        SPRING, SUMMER, AUTUMN, WINTER;
-        @Override
-        public String getSerializedName()
-        {
-            return this.name().toLowerCase();
-        }
-        @Override
-        public String toString()
-        {
-            return this.getSerializedName();
-        }
-    };
 }

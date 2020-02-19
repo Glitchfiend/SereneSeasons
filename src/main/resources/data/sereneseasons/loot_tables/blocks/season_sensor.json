@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "sereneseasons:season_sensor_spring"
+          "name": "sereneseasons:season_sensor"
         }
       ],
       "conditions": [

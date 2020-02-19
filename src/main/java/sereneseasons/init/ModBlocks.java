@@ -32,16 +32,13 @@ public class ModBlocks
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event)
     {
-        season_sensors[0] = registerBlock(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SPRING), "season_sensor_spring");
-        season_sensors[1] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.SUMMER), "season_sensor_summer");
-        season_sensors[2] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.AUTUMN), "season_sensor_autumn");
-        season_sensors[3] = registerBlockNoGroup(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE), SeasonSensorBlock.DetectorType.WINTER), "season_sensor_winter");
+        season_sensor = registerBlock(new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE)), "season_sensor");
     }
 
     @SubscribeEvent
     public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event)
     {
-        season_sensor_tile_entity = registerTileEntityType("season_sensor", SeasonSensorTileEntity::new, season_sensors);
+        season_sensor_tile_entity = registerTileEntityType("season_sensor", SeasonSensorTileEntity::new, season_sensor);
     }
 
     public static Block registerBlock(Block block, String name)
