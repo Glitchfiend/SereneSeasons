@@ -5,7 +5,7 @@
   "commands.sereneseasons.setseason.fail": "%s não é uma estação válida",
   "commands.sereneseasons.setseason.disabled": "As estações estão desativadas no momento!",
 
-  "itemGroup.tabSereneSeasons": "Estações Serenas",
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
 
   "block.sereneseasons.greenhouse_glass": "Vidro de estufa",
   "block.sereneseasons.season_sensor_spring": "Sensor de estação",

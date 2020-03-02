@@ -5,7 +5,7 @@
     "commands.sereneseasons.setseason.fail": "Ongeldig seizoen %s",
     "commands.sereneseasons.setseason.disabled": "Seizoenen zijn momenteel uitgeschakeld!",
 	
-    "itemGroup.tabSereneSeasons": "Serene seizoenen",
+    "itemGroup.tabSereneSeasons": "Serene Seasons",
 	
     "block.sereneseasons.greenhouse_glass": "Kasglas",
     "block.sereneseasons.season_sensor_spring": "Seizoensensor",

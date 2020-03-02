@@ -5,7 +5,7 @@
   "commands.sereneseasons.setseason.fail": "%s라는 계절이 존재하지 않습니다.",
   "commands.sereneseasons.setseason.disabled": "계절이 현재 비활성화되어 있습니다!",
 
-  "itemGroup.tabSereneSeasons": "고요한 계절",
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
 
   "block.sereneseasons.greenhouse_glass": "온실 유리",
   "block.sereneseasons.season_sensor_spring": "계절 감지기",
