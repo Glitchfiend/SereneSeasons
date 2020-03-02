@@ -32,9 +32,8 @@ public class ModHandlers
         //Handlers for functionality related to seasons
         MinecraftForge.EVENT_BUS.register(SEASON_HANDLER);
         SeasonHelper.dataProvider = SEASON_HANDLER;
-        
+
         MinecraftForge.EVENT_BUS.register(new RandomUpdateHandler());
-        MinecraftForge.EVENT_BUS.register(new SeasonSleepHandler());
         MinecraftForge.EVENT_BUS.register(new SeasonalCropGrowthHandler());
         MinecraftForge.EVENT_BUS.register(new TimeSkipHandler());
 
