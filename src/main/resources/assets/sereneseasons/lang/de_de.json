@@ -1,0 +1,21 @@
+{
+  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
+  "commands.sereneseasons.getseason.success": "Derzeitige Jahreszeit ist %s, Tag %s/%s, tick %s/%s",
+  "commands.sereneseasons.setseason.success": "Setze Jahreszeit zu %s",
+  "commands.sereneseasons.setseason.fail": "Ungültige Jahreszeit %s",
+  "commands.sereneseasons.setseason.disabled": "Jahreszeiten sind derzeit deaktiviert!",
+
+  "itemGroup.tabSereneSeasons": "Ruhige Jahreszeiten",
+
+  "block.sereneseasons.season_sensor": "Jahreszeiten Sensor",
+  
+  "item.sereneseasons.ss_icon": "SS Icon",
+  "item.sereneseasons.calendar": "Kalender",
+
+  "desc.sereneseasons.fertile_seasons": "Fertile Jahreszeiten",
+  "desc.sereneseasons.year_round": "Ganzjährig",
+  "desc.sereneseasons.spring": "Frühling",
+  "desc.sereneseasons.summer": "Sommer",
+  "desc.sereneseasons.autumn": "Herbst",
+  "desc.sereneseasons.winter": "Winter"
+}
