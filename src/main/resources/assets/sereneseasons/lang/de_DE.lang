@@ -1,3 +1,4 @@
+commands.sereneseasons.usage=/sereneseasons <setseason> [argument]
 commands.sereneseasons.setseason.success=Jahreszeit auf %s gesetzt
 commands.sereneseasons.setseason.fail=Ungültige Jahreszeit %s
 commands.sereneseasons.setseason.disabled=Jahreszeiten sind aktuell deaktiviert!
