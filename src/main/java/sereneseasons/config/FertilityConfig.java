@@ -125,19 +125,12 @@ public class FertilityConfig
 		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:strawberry_seeds",
 	
 	 	"atmospheric:aloe_kernels", "atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling",
-	
 		"autumnity:foul_berry_pips", "autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		
 		"berry_good:sweet_berry_pips",
-		
 		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		
 		"dynamic_world:palm_sapling",
-		
 		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",
-		
 		"swampexpansion:willow_sapling", "swampexpansion:rice",
-		
 		"upgrade_aquatic:mulberry", "upgrade_aquatic:river_sapling", "upgrade_aquatic:pickerel_weed_blue", "upgrade_aquatic:pickerel_weed_purple");
 
 	private static List<String> defaultSummerCrops = Lists.newArrayList(
@@ -274,19 +267,12 @@ public class FertilityConfig
 		"xlfoodmod:onion", "xlfoodmod:tomato_seeds", "xlfoodmod:cucumber_seeds", "xlfoodmod:pepper_seeds", "xlfoodmod:corn_seeds", "xlfoodmod:rice",
 	
 		"atmospheric:barrel_cactus", "atmospheric:aloe_kernels", "atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling",
-		
 		"autumnity:foul_berry_pips", "autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		
 		"berry_good:sweet_berry_pips",
-		
 		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		
 		"dynamic_world:palm_sapling",
-		
 		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",
-		
 		"swampexpansion:willow_sapling", "swampexpansion:cattail_seeds", "swampexpansion:rice",
-		
 	  	"upgrade_aquatic:mulberry", "upgrade_aquatic:river_sapling", "upgrade_aquatic:pickerel_weed_blue", "upgrade_aquatic:pickerel_weed_purple");
 
 	private static List<String> defaultAutumnCrops = Lists.newArrayList(
@@ -385,17 +371,11 @@ public class FertilityConfig
 		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:corn_seeds",
 		
 		"atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling",
-		
 		"autumnity:foul_berry_pips", "autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		
 		"berry_good:sweet_berry_pips",
-		
 		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		
 		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",
-		
 		"swampexpansion:willow_sapling", "swampexpansion:cattail_seeds", "swampexpansion:rice",
-		
 		"upgrade_aquatic:mulberry", "upgrade_aquatic:river_sapling", "upgrade_aquatic:pickerel_weed_blue", "upgrade_aquatic:pickerel_weed_purple");
 
 	private static List<String> defaultWinterCrops = Lists.newArrayList(
@@ -414,20 +394,14 @@ public class FertilityConfig
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom"
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
 		
 		"atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling", 
-		
 		"autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		
 		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		
 		"dynamic_world:palm_sapling", 
-		
-		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",
-		
+		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",		
 		"swampexpansion:willow_sapling",
-		
 		"upgrade_aquatic:river_sapling");
 
 	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryParse(obj.toString()) != null;
