@@ -99,6 +99,6 @@ public class SSCommand extends CommandBase
             return getListOfStringsMatchingLastWord(args, Arrays.stream(SubSeason.values()).map(e -> e.toString().toLowerCase()).toArray(String[]::new));
         }
 
-        return null;
+        return super.getTabCompletions(server, sender, args, pos);
     }
 }
