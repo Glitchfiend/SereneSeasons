@@ -12,10 +12,12 @@ import net.minecraft.util.text.TextComponentTranslation;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
+import sereneseasons.api.season.Season.SubSeason;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SSCommand extends CommandBase
@@ -92,7 +94,11 @@ public class SSCommand extends CommandBase
         {
             return getListOfStringsMatchingLastWord(args, "setseason");
         }
+        else if (args.length == 2)
+        {
+            return getListOfStringsMatchingLastWord(args, Arrays.stream(SubSeason.values()).map(e -> e.toString().toLowerCase()).toArray(String[]::new));
+        }
 
-        return null;
+        return super.getTabCompletions(server, sender, args, pos);
     }
 }
