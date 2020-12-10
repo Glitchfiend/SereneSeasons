@@ -36,6 +36,7 @@ public class SereneSeasons
     private void clientSetup(final FMLClientSetupEvent event)
     {
         BirchColorHandler.setup();
+        proxy.registerItemModelsProperties();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
