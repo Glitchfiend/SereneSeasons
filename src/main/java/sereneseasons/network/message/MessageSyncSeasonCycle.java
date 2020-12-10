@@ -15,7 +15,9 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import sereneseasons.core.SereneSeasons;
 import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.season.SeasonTime;
 
 import java.util.function.Supplier;
 
@@ -53,7 +55,9 @@ public class MessageSyncSeasonCycle
                 RegistryKey<World> playerDimension = Minecraft.getInstance().player.level.dimension();
 
                 if (playerDimension.equals(packet.dimension))
+                {
                     SeasonHandler.clientSeasonCycleTicks.replace(playerDimension, packet.seasonCycleTicks);
+                }
             });
             context.get().setPacketHandled(true);
         }

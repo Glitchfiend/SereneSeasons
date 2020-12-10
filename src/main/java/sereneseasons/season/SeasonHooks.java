@@ -17,6 +17,7 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.core.SereneSeasons;
 import sereneseasons.util.biome.BiomeUtil;
 
 public class SeasonHooks
@@ -25,40 +26,44 @@ public class SeasonHooks
     // Hooks called by ASM
     //
 
-    public static float getBiomeTemperatureCachedHook(RegistryKey<Biome> key, BlockPos pos, IWorldReader world)
+    public static float getBiomeTemperatureHook(Biome biome, BlockPos pos, IWorldReader worldReader)
     {
-        Biome biome = BiomeUtil.getBiome(key);
-
-        if (!(world instanceof World))
+        if (!(worldReader instanceof World))
         {
             return biome.getTemperature(pos);
         }
 
-        return getBiomeTemperature((World)world, key, pos);
+        return getBiomeTemperature((World)worldReader, biome, pos);
     }
 
     //
     // General utilities
     //
 
+    public static float getBiomeTemperature(World world, Biome biome, BlockPos pos)
+    {
+        return getBiomeTemperature(world, biome, world.getBiomeName(pos).orElse(null), pos);
+    }
+
     public static float getBiomeTemperature(World world, RegistryKey<Biome> key, BlockPos pos)
     {
-        Biome biome = BiomeUtil.getBiome(key);
+        return getBiomeTemperature(world, world.getBiome(pos), key, pos);
+    }
 
+    public static float getBiomeTemperature(World world, Biome biome, RegistryKey<Biome> key, BlockPos pos)
+    {
         if (!SeasonsConfig.isDimensionWhitelisted(world.dimension()))
         {
             return biome.getTemperature(pos);
         }
 
-        return getBiomeTemperatureInSeason(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), key, pos);
+        return getBiomeTemperatureInSeason(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), biome, key, pos);
     }
 
-    public static float getBiomeTemperatureInSeason(Season.SubSeason subSeason, RegistryKey<Biome> key, BlockPos pos)
+    public static float getBiomeTemperatureInSeason(Season.SubSeason subSeason, Biome biome, RegistryKey<Biome> key, BlockPos pos)
     {
-        Biome biome = BiomeUtil.getBiome(key);
         boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(key);
         float biomeTemp = biome.getTemperature(pos);
-
         if (!tropicalBiome && biome.getBaseTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(key))
         {
             switch (subSeason)
@@ -86,42 +91,4 @@ public class SeasonHooks
 
         return biomeTemp;
     }
-
-//    public boolean doesWaterFreeze(IWorldReader worldIn, BlockPos water, boolean mustBeAtEdge) {
-//        if (this.func_225486_c(water) >= 0.15F) {
-//            return false;
-//        } else {
-//            if (water.getY() >= 0 && water.getY() < worldIn.getDimension().getHeight() && worldIn.getLightFor(LightType.BLOCK, water) < 10) {
-//                BlockState blockstate = worldIn.getBlockState(water);
-//                IFluidState ifluidstate = worldIn.getFluidState(water);
-//                if (ifluidstate.getFluid() == Fluids.WATER && blockstate.getBlock() instanceof FlowingFluidBlock) {
-//                    if (!mustBeAtEdge) {
-//                        return true;
-//                    }
-//
-//                    boolean flag = worldIn.hasWater(water.west()) && worldIn.hasWater(water.east()) && worldIn.hasWater(water.north()) && worldIn.hasWater(water.south());
-//                    if (!flag) {
-//                        return true;
-//                    }
-//                }
-//            }
-//
-//            return false;
-//        }
-//    }
-//
-//    public boolean doesSnowGenerate(IWorldReader worldIn, BlockPos pos) {
-//        if (this.func_225486_c(pos) >= 0.15F) {
-//            return false;
-//        } else {
-//            if (pos.getY() >= 0 && pos.getY() < 256 && worldIn.getLightFor(LightType.BLOCK, pos) < 10) {
-//                BlockState blockstate = worldIn.getBlockState(pos);
-//                if (blockstate.isAir(worldIn, pos) && Blocks.SNOW.getDefaultState().isValidPosition(worldIn, pos)) {
-//                    return true;
-//                }
-//            }
-//
-//            return false;
-//        }
-//    }
 }

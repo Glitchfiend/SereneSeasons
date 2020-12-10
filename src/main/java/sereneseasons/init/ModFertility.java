@@ -58,7 +58,7 @@ public class ModFertility
         //Get season
         Season season = SeasonHelper.getSeasonState(world).getSeason();
         Biome biome = world.getBiome(pos);
-        RegistryKey<Biome> biomeKey = world.getBiomeName(pos).orElseThrow();
+        RegistryKey<Biome> biomeKey = world.getBiomeName(pos).orElse(null);
 
         if (FertilityConfig.undergroundFertilityLevel.get() > -1 && pos.getY() < FertilityConfig.undergroundFertilityLevel.get() && !world.canSeeSky(pos))
         {

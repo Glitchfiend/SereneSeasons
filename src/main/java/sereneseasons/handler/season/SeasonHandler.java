@@ -190,7 +190,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     
     public ISeasonState getClientSeasonState()
     {
-        Integer i = clientSeasonCycleTicks.get(0);
+        Integer i = clientSeasonCycleTicks.get(Minecraft.getInstance().level.dimension());
     	return new SeasonTime(i == null ? 0 : i);
     }
 }

@@ -33,7 +33,7 @@ public class BirchColorHandler
 
 				if (world != null && pos != null && SeasonsConfig.changeBirchColor.get() && SeasonsConfig.isDimensionWhitelisted(dimension))
 				{
-					RegistryKey<Biome> biome = world.getBiomeName(pos).orElseThrow();
+					RegistryKey<Biome> biome = world.getBiomeName(pos).orElse(null);
 
 					if (BiomeConfig.enablesSeasonalEffects(biome))
 					{
