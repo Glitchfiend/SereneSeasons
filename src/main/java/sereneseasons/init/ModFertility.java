@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
@@ -22,6 +23,7 @@ import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.core.SereneSeasons;
+import sereneseasons.util.biome.BiomeUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,22 +58,23 @@ public class ModFertility
         //Get season
         Season season = SeasonHelper.getSeasonState(world).getSeason();
         Biome biome = world.getBiome(pos);
+        RegistryKey<Biome> biomeKey = world.getBiomeName(pos).orElseThrow();
 
         if (FertilityConfig.undergroundFertilityLevel.get() > -1 && pos.getY() < FertilityConfig.undergroundFertilityLevel.get() && !world.canSeeSky(pos))
         {
             return true;
         }
 
-        if (BiomeConfig.infertileBiome(biome))
+        if (BiomeConfig.infertileBiome(biomeKey))
         {
             return false;
         }
-        else if (!FertilityConfig.seasonalCrops.get() || !BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
+        else if (!FertilityConfig.seasonalCrops.get() || !BiomeConfig.enablesSeasonalEffects(biomeKey) || !SeasonsConfig.isDimensionWhitelisted(world.dimension()))
         {
             return true;
         }
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (BiomeConfig.usesTropicalSeasons(biomeKey))
         {
             if (summerPlants.contains(cropName) || !(allListedPlants.contains(cropName)))
             {

@@ -9,11 +9,14 @@ package sereneseasons.util;
 
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.core.SereneSeasons;
 
 public class SeasonColorUtil
 {
@@ -83,16 +86,18 @@ public class SeasonColorUtil
         return newColor.toInt();
     }
     
-    public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
+    public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, RegistryKey<Biome> biome, int originalColour)
     {
-        int dimensionId =  Minecraft.getInstance().level.getDimension().getType().getId();
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimensionId))
+        RegistryKey<World> dimension = Minecraft.getInstance().level.dimension();
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimension)) {
             return originalColour;
+        }
 
         int overlay = colorProvider.getGrassOverlay();
         float saturationMultiplier = colorProvider.getGrassSaturationMultiplier();
         if (!SeasonsConfig.changeGrassColor.get())
     	{
+            SereneSeasons.logger.info("Forcing mid summer colouring...");
         	overlay = Season.SubSeason.MID_SUMMER.getGrassOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getGrassSaturationMultiplier();
     	}
@@ -106,10 +111,10 @@ public class SeasonColorUtil
         return saturationMultiplier != -1 ? saturateColour(fixedColour, saturationMultiplier) : fixedColour;
     }
     
-    public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Biome biome, int originalColour)
+    public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, RegistryKey<Biome> biome, int originalColour)
     {
-        int dimensionId =  Minecraft.getInstance().level.getDimension().getType().getId();
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimensionId))
+        RegistryKey<World> dimension =  Minecraft.getInstance().level.dimension();
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimension))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();

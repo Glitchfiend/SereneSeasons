@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
 import net.minecraft.profiler.IProfiler;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.DifficultyInstance;
@@ -28,6 +29,8 @@ import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraft.world.storage.IServerWorldInfo;
+import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -38,6 +41,7 @@ import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonHooks;
+import sereneseasons.util.biome.BiomeUtil;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -50,32 +54,33 @@ public class RandomUpdateHandler
 		if (!SeasonsConfig.changeWeatherFrequency.get())
 			return;
 
+		IServerWorldInfo serverLevelData = (IServerWorldInfo)world.getLevelData();
+
 		if (season == Season.WINTER)
 		{
-			if (world.getLevelData().isThundering())
+			if (serverLevelData.isThundering())
 			{
-				world.getLevelData().setThundering(false);
-				;
+				serverLevelData.setThundering(false);
 			}
-			if (!world.getLevelData().isRaining() && world.getLevelData().getRainTime() > 36000)
+			if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > 36000)
 			{
-				world.getLevelData().setRainTime(world.random.nextInt(24000) + 12000);
+				serverLevelData.setRainTime(world.random.nextInt(24000) + 12000);
 			}
 		}
 		else
 		{
 			if (season == Season.SPRING)
 			{
-				if (!world.getLevelData().isRaining() && world.getLevelData().getRainTime() > 96000)
+				if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > 96000)
 				{
-					world.getLevelData().setRainTime(world.random.nextInt(84000) + 12000);
+					serverLevelData.setRainTime(world.random.nextInt(84000) + 12000);
 				}
 			}
 			else if (season == Season.SUMMER)
 			{
-				if (!world.getLevelData().isThundering() && world.getLevelData().getThunderTime() > 36000)
+				if (!world.getLevelData().isThundering() && serverLevelData.getThunderTime() > 36000)
 				{
-					world.getLevelData().setThunderTime(world.random.nextInt(24000) + 12000);
+					serverLevelData.setThunderTime(world.random.nextInt(24000) + 12000);
 				}
 			}
 		}
@@ -111,7 +116,7 @@ public class RandomUpdateHandler
 			BlockPos topGroundPos = topAirPos.below();
 			BlockState aboveGroundState = world.getBlockState(topAirPos);
 			BlockState groundState = world.getBlockState(topGroundPos);
-			Biome biome = world.getBiome(topAirPos);
+			RegistryKey<Biome> biome = world.getBiomeName(topAirPos).orElseThrow();
 
 			if (!BiomeConfig.enablesSeasonalEffects(biome))
 				return;
@@ -147,7 +152,7 @@ public class RandomUpdateHandler
 
 			if (season != Season.WINTER)
 			{
-				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.getDimension().getType().getId()))
+				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.dimension()))
 				{
 					ServerWorld world = (ServerWorld) event.world;
 					ChunkManager chunkManager = world.getChunkSource().chunkMap;

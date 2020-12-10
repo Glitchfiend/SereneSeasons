@@ -7,21 +7,17 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.util.biome.BiomeUtil;
 
 public class SeasonHooks
 {
@@ -29,36 +25,41 @@ public class SeasonHooks
     // Hooks called by ASM
     //
 
-    public static float getBiomeTemperatureCachedHook(Biome biome, BlockPos pos, IWorldReader world)
+    public static float getBiomeTemperatureCachedHook(RegistryKey<Biome> key, BlockPos pos, IWorldReader world)
     {
+        Biome biome = BiomeUtil.getBiome(key);
+
         if (!(world instanceof World))
         {
             return biome.getTemperature(pos);
         }
 
-        return getBiomeTemperature((World)world, biome, pos);
+        return getBiomeTemperature((World)world, key, pos);
     }
 
     //
     // General utilities
     //
 
-    public static float getBiomeTemperature(World world, Biome biome, BlockPos pos)
+    public static float getBiomeTemperature(World world, RegistryKey<Biome> key, BlockPos pos)
     {
-        if (!SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
+        Biome biome = BiomeUtil.getBiome(key);
+
+        if (!SeasonsConfig.isDimensionWhitelisted(world.dimension()))
         {
             return biome.getTemperature(pos);
         }
 
-        return getBiomeTemperatureInSeason(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), biome, pos);
+        return getBiomeTemperatureInSeason(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), key, pos);
     }
 
-    public static float getBiomeTemperatureInSeason(Season.SubSeason subSeason, Biome biome, BlockPos pos)
+    public static float getBiomeTemperatureInSeason(Season.SubSeason subSeason, RegistryKey<Biome> key, BlockPos pos)
     {
-        boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
+        Biome biome = BiomeUtil.getBiome(key);
+        boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(key);
         float biomeTemp = biome.getTemperature(pos);
 
-        if (!tropicalBiome && biome.getTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
+        if (!tropicalBiome && biome.getBaseTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(key))
         {
             switch (subSeason)
             {

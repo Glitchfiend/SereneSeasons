@@ -7,27 +7,16 @@
  ******************************************************************************/
 package sereneseasons.handler.season;
 
-import java.util.HashMap;
-import java.util.function.Supplier;
-
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.MapData;
-import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.PacketDistributor;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
@@ -35,11 +24,13 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.core.SereneSeasons;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
+
+import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {
@@ -83,9 +74,9 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     private Season.SubSeason lastSeason = null;
-    public static final HashMap<Integer, Integer> clientSeasonCycleTicks = new HashMap<>();
+    public static final HashMap<RegistryKey<World>, Integer> clientSeasonCycleTicks = new HashMap<>();
     public static SeasonTime getClientSeasonTime() {
-        Integer i = clientSeasonCycleTicks.get(0);
+        Integer i = clientSeasonCycleTicks.get(Minecraft.getInstance().level.dimension());
     	return new SeasonTime(i == null ? 0 : i);
     }
     
@@ -94,7 +85,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         //Only do this when in the world
         if (Minecraft.getInstance().player == null) return;
-        int dimension = Minecraft.getInstance().player.dimension.getId();
+        RegistryKey<World> dimension = Minecraft.getInstance().player.level.dimension();
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
@@ -151,7 +142,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (!world.isClientSide)
         {
             SeasonSavedData savedData = getSeasonSavedData(world);
-            PacketHandler.HANDLER.send(PacketDistributor.ALL.noArg(), new MessageSyncSeasonCycle(world.getDimension().getType().getId(), savedData.seasonCycleTicks));
+            PacketHandler.HANDLER.send(PacketDistributor.ALL.noArg(), new MessageSyncSeasonCycle(world.dimension(), savedData.seasonCycleTicks));
         }
     }
     

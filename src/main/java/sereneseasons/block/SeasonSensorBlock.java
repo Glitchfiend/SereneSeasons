@@ -12,24 +12,19 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.AttachFace;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.season.SeasonTime;
@@ -69,7 +64,7 @@ public class SeasonSensorBlock extends ContainerBlock
     {
         BlockState state = world.getBlockState(pos);
 
-        if (SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
+        if (SeasonsConfig.isDimensionWhitelisted(world.dimension()))
         {
             BlockState currentState = world.getBlockState(pos);
 
@@ -136,6 +131,6 @@ public class SeasonSensorBlock extends ContainerBlock
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(new IProperty[]{POWER, SEASON});
+        builder.add(POWER, SEASON);
     }
 }

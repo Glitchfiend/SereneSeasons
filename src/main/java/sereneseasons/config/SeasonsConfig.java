@@ -8,6 +8,9 @@
 package sereneseasons.config;
 
 import com.google.common.collect.Lists;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -39,18 +42,21 @@ public class SeasonsConfig
     public static ForgeConfigSpec.BooleanValue changeBirchColor;
 
     // Dimension settings
-    public static ForgeConfigSpec.ConfigValue<List<? extends Integer>> whitelistedDimensions;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistedDimensions;
 
-    private static List<Integer> defaultWhitelistedDimensions = Lists.newArrayList(0);
+    private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(World.OVERWORLD.location().toString());
     private static final Predicate<Object> DIMENSION_VALIDATOR = (obj) ->
     {
+        if (!(obj instanceof String))
+            return false;
+
         try
         {
-            Integer.valueOf(obj.toString());
+            new ResourceLocation((String)obj);
         }
         catch (Exception e)
         {
-            // Can't convert to an integer, therefore this object is invalid
+            // Can't convert to a resource location, therefore this object is invalid
             return false;
         }
 
@@ -84,11 +90,11 @@ public class SeasonsConfig
         SPEC = BUILDER.build();
     }
     
-    public static boolean isDimensionWhitelisted(int dimension)
+    public static boolean isDimensionWhitelisted(RegistryKey<World> dimension)
     {
-    	for (Integer whitelistedDimension : whitelistedDimensions.get())
+    	for (String whitelistedDimension : whitelistedDimensions.get())
 		{
-    		if (dimension == whitelistedDimension.intValue())
+    		if (dimension.location().toString().equals(whitelistedDimension))
 			{
     			return true;
 			}

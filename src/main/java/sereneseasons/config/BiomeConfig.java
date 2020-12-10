@@ -10,9 +10,11 @@ package sereneseasons.config;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import sereneseasons.config.json.BiomeData;
+import sereneseasons.util.biome.BiomeUtil;
 import sereneseasons.util.config.JsonUtil;
 
 import java.io.File;
@@ -45,9 +47,9 @@ public class BiomeConfig
         }
     }
 
-    public static boolean enablesSeasonalEffects(Biome biome)
+    public static boolean enablesSeasonalEffects(RegistryKey<Biome> biome)
     {
-        ResourceLocation name = biome.getRegistryName();
+        ResourceLocation name = biome.location();
 
         if (biomeDataMap.containsKey(name))
         {
@@ -57,26 +59,27 @@ public class BiomeConfig
         return true;
     }
 
-    public static boolean usesTropicalSeasons(Biome biome)
+    public static boolean usesTropicalSeasons(RegistryKey<Biome> key)
     {
-        ResourceLocation name = biome.getRegistryName();
+        ResourceLocation name = key.location();
+        Biome biome = BiomeUtil.getBiome(key);
 
         if (biomeDataMap.containsKey(name))
         {
             return biomeDataMap.get(name).useTropicalSeasons;
         }
 
-        return biome.getTemperature() > 0.8F;
+        return biome.getBaseTemperature() > 0.8F;
     }
 
-    public static boolean infertileBiome(Biome biome)
+    public static boolean infertileBiome(RegistryKey<Biome> biome)
     {
         List<String> infertileBiomes = Lists.newArrayList("minecraft:nether", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
                 "minecraft:end_highlands", "minecraft:end_barrens", "minecraft:the_void",
                 "biomesoplenty:ashen_inferno", "biomesoplenty:ominous_woods", "biomesoplenty:undergarden", "biomesoplenty:visceral_heap", "biomesoplenty:volcano",
                 "biomesoplenty:volcano_edge", "biomesoplenty:wasteland");
 
-        String name = biome.getRegistryName().toString();
+        String name = biome.location().toString();
 
         if (infertileBiomes.contains(name))
         {
@@ -86,12 +89,12 @@ public class BiomeConfig
         return false;
     }
 
-    public static boolean lessColorChange(Biome biome)
+    public static boolean lessColorChange(RegistryKey<Biome> biome)
     {
         List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
                 "biomesoplenty:bog", "biomesoplenty:mire", "biomesoplenty:ominous_woods");
 
-        String name = biome.getRegistryName().toString();
+        String name = biome.location().toString();
 
         if (lessColorChangeBiomes.contains(name))
         {

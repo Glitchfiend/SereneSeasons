@@ -29,98 +29,98 @@ public class CalendarItem extends Item
     {
         super(builder);
 
-        this.addProperty(new ResourceLocation("time"), new IItemPropertyGetter()
-        {
-            @OnlyIn(Dist.CLIENT)
-            double field_185088_a;
-            @OnlyIn(Dist.CLIENT)
-            double field_185089_b;
-            @OnlyIn(Dist.CLIENT)
-            int ticks;
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(ItemStack stack, World world, LivingEntity entity)
-            {
-                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
-
-                if (world == null && holder != null)
-                {
-                    world = holder.level;
-                }
-
-                if (world == null)
-                {
-                    return 0.0F;
-                }
-                else
-                {
-                    double d0;
-
-                    int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
-                    d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
-
-                    return MathHelper.positiveModulo((float)d0, 1.0F);
-                }
-            }
-        });
-
-        this.addProperty(new ResourceLocation("seasontype"), new IItemPropertyGetter()
-        {
-            @OnlyIn(Dist.CLIENT)
-            double field_185088_a;
-            @OnlyIn(Dist.CLIENT)
-            double field_185089_b;
-            @OnlyIn(Dist.CLIENT)
-            int ticks;
-
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(ItemStack stack, World world, LivingEntity entity)
-            {
-                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
-
-                if (world == null && holder != null)
-                {
-                    world = holder.level;
-                }
-
-                if (world == null)
-                {
-                    return 2.0F;
-                }
-                else
-                {
-                    float seasontype;
-
-                    if (SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
-                    {
-                        if (holder != null)
-                        {
-                            Biome biome = world.getBiome(holder.getCommandSenderBlockPosition());
-
-                            if (BiomeConfig.usesTropicalSeasons(biome))
-                            {
-                                seasontype = 1.0F;
-                            }
-                            else
-                            {
-                                seasontype = 0.0F;
-                            }
-                        }
-                        else
-                        {
-                            seasontype = 0.0F;
-                        }
-                    }
-                    else
-                    {
-                        seasontype = 2.0F;
-                    }
-
-                    return seasontype;
-                }
-            }
-        });
+//        this.addProperty(new ResourceLocation("time"), new IItemPropertyGetter()
+//        {
+//            @OnlyIn(Dist.CLIENT)
+//            double field_185088_a;
+//            @OnlyIn(Dist.CLIENT)
+//            double field_185089_b;
+//            @OnlyIn(Dist.CLIENT)
+//            int ticks;
+//
+//            @Override
+//            @OnlyIn(Dist.CLIENT)
+//            public float call(ItemStack stack, World world, LivingEntity entity)
+//            {
+//                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
+//
+//                if (world == null && holder != null)
+//                {
+//                    world = holder.level;
+//                }
+//
+//                if (world == null)
+//                {
+//                    return 0.0F;
+//                }
+//                else
+//                {
+//                    double d0;
+//
+//                    int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
+//                    d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
+//
+//                    return MathHelper.positiveModulo((float)d0, 1.0F);
+//                }
+//            }
+//        });
+//
+//        this.addProperty(new ResourceLocation("seasontype"), new IItemPropertyGetter()
+//        {
+//            @OnlyIn(Dist.CLIENT)
+//            double field_185088_a;
+//            @OnlyIn(Dist.CLIENT)
+//            double field_185089_b;
+//            @OnlyIn(Dist.CLIENT)
+//            int ticks;
+//
+//            @Override
+//            @OnlyIn(Dist.CLIENT)
+//            public float call(ItemStack stack, World world, LivingEntity entity)
+//            {
+//                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
+//
+//                if (world == null && holder != null)
+//                {
+//                    world = holder.level;
+//                }
+//
+//                if (world == null)
+//                {
+//                    return 2.0F;
+//                }
+//                else
+//                {
+//                    float seasontype;
+//
+//                    if (SeasonsConfig.isDimensionWhitelisted(world.getDimension().getType().getId()))
+//                    {
+//                        if (holder != null)
+//                        {
+//                            Biome biome = world.getBiome(holder.getCommandSenderBlockPosition());
+//
+//                            if (BiomeConfig.usesTropicalSeasons(biome))
+//                            {
+//                                seasontype = 1.0F;
+//                            }
+//                            else
+//                            {
+//                                seasontype = 0.0F;
+//                            }
+//                        }
+//                        else
+//                        {
+//                            seasontype = 0.0F;
+//                        }
+//                    }
+//                    else
+//                    {
+//                        seasontype = 2.0F;
+//                    }
+//
+//                    return seasontype;
+//                }
+//            }
+//        });
     }
 }

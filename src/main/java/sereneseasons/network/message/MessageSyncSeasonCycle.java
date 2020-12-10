@@ -9,19 +9,24 @@ package sereneseasons.network.message;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.handler.season.SeasonHandler;
 
 import java.util.function.Supplier;
 
 public class MessageSyncSeasonCycle
 {
-    public int dimension;
+    public RegistryKey<World> dimension;
     public int seasonCycleTicks;
     
     public MessageSyncSeasonCycle() {}
     
-    public MessageSyncSeasonCycle(int dimension, int seasonCycleTicks)
+    public MessageSyncSeasonCycle(RegistryKey<World> dimension, int seasonCycleTicks)
     {
         this.dimension = dimension;
         this.seasonCycleTicks = seasonCycleTicks;
@@ -29,13 +34,13 @@ public class MessageSyncSeasonCycle
 
     public static void encode(MessageSyncSeasonCycle packet, PacketBuffer buf)
     {
-        buf.writeInt(packet.dimension);
+        buf.writeUtf(packet.dimension.location().toString());
         buf.writeInt(packet.seasonCycleTicks);
     }
 
     public static MessageSyncSeasonCycle decode(PacketBuffer buf)
     {
-        return new MessageSyncSeasonCycle(buf.readInt(), buf.readInt());
+        return new MessageSyncSeasonCycle(RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(buf.readUtf())), buf.readInt());
     }
 
     public static class Handler
@@ -45,9 +50,9 @@ public class MessageSyncSeasonCycle
             context.get().enqueueWork(() ->
             {
                 if (Minecraft.getInstance().player == null) return;
-                int playerDimension = Minecraft.getInstance().player.dimension.getId();
+                RegistryKey<World> playerDimension = Minecraft.getInstance().player.level.dimension();
 
-                if (playerDimension == packet.dimension)
+                if (playerDimension.equals(packet.dimension))
                     SeasonHandler.clientSeasonCycleTicks.replace(playerDimension, packet.seasonCycleTicks);
             });
             context.get().setPacketHandled(true);
