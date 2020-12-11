@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "sereneseasons.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "sereneseasons.refmap.json",
+  "mixins": [
+    "MixinWorld"
+  ],
+  "client": [
+    "client.MixinWorldRenderer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

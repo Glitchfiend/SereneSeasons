@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
@@ -90,5 +91,26 @@ public class SeasonHooks
         }
 
         return biomeTemp;
+    }
+
+    public static boolean shouldRainInBiomeInSeason(World world, RegistryKey<Biome> biomeKey)
+    {
+        Biome biome = BiomeUtil.getBiome(biomeKey);
+
+        if (BiomeConfig.usesTropicalSeasons(biomeKey))
+        {
+            Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
+
+            switch (tropicalSeason)
+            {
+                case MID_DRY:
+                    return false;
+
+                case MID_WET:
+                    return true;
+            }
+        }
+
+        return biome.getPrecipitation() == Biome.RainType.RAIN;
     }
 }
