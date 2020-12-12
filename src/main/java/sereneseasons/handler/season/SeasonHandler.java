@@ -18,6 +18,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
+import sereneseasons.api.SSGameRules;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
@@ -47,6 +48,10 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
                 if (server != null && server.getPlayerList().getPlayerCount() == 0)
                     return;
             }
+
+            // Only tick seasons if the game rule is enabled
+            if (!world.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONTICK))
+                return;
                 
             SeasonSavedData savedData = getSeasonSavedData(world);
 
