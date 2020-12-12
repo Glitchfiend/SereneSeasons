@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import sereneseasons.handler.season.BirchColorHandler;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModFertility;
+import sereneseasons.init.ModGameRules;
 import sereneseasons.init.ModHandlers;
 
 @Mod(value = SereneSeasons.MOD_ID)
@@ -31,6 +32,7 @@ public class SereneSeasons
 
         ModHandlers.init();
         ModConfig.init();
+        ModGameRules.init();
     }
 
     private void clientSetup(final FMLClientSetupEvent event)
