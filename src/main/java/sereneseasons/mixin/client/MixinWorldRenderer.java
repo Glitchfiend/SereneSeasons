@@ -42,7 +42,7 @@ public abstract class MixinWorldRenderer implements IResourceManagerReloadListen
         Biome.RainType rainType = biome.getPrecipitation();
         World world = Minecraft.getInstance().level;
 
-        if (SeasonsConfig.isDimensionWhitelisted(world.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey) && rainType == Biome.RainType.RAIN)
+        if (SeasonsConfig.isDimensionWhitelisted(world.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey) && (rainType == Biome.RainType.RAIN || rainType == Biome.RainType.NONE))
         {
             if (SeasonHooks.shouldRainInBiomeInSeason(world, biomeKey))
                 return Biome.RainType.RAIN;
