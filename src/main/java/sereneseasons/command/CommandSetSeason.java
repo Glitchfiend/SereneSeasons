@@ -24,7 +24,7 @@ public class CommandSetSeason
 {
     static ArgumentBuilder<CommandSource, ?> register()
     {
-        return Commands.literal("setseason")
+        return Commands.literal("set")
             .then(Commands.argument("season", EnumArgument.enumArgument(Season.SubSeason.class))
             .executes(ctx -> {
                 World world = ctx.getSource().getLevel();

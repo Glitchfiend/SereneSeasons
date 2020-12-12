@@ -23,7 +23,7 @@ public class CommandGetSeason
 {
     static ArgumentBuilder<CommandSource, ?> register()
     {
-        return Commands.literal("getseason")
+        return Commands.literal("get")
             .executes(ctx -> {
                 World world = ctx.getSource().getLevel();
                 return getSeason(ctx.getSource(), world);
