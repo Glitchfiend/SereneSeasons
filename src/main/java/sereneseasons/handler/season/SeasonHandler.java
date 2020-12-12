@@ -50,7 +50,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             }
 
             // Only tick seasons if the game rule is enabled
-            if (!world.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONTICK))
+            if (!world.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONCYCLE))
                 return;
                 
             SeasonSavedData savedData = getSeasonSavedData(world);

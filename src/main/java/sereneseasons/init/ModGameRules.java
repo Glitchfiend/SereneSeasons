@@ -16,6 +16,6 @@ public class ModGameRules
 {
     public static void init()
     {
-        RULE_DOSEASONTICK = register("doSeasonTick", GameRules.Category.UPDATES, GameRules.BooleanValue.create(true));
+        RULE_DOSEASONCYCLE = register("doSeasonCycle", GameRules.Category.UPDATES, GameRules.BooleanValue.create(true));
     }
 }

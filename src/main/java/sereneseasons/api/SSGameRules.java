@@ -11,5 +11,5 @@ import net.minecraft.world.GameRules;
 
 public class SSGameRules
 {
-    public static GameRules.RuleKey<GameRules.BooleanValue> RULE_DOSEASONTICK;
+    public static GameRules.RuleKey<GameRules.BooleanValue> RULE_DOSEASONCYCLE;
 }
