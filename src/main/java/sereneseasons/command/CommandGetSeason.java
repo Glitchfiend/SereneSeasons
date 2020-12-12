@@ -11,12 +11,10 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.server.command.EnumArgument;
+import net.minecraft.world.World;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
-import sereneseasons.api.season.Season;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
@@ -27,14 +25,14 @@ public class CommandGetSeason
     {
         return Commands.literal("getseason")
             .executes(ctx -> {
-                ServerPlayerEntity player = ctx.getSource().getPlayerOrException();
-                return getSeason(ctx.getSource(), player);
+                World world = ctx.getSource().getLevel();
+                return getSeason(ctx.getSource(), world);
             });
     }
 
-    private static int getSeason(CommandSource cs, ServerPlayerEntity player) throws CommandException
+    private static int getSeason(CommandSource cs, World world) throws CommandException
     {
-        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(player.level);
+        SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
         SeasonTime time = new SeasonTime(seasonData.seasonCycleTicks);
         int subSeasonDuration = SyncedConfig.getIntValue(SeasonsOption.SUB_SEASON_DURATION);
         cs.sendSuccess(new TranslationTextComponent("commands.sereneseasons.getseason.success", time.getSubSeason().toString(), time.getDay() % subSeasonDuration, subSeasonDuration, time.getSeasonCycleTicks() % time.getDayDuration(), time.getDayDuration()), true);
