@@ -3,6 +3,7 @@
 /out/
 /repo/
 /run/
+/logs/
 .idea/*
 /.gradle/
 /.settings/

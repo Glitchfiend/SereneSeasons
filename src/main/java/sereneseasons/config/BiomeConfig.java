@@ -74,10 +74,13 @@ public class BiomeConfig
 
     public static boolean infertileBiome(RegistryKey<Biome> biome)
     {
-        List<String> infertileBiomes = Lists.newArrayList("minecraft:nether", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
+        List<String> infertileBiomes = Lists.newArrayList("minecraft:nether_wastes", "minecraft:soul_sand_valley", "minecraft:crimson_forest",
+                "minecraft:warped_forest", "minecraft:basalt_deltas", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
                 "minecraft:end_highlands", "minecraft:end_barrens", "minecraft:the_void",
-                "biomesoplenty:ashen_inferno", "biomesoplenty:ominous_woods", "biomesoplenty:undergarden", "biomesoplenty:visceral_heap", "biomesoplenty:volcano",
-                "biomesoplenty:volcano_edge", "biomesoplenty:wasteland");
+
+                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire", "biomesoplenty:volcano", "biomesoplenty:volcanic_plains", "biomesoplenty:wasteland",
+                "biomesoplenty:wooded_wasteland", "biomesoplenty:crystalline_chasm", "biomesoplenty:undergrowth", "biomesoplenty:visercal_heap",
+                "biomesoplenty:withered_abyss");
 
         String name = biome.location().toString();
 
@@ -92,7 +95,7 @@ public class BiomeConfig
     public static boolean lessColorChange(RegistryKey<Biome> biome)
     {
         List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
-                "biomesoplenty:bog", "biomesoplenty:mire", "biomesoplenty:ominous_woods");
+                "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog", "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire");
 
         String name = biome.location().toString();
 
@@ -108,9 +111,10 @@ public class BiomeConfig
     {
         List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:ocean",
                 "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean",
-                "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river", "minecraft:the_void",
+                "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
+                "minecraft:the_void",
 
-                "biomesoplenty:mystic_grove", "biomesoplenty:origin_beach", "biomesoplenty:origin_hills", "biomesoplenty:rainbow_valley");
+                "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:origin_valley", "biomesoplenty:rainbow_hills");
 
         for (String biomeName : blacklistedBiomes)
         {
@@ -123,7 +127,7 @@ public class BiomeConfig
 
     private static void addTropicalBiomes(Map<String, BiomeData> map)
     {
-        List<String> tropicalBiomes = Lists.newArrayList("minecraft:warm_ocean", "minecraft:deep_warm_ocean");
+        List<String> tropicalBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills", "minecraft:warm_ocean", "minecraft:deep_warm_ocean");
 
         for (String biomeName : tropicalBiomes)
         {
