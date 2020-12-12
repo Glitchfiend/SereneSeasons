@@ -35,6 +35,14 @@ public class FertilityConfig
 		"minecraft:red_mushroom",
 		"minecraft:brown_mushroom",
 		"minecraft:nether_wart",
+		"minecraft:crimson_fungus",
+		"minecraft:warped_fungus",
+		"minecraft:crimson_nylium",
+		"minecraft:warped_nylium",
+		"minecraft:twisting_vines",
+		"minecraft:twisting_vines_plant",
+		"minecraft:weeping_vines",
+		"minecraft:weeping_vines_plant",
 		"minecraft:seagrass",
 		"minecraft:sea_pickle",
 		"minecraft:sweet_berries",
@@ -50,8 +58,6 @@ public class FertilityConfig
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
-
-		"milknhoney:lettuce_seeds",
 
 		"pamhc2crops:asparagusitem",
 		"pamhc2crops:asparagusseeditem",
@@ -122,16 +128,7 @@ public class FertilityConfig
 		"simplefarming:turnip_seeds", "simplefarming:zucchini_seeds", "simplefarming:apricot_sapling", "simplefarming:cherry_sapling",
 		"simplefarming:blueberry_bush", "simplefarming:strawberry_bush",
 
-		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:strawberry_seeds",
-	
-	 	"atmospheric:aloe_kernels", "atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling",
-		"autumnity:foul_berry_pips", "autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		"berry_good:sweet_berry_pips",
-		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		"dynamic_world:palm_sapling",
-		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",
-		"swampexpansion:willow_sapling", "swampexpansion:rice",
-		"upgrade_aquatic:mulberry", "upgrade_aquatic:river_sapling", "upgrade_aquatic:pickerel_weed_blue", "upgrade_aquatic:pickerel_weed_purple");
+		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:strawberry_seeds");
 
 	private static List<String> defaultSummerCrops = Lists.newArrayList(
 "minecraft:oak_sapling",
@@ -143,6 +140,14 @@ public class FertilityConfig
 		"minecraft:red_mushroom",
 		"minecraft:brown_mushroom",
 		"minecraft:nether_wart",
+		"minecraft:crimson_fungus",
+		"minecraft:warped_fungus",
+		"minecraft:crimson_nylium",
+		"minecraft:warped_nylium",
+		"minecraft:twisting_vines",
+		"minecraft:twisting_vines_plant",
+		"minecraft:weeping_vines",
+		"minecraft:weeping_vines_plant",
 		"minecraft:seagrass",
 		"minecraft:sea_pickle",
 		"minecraft:sweet_berries",
@@ -162,8 +167,6 @@ public class FertilityConfig
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
-
-		"milknhoney:tomato_seeds",
 
 		"pamhc2crops:agaveitem",
 		"pamhc2crops:agaveseeditem",
@@ -252,8 +255,6 @@ public class FertilityConfig
 		"pamhc2crops:waterchestnutitem",
 		"pamhc2crops:waterchestnutseeditem",
 
-		"simplecorn:kernels",
-
 		"simplefarming:barley_seeds", "simplefarming:cantaloupe_seeds", "simplefarming:cassava_seeds", "simplefarming:corn_seeds",
 		"simplefarming:cotton_seeds", "simplefarming:cucumber_seeds", "simplefarming:cumin_seeds", "simplefarming:ginger_seeds",
 		"simplefarming:grape_seeds", "simplefarming:honeydew_seeds", "simplefarming:kenaf_seeds",
@@ -264,16 +265,7 @@ public class FertilityConfig
 		"simplefarming:mango_sapling", "simplefarming:olive_sapling", "simplefarming:orange_sapling", "simplefarming:plum_sapling",
 		"simplefarming:blueberry_bush", "simplefarming:raspberry_bush",
 
-		"xlfoodmod:onion", "xlfoodmod:tomato_seeds", "xlfoodmod:cucumber_seeds", "xlfoodmod:pepper_seeds", "xlfoodmod:corn_seeds", "xlfoodmod:rice",
-	
-		"atmospheric:barrel_cactus", "atmospheric:aloe_kernels", "atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling",
-		"autumnity:foul_berry_pips", "autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		"berry_good:sweet_berry_pips",
-		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		"dynamic_world:palm_sapling",
-		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",
-		"swampexpansion:willow_sapling", "swampexpansion:cattail_seeds", "swampexpansion:rice",
-	  	"upgrade_aquatic:mulberry", "upgrade_aquatic:river_sapling", "upgrade_aquatic:pickerel_weed_blue", "upgrade_aquatic:pickerel_weed_purple");
+		"xlfoodmod:onion", "xlfoodmod:tomato_seeds", "xlfoodmod:cucumber_seeds", "xlfoodmod:pepper_seeds", "xlfoodmod:corn_seeds", "xlfoodmod:rice");
 
 	private static List<String> defaultAutumnCrops = Lists.newArrayList(
 		"minecraft:oak_sapling",
@@ -285,6 +277,14 @@ public class FertilityConfig
 		"minecraft:red_mushroom",
 		"minecraft:brown_mushroom",
 		"minecraft:nether_wart",
+		"minecraft:crimson_fungus",
+		"minecraft:warped_fungus",
+		"minecraft:crimson_nylium",
+		"minecraft:warped_nylium",
+		"minecraft:twisting_vines",
+		"minecraft:twisting_vines_plant",
+		"minecraft:weeping_vines",
+		"minecraft:weeping_vines_plant",
 		"minecraft:seagrass",
 		"minecraft:sea_pickle",
 		"minecraft:sweet_berries",
@@ -300,8 +300,6 @@ public class FertilityConfig
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
 		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
-
-		"milknhoney:lettuce_seeds",
 
 		"pamhc2crops:amaranthitem",
 		"pamhc2crops:amaranthseeditem",
@@ -360,23 +358,13 @@ public class FertilityConfig
 		"pamhc2crops:wintersquashitem",
 		"pamhc2crops:wintersquashseeditem",
 
-		"simplecorn:kernels",
-
 		"simplefarming:carrot_seeds", "simplefarming:corn_seeds", "simplefarming:eggplant_seeds", "simplefarming:ginger_seeds", "simplefarming:grape_seeds",
 		"simplefarming:lettuce_seeds", "simplefarming:oat_seeds", "simplefarming:onion_seeds", "simplefarming:pea_seeds", "simplefarming:quinoa_seeds",
 		"simplefarming:rye_seeds", "simplefarming:spinach_seeds", "simplefarming:squash_seeds", "simplefarming:sunflower_seeds",
 		"simplefarming:sweet_potato_seeds", "simplefarming:yam_seeds", "simplefarming:apple_sapling", "simplefarming:pear_sapling",
 		"simplefarming:plum_sapling", "simplefarming:blackberry_bush",
 
-		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:corn_seeds",
-		
-		"atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling",
-		"autumnity:foul_berry_pips", "autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		"berry_good:sweet_berry_pips",
-		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",
-		"swampexpansion:willow_sapling", "swampexpansion:cattail_seeds", "swampexpansion:rice",
-		"upgrade_aquatic:mulberry", "upgrade_aquatic:river_sapling", "upgrade_aquatic:pickerel_weed_blue", "upgrade_aquatic:pickerel_weed_purple");
+		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:corn_seeds");
 
 	private static List<String> defaultWinterCrops = Lists.newArrayList(
 "minecraft:oak_sapling",
@@ -388,21 +376,21 @@ public class FertilityConfig
 		"minecraft:red_mushroom",
 		"minecraft:brown_mushroom",
 		"minecraft:nether_wart",
+		"minecraft:crimson_fungus",
+		"minecraft:warped_fungus",
+		"minecraft:crimson_nylium",
+		"minecraft:warped_nylium",
+		"minecraft:twisting_vines",
+		"minecraft:twisting_vines_plant",
+		"minecraft:weeping_vines",
+		"minecraft:weeping_vines_plant",
 		"minecraft:seagrass",
 		"minecraft:sea_pickle",
 
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
 		"biomesoplenty:jacaranda_sapling", "biomesoplenty:palm_sapling", "biomesoplenty:willow_sapling", "biomesoplenty:dead_sapling", "biomesoplenty:magic_sapling",
-		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom",
-		
-		"atmospheric:grimwood_sapling", "atmospheric:aspen_sapling", "atmospheric:kousa_sapling", "atmospheric:rosewood_sapling", "atmospheric:yucca_sapling", 
-		"autumnity:maple_sapling", "autumnity:yellow_maple_sapling", "autumnity:red_maple_sapling", "autumnity:orange_maple_sapling",
-		"bloomful:pink_wisteria_sapling", "bloomful:blue_wisteria_sapling", "bloomful:purple_wisteria_sapling", "bloomful:white_wisteria_sapling",
-		"dynamic_world:palm_sapling", 
-		"quark:glowshroom", "quark:yellow_blossom_sapling", "quark:pink_blossom_sapling", "quark:blue_blossom_sapling", "quark:orange_blossom_sapling", "quark:lavender_blossom_sapling",		
-		"swampexpansion:willow_sapling",
-		"upgrade_aquatic:river_sapling");
+		"biomesoplenty:umbran_sapling", "biomesoplenty:hellbark_sapling", "biomesoplenty:toadstool", "biomesoplenty:glowshroom");
 
 	private static final Predicate<Object> CROP_VALIDATOR = (obj) -> ResourceLocation.tryParse(obj.toString()) != null;
 

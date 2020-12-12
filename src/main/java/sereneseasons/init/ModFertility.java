@@ -222,25 +222,25 @@ public class ModFertility
 
                 if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
                 {
-                    event.getToolTip().add(new StringTextComponent(TextFormatting.LIGHT_PURPLE + " ").append(new TranslationTextComponent("desc.sereneseasons.year_round")));
+                    event.getToolTip().add(new StringTextComponent(" ").append((new TranslationTextComponent("desc.sereneseasons.year_round")).withStyle(TextFormatting.LIGHT_PURPLE)));
                 }
                 else
                 {
                     if ((mask & 1) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.GREEN + " ").append(new TranslationTextComponent("desc.sereneseasons.spring")));
+                        event.getToolTip().add(new StringTextComponent(" ").append((new TranslationTextComponent("desc.sereneseasons.spring")).withStyle(TextFormatting.GREEN)));
                     }
                     if ((mask & 2) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.YELLOW + " ").append(new TranslationTextComponent("desc.sereneseasons.summer")));
+                        event.getToolTip().add(new StringTextComponent(" ").append((new TranslationTextComponent("desc.sereneseasons.summer")).withStyle(TextFormatting.YELLOW)));
                     }
                     if ((mask & 4) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.GOLD + " ").append(new TranslationTextComponent("desc.sereneseasons.autumn")));
+                        event.getToolTip().add(new StringTextComponent(" ").append((new TranslationTextComponent("desc.sereneseasons.autumn")).withStyle(TextFormatting.GOLD)));
                     }
                     if ((mask & 8) != 0)
                     {
-                        event.getToolTip().add(new StringTextComponent(TextFormatting.AQUA + " ").append(new TranslationTextComponent("desc.sereneseasons.winter")));
+                        event.getToolTip().add(new StringTextComponent(" ").append((new TranslationTextComponent("desc.sereneseasons.winter")).withStyle(TextFormatting.AQUA)));
                     }
                 }
             }
