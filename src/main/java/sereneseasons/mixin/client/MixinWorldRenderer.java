@@ -38,7 +38,7 @@ public abstract class MixinWorldRenderer implements IResourceManagerReloadListen
 
     private static Biome.RainType getSeasonalPrecipitation(Biome biome)
     {
-        RegistryKey<Biome> biomeKey = BiomeUtil.getClientKey(biome);
+        RegistryKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
         Biome.RainType rainType = biome.getPrecipitation();
         World world = Minecraft.getInstance().level;
 

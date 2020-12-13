@@ -60,7 +60,7 @@ public class ModHandlers
 
         BiomeColors.GRASS_COLOR_RESOLVER = (biome, x, z) ->
         {
-            RegistryKey<Biome> biomeKey = BiomeUtil.getClientKey(biome);
+            RegistryKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biomeKey) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 
@@ -69,7 +69,7 @@ public class ModHandlers
 
         BiomeColors.FOLIAGE_COLOR_RESOLVER = (biome, x, z) ->
         {
-            RegistryKey<Biome> biomeKey = BiomeUtil.getClientKey(biome);
+            RegistryKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biomeKey) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 
