@@ -95,7 +95,8 @@ public class BiomeConfig
     public static boolean lessColorChange(RegistryKey<Biome> biome)
     {
         List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
-                "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog", "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire");
+                "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog",
+                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire");
 
         String name = biome.location().toString();
 
@@ -114,7 +115,7 @@ public class BiomeConfig
                 "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
                 "minecraft:the_void",
 
-                "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:origin_valley", "biomesoplenty:rainbow_hills");
+                "biomesoplenty:origin_valley", "biomesoplenty:rainbow_hills");
 
         for (String biomeName : blacklistedBiomes)
         {
