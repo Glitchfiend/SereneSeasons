@@ -97,8 +97,7 @@ public class SeasonColorUtil
         float saturationMultiplier = colorProvider.getGrassSaturationMultiplier();
         if (!SeasonsConfig.changeGrassColor.get())
     	{
-            SereneSeasons.logger.info("Forcing mid summer colouring...");
-        	overlay = Season.SubSeason.MID_SUMMER.getGrassOverlay();
+            overlay = Season.SubSeason.MID_SUMMER.getGrassOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getGrassSaturationMultiplier();
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
