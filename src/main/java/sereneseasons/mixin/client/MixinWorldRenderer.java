@@ -24,13 +24,13 @@ import sereneseasons.util.biome.BiomeUtil;
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRenderer implements IResourceManagerReloadListener, AutoCloseable
 {
-    @Redirect(method="renderSnowAndRain", at=@At(value="INVOKE", target="Lnet/minecraft/world/biome/Biome;getPrecipitation()Lnet/minecraft/world/biome/Biome$RainType;"))
+    @Redirect(method={"renderSnowAndRain", "renderRainSnow"}, at=@At(value="INVOKE", target="Lnet/minecraft/world/biome/Biome;getPrecipitation()Lnet/minecraft/world/biome/Biome$RainType;"))
     public Biome.RainType renderSnowAndRain_getPrecipitation(Biome biome)
     {
         return getSeasonalPrecipitation(biome);
     }
 
-    @Redirect(method="tickRain", at=@At(value="INVOKE", target="Lnet/minecraft/world/biome/Biome;getPrecipitation()Lnet/minecraft/world/biome/Biome$RainType;"))
+    @Redirect(method={"tickRain", "addRainParticles"}, at=@At(value="INVOKE", target="Lnet/minecraft/world/biome/Biome;getPrecipitation()Lnet/minecraft/world/biome/Biome$RainType;"))
     public Biome.RainType tickRain_getPrecipitation(Biome biome)
     {
         return getSeasonalPrecipitation(biome);
