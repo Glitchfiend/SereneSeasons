@@ -128,7 +128,9 @@ public class FertilityConfig
 		"simplefarming:turnip_seeds", "simplefarming:zucchini_seeds", "simplefarming:apricot_sapling", "simplefarming:cherry_sapling",
 		"simplefarming:blueberry_bush", "simplefarming:strawberry_bush",
 
-		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:strawberry_seeds");
+		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:strawberry_seeds",
+
+		"farmersdelight:tomato_seeds", "farmersdelight:cabbage_seeds", "farmersdelight:rice", "farmersdelight:rice_panicle");
 
 	private static List<String> defaultSummerCrops = Lists.newArrayList(
 "minecraft:oak_sapling",
@@ -265,7 +267,9 @@ public class FertilityConfig
 		"simplefarming:mango_sapling", "simplefarming:olive_sapling", "simplefarming:orange_sapling", "simplefarming:plum_sapling",
 		"simplefarming:blueberry_bush", "simplefarming:raspberry_bush",
 
-		"xlfoodmod:onion", "xlfoodmod:tomato_seeds", "xlfoodmod:cucumber_seeds", "xlfoodmod:pepper_seeds", "xlfoodmod:corn_seeds", "xlfoodmod:rice");
+		"xlfoodmod:onion", "xlfoodmod:tomato_seeds", "xlfoodmod:cucumber_seeds", "xlfoodmod:pepper_seeds", "xlfoodmod:corn_seeds", "xlfoodmod:rice",
+
+		"farmersdelight:tomato_seeds", "farmersdelight:rice", "farmersdelight:rice_panicle", "farmersdelight:onion");
 
 	private static List<String> defaultAutumnCrops = Lists.newArrayList(
 		"minecraft:oak_sapling",
@@ -364,7 +368,9 @@ public class FertilityConfig
 		"simplefarming:sweet_potato_seeds", "simplefarming:yam_seeds", "simplefarming:apple_sapling", "simplefarming:pear_sapling",
 		"simplefarming:plum_sapling", "simplefarming:blackberry_bush",
 
-		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:corn_seeds");
+		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:corn_seeds",
+
+		"farmersdelight:onion");
 
 	private static List<String> defaultWinterCrops = Lists.newArrayList(
 "minecraft:oak_sapling",
