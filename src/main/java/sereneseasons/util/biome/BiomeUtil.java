@@ -7,21 +7,28 @@
  ******************************************************************************/
 package sereneseasons.util.biome;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
-import sereneseasons.core.SereneSeasons;
 
-import javax.annotation.Nullable;
+import java.util.List;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BiomeUtil
 {
+    private static List<ServerWorld> serverWorldList = Lists.newArrayList();
+
     public static RegistryKey<Biome> getBiomeKey(Biome biome)
     {
         if (biome == null) throw new RuntimeException("Cannot get registry key for null biome");
@@ -44,6 +51,8 @@ public class BiomeUtil
         {
             if (FMLEnvironment.dist == Dist.CLIENT)
                 return getClientBiome(key);
+            else if (FMLEnvironment.dist == Dist.DEDICATED_SERVER)
+                return getServerBiome(key);
             else
                 throw new RuntimeException("Attempted to get unregistered biome " + key);
         }
@@ -89,5 +98,27 @@ public class BiomeUtil
         Biome biome = Minecraft.getInstance().level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).get(key);
         if (biome == null) new RuntimeException("Failed to get client biome for registry key!");
         return biome;
+    }
+
+    private static Biome getServerBiome(RegistryKey<Biome> key)
+    {
+        for (ServerWorld world : serverWorldList)
+        {
+            Biome biome = world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).get(key);
+
+            if (biome != null)
+            {
+                return biome;
+            }
+        }
+
+        throw new RuntimeException("Failed to get server biome for registry key!");
+    }
+
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    @SubscribeEvent
+    public static void onWorldLoad(WorldEvent.Load event)
+    {
+        serverWorldList.add((ServerWorld)event.getWorld());
     }
 }
