@@ -1,6 +1,6 @@
 ---
-name: 1.15.1 Standalone Crash
-about: For crashes that occur with Serene Seasons for 1.15.1.  We do not support older versions!
+name: 1.16.4 Standalone Crash
+about: For crashes that occur with Serene Seasons for 1.16.4.  We do not support older versions!
 title: ''
 labels: crash
 assignees: ''
