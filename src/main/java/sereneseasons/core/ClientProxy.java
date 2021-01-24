@@ -21,6 +21,7 @@ import sereneseasons.season.SeasonTime;
 
 public class ClientProxy extends CommonProxy
 {
+    @OnlyIn(Dist.CLIENT)
     @Override
     void registerItemModelsProperties()
     {

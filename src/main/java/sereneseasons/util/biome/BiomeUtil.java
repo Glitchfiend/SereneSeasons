@@ -14,6 +14,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -108,6 +109,7 @@ public class BiomeUtil
         return getBiome(id) != null;
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static Registry<Biome> getClientBiomeRegistry()
     {
         Minecraft minecraft = Minecraft.getInstance();
@@ -116,11 +118,13 @@ public class BiomeUtil
         return world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static RegistryKey<Biome> getClientKey(Biome biome)
     {
         return getClientBiomeRegistry().getResourceKey(biome).orElseThrow(() -> new RuntimeException("Failed to get client registry key for biome!"));
     }
 
+    @OnlyIn(Dist.CLIENT)
     private static Biome getClientBiome(RegistryKey<Biome> key)
     {
         Biome biome = getClientBiomeRegistry().get(key);
