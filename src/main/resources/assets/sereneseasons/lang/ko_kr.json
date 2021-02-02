@@ -1,5 +1,5 @@
 {
-  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
   "commands.sereneseasons.getseason.success": "현재 계절: %s 날짜: %s/%s 틱: %s/%s",
   "commands.sereneseasons.setseason.success": "계절을 %s으로 설정했습니다.",
   "commands.sereneseasons.setseason.fail": "%s라는 계절이 존재하지 않습니다.",
