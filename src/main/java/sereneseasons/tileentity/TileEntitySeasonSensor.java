@@ -30,12 +30,14 @@ public class TileEntitySeasonSensor extends TileEntity implements ITickable
     }
 
     @SubscribeEvent
-    public void onChunkLoad(ChunkEvent.Load event){
+    public void onChunkLoad(ChunkEvent.Load event)
+    {
         Chunk chunk = event.getChunk();
         int chunkX = chunk.x;
         int chunkZ = chunk.z;
 
-        if(chunkX == (this.pos.getX() / 16) && chunkZ == (this.pos.getZ() / 16) ) {
+        if (chunkX == (this.pos.getX() / 16) && chunkZ == (this.pos.getZ() / 16) )
+        {
             ((BlockSeasonSensor) this.getBlockType()).updatePower(this.world, this.pos);
         }
     }

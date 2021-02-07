@@ -42,7 +42,6 @@ public class SSCommand extends CommandBase
     @Override
     public String getUsage(ICommandSender sender)
     {
-
         return "commands.sereneseasons.usage";
     }
 
@@ -69,34 +68,27 @@ public class SSCommand extends CommandBase
         }
     }
 
-
-    private void getSeason(ICommandSender sender, String[] args) throws  CommandException{
+    private void getSeason(ICommandSender sender, String[] args) throws  CommandException
+    {
         EntityPlayer player = getCommandSenderAsPlayer(sender);
-
         SeasonSavedData data = SeasonHandler.getSeasonSavedData(player.world);
 
-        //Current "time"
         int seasonCycleTicks = data.seasonCycleTicks;
         SeasonTime time = new SeasonTime(seasonCycleTicks);
         Season.SubSeason season = time.getSubSeason();
 
         int subSeasonDuration = time.getSubSeasonDuration();
-
-        //One second contains 20 ticks (if the game runs smoothly, lags kick that out of the window)
         final int ticksPerSecond = 20;
-
         int index = ArrayUtils.indexOf(SubSeason.VALUES, season);
 
-        if(index == 11){
+        if (index == 11)
+        {
             index = -1;
         }
 
         int ticksTillNext = subSeasonDuration * (index + 1) - seasonCycleTicks;
-
         int days = ticksTillNext / ticksPerSecond / 60 / 60 / 24;
         int hours = (ticksTillNext - (days * ticksPerSecond * 60 * 60 * 24)) / ticksPerSecond / 60 / 60;
-
-
         sender.sendMessage(new TextComponentTranslation("commands.sereneseasons.getseason", season, days, hours));
     }
 

@@ -27,7 +27,7 @@ public class SeasonSleepHandler
         {
             WorldServer world = (WorldServer)event.world;
 
-            //Called before all players are awoken for the next day
+            // Called before all players are awoken for the next day
             if (world.areAllPlayersAsleep())
             {
                 SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
