@@ -5,14 +5,19 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.LoggingPrintStream;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.WorldServer;
+import org.apache.commons.lang3.ArrayUtils;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.Season.SubSeason;
+import sereneseasons.config.SeasonsConfig;
 import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
@@ -56,7 +61,35 @@ public class SSCommand extends CommandBase
         else if ("setseason".equals(args[0]))
         {
             setSeason(sender, args);
+        } else if ("getseason".equals(args[0])){
+            getSeason(sender, args);
+        } else {
+            sender.sendMessage(new TextComponentTranslation("commands.sereneseasons.usage"));
         }
+    }
+
+    private void getSeason(ICommandSender sender, String[] args) throws  CommandException
+    {
+        EntityPlayer player = getCommandSenderAsPlayer(sender);
+        SeasonSavedData data = SeasonHandler.getSeasonSavedData(player.world);
+
+        int seasonCycleTicks = data.seasonCycleTicks;
+        SeasonTime time = new SeasonTime(seasonCycleTicks);
+        Season.SubSeason season = time.getSubSeason();
+
+        int subSeasonDuration = time.getSubSeasonDuration();
+        final int ticksPerSecond = 20;
+        int index = ArrayUtils.indexOf(SubSeason.VALUES, season);
+
+        if (index == 11)
+        {
+            index = -1;
+        }
+
+        int ticksTillNext = subSeasonDuration * (index + 1) - seasonCycleTicks;
+        int days = ticksTillNext / ticksPerSecond / 60 / 60 / 24;
+        int hours = (ticksTillNext - (days * ticksPerSecond * 60 * 60 * 24)) / ticksPerSecond / 60 / 60;
+        sender.sendMessage(new TextComponentTranslation("commands.sereneseasons.getseason", season, days, hours));
     }
 
     private void setSeason(ICommandSender sender, String[] args) throws CommandException

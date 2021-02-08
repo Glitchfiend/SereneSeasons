@@ -1,7 +1,8 @@
-commands.sereneseasons.usage=/sereneseasons <setseason> [args]
+commands.sereneseasons.usage=/sereneseasons <setseason|getseason> [args]
 commands.sereneseasons.setseason.success=Set season to %s
 commands.sereneseasons.setseason.fail=Invalid season %s
 commands.sereneseasons.setseason.disabled=Seasons are currently disabled!
+commands.sereneseasons.getseason=It is %s. Time until next Season: %d days, %d hours
 
 itemGroup.tabSereneSeasons=Serene Seasons
 
