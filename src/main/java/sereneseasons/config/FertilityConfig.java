@@ -128,6 +128,14 @@ public class FertilityConfig
 		"simplefarming:turnip_seeds", "simplefarming:zucchini_seeds", "simplefarming:apricot_sapling", "simplefarming:cherry_sapling",
 		"simplefarming:blueberry_bush", "simplefarming:strawberry_bush",
 
+		"croptopia:artichoke_seed", "croptopia:asparagus_seed", "croptopia:artichoke_seed", "croptopia:asparagus_seed",
+		"croptopia:bellpepper_seed", "croptopia:cabbage_seed", "croptopia:celery_seed", "croptopia:garlic_seed",
+		"croptopia:leek_seed", "croptopia:lettuce_seed", "croptopia:radish_seed", "croptopia:spinach_seed", "croptopia:tomato_seed",
+		"croptopia:chile_pepper_seed", "croptopia:turnip_seed", "croptopia:zucchini_seed", "croptopia:oat_seed",
+		"croptopia:barley_seed", "croptopia:soybean_seed", "croptopia:mustard_seed", "croptopia:turmeric_seed",
+		"croptopia:ginger_seed", "croptopia:basil_seed", "croptopia:blackberry_seed", "croptopia:blueberry_seed",
+		"croptopia:cranberry_seed", "croptopia:cantaloupe_seed", "croptopia:elderberry_seed",
+
 		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:strawberry_seeds",
 
 		"farmersdelight:tomato_seeds", "farmersdelight:cabbage_seeds", "farmersdelight:rice", "farmersdelight:rice_panicle");
@@ -267,6 +275,15 @@ public class FertilityConfig
 		"simplefarming:mango_sapling", "simplefarming:olive_sapling", "simplefarming:orange_sapling", "simplefarming:plum_sapling",
 		"simplefarming:blueberry_bush", "simplefarming:raspberry_bush",
 
+		"croptopia:artichoke_seed", "croptopia:asparagus_seed", "croptopia:artichoke_seed",
+		"croptopia:asparagus_seed", "croptopia:bellpepper_seed", "croptopia:saguaro_seed", "croptopia:blackbean_seed",
+		"croptopia:blackberry_seed", "croptopia:blueberry_seed", "croptopia:cranberry_seed", "croptopia:cantaloupe_seed",
+		"croptopia:elderberry_seed", "croptopia:coffee_seed", "croptopia:greenbean_seed", "croptopia:greenonion_seed",
+		"croptopia:honeydew_seed", "croptopia:kiwi_seed", "croptopia:onion_seed", "croptopia:pineapple_seed",
+		"croptopia:raspberry_seed", "croptopia:rice_seed", "croptopia:strawberry_seed", "croptopia:tomatillo_seed", "croptopia:tomato_seed",
+		"croptopia:zucchini_seed", "croptopia:oat_seed", "croptopia:barley_seed", "croptopia:soybean_seed", "croptopia:mustard_seed",
+		"croptopia:turmeric_seed", "croptopia:ginger_seed", "croptopia:basil_seed",
+
 		"xlfoodmod:onion", "xlfoodmod:tomato_seeds", "xlfoodmod:cucumber_seeds", "xlfoodmod:pepper_seeds", "xlfoodmod:corn_seeds", "xlfoodmod:rice",
 
 		"farmersdelight:tomato_seeds", "farmersdelight:rice", "farmersdelight:rice_panicle", "farmersdelight:onion");
@@ -368,6 +385,10 @@ public class FertilityConfig
 		"simplefarming:sweet_potato_seeds", "simplefarming:yam_seeds", "simplefarming:apple_sapling", "simplefarming:pear_sapling",
 		"simplefarming:plum_sapling", "simplefarming:blackberry_bush",
 
+		"croptopia:cauliflower_seed", "croptopia:broccoli_seed", "croptopia:corn_seed", "croptopia:cucumber_seed",
+		"croptopia:currant_seed", "croptopia:eggplant_seed", "croptopia:grape_seed", "croptopia:hops_seed",
+		"croptopia:kale_seed", "croptopia:olive_seed", "croptopia:peanut_seed", "croptopia:sweetpotato_seed", "croptopia:chile_pepper_seed",
+
 		"xlfoodmod:onion", "xlfoodmod:lettuce_seeds", "xlfoodmod:corn_seeds",
 
 		"farmersdelight:onion");
@@ -392,6 +413,8 @@ public class FertilityConfig
 		"minecraft:weeping_vines_plant",
 		"minecraft:seagrass",
 		"minecraft:sea_pickle",
+
+		"croptopia:rhubarb_seed", "croptopia:rutabaga_seed", "croptopia:squash_seed", "croptopia:yam_seed", "croptopia:turnip_seed",
 
 		"biomesoplenty:origin_sapling", "biomesoplenty:flowering_oak_sapling", "biomesoplenty:rainbow_birch_sapling", "biomesoplenty:yellow_autumn_sapling", "biomesoplenty:orange_autumn_sapling", "biomesoplenty:maple_sapling",
 		"biomesoplenty:fir_sapling", "biomesoplenty:redwood_sapling", "biomesoplenty:white_cherry_sapling", "biomesoplenty:pink_cherry_sapling", "biomesoplenty:mahogany_sapling",
