@@ -96,7 +96,8 @@ public class BiomeConfig
     {
         List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
                 "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog",
-                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire");
+                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire", "biomesoplenty:prairie", "biomesoplenty:golden_prairie", "biomesoplenty:lavender_field",
+                "biomesoplenty:lavender_forest", "biomesoplenty:grove", "biomesoplenty:grove_clearing", "biomesoplenty:grove_lakes");
 
         String name = biome.location().toString();
 
