@@ -1,5 +1,5 @@
 {
-  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
   "commands.sereneseasons.getseason.success": "Текущий сезон %s, день %s/%s, тик %s/%s",
   "commands.sereneseasons.setseason.success": "Сезон установлен на %s",
   "commands.sereneseasons.setseason.fail": "Неправильный сезон %s",
@@ -7,13 +7,9 @@
 
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
-  "block.sereneseasons.greenhouse_glass": "Тепличное стекло",
-  "block.sereneseasons.season_sensor_spring": "Датчик сезона",
-  "block.sereneseasons.season_sensor_summer": "Датчик сезона",
-  "block.sereneseasons.season_sensor_autumn": "Датчик сезона",
-  "block.sereneseasons.season_sensor_winter": "Датчик сезона",
+  "block.sereneseasons.season_sensor": "Датчик сезона",
+  
   "item.sereneseasons.ss_icon": "SS иконка",
-
   "item.sereneseasons.season_clock": "Календарь",
 
   "desc.sereneseasons.fertile_seasons": "Плодородные сезоны",
