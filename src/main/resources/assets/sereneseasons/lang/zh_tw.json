@@ -1,22 +1,18 @@
 {
-  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
-  "commands.sereneseasons.getseason.success": "現在是 %s 的第 %s/%s 天 %s/%s 刻",
-  "commands.sereneseasons.setseason.success": "Set season to %s",
-  "commands.sereneseasons.setseason.fail": "無效的季節 %s",
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "現在是%s的第 %s/%s 天、%s/%s 刻",
+  "commands.sereneseasons.setseason.success": "將季節設為%s",
+  "commands.sereneseasons.setseason.fail": "季節%s無效",
   "commands.sereneseasons.setseason.disabled": "目前已停用季節！",
 
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
-  "block.sereneseasons.greenhouse_glass": "溫室玻璃",
-  "block.sereneseasons.season_sensor_spring": "季節感測器",
-  "block.sereneseasons.season_sensor_summer": "季節感測器",
-  "block.sereneseasons.season_sensor_autumn": "季節感測器",
-  "block.sereneseasons.season_sensor_winter": "季節感測器",
-  "item.sereneseasons.ss_icon": "SS 圖示",
-
+  "block.sereneseasons.season_sensor": "季節感測器",
+  
+  "item.sereneseasons.ss_icon": "SS Icon",
   "item.sereneseasons.calendar": "日曆",
 
-  "desc.sereneseasons.fertile_seasons": "肥沃季",
+  "desc.sereneseasons.fertile_seasons": "生長季",
   "desc.sereneseasons.year_round": "全年",
   "desc.sereneseasons.spring": "春季",
   "desc.sereneseasons.summer": "夏季",
