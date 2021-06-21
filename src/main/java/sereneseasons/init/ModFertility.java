@@ -2,10 +2,8 @@ package sereneseasons.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -14,16 +12,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.core.SereneSeasons;
-import sereneseasons.util.biome.BiomeUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,10 +41,15 @@ public class ModFertility
     public static void init()
     {
         //Store crops in hash sets for quick and easy retrieval
-        initSeasonCrops((List<String>)FertilityConfig.springCrops.get(), springPlants, 1);
-        initSeasonCrops((List<String>)FertilityConfig.summerCrops.get(), summerPlants, 2);
-        initSeasonCrops((List<String>)FertilityConfig.autumnCrops.get(), autumnPlants, 4);
-        initSeasonCrops((List<String>)FertilityConfig.winterCrops.get(), winterPlants, 8);
+        initSeasonCrops(ModTags.Blocks.spring_crops.getValues(), springPlants, 1);
+        initSeasonCrops(ModTags.Blocks.summer_crops.getValues(), summerPlants, 2);
+        initSeasonCrops(ModTags.Blocks.autumn_crops.getValues(), autumnPlants, 4);
+        initSeasonCrops(ModTags.Blocks.winter_crops.getValues(), winterPlants, 8);
+
+        initSeasonSeeds(ModTags.Items.spring_crops.getValues(), springPlants, 1);
+        initSeasonSeeds(ModTags.Items.summer_crops.getValues(), summerPlants, 2);
+        initSeasonSeeds(ModTags.Items.autumn_crops.getValues(), autumnPlants, 4);
+        initSeasonSeeds(ModTags.Items.winter_crops.getValues(), winterPlants, 8);
     }
 
     public static boolean isCropFertile(String cropName, World world, BlockPos pos)
@@ -120,14 +119,7 @@ public class ModFertility
                 //Check if unspecified crops are by default fertile in non-winter, and that it's not winter
                 if (!allListedPlants.contains(cropName))
                 {
-                    if (season == Season.WINTER)
-                    {
-                        return (FertilityConfig.ignoreUnlistedCrops.get());
-                    }
-                    else
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
@@ -139,19 +131,16 @@ public class ModFertility
      * Initializes the crops for a particular season. User's responsibility to match seeds and cropSet to be of the
      * same season (eg. String [] spring_seeds, HashSet springPlants)
      *
-     * @param seeds   String array of seeds that are fertile during the chosen season
+     * @param crops   String array of seeds that are fertile during the chosen season
      * @param cropSet HashSet that will store the list of crops fertile during the chosen season
      */
-    private static void initSeasonCrops(List<String> seeds, HashSet<String> cropSet, int bitmask)
+    private static void initSeasonCrops(List<Block> crops, HashSet<String> cropSet, int bitmask)
     {
-        for (String seed : seeds)
+        for (Block crop : crops)
         {
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(seed));
-            BlockItem blockItem = (item instanceof BlockItem) ? (BlockItem)item : null;
-
-            if (blockItem != null && blockItem.getBlock() instanceof IPlantable)
+            if (crop != null && crop != Blocks.AIR)
             {
-                String plantName = blockItem.getBlock().getRegistryName().toString();
+                String plantName = crop.getRegistryName().toString();
                 cropSet.add(plantName);
 
                 if (bitmask != 0)
@@ -164,44 +153,46 @@ public class ModFertility
                 }
 
                 //Add to seedSeasons
-                if (seedSeasons.containsKey(seed))
+                if (seedSeasons.containsKey(plantName))
                 {
-                    int seasons = seedSeasons.get(seed);
-                    seedSeasons.put(seed, seasons | bitmask);
+                    int seasons = seedSeasons.get(plantName);
+                    seedSeasons.put(plantName, seasons | bitmask);
                 }
                 else
                 {
-                    seedSeasons.put(seed, bitmask);
+                    seedSeasons.put(plantName, bitmask);
                 }
             }
-            else // Not a BlockItem with an IPlantable block, but uses same registry key as seeds
+        }
+    }
+
+    private static void initSeasonSeeds(List<Item> seeds, HashSet<String> cropSet, int bitmask)
+    {
+        for (Item seed : seeds)
+        {
+            if (seed != null)
             {
-                Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(seed));
+                String plantName = seed.getRegistryName().toString();
+                cropSet.add(plantName);
 
-                if (block != null && block != Blocks.AIR)
+                if (bitmask != 0)
                 {
-                    String plantName = block.getRegistryName().toString();
-                    cropSet.add(plantName);
+                    allListedPlants.add(plantName);
+                }
+                else
+                {
+                    continue;
+                }
 
-                    if (bitmask != 0)
-                    {
-                        allListedPlants.add(plantName);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    //Add to seedSeasons
-                    if (seedSeasons.containsKey(seed))
-                    {
-                        int seasons = seedSeasons.get(seed);
-                        seedSeasons.put(seed, seasons | bitmask);
-                    }
-                    else
-                    {
-                        seedSeasons.put(seed, bitmask);
-                    }
+                //Add to seedSeasons
+                if (seedSeasons.containsKey(plantName))
+                {
+                    int seasons = seedSeasons.get(plantName);
+                    seedSeasons.put(plantName, seasons | bitmask);
+                }
+                else
+                {
+                    seedSeasons.put(plantName, bitmask);
                 }
             }
         }

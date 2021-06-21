@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
+import sereneseasons.init.ModTags;
 
 @Mod.EventBusSubscriber
 public class SeasonalCropGrowthHandler
@@ -47,7 +48,7 @@ public class SeasonalCropGrowthHandler
             }
 		    if (FertilityConfig.outOfSeasonCropBehavior.get() == 2)
             {
-                if (!(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))
+                if (!plant.is(ModTags.Blocks.unbreakable_infertile_crops))
                 {
 					event.setResult(Event.Result.DENY);
                     event.getWorld().destroyBlock(event.getPos(), false);
@@ -81,7 +82,7 @@ public class SeasonalCropGrowthHandler
             }
             if (FertilityConfig.outOfSeasonCropBehavior.get() == 2)
             {
-                if (!(plant instanceof GrassBlock) && !(plant instanceof SugarCaneBlock) && !(plant instanceof CactusBlock) && !(plant instanceof BambooBlock))
+                if (!plant.is(ModTags.Blocks.unbreakable_infertile_crops))
                 {
 					event.setResult(Event.Result.ALLOW);
                     event.getWorld().destroyBlock(event.getPos(), false);
@@ -98,7 +99,7 @@ public class SeasonalCropGrowthHandler
 	{
 		for (int i = 0; i < 16; i++)
 		{
-			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).getBlock() instanceof AbstractGlassBlock)
+			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).getBlock().is(ModTags.Blocks.greenhouse_glass))
 			{
 				return true;
 			}
