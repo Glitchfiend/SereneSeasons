@@ -73,7 +73,7 @@ public class SeasonalCropGrowthHandler
 			{
 				if (event.getWorld().getRandom().nextInt(6) != 0)
 				{
-					event.setResult(Event.Result.ALLOW);
+					event.setResult(Event.Result.DEFAULT);
 				}
 			}
             if (FertilityConfig.outOfSeasonCropBehavior.get() == 1)
@@ -84,7 +84,7 @@ public class SeasonalCropGrowthHandler
             {
                 if (!plant.is(ModTags.Blocks.unbreakable_infertile_crops))
                 {
-					event.setResult(Event.Result.ALLOW);
+					event.setCanceled(true);
                     event.getWorld().destroyBlock(event.getPos(), false);
                 }
                 else

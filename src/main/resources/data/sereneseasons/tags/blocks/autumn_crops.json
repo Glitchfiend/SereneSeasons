@@ -24,6 +24,9 @@
 	"minecraft:grass_block",
 	"minecraft:grass",
 	"minecraft:fern",
+	"minecraft:wheat",
+	"minecraft:pumpkin_stem",
+	"minecraft:beetroots",
 	"minecraft:carrots"
   ]
 }
