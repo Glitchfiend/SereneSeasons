@@ -4,6 +4,19 @@
 	"minecraft:grass_block",
 	"minecraft:sugar_cane",
 	"minecraft:cactus",
-	"minecraft:bamboo"
+	"minecraft:bamboo",
+	"minecraft:red_mushroom",
+	"minecraft:brown_mushroom",
+	"minecraft:nether_wart",
+	"minecraft:crimson_fungus",
+	"minecraft:warped_fungus",
+	"minecraft:crimson_nylium",
+	"minecraft:warped_nylium",
+	"minecraft:twisting_vines",
+	"minecraft:twisting_vines_plant",
+	"minecraft:weeping_vines",
+	"minecraft:weeping_vines_plant",
+	"minecraft:seagrass",
+	"minecraft:sea_pickle"
   ]
 }
