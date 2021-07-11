@@ -74,13 +74,7 @@ public class BiomeConfig
 
     public static boolean infertileBiome(RegistryKey<Biome> biome)
     {
-        List<String> infertileBiomes = Lists.newArrayList("minecraft:nether_wastes", "minecraft:soul_sand_valley", "minecraft:crimson_forest",
-                "minecraft:warped_forest", "minecraft:basalt_deltas", "minecraft:the_end", "minecraft:small_end_islands", "minecraft:end_midlands",
-                "minecraft:end_highlands", "minecraft:end_barrens", "minecraft:the_void",
-
-                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire", "biomesoplenty:volcano", "biomesoplenty:volcanic_plains", "biomesoplenty:wasteland",
-                "biomesoplenty:wooded_wasteland", "biomesoplenty:crystalline_chasm", "biomesoplenty:undergrowth", "biomesoplenty:visercal_heap",
-                "biomesoplenty:withered_abyss");
+        List<String> infertileBiomes = Lists.newArrayList("biomesoplenty:wasteland");
 
         String name = biome.location().toString();
 
@@ -96,8 +90,7 @@ public class BiomeConfig
     {
         List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
                 "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog",
-                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire", "biomesoplenty:prairie", "biomesoplenty:golden_prairie", "biomesoplenty:lavender_field",
-                "biomesoplenty:lavender_forest", "biomesoplenty:grove", "biomesoplenty:grove_clearing", "biomesoplenty:grove_lakes");
+                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire");
 
         String name = biome.location().toString();
 
