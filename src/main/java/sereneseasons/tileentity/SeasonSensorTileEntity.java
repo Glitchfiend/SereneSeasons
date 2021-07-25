@@ -7,15 +7,15 @@
  ******************************************************************************/
 package sereneseasons.tileentity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.block.SeasonSensorBlock;
 
-public class SeasonSensorTileEntity extends TileEntity implements ITickableTileEntity
+public class SeasonSensorTileEntity extends BlockEntity implements TickableBlockEntity
 {
     public SeasonSensorTileEntity()
     {

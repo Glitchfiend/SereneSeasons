@@ -1,8 +1,8 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.block.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -15,6 +15,8 @@ import sereneseasons.api.SSBlocks;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModTags;
+
+import net.minecraft.world.level.block.Block;
 
 @Mod.EventBusSubscriber
 public class SeasonalCropGrowthHandler
@@ -30,7 +32,7 @@ public class SeasonalCropGrowthHandler
 	public void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
 		Block plant = event.getState().getBlock();
-		World world = (World)event.getWorld();
+		Level world = (Level)event.getWorld();
 		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), world, event.getPos());
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, event.getPos()))
@@ -95,7 +97,7 @@ public class SeasonalCropGrowthHandler
 		}
 	}
 
-	private boolean isGlassAboveBlock(World world, BlockPos cropPos)
+	private boolean isGlassAboveBlock(Level world, BlockPos cropPos)
 	{
 		for (int i = 0; i < 16; i++)
 		{

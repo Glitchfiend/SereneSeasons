@@ -8,11 +8,11 @@
 package sereneseasons.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.handler.season.SeasonHandler;
@@ -21,21 +21,21 @@ import sereneseasons.season.SeasonTime;
 
 public class CommandGetSeason
 {
-    static ArgumentBuilder<CommandSource, ?> register()
+    static ArgumentBuilder<CommandSourceStack, ?> register()
     {
         return Commands.literal("get")
             .executes(ctx -> {
-                World world = ctx.getSource().getLevel();
+                Level world = ctx.getSource().getLevel();
                 return getSeason(ctx.getSource(), world);
             });
     }
 
-    private static int getSeason(CommandSource cs, World world) throws CommandException
+    private static int getSeason(CommandSourceStack cs, Level world) throws CommandRuntimeException
     {
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
         SeasonTime time = new SeasonTime(seasonData.seasonCycleTicks);
         int subSeasonDuration = SyncedConfig.getIntValue(SeasonsOption.SUB_SEASON_DURATION);
-        cs.sendSuccess(new TranslationTextComponent("commands.sereneseasons.getseason.success", time.getSubSeason().toString(), time.getDay() % subSeasonDuration, subSeasonDuration, time.getSeasonCycleTicks() % time.getDayDuration(), time.getDayDuration()), true);
+        cs.sendSuccess(new TranslatableComponent("commands.sereneseasons.getseason.success", time.getSubSeason().toString(), time.getDay() % subSeasonDuration, subSeasonDuration, time.getSeasonCycleTicks() % time.getDayDuration(), time.getDayDuration()), true);
 
         return 1;
     }

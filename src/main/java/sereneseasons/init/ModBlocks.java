@@ -1,16 +1,16 @@
 package sereneseasons.init;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.block.GlassBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,7 +36,7 @@ public class ModBlocks
     }
 
     @SubscribeEvent
-    public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event)
+    public static void registerTileEntities(RegistryEvent.Register<BlockEntityType<?>> event)
     {
         season_sensor_tile_entity = registerTileEntityType("season_sensor", SeasonSensorTileEntity::new, season_sensor);
     }
@@ -61,9 +61,9 @@ public class ModBlocks
         return block;
     }
 
-    public static <T extends TileEntity> TileEntityType<T> registerTileEntityType(String name, Supplier<? extends T> factoryIn, Block... validBlocks)
+    public static <T extends BlockEntity> BlockEntityType<T> registerTileEntityType(String name, Supplier<? extends T> factoryIn, Block... validBlocks)
     {
-        TileEntityType type = TileEntityType.Builder.of(factoryIn, validBlocks).build(null);
+        BlockEntityType type = BlockEntityType.Builder.of(factoryIn, validBlocks).build(null);
         type.setRegistryName(name);
         ForgeRegistries.TILE_ENTITIES.register(type);
         return type;

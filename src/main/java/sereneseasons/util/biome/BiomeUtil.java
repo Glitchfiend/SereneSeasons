@@ -9,10 +9,10 @@ package sereneseasons.util.biome;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.world.WorldEvent;
@@ -28,9 +28,9 @@ import java.util.List;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BiomeUtil
 {
-    private static List<World> worldList = Lists.newArrayList();
+    private static List<Level> worldList = Lists.newArrayList();
 
-    public static RegistryKey<Biome> getBiomeKey(Biome biome)
+    public static ResourceKey<Biome> getBiomeKey(Biome biome)
     {
         if (biome == null) throw new RuntimeException("Cannot get registry key for null biome");
 
@@ -42,10 +42,10 @@ public class BiomeUtil
                 throw new RuntimeException("Failed to get registry key for biome!");
         }
 
-        return RegistryKey.create(Registry.BIOME_REGISTRY, biome.delegate.name());
+        return ResourceKey.create(Registry.BIOME_REGISTRY, biome.delegate.name());
     }
 
-    public static Biome getBiome(RegistryKey<Biome> key)
+    public static Biome getBiome(ResourceKey<Biome> key)
     {
         Biome biome = ForgeRegistries.BIOMES.getValue(key.location());
 
@@ -94,12 +94,12 @@ public class BiomeUtil
         return id;
     }
 
-    public static int getBiomeId(RegistryKey<Biome> key)
+    public static int getBiomeId(ResourceKey<Biome> key)
     {
         return getBiomeId(getBiome(key));
     }
 
-    public static boolean exists(RegistryKey<Biome> key)
+    public static boolean exists(ResourceKey<Biome> key)
     {
         return ForgeRegistries.BIOMES.containsKey(key.location());
     }
@@ -113,28 +113,28 @@ public class BiomeUtil
     private static Registry<Biome> getClientBiomeRegistry()
     {
         Minecraft minecraft = Minecraft.getInstance();
-        World world = minecraft.level;
+        Level world = minecraft.level;
         if (world == null) throw new RuntimeException("Cannot acquire biome registry when the world is null.");
         return world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static RegistryKey<Biome> getClientKey(Biome biome)
+    private static ResourceKey<Biome> getClientKey(Biome biome)
     {
         return getClientBiomeRegistry().getResourceKey(biome).orElseThrow(() -> new RuntimeException("Failed to get client registry key for biome!"));
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static Biome getClientBiome(RegistryKey<Biome> key)
+    private static Biome getClientBiome(ResourceKey<Biome> key)
     {
         Biome biome = getClientBiomeRegistry().get(key);
         if (biome == null) new RuntimeException("Failed to get client biome for registry key " + key.location().toString() + "!");
         return biome;
     }
 
-    private static Biome getBiomeFromWorlds(RegistryKey<Biome> key)
+    private static Biome getBiomeFromWorlds(ResourceKey<Biome> key)
     {
-        for (World world : worldList)
+        for (Level world : worldList)
         {
             Biome biome = world.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).get(key);
 
@@ -150,12 +150,12 @@ public class BiomeUtil
     @SubscribeEvent
     public static void onWorldLoad(WorldEvent.Load event)
     {
-        worldList.add((World)event.getWorld());
+        worldList.add((Level)event.getWorld());
     }
 
     @SubscribeEvent
     public static void onWorldUnload(WorldEvent.Unload event)
     {
-        worldList.remove((World)event.getWorld());
+        worldList.remove((Level)event.getWorld());
     }
 }

@@ -8,11 +8,11 @@
 package sereneseasons.network.message;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import sereneseasons.core.SereneSeasons;
@@ -23,26 +23,26 @@ import java.util.function.Supplier;
 
 public class MessageSyncSeasonCycle
 {
-    public RegistryKey<World> dimension;
+    public ResourceKey<Level> dimension;
     public int seasonCycleTicks;
     
     public MessageSyncSeasonCycle() {}
     
-    public MessageSyncSeasonCycle(RegistryKey<World> dimension, int seasonCycleTicks)
+    public MessageSyncSeasonCycle(ResourceKey<Level> dimension, int seasonCycleTicks)
     {
         this.dimension = dimension;
         this.seasonCycleTicks = seasonCycleTicks;
     }
 
-    public static void encode(MessageSyncSeasonCycle packet, PacketBuffer buf)
+    public static void encode(MessageSyncSeasonCycle packet, FriendlyByteBuf buf)
     {
         buf.writeUtf(packet.dimension.location().toString());
         buf.writeInt(packet.seasonCycleTicks);
     }
 
-    public static MessageSyncSeasonCycle decode(PacketBuffer buf)
+    public static MessageSyncSeasonCycle decode(FriendlyByteBuf buf)
     {
-        return new MessageSyncSeasonCycle(RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(buf.readUtf())), buf.readInt());
+        return new MessageSyncSeasonCycle(ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(buf.readUtf())), buf.readInt());
     }
 
     public static class Handler
@@ -52,7 +52,7 @@ public class MessageSyncSeasonCycle
             context.get().enqueueWork(() ->
             {
                 if (Minecraft.getInstance().player == null) return;
-                RegistryKey<World> playerDimension = Minecraft.getInstance().player.level.dimension();
+                ResourceKey<Level> playerDimension = Minecraft.getInstance().player.level.dimension();
 
                 if (playerDimension.equals(packet.dimension))
                 {

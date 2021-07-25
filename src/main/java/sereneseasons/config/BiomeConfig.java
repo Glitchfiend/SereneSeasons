@@ -10,9 +10,9 @@ package sereneseasons.config;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 import sereneseasons.config.json.BiomeData;
 import sereneseasons.util.biome.BiomeUtil;
 import sereneseasons.util.config.JsonUtil;
@@ -47,7 +47,7 @@ public class BiomeConfig
         }
     }
 
-    public static boolean enablesSeasonalEffects(RegistryKey<Biome> biome)
+    public static boolean enablesSeasonalEffects(ResourceKey<Biome> biome)
     {
         ResourceLocation name = biome.location();
 
@@ -59,7 +59,7 @@ public class BiomeConfig
         return true;
     }
 
-    public static boolean usesTropicalSeasons(RegistryKey<Biome> key)
+    public static boolean usesTropicalSeasons(ResourceKey<Biome> key)
     {
         ResourceLocation name = key.location();
         Biome biome = BiomeUtil.getBiome(key);
@@ -72,7 +72,7 @@ public class BiomeConfig
         return biome.getBaseTemperature() > 0.8F;
     }
 
-    public static boolean infertileBiome(RegistryKey<Biome> biome)
+    public static boolean infertileBiome(ResourceKey<Biome> biome)
     {
         List<String> infertileBiomes = Lists.newArrayList("biomesoplenty:wasteland");
 
@@ -86,7 +86,7 @@ public class BiomeConfig
         return false;
     }
 
-    public static boolean lessColorChange(RegistryKey<Biome> biome)
+    public static boolean lessColorChange(ResourceKey<Biome> biome)
     {
         List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
                 "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog",

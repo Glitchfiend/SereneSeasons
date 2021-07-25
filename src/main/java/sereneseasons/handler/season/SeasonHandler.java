@@ -8,12 +8,12 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,7 +38,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        World world = event.world;
+        Level world = event.world;
 
         if (event.phase == TickEvent.Phase.END && !world.isClientSide)
         {
@@ -72,14 +72,14 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
-        PlayerEntity player = event.getPlayer();
-        World world = player.level;
+        Player player = event.getPlayer();
+        Level world = player.level;
         
         sendSeasonUpdate(world);
     }
 
     private Season.SubSeason lastSeason = null;
-    public static final HashMap<RegistryKey<World>, Integer> clientSeasonCycleTicks = new HashMap<>();
+    public static final HashMap<ResourceKey<Level>, Integer> clientSeasonCycleTicks = new HashMap<>();
     public static SeasonTime getClientSeasonTime() {
         Integer i = clientSeasonCycleTicks.get(Minecraft.getInstance().level.dimension());
     	return new SeasonTime(i == null ? 0 : i);
@@ -90,7 +90,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         //Only do this when in the world
         if (Minecraft.getInstance().player == null) return;
-        RegistryKey<World> dimension = Minecraft.getInstance().player.level.dimension();
+        ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
 
         if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
         {
@@ -142,7 +142,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 //        }
 //    }
     
-    public static void sendSeasonUpdate(World world)
+    public static void sendSeasonUpdate(Level world)
     {
         if (!world.isClientSide)
         {
@@ -151,15 +151,15 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         }
     }
     
-    public static SeasonSavedData getSeasonSavedData(World w)
+    public static SeasonSavedData getSeasonSavedData(Level w)
     {
-        if (w.isClientSide() || !(w instanceof ServerWorld))
+        if (w.isClientSide() || !(w instanceof ServerLevel))
         {
             return null;
         }
 
-        ServerWorld world = (ServerWorld)w;
-        DimensionSavedDataManager saveDataManager = world.getChunkSource().getDataStorage();
+        ServerLevel world = (ServerLevel)w;
+        DimensionDataStorage saveDataManager = world.getChunkSource().getDataStorage();
 
         Supplier<SeasonSavedData> defaultSaveDataSupplier = () ->
         {
@@ -187,7 +187,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     // Used to implement getSeasonState in the API
     //
     
-    public ISeasonState getServerSeasonState(World world)
+    public ISeasonState getServerSeasonState(Level world)
     {
         SeasonSavedData savedData = getSeasonSavedData(world);
         return new SeasonTime(savedData.seasonCycleTicks);

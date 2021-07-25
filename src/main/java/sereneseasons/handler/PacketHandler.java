@@ -1,7 +1,7 @@
 package sereneseasons.handler;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -30,7 +30,7 @@ public class PacketHandler
         registerMessage(MessageSyncConfigs.class, MessageSyncConfigs::encode, MessageSyncConfigs::decode, MessageSyncConfigs.Handler::handle);
     }
 
-    private static <T> void registerMessage(Class<T> type, BiConsumer<T, PacketBuffer> encoder, Function<PacketBuffer, T> decoder,
+    private static <T> void registerMessage(Class<T> type, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder,
                                             BiConsumer<T, Supplier<NetworkEvent.Context>> consumer) {
         HANDLER.registerMessage(nextFreeIndex++, type, encoder, decoder, consumer);
     }

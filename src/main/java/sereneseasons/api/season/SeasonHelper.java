@@ -8,7 +8,7 @@
 package sereneseasons.api.season;
 
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import sereneseasons.init.ModConfig;
 
 public class SeasonHelper 
@@ -19,7 +19,7 @@ public class SeasonHelper
      * Obtains data about the state of the season cycle in the world. This works both on
      * the client and the server.
      */
-    public static ISeasonState getSeasonState(World world)
+    public static ISeasonState getSeasonState(Level world)
     {
         ISeasonState data;
 
@@ -37,7 +37,7 @@ public class SeasonHelper
 
     public interface ISeasonDataProvider
     {
-        ISeasonState getServerSeasonState(World world);
+        ISeasonState getServerSeasonState(Level world);
         ISeasonState getClientSeasonState();
     }
 }

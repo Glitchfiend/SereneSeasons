@@ -7,7 +7,7 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import sereneseasons.api.season.Season;
 
 /** Now with extra seasoning*/

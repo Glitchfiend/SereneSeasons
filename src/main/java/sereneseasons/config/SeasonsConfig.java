@@ -8,9 +8,9 @@
 package sereneseasons.config;
 
 import com.google.common.collect.Lists;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class SeasonsConfig
     // Dimension settings
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistedDimensions;
 
-    private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(World.OVERWORLD.location().toString());
+    private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
     private static final Predicate<Object> DIMENSION_VALIDATOR = (obj) ->
     {
         if (!(obj instanceof String))
@@ -90,7 +90,7 @@ public class SeasonsConfig
         SPEC = BUILDER.build();
     }
     
-    public static boolean isDimensionWhitelisted(RegistryKey<World> dimension)
+    public static boolean isDimensionWhitelisted(ResourceKey<Level> dimension)
     {
     	for (String whitelistedDimension : whitelistedDimensions.get())
 		{

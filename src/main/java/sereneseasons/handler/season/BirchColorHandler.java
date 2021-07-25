@@ -1,14 +1,14 @@
 package sereneseasons.handler.season;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.FoliageColors;
-import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import sereneseasons.api.season.ISeasonColorProvider;
@@ -25,15 +25,15 @@ public class BirchColorHandler
     {
 		if (FMLEnvironment.dist == Dist.CLIENT)
 		{
-			Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable IBlockDisplayReader dimensionReader, @Nullable BlockPos pos, int tintIndex) ->
+			Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable BlockAndTintGetter dimensionReader, @Nullable BlockPos pos, int tintIndex) ->
 			{
-				int birchColor = FoliageColors.getBirchColor();
-				World world = Minecraft.getInstance().player.level;
-				RegistryKey<World> dimension = Minecraft.getInstance().player.level.dimension();
+				int birchColor = FoliageColor.getBirchColor();
+				Level world = Minecraft.getInstance().player.level;
+				ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
 
 				if (world != null && pos != null && SeasonsConfig.changeBirchColor.get() && SeasonsConfig.isDimensionWhitelisted(dimension))
 				{
-					RegistryKey<Biome> biome = world.getBiomeName(pos).orElse(null);
+					ResourceKey<Biome> biome = world.getBiomeName(pos).orElse(null);
 
 					if (BiomeConfig.enablesSeasonalEffects(biome))
 					{

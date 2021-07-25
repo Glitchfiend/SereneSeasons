@@ -1,12 +1,12 @@
 package sereneseasons.util.inventory;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import sereneseasons.api.SSItems;
 
-public class ItemGroupSS extends ItemGroup
+public class ItemGroupSS extends CreativeModeTab
 {
-    public static final ItemGroupSS instance = new ItemGroupSS(ItemGroup.TABS.length, "tabSereneSeasons");
+    public static final ItemGroupSS instance = new ItemGroupSS(CreativeModeTab.TABS.length, "tabSereneSeasons");
 
     private ItemGroupSS(int index, String label)
     {

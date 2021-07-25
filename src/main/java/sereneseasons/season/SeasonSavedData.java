@@ -7,10 +7,10 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.saveddata.SavedData;
 
-public class SeasonSavedData extends WorldSavedData
+public class SeasonSavedData extends SavedData
 {
     public static final String DATA_IDENTIFIER = "seasons";
     public static final int VERSION = 0;
@@ -29,13 +29,13 @@ public class SeasonSavedData extends WorldSavedData
     }
 
     @Override
-    public void load(CompoundNBT nbt)
+    public void load(CompoundTag nbt)
     {
         this.seasonCycleTicks = nbt.getInt("SeasonCycleTicks");
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbt)
+    public CompoundTag save(CompoundTag nbt)
     {
         nbt.putInt("SeasonCycleTicks", this.seasonCycleTicks);
         return nbt;

@@ -7,30 +7,32 @@
  ******************************************************************************/
 package sereneseasons.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.tileentity.SeasonSensorTileEntity;
 
-public class SeasonSensorBlock extends ContainerBlock
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+public class SeasonSensorBlock extends BaseEntityBlock
 {
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
@@ -43,7 +45,7 @@ public class SeasonSensorBlock extends ContainerBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext selectionContext)
+    public VoxelShape getShape(BlockState state, BlockGetter reader, BlockPos pos, CollisionContext selectionContext)
     {
         return SHAPE;
     }
@@ -55,12 +57,12 @@ public class SeasonSensorBlock extends ContainerBlock
     }
 
     @Override
-    public int getSignal(BlockState state, IBlockReader reader, BlockPos pos, Direction direction)
+    public int getSignal(BlockState state, BlockGetter reader, BlockPos pos, Direction direction)
     {
         return state.getValue(POWER);
     }
 
-    public void updatePower(World world, BlockPos pos)
+    public void updatePower(Level world, BlockPos pos)
     {
         BlockState state = world.getBlockState(pos);
 
@@ -88,20 +90,20 @@ public class SeasonSensorBlock extends ContainerBlock
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult)
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult)
     {
         if (player.mayBuild())
         {
             if (world.isClientSide)
             {
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             else
             {
                 BlockState blockstate = state.cycle(SEASON);
                 world.setBlock(pos, blockstate, 4);
                 updatePower(world, pos);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         else
@@ -111,9 +113,9 @@ public class SeasonSensorBlock extends ContainerBlock
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state)
+    public RenderShape getRenderShape(BlockState state)
     {
-        return BlockRenderType.MODEL;
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -123,13 +125,13 @@ public class SeasonSensorBlock extends ContainerBlock
     }
 
     @Override
-    public TileEntity newBlockEntity(IBlockReader reader)
+    public BlockEntity newBlockEntity(BlockGetter reader)
     {
         return new SeasonSensorTileEntity();
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(POWER, SEASON);
     }

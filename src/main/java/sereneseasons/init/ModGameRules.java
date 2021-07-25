@@ -7,10 +7,10 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import net.minecraft.world.GameRules;
+import net.minecraft.world.level.GameRules;
 
 import static net.minecraft.world.GameRules.register;
-import static sereneseasons.api.SSGameRules.*;
+import staticnet.minecraft.world.level.GameRuless.*;
 
 public class ModGameRules
 {

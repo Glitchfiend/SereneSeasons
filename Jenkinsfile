@@ -38,7 +38,7 @@ pipeline {
                 }
             }
             steps {
-                writeChangelog(currentBuild, "build/SereneSeasons-${env.MYVERSION}-changelog.txt")
+                writeChangelog(currentBuild, "build/BiomesOPlenty-${env.MYVERSION}-changelog.txt")
             }
         }
         stage('publish') {
@@ -52,7 +52,7 @@ pipeline {
             }
             steps {
                 withGradle {
-                    sh './gradlew ${GRADLE_ARGS} :uploadArchives curseforge -PcurseApiKey=${CURSE_API_KEY}'
+                    sh './gradlew ${GRADLE_ARGS} curseforge -PcurseApiKey=${CURSE_API_KEY}'
                 }
             }
         }

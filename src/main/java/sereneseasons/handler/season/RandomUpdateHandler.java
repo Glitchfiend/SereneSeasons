@@ -8,28 +8,28 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IceBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
 import net.minecraft.profiler.IProfiler;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ChunkHolder;
-import net.minecraft.world.server.ChunkManager;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.spawner.WorldEntitySpawner;
-import net.minecraft.world.storage.IServerWorldInfo;
+import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,12 +49,12 @@ import java.util.Optional;
 @Mod.EventBusSubscriber
 public class RandomUpdateHandler
 {
-	private void adjustWeatherFrequency(World world, Season season)
+	private void adjustWeatherFrequency(Level world, Season season)
 	{
 		if (!SeasonsConfig.changeWeatherFrequency.get())
 			return;
 
-		IServerWorldInfo serverLevelData = (IServerWorldInfo)world.getLevelData();
+		ServerLevelData serverLevelData = (ServerLevelData)world.getLevelData();
 
 		if (season == Season.WINTER)
 		{
@@ -86,9 +86,9 @@ public class RandomUpdateHandler
 		}
 	}
 
-	private void meltInChunk(ChunkManager chunkManager, Chunk chunkIn, Season.SubSeason subSeason)
+	private void meltInChunk(ChunkMap chunkManager, LevelChunk chunkIn, Season.SubSeason subSeason)
 	{
-		ServerWorld world = chunkManager.level;
+		ServerLevel world = chunkManager.level;
 		ChunkPos chunkpos = chunkIn.getPos();
 		int i = chunkpos.getMinBlockX();
 		int j = chunkpos.getMinBlockZ();
@@ -112,11 +112,11 @@ public class RandomUpdateHandler
 
 		if (world.random.nextInt(meltRand) == 0)
 		{
-			BlockPos topAirPos = world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, world.getBlockRandomPos(i, 0, j, 15));
+			BlockPos topAirPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, world.getBlockRandomPos(i, 0, j, 15));
 			BlockPos topGroundPos = topAirPos.below();
 			BlockState aboveGroundState = world.getBlockState(topAirPos);
 			BlockState groundState = world.getBlockState(topGroundPos);
-			RegistryKey<Biome> biome = world.getBiomeName(topAirPos).orElse(null);
+			ResourceKey<Biome> biome = world.getBiomeName(topAirPos).orElse(null);
 
 			if (!BiomeConfig.enablesSeasonalEffects(biome))
 				return;
@@ -154,16 +154,16 @@ public class RandomUpdateHandler
 			{
 				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.dimension()))
 				{
-					ServerWorld world = (ServerWorld) event.world;
-					ChunkManager chunkManager = world.getChunkSource().chunkMap;
+					ServerLevel world = (ServerLevel) event.world;
+					ChunkMap chunkManager = world.getChunkSource().chunkMap;
 
 					// Replicate the behaviour of ServerChunkProvider
 					chunkManager.getChunks().forEach((chunkHolder) ->
 					{
-						Optional<Chunk> optional = chunkHolder.getEntityTickingChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left();
+						Optional<LevelChunk> optional = chunkHolder.getEntityTickingChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left();
 						if (optional.isPresent())
 						{
-							Chunk chunk = optional.get();
+							LevelChunk chunk = optional.get();
 							ChunkPos chunkpos = chunkHolder.getPos();
 							if (!chunkManager.noPlayersCloseForSpawning(chunkpos))
 							{

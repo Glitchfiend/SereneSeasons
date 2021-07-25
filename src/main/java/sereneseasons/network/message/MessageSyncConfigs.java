@@ -7,8 +7,8 @@
  ******************************************************************************/
 package sereneseasons.network.message;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
@@ -17,19 +17,19 @@ import java.util.function.Supplier;
 
 public class MessageSyncConfigs
 {
-    public CompoundNBT nbtOptions;
+    public CompoundTag nbtOptions;
 
-    public MessageSyncConfigs(CompoundNBT nbtOptions)
+    public MessageSyncConfigs(CompoundTag nbtOptions)
     {
         this.nbtOptions = nbtOptions;
     }
 
-    public static void encode(MessageSyncConfigs packet, PacketBuffer buf)
+    public static void encode(MessageSyncConfigs packet, FriendlyByteBuf buf)
     {
         buf.writeNbt(packet.nbtOptions);
     }
 
-    public static MessageSyncConfigs decode(PacketBuffer buf)
+    public static MessageSyncConfigs decode(FriendlyByteBuf buf)
     {
         return new MessageSyncConfigs(buf.readNbt());
     }

@@ -1,16 +1,16 @@
 package sereneseasons.core;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.SSItems;
@@ -25,13 +25,13 @@ public class ClientProxy extends CommonProxy
     @Override
     void registerItemModelsProperties()
     {
-        ItemModelsProperties.register(SSItems.calendar, new ResourceLocation("time"), new IItemPropertyGetter()
+        ItemProperties.register(SSItems.calendar, new ResourceLocation("time"), new ItemPropertyFunction()
         {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
+            public float call(ItemStack stack, ClientLevel clientWorld, LivingEntity entity)
             {
-                World world = clientWorld;
+                Level world = clientWorld;
                 Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
 
                 if (world == null && holder != null)
@@ -50,18 +50,18 @@ public class ClientProxy extends CommonProxy
                     int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
                     d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
 
-                    return MathHelper.positiveModulo((float)d0, 1.0F);
+                    return Mth.positiveModulo((float)d0, 1.0F);
                 }
             }
         });
 
-        ItemModelsProperties.register(SSItems.calendar, new ResourceLocation("seasontype"), new IItemPropertyGetter()
+        ItemProperties.register(SSItems.calendar, new ResourceLocation("seasontype"), new ItemPropertyFunction()
         {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public float call(ItemStack stack, ClientWorld clientWorld, LivingEntity entity)
+            public float call(ItemStack stack, ClientLevel clientWorld, LivingEntity entity)
             {
-                World world = clientWorld;
+                Level world = clientWorld;
                 Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
 
                 if (world == null && holder != null)
@@ -81,7 +81,7 @@ public class ClientProxy extends CommonProxy
                     {
                         if (holder != null)
                         {
-                            RegistryKey<Biome> biome = world.getBiomeName(holder.blockPosition()).orElse(null);
+                            ResourceKey<Biome> biome = world.getBiomeName(holder.blockPosition()).orElse(null);
 
                             if (BiomeConfig.usesTropicalSeasons(biome))
                             {

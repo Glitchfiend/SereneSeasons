@@ -7,9 +7,9 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -60,7 +60,7 @@ public class ModHandlers
 
         BiomeColors.GRASS_COLOR_RESOLVER = (biome, x, z) ->
         {
-            RegistryKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
+            ResourceKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biomeKey) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 
@@ -69,7 +69,7 @@ public class ModHandlers
 
         BiomeColors.FOLIAGE_COLOR_RESOLVER = (biome, x, z) ->
         {
-            RegistryKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
+            ResourceKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
             SeasonTime calendar = SeasonHandler.getClientSeasonTime();
             ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biomeKey) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 

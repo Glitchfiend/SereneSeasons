@@ -1,17 +1,12 @@
 buildscript {
     repositories {
-        mavenLocal()
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven {
-            name = 'sponge'
-            url = 'https://repo.spongepowered.org/maven'
-        }
-        jcenter()
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
@@ -20,17 +15,15 @@ plugins {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'maven'
 apply plugin: 'org.spongepowered.mixin'
 
 repositories { mavenLocal() }
 
-group = "com.github.glitchfiend.biomesoplenty"
+group = "com.github.glitchfiend"
 archivesBaseName = "SereneSeasons"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 def getGitHash = {
     def stdout = new ByteArrayOutputStream()
@@ -44,7 +37,7 @@ def getGitHash = {
 version = "${minecraft_version}-${mod_version}.${System.getenv().BUILD_NUMBER}"
 
 minecraft {
-    mappings channel: 'snapshot', version: mappings_version
+    mappings channel: 'official', version: minecraft_version
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -63,7 +56,21 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "sereneseasons.refmap.json"
+    add sourceSets.main, "main.refmap.json"
+}
+
+// configure  the source folders
+sourceSets {
+    main {
+        java {
+            srcDir "src/main/java"
+            srcDir "public/src/main/java"
+        }
+        resources {
+            srcDir "src/main/resources"
+            srcDir "public/src/main/resources"
+        }
+    }
 }
 
 processResources {
@@ -71,11 +78,13 @@ processResources {
         include 'META-INF/mods.toml'
         expand 'version': project.version
     }
+	
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 jar {
     classifier = 'universal'
-
+    
     manifest {
         attributes([
             "Specification-Title": "sereneseasons",
@@ -92,16 +101,6 @@ jar {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
-    compile 'org.spongepowered:mixin:0.8'
-}
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    from (sourceSets.main.output) {
-        include 'LICENSE.txt'
-    }
-
-    classifier = 'sources'
 }
 
 task deobfJar(type: Jar) {
@@ -118,6 +117,7 @@ task apiJar(type: Jar) {
         include 'sereneseasons/api/**'
     }
 
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     classifier = 'api'
 }
 
@@ -134,85 +134,23 @@ curseforge {
             }
 
             releaseType = 'beta'
+            addGameVersion minecraft_version
 
             mainArtifact(jar) {
                 displayName = "Serene Seasons ${version}"
             }
-            addArtifact sourcesJar
+
             addArtifact deobfJar
             addArtifact apiJar
         }
     }
 }
 
-
-
 artifacts {
     if (changelog_file.exists()) {
         archives changelog_file
     }
     archives jar
-    archives sourcesJar
     archives deobfJar
     archives apiJar
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            if (project.hasProperty('forgeMavenPassword')) {
-                repository(url: "https://files.minecraftforge.net/maven/manage/upload") {
-                    authentication(userName: project.getProperty('forgeMavenUsername'), password: project.getProperty('forgeMavenPassword'))
-                }
-            }
-            else {
-                // local repo folder. Might wanna juset use  gradle install   if you wanans end it to maven-local
-                repository(url: 'file://localhost/' + project.file('repo').getAbsolutePath())
-            }
-
-            pom {
-                groupId = project.group
-                version = project.version
-                artifactId = project.archivesBaseName
-                project {
-                    name project.archivesBaseName
-                    packaging 'jar'
-                    description 'Serene Seasons'
-                    url 'https://github.com/Glitchfiend/SereneSeasons'
-                
-                    scm {
-                        url 'https://github.com/Glitchfiend/SereneSeasons'
-                        connection 'scm:git:git://github.com/Glitchfiend/SereneSeasons.git'
-                        developerConnection 'scm:git:git@github.com:Glitchfiend/SereneSeasons.git'
-                    }
-                
-                    issueManagement {
-                        system 'github'
-                        url 'https://github.com/Glitchfiend/SereneSeasons/issues'
-                    }
-                
-                    licenses {
-                        license {
-                            name 'Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International Public License'
-                            url 'http://creativecommons.org/licenses/by-nc-nd/4.0/'
-                            distribution 'repo'
-                        }
-                    }
-                
-                    developers {
-                        developer {
-                            id 'Adubbz'
-                            name 'Adubbz'
-                            roles { role 'developer' }
-                        }
-                        developer {
-                            id 'Forstride'
-                            name 'Forstride'
-                            roles { role 'developer' }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }

@@ -8,12 +8,12 @@
 package sereneseasons.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.server.command.EnumArgument;
 import sereneseasons.api.season.Season;
 import sereneseasons.handler.season.SeasonHandler;
@@ -22,17 +22,17 @@ import sereneseasons.season.SeasonTime;
 
 public class CommandSetSeason
 {
-    static ArgumentBuilder<CommandSource, ?> register()
+    static ArgumentBuilder<CommandSourceStack, ?> register()
     {
         return Commands.literal("set")
             .then(Commands.argument("season", EnumArgument.enumArgument(Season.SubSeason.class))
             .executes(ctx -> {
-                World world = ctx.getSource().getLevel();
+                Level world = ctx.getSource().getLevel();
                 return setSeason(ctx.getSource(), world, ctx.getArgument("season", Season.SubSeason.class));
             }));
     }
 
-    private static int setSeason(CommandSource cs, World world, Season.SubSeason season) throws CommandException
+    private static int setSeason(CommandSourceStack cs, Level world, Season.SubSeason season) throws CommandRuntimeException
     {
         if (season != null)
         {
@@ -40,11 +40,11 @@ public class CommandSetSeason
             seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * season.ordinal();
             seasonData.setDirty();
             SeasonHandler.sendSeasonUpdate(world);
-            cs.sendSuccess(new TranslationTextComponent("commands.sereneseasons.setseason.success", season.toString()), true);
+            cs.sendSuccess(new TranslatableComponent("commands.sereneseasons.setseason.success", season.toString()), true);
         }
         else
         {
-            cs.sendFailure(new TranslationTextComponent("commands.sereneseasons.setseason.fail", season.toString()));
+            cs.sendFailure(new TranslatableComponent("commands.sereneseasons.setseason.fail", season.toString()));
         }
 
         return 1;
