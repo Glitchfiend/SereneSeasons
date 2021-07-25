@@ -16,28 +16,18 @@ public class SeasonSavedData extends SavedData
     public static final int VERSION = 0;
     
     public int seasonCycleTicks;
-    
-    public SeasonSavedData()
-    {
-        this(DATA_IDENTIFIER);
-    }
-    
-    //This specific constructor is required for saving to occur
-    public SeasonSavedData(String identifier)
-    {
-        super(identifier);
-    }
-
-    @Override
-    public void load(CompoundTag nbt)
-    {
-        this.seasonCycleTicks = nbt.getInt("SeasonCycleTicks");
-    }
 
     @Override
     public CompoundTag save(CompoundTag nbt)
     {
         nbt.putInt("SeasonCycleTicks", this.seasonCycleTicks);
         return nbt;
+    }
+
+    public static SeasonSavedData load(CompoundTag nbt)
+    {
+        SeasonSavedData data = new SeasonSavedData();
+        data.seasonCycleTicks = nbt.getInt("SeasonCycleTicks");
+        return data;
     }
 }

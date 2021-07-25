@@ -15,8 +15,8 @@ plugins {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'idea'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'idea'
 
 repositories { mavenLocal() }
 
@@ -44,12 +44,12 @@ minecraft {
     runs {
         client = {
             workingDirectory = project.file("run").canonicalPath
-            arg "-mixin.config="+archivesBaseName+".mixins.json"
+            // arg "-mixin.config="+archivesBaseName+".mixins.json"
             source sourceSets.main
         }
         server = {
             workingDirectory = project.file("run").canonicalPath
-            arg "-mixin.config="+archivesBaseName+".mixins.json"
+            // arg "-mixin.config="+archivesBaseName+".mixins.json"
             source sourceSets.main
         }
     }
@@ -101,6 +101,8 @@ jar {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
+    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+    implementation('cpw.mods:securejarhandler') { version { strictly '0.9.45' } } // TODO: Remove this
 }
 
 task deobfJar(type: Jar) {

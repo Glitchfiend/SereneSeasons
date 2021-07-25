@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import sereneseasons.api.SSGameRules;
 import sereneseasons.api.config.SeasonsOption;
 import sereneseasons.api.config.SyncedConfig;
@@ -163,7 +163,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         Supplier<SeasonSavedData> defaultSaveDataSupplier = () ->
         {
-            SeasonSavedData savedData = new SeasonSavedData(SeasonSavedData.DATA_IDENTIFIER);
+            SeasonSavedData savedData = new SeasonSavedData();
 
             int startingSeason = SyncedConfig.getIntValue(SeasonsOption.STARTING_SUB_SEASON);
 
@@ -180,7 +180,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             return savedData;
         };
 
-        return saveDataManager.computeIfAbsent(defaultSaveDataSupplier, SeasonSavedData.DATA_IDENTIFIER);
+        return saveDataManager.computeIfAbsent(SeasonSavedData::load, defaultSaveDataSupplier, SeasonSavedData.DATA_IDENTIFIER);
     }
     
     //

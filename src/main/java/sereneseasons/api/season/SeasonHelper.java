@@ -7,9 +7,7 @@
  ******************************************************************************/
 package sereneseasons.api.season;
 
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.level.Level;
-import sereneseasons.init.ModConfig;
 
 public class SeasonHelper 
 {

@@ -1,8 +1,9 @@
 package sereneseasons.handler.season;
 
-import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -11,12 +12,9 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import sereneseasons.api.SSBlocks;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.init.ModFertility;
 import sereneseasons.init.ModTags;
-
-import net.minecraft.world.level.block.Block;
 
 @Mod.EventBusSubscriber
 public class SeasonalCropGrowthHandler
@@ -31,9 +29,10 @@ public class SeasonalCropGrowthHandler
 	@SubscribeEvent
 	public void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
-		Block plant = event.getState().getBlock();
+		BlockState plant = event.getState();
+		Block plantBlock = plant.getBlock();
 		Level world = (Level)event.getWorld();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), world, event.getPos());
+		boolean isFertile = ModFertility.isCropFertile(plantBlock.getRegistryName().toString(), world, event.getPos());
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, event.getPos()))
 		{
@@ -66,8 +65,9 @@ public class SeasonalCropGrowthHandler
 	@SubscribeEvent
 	public void onApplyBonemeal(BonemealEvent event)
 	{
-		Block plant = event.getBlock().getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plant.getRegistryName().toString(), event.getWorld(), event.getPos());
+		BlockState plant = event.getBlock();
+		Block plantBlock = plant.getBlock();
+		boolean isFertile = ModFertility.isCropFertile(plantBlock.getRegistryName().toString(), event.getWorld(), event.getPos());
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
@@ -101,7 +101,7 @@ public class SeasonalCropGrowthHandler
 	{
 		for (int i = 0; i < 16; i++)
 		{
-			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).getBlock().is(ModTags.Blocks.greenhouse_glass))
+			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).is(ModTags.Blocks.greenhouse_glass))
 			{
 				return true;
 			}

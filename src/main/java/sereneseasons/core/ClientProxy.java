@@ -29,7 +29,7 @@ public class ClientProxy extends CommonProxy
         {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public float call(ItemStack stack, ClientLevel clientWorld, LivingEntity entity)
+            public float call(ItemStack stack, ClientLevel clientWorld, LivingEntity entity, int seed)
             {
                 Level world = clientWorld;
                 Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
@@ -59,7 +59,7 @@ public class ClientProxy extends CommonProxy
         {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public float call(ItemStack stack, ClientLevel clientWorld, LivingEntity entity)
+            public float call(ItemStack stack, ClientLevel clientWorld, LivingEntity entity, int seed)
             {
                 Level world = clientWorld;
                 Entity holder = (Entity)(entity != null ? entity : stack.getFrame());

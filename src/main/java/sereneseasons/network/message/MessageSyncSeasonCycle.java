@@ -8,16 +8,13 @@
 package sereneseasons.network.message;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import sereneseasons.core.SereneSeasons;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import sereneseasons.handler.season.SeasonHandler;
-import sereneseasons.season.SeasonTime;
 
 import java.util.function.Supplier;
 

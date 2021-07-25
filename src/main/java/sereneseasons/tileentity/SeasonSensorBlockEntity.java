@@ -7,32 +7,18 @@
  ******************************************************************************/
 package sereneseasons.tileentity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.block.SeasonSensorBlock;
 
-public class SeasonSensorTileEntity extends BlockEntity implements TickableBlockEntity
+public class SeasonSensorBlockEntity extends BlockEntity
 {
-    public SeasonSensorTileEntity()
+    public SeasonSensorBlockEntity(BlockPos pos, BlockState state)
     {
-        super(SSBlocks.season_sensor_tile_entity);
-    }
-
-    @Override
-    public void tick()
-    {
-        if (this.level != null && !this.level.isClientSide && SeasonHelper.getSeasonState(this.level).getSeasonCycleTicks() % 20L == 0L)
-        {
-            BlockState blockstate = this.getBlockState();
-            Block block = blockstate.getBlock();
-            if (block instanceof SeasonSensorBlock)
-            {
-                ((SeasonSensorBlock)block).updatePower(this.level, this.worldPosition);
-            }
-        }
+        super(SSBlocks.season_sensor_tile_entity, pos, state);
     }
 }

@@ -7,18 +7,16 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.core.SereneSeasons;
 import sereneseasons.util.biome.BiomeUtil;
 
 public class SeasonHooks

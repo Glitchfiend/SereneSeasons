@@ -9,8 +9,8 @@ package sereneseasons.init;
 
 import net.minecraft.world.level.GameRules;
 
-import static net.minecraft.world.GameRules.register;
-import staticnet.minecraft.world.level.GameRuless.*;
+import static net.minecraft.world.level.GameRules.register;
+import static sereneseasons.api.SSGameRules.*;
 
 public class ModGameRules
 {
