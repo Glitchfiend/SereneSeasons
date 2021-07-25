@@ -1,5 +1,5 @@
 modLoader="javafml"
-license="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0"
+license="All Rights Reserved"
 loaderVersion="[24,)"
 issueTrackerURL="https://github.com/Glitchfiend/SereneSeasons/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/serene-seasons"
@@ -9,7 +9,7 @@ logoFile="ss_logo.png"
     modId="sereneseasons"
     version="${version}"
     displayName="Serene Seasons"
-	authors="Forstride, Adubbz"
+	authors="Adubbz, Forstride"
     description='''
     Adds seasons with changing colors, temperature shifting, and more!
     '''
@@ -17,6 +17,6 @@ logoFile="ss_logo.png"
 [[dependencies.sereneseasons]]
     modId="forge"
     mandatory=true
-    versionRange="[36.0.1,)"
+    versionRange="[37.0.1,)"
     ordering="NONE"
     side="BOTH"
