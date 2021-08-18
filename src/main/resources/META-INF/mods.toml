@@ -17,6 +17,6 @@ logoFile="ss_logo.png"
 [[dependencies.sereneseasons]]
     modId="forge"
     mandatory=true
-    versionRange="[37.0.1,)"
+    versionRange="[37.0.34,)"
     ordering="NONE"
     side="BOTH"
