@@ -1,13 +1,13 @@
 modLoader="javafml"
 license="All Rights Reserved"
-loaderVersion="[24,)"
+loaderVersion="[37,)"
 issueTrackerURL="https://github.com/Glitchfiend/SereneSeasons/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/serene-seasons"
 logoFile="ss_logo.png"
 
 [[mods]]
     modId="sereneseasons"
-    version="${version}"
+    version="${file.jarVersion}"
     displayName="Serene Seasons"
 	authors="Adubbz, Forstride"
     description='''
