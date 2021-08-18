@@ -1,0 +1,21 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "現在是%s的第 %s/%s 天、%s/%s 刻",
+  "commands.sereneseasons.setseason.success": "將季節設為%s",
+  "commands.sereneseasons.setseason.fail": "季節%s無效",
+  "commands.sereneseasons.setseason.disabled": "目前已停用季節！",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "季節感測器",
+  
+  "item.sereneseasons.ss_icon": "SS Icon",
+  "item.sereneseasons.calendar": "日曆",
+
+  "desc.sereneseasons.fertile_seasons": "生長季",
+  "desc.sereneseasons.year_round": "全年",
+  "desc.sereneseasons.spring": "春季",
+  "desc.sereneseasons.summer": "夏季",
+  "desc.sereneseasons.autumn": "秋季",
+  "desc.sereneseasons.winter": "冬季"
+}

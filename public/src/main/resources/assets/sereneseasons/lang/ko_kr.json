@@ -1,0 +1,21 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "현재 계절: %s 날짜: %s/%s 틱: %s/%s",
+  "commands.sereneseasons.setseason.success": "계절을 %s으로 설정했습니다.",
+  "commands.sereneseasons.setseason.fail": "%s라는 계절이 존재하지 않습니다.",
+  "commands.sereneseasons.setseason.disabled": "계절이 현재 비활성화되어 있습니다!",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "계절 감지기",
+  
+  "item.sereneseasons.ss_icon": "SS 아이콘",
+  "item.sereneseasons.calendar": "달력",
+
+  "desc.sereneseasons.fertile_seasons": "비옥한 계절",
+  "desc.sereneseasons.year_round": "연중지속",
+  "desc.sereneseasons.spring": "봄",
+  "desc.sereneseasons.summer": "여름",
+  "desc.sereneseasons.autumn": "가을",
+  "desc.sereneseasons.winter": "겨울"
+}

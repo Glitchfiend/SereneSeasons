@@ -1,0 +1,21 @@
+{
+  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
+  "commands.sereneseasons.getseason.success": "A estação atual é %s, dia %s/%s, ciclo %s/%s",
+  "commands.sereneseasons.setseason.success": "A estação foi definida para %s",
+  "commands.sereneseasons.setseason.fail": "A estação %s é inválida",
+  "commands.sereneseasons.setseason.disabled": "As estações foram desativadas!",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "Sensor de estações",
+  
+  "item.sereneseasons.ss_icon": "Ícone do SS",
+  "item.sereneseasons.calendar": "Calendário",
+
+  "desc.sereneseasons.fertile_seasons": "Estações férteis",
+  "desc.sereneseasons.year_round": "Ano inteiro",
+  "desc.sereneseasons.spring": "Primavera",
+  "desc.sereneseasons.summer": "Verão",
+  "desc.sereneseasons.autumn": "Outono",
+  "desc.sereneseasons.winter": "Inverno"
+}
