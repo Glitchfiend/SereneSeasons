@@ -1,15 +1,10 @@
 /*******************************************************************************
- * Copyright 2016, the Biomes O' Plenty Team
- * 
- * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Public License.
- * 
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
+ * Copyright 2021, the Glitchfiend Team.
+ * All rights reserved.
  ******************************************************************************/
 package sereneseasons.api.season;
 
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import sereneseasons.init.ModConfig;
+import net.minecraft.world.level.Level;
 
 public class SeasonHelper 
 {
@@ -19,7 +14,7 @@ public class SeasonHelper
      * Obtains data about the state of the season cycle in the world. This works both on
      * the client and the server.
      */
-    public static ISeasonState getSeasonState(World world)
+    public static ISeasonState getSeasonState(Level world)
     {
         ISeasonState data;
 
@@ -37,7 +32,7 @@ public class SeasonHelper
 
     public interface ISeasonDataProvider
     {
-        ISeasonState getServerSeasonState(World world);
+        ISeasonState getServerSeasonState(Level world);
         ISeasonState getClientSeasonState();
     }
 }
