@@ -1,26 +1,76 @@
+/*******************************************************************************
+ * Copyright 2021, the Glitchfiend Team.
+ * All rights reserved.
+ ******************************************************************************/
 var ASM = Java.type("net.minecraftforge.coremod.api.ASMAPI");
 
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
+var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
-var GET_TEMPERATURE = ASM.mapMethod("func_225486_c");
-var GET_BIOME = ASM.mapMethod("func_226691_t_");
-var GET_BLOCK_STATE = ASM.mapMethod("func_180495_p");
-var TRANSFORMATIONS = {
-    "net.minecraft.block.CauldronBlock": [ ASM.mapMethod("func_176224_k") ], // fillWithRain
-    "net.minecraft.client.renderer.WorldRenderer": [ ASM.mapMethod("func_228436_a_"), ASM.mapMethod("func_228438_a_") ], // addRainParticles, renderRainSnow
-    "net.minecraft.entity.passive.SnowGolemEntity": [ ASM.mapMethod("func_70636_d")], // livingTick
-    "net.minecraft.world.biome.Biome": [ ASM.mapMethod("func_201854_a"), ASM.mapMethod("func_201850_b") ] // shouldFreeze, shouldSnow
+var GET_TEMPERATURE = ASM.mapMethod("m_47505_");
+var GET_BIOME = ASM.mapMethod("m_46857_");
+var GET_BLOCK_STATE = ASM.mapMethod("m_8055_");
+var IS_COLD_ENOUGH_TO_SNOW = ASM.mapMethod("m_151696_");
+var GET_PRECIPITATION = ASM.mapMethod("m_47530_");
+
+function Transformation(name, desc) {
+    this.name = name;
+    this.desc = desc;
+    this.funcs = [];
+
+    for (var i = 2; i < arguments.length; i++) {
+        this.funcs.push(arguments[i]);
+    }
 }
 
-function log(message)
-{
+var TRANSFORMATIONS = {
+    "net/minecraft/client/renderer/LevelRenderer": [ 
+        new Transformation(ASM.mapMethod("m_109693_"), "(Lnet/minecraft/client/Camera;)V", patchGetTemperatureCalls, patchLevelRendererGetPrecipitation),                   // tickRain
+        new Transformation(ASM.mapMethod("m_109703_"), "(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", patchGetTemperatureCalls, patchLevelRendererGetPrecipitation) // renderSnowAndRain
+    ],
+    "net/minecraft/world/entity/animal/SnowGolem": [ 
+        new Transformation(ASM.mapMethod("m_8107_"), "()V", patchGetTemperatureCalls) // aiStep
+    ],
+    "net/minecraft/world/level/biome/Biome": [ 
+        new Transformation(ASM.mapMethod("m_47480_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", patchGetTemperatureCalls), // shouldFreeze
+        new Transformation(ASM.mapMethod("m_47519_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",  patchShouldSnow)           // shouldSnow
+    ],
+    "net/minecraft/server/level/ServerLevel": [
+        new Transformation(ASM.mapMethod("m_8714_"), "(Lnet/minecraft/world/level/chunk/LevelChunk;I)V", patchTickChunk) //tickChunk
+    ],
+    "net/minecraft/world/level/Level": [
+        new Transformation(ASM.mapMethod("m_46758_"), "(Lnet/minecraft/core/BlockPos;)Z", patchIsRainingAt) //isRainingAt
+    ]
+};
+
+function applyTransformations(classNode, method) {
+    if (!(classNode.name in TRANSFORMATIONS)) {
+        return;
+    }
+
+    var transformations = TRANSFORMATIONS[classNode.name];
+
+    for (var i = 0; i < transformations.length; i++) {
+        var transformation = transformations[i];
+
+        if (transformation.name == method.name && transformation.desc == method.desc) {
+            log("Transforming " + method.name + " " + method.desc + " in " + classNode.name);
+
+            for each (var func in transformation.funcs) {
+                func(method);
+            }
+            break;
+        }
+    }
+}
+
+function log(message) {
     print("[Serene Seasons Transformer]: " + message);
 }
 
-function initializeCoreMod()
-{
+function initializeCoreMod() {
     return {
         "temperature_transformer": {
             "target": {
@@ -29,12 +79,7 @@ function initializeCoreMod()
             },
             "transformer": function(classNode) {
                 for each (var method in classNode.methods) {
-                    var methodsToTransform = TRANSFORMATIONS[classNode.name.split('/').join('.')];
-
-                    if (~methodsToTransform.indexOf(method.name)) {
-                        log("Transforming " + method.name + " in " + classNode.name);
-                        patchGetTemperatureCalls(method);
-                    }
+                    applyTransformations(classNode, method);
                 }
 
                 return classNode;
@@ -43,30 +88,113 @@ function initializeCoreMod()
     };
 }
 
-function patchGetTemperatureCalls(method)
-{
+function patchLevelRendererGetPrecipitation(node) {
+    var call = ASM.findFirstMethodCall(node,
+        ASM.MethodType.VIRTUAL,
+        "net/minecraft/world/level/biome/Biome",
+        GET_PRECIPITATION,
+        "()Lnet/minecraft/world/level/biome/Biome$Precipitation;");
+
+    if (call == null) {
+        log("Failed to locate call to getPrecipitation");
+        return;
+    }
+
+    node.instructions.insertBefore(call, ASM.buildMethodCall(
+        "sereneseasons/season/SeasonHooks",
+        "getLevelRendererPrecipitation",
+        "(Lnet/minecraft/world/level/biome/Biome;)Lnet/minecraft/world/level/biome/Biome$Precipitation;",
+        ASM.MethodType.STATIC
+    ));
+    node.instructions.remove(call);
+    log("Successfully patched " + node.name);
+}
+
+// This is used to make farmland wet during rain (amongst other things)
+function patchIsRainingAt(node) {
+    // Insert a call to SeasonHooks isRainingAt at the start of Level's isRainingAt
+    var insns = new InsnList();
+    insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
+    insns.add(new VarInsnNode(Opcodes.ALOAD, 1));
+    insns.add(ASM.buildMethodCall(
+        "sereneseasons/season/SeasonHooks",
+        "isRainingAtHook",
+        "(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z",
+        ASM.MethodType.STATIC
+    ));
+    insns.add(new InsnNode(Opcodes.IRETURN));
+    node.instructions.insertBefore(node.instructions.getFirst(), insns);
+    log("Successfully patched isRainingAt");
+}
+
+function patchShouldSnow(node) {
+    // Insert a call to SeasonHooks shouldSnow at the start of Biome's shouldSnow
+    var insns = new InsnList();
+    insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
+    insns.add(new VarInsnNode(Opcodes.ALOAD, 1));
+    insns.add(new VarInsnNode(Opcodes.ALOAD, 2));
+    insns.add(ASM.buildMethodCall(
+        "sereneseasons/season/SeasonHooks",
+        "shouldSnowHook",
+        "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",
+        ASM.MethodType.STATIC
+    ));
+    insns.add(new InsnNode(Opcodes.IRETURN));
+    node.instructions.insertBefore(node.instructions.getFirst(), insns);
+    log("Successfully patched shouldSnow");
+}
+
+// This is used to fill cauldrons with snow/rain during rain
+function patchTickChunk(node) {
+    var call = ASM.findFirstMethodCall(node,
+        ASM.MethodType.VIRTUAL,
+        "net/minecraft/world/level/biome/Biome",
+        IS_COLD_ENOUGH_TO_SNOW,
+        "(Lnet/minecraft/core/BlockPos;)Z");
+
+    if (call == null) {
+        log("Failed to locate call to isColdEnoughToSnow");
+        return;
+    }
+
+    // Swap the call to Vanilla's isColdEnoughToSnow with ours
+    var insns = new InsnList();
+    insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
+    insns.add(ASM.buildMethodCall(
+        "sereneseasons/season/SeasonHooks",
+        "isColdEnoughToSnowHook",
+        "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/LevelReader;)Z",
+        ASM.MethodType.STATIC
+    ));
+
+    node.instructions.insertBefore(call, insns);
+    node.instructions.remove(call);
+    log("Successfully patched tickChunk");
+}
+
+function patchGetTemperatureCalls(method) {
     var startIndex = 0;
     var patchedCount = 0;
 
     while (true) {
-        var getTemperatureCachedCall = ASM.findFirstMethodCallAfter(method,
+        var getTemperatureCall = ASM.findFirstMethodCallAfter(method,
             ASM.MethodType.VIRTUAL,
-            "net/minecraft/world/biome/Biome",
+            "net/minecraft/world/level/biome/Biome",
             GET_TEMPERATURE,
-            "(Lnet/minecraft/util/math/BlockPos;)F",
+            "(Lnet/minecraft/core/BlockPos;)F",
             startIndex);
 
-        if (getTemperatureCachedCall == null) {
+        if (getTemperatureCall == null) {
             break;
         }
 
-        startIndex = method.instructions.indexOf(getTemperatureCachedCall);
+        startIndex = method.instructions.indexOf(getTemperatureCall);
 
         // We can't reuse the same world instruction, we must make a clone each iteration
         var worldLoad = buildWorldLoad(method);
 
         if (worldLoad == null) {
-            log('Failed to find world load in ' + method.name);
+            log('Failed to find level load in ' + method.name);
             return;
         }
 
@@ -75,12 +203,12 @@ function patchGetTemperatureCalls(method)
         newInstructions.add(ASM.buildMethodCall(
             "sereneseasons/season/SeasonHooks",
             "getBiomeTemperatureHook",
-            "(Lnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IWorldReader;)F",
+            "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/LevelReader;)F",
             ASM.MethodType.STATIC
         )); // Replace the existing call with ours
 
-        method.instructions.insertBefore(getTemperatureCachedCall, newInstructions);
-        method.instructions.remove(getTemperatureCachedCall);
+        method.instructions.insertBefore(getTemperatureCall, newInstructions);
+        method.instructions.remove(getTemperatureCall);
         patchedCount++;
     }
 
@@ -91,12 +219,11 @@ function patchGetTemperatureCalls(method)
     }
 }
 
-function buildWorldLoad(method)
-{
+function buildWorldLoad(method) {
     for (var i = method.instructions.size() - 1; i >= 0; i--) {
         var instruction = method.instructions.get(i);
 
-        if (instruction.getOpcode() == Opcodes.GETFIELD && instruction.desc == "Lnet/minecraft/world/World;") {
+        if (instruction.getOpcode() == Opcodes.GETFIELD && instruction.desc == "Lnet/minecraft/world/level/Level;") {
             var newInstructions = new InsnList();
             newInstructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
             newInstructions.add(instruction.clone(null));
@@ -104,33 +231,33 @@ function buildWorldLoad(method)
         }
     }
 
-    // NOTE: This is potentially dangerous if the first call is executed after getTemperatureCached.
+    // NOTE: This is potentially dangerous if the first call is executed after getTemperature.
     // However, it is non-trivial to check for this properly.
 
     var worldCall = ASM.findFirstMethodCall(method,
         ASM.MethodType.INTERFACE,
-        "net/minecraft/world/IWorldReader",
+        "net/minecraft/world/level/LevelReader",
         GET_BIOME,
-        "(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/world/biome/Biome;");
+        "(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome;");
 
     if (worldCall == null) {
         worldCall = ASM.findFirstMethodCall(method,
             ASM.MethodType.VIRTUAL,
-            "net/minecraft/world/World",
+            "net/minecraft/world/level/Level",
             GET_BIOME,
-            "(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/world/biome/Biome;");
+            "(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome;");
     }
 
     if (worldCall == null) {
         worldCall = ASM.findFirstMethodCall(method,
             ASM.MethodType.INTERFACE,
-            "net/minecraft/world/IWorldReader",
+            "net/minecraft/world/level/LevelReader",
             GET_BLOCK_STATE,
-            "(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;");
+            "(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;");
     }
 
     if (worldCall == null) {
-        log('Failed to locate a world call!');
+        log('Failed to locate a level call!');
         return null;
     }
 

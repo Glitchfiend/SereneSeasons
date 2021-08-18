@@ -4,12 +4,19 @@
  ******************************************************************************/
 package sereneseasons.season;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
@@ -22,14 +29,84 @@ public class SeasonHooks
     // Hooks called by ASM
     //
 
-    public static float getBiomeTemperatureHook(Biome biome, BlockPos pos, LevelReader worldReader)
+    public static float getBiomeTemperatureHook(Biome biome, BlockPos pos, LevelReader levelReader)
     {
-        if (!(worldReader instanceof Level))
+        if (!(levelReader instanceof Level))
         {
             return biome.getTemperature(pos);
         }
 
-        return getBiomeTemperature((Level)worldReader, biome, pos);
+        return getBiomeTemperature((Level)levelReader, biome, pos);
+    }
+
+    public static boolean shouldSnowHook(Biome biome, LevelReader levelReader, BlockPos pos)
+    {
+        if (!isColdEnoughToSnowHook(biome, pos, levelReader))
+        {
+            return false;
+        }
+        else
+        {
+            if (pos.getY() >= levelReader.getMinBuildHeight() && pos.getY() < levelReader.getMaxBuildHeight() && levelReader.getBrightness(LightLayer.BLOCK, pos) < 10)
+            {
+                BlockState blockstate = levelReader.getBlockState(pos);
+                if (blockstate.isAir() && Blocks.SNOW.defaultBlockState().canSurvive(levelReader, pos))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public static boolean isColdEnoughToSnowHook(Biome biome, BlockPos pos, LevelReader levelReader)
+    {
+        return getBiomeTemperatureHook(biome, pos, levelReader) < 0.15F;
+    }
+
+    public static boolean isRainingAtHook(Level level, BlockPos position)
+    {
+        if (!level.isRaining()) return false;
+        else if (!level.canSeeSky(position)) return false;
+        else if (level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, position).getY() > position.getY()) return false;
+        else
+        {
+            Biome biome = level.getBiome(position);
+            ResourceKey<Biome> biomeKey = level.getBiomeName(position).orElse(null);
+
+            if (SeasonsConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey))
+            {
+                if (SeasonHooks.shouldRainInBiomeInSeason(level, biomeKey))
+                {
+                    if (BiomeConfig.usesTropicalSeasons(biomeKey)) return true;
+                    else return SeasonHooks.getBiomeTemperature(level, biome, position) >= 0.15F;
+                }
+                else return false;
+            }
+            else
+            {
+                return biome.getPrecipitation() == Biome.Precipitation.RAIN && biome.getTemperature(position) >= 0.15F;
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static Biome.Precipitation getLevelRendererPrecipitation(Biome biome)
+    {
+        ResourceKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
+        Biome.Precipitation rainType = biome.getPrecipitation();
+        Level world = Minecraft.getInstance().level;
+
+        if (SeasonsConfig.isDimensionWhitelisted(world.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey) && (rainType == Biome.Precipitation.RAIN || rainType == Biome.Precipitation.NONE))
+        {
+            if (SeasonHooks.shouldRainInBiomeInSeason(world, biomeKey))
+                return Biome.Precipitation.RAIN;
+            else
+                return Biome.Precipitation.NONE;
+        }
+
+        return rainType;
     }
 
     //
