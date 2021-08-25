@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/Glitchfiend/SereneSeasons.git
 	branch = SS-public
-	commit = c485fcd580a7a96068c4d77fc7d289c251ebd8c1
-	parent = ef86f34fad5e790c932b9297861b8d7c19c70f1e
+	commit = 6ea7df43841a087f51851469245b238bdbf95473
+	parent = a55f8103c7cc04848f87503f1a9ceacc96862735
 	method = merge
 	cmdver = 0.4.3
