@@ -8,11 +8,11 @@ var GET_TEMPERATURE = ASM.mapMethod("func_225486_c");
 var GET_BIOME = ASM.mapMethod("func_226691_t_");
 var GET_BLOCK_STATE = ASM.mapMethod("func_180495_p");
 var TRANSFORMATIONS = {
-    "net.minecraft.block.CauldronBlock": [ ASM.mapMethod("func_176224_k") ], // fillWithRain
-    "net.minecraft.client.renderer.WorldRenderer": [ ASM.mapMethod("func_228436_a_"), ASM.mapMethod("func_228438_a_") ], // addRainParticles, renderRainSnow
-    "net.minecraft.entity.passive.SnowGolemEntity": [ ASM.mapMethod("func_70636_d")], // livingTick
-    "net.minecraft.world.biome.Biome": [ ASM.mapMethod("func_201854_a"), ASM.mapMethod("func_201850_b") ] // shouldFreeze, shouldSnow
-}
+    "net.minecraft.block.CauldronBlock": [ [ASM.mapMethod("func_176224_k")], [patchGetTemperatureCalls] ], // fillWithRain
+    "net.minecraft.client.renderer.WorldRenderer": [ [ASM.mapMethod("func_228436_a_"), ASM.mapMethod("func_228438_a_")], [patchGetTemperatureCalls, patchGetTemperatureCalls] ], // addRainParticles, renderRainSnow
+    "net.minecraft.entity.passive.SnowGolemEntity": [ [ASM.mapMethod("func_70636_d")], [patchGetTemperatureCalls]], // livingTick
+    "net.minecraft.world.biome.Biome": [ [ASM.mapMethod("func_201854_a"), ASM.mapMethod("func_201850_b")], [patchGetTemperatureCallsIce, patchGetTemperatureCallsSnow] ] // shouldFreeze, shouldSnow
+};
 
 function log(message)
 {
@@ -30,10 +30,11 @@ function initializeCoreMod()
             "transformer": function(classNode) {
                 for each (var method in classNode.methods) {
                     var methodsToTransform = TRANSFORMATIONS[classNode.name.split('/').join('.')];
-
-                    if (~methodsToTransform.indexOf(method.name)) {
+					
+					var index = methodsToTransform[0].indexOf(method.name);
+                    if (~index) {
                         log("Transforming " + method.name + " in " + classNode.name);
-                        patchGetTemperatureCalls(method);
+                        methodsToTransform[1][index](method);
                     }
                 }
 
@@ -75,6 +76,102 @@ function patchGetTemperatureCalls(method)
         newInstructions.add(ASM.buildMethodCall(
             "sereneseasons/season/SeasonHooks",
             "getBiomeTemperatureHook",
+            "(Lnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IWorldReader;)F",
+            ASM.MethodType.STATIC
+        )); // Replace the existing call with ours
+
+        method.instructions.insertBefore(getTemperatureCachedCall, newInstructions);
+        method.instructions.remove(getTemperatureCachedCall);
+        patchedCount++;
+    }
+
+    if (patchedCount == 0) {
+        log('Failed to locate call to getTemperature in ' + method.name);
+    } else {
+        log('Patched ' + patchedCount + ' calls');
+    }
+}
+
+function patchGetTemperatureCallsIce(method)
+{
+    var startIndex = 0;
+    var patchedCount = 0;
+
+    while (true) {
+        var getTemperatureCachedCall = ASM.findFirstMethodCallAfter(method,
+            ASM.MethodType.VIRTUAL,
+            "net/minecraft/world/biome/Biome",
+            GET_TEMPERATURE,
+            "(Lnet/minecraft/util/math/BlockPos;)F",
+            startIndex);
+
+        if (getTemperatureCachedCall == null) {
+            break;
+        }
+
+        startIndex = method.instructions.indexOf(getTemperatureCachedCall);
+
+        // We can't reuse the same world instruction, we must make a clone each iteration
+        var worldLoad = buildWorldLoad(method);
+
+        if (worldLoad == null) {
+            log('Failed to find world load in ' + method.name);
+            return;
+        }
+
+        var newInstructions = new InsnList();
+        newInstructions.add(worldLoad); // Pass the world as an argument to our hook
+        newInstructions.add(ASM.buildMethodCall(
+            "sereneseasons/season/SeasonHooks",
+            "getBiomeTemperatureHookICE",
+            "(Lnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IWorldReader;)F",
+            ASM.MethodType.STATIC
+        )); // Replace the existing call with ours
+
+        method.instructions.insertBefore(getTemperatureCachedCall, newInstructions);
+        method.instructions.remove(getTemperatureCachedCall);
+        patchedCount++;
+    }
+
+    if (patchedCount == 0) {
+        log('Failed to locate call to getTemperature in ' + method.name);
+    } else {
+        log('Patched ' + patchedCount + ' calls');
+    }
+}
+
+function patchGetTemperatureCallsSnow(method)
+{
+    var startIndex = 0;
+    var patchedCount = 0;
+
+    while (true) {
+        var getTemperatureCachedCall = ASM.findFirstMethodCallAfter(method,
+            ASM.MethodType.VIRTUAL,
+            "net/minecraft/world/biome/Biome",
+            GET_TEMPERATURE,
+            "(Lnet/minecraft/util/math/BlockPos;)F",
+            startIndex);
+
+        if (getTemperatureCachedCall == null) {
+            break;
+        }
+
+        startIndex = method.instructions.indexOf(getTemperatureCachedCall);
+
+        // We can't reuse the same world instruction, we must make a clone each iteration
+        var worldLoad = buildWorldLoad(method);
+
+        if (worldLoad == null) {
+            log('Failed to find world load in ' + method.name);
+            return;
+        }
+
+        var newInstructions = new InsnList();
+        newInstructions.add(worldLoad); // Pass the world as an argument to our hook
+        newInstructions.add(ASM.buildMethodCall(
+            "sereneseasons/season/SeasonHooks",
+            "getBiomeTemperatureHookSNOW",
             "(Lnet/minecraft/world/biome/Biome;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/IWorldReader;)F",
             ASM.MethodType.STATIC
         )); // Replace the existing call with ours

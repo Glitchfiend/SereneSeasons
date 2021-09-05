@@ -121,14 +121,14 @@ public class RandomUpdateHandler
 			if (!BiomeConfig.enablesSeasonalEffects(biome))
 				return;
 
-			if (aboveGroundState.getBlock() == Blocks.SNOW)
+			if (aboveGroundState.getBlock() == Blocks.SNOW && SeasonsConfig.generateSnow.get())
 			{
 				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 				{
 					world.setBlockAndUpdate(topAirPos, Blocks.AIR.defaultBlockState());
 				}
 			}
-			else if (groundState.getBlock() == Blocks.ICE)
+			else if (groundState.getBlock() == Blocks.ICE && SeasonsConfig.generateIce.get())
 			{
 				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 				{
@@ -152,7 +152,7 @@ public class RandomUpdateHandler
 
 			if (season != Season.WINTER)
 			{
-				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.dimension()))
+				if ((SeasonsConfig.generateSnow.get() || SeasonsConfig.generateIce.get()) && SeasonsConfig.isDimensionWhitelisted(event.world.dimension()))
 				{
 					ServerWorld world = (ServerWorld) event.world;
 					ChunkManager chunkManager = world.getChunkSource().chunkMap;

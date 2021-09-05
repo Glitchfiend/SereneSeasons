@@ -33,7 +33,8 @@ public class SeasonsConfig
     public static ForgeConfigSpec.BooleanValue progressSeasonWhileOffline;
 
     // Weather settings
-    public static ForgeConfigSpec.BooleanValue generateSnowAndIce;
+    public static ForgeConfigSpec.BooleanValue generateSnow;
+    public static ForgeConfigSpec.BooleanValue generateIce;
     public static ForgeConfigSpec.BooleanValue changeWeatherFrequency;
 
     // Aesthetic settings
@@ -73,7 +74,8 @@ public class SeasonsConfig
         BUILDER.pop();
 
         BUILDER.push("weather_settings");
-        generateSnowAndIce = BUILDER.comment("Generate snow and ice during the Winter season").define("generate_snow_ice", true);
+        generateSnow = BUILDER.comment("Generate snow during the Winter season").define("generate_snow", true);
+        generateIce = BUILDER.comment("Generate ice during the Winter season").define("generate_ice", true);
         changeWeatherFrequency = BUILDER.comment("Change the frequency of rain/snow/storms based on the season").define("change_weather_frequency", true);
         BUILDER.pop();
 
