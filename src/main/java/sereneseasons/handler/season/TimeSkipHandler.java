@@ -8,6 +8,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import sereneseasons.core.SereneSeasons;
@@ -18,6 +20,12 @@ import java.util.HashMap;
 public class TimeSkipHandler
 {
     public static final HashMap<ResourceKey<Level>, Long> lastDayTimes = new HashMap<>();
+
+    @SubscribeEvent
+    public void onWorldLoaded(WorldEvent.Load event)
+    {
+        lastDayTimes.clear();
+    }
 
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event)

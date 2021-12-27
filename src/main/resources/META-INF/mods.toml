@@ -10,9 +10,7 @@ logoFile="ss_logo.png"
     version="${file.jarVersion}"
     displayName="Serene Seasons"
 	authors="Adubbz, Forstride"
-    description='''
-    Adds seasons with changing colors, temperature shifting, and more!
-    '''
+    description="Adds seasons with changing colors, temperature shifting, and more!"
 
 [[dependencies.sereneseasons]]
     modId="forge"

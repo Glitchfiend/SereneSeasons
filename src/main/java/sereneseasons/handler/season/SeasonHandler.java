@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
 import sereneseasons.api.SSGameRules;
@@ -84,7 +85,13 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         Integer i = clientSeasonCycleTicks.get(Minecraft.getInstance().level.dimension());
     	return new SeasonTime(i == null ? 0 : i);
     }
-    
+
+    @SubscribeEvent
+    public void onWorldLoaded(WorldEvent.Load event)
+    {
+        clientSeasonCycleTicks.clear();
+    }
+
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) 
     {
