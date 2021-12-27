@@ -31,9 +31,21 @@ public class ServerConfig
 
     // Dimension settings
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistedDimensions;
-
     private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
-    private static final Predicate<Object> DIMENSION_VALIDATOR = (obj) ->
+
+    // Biome settings
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomes;
+    private static List<String> defaultBlacklistedBiomes = Lists.newArrayList("minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:ocean",
+            "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean",
+            "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
+            "minecraft:the_void",
+
+            "biomesoplenty:origin_valley", "biomesoplenty:rainbow_hills");
+
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> tropicalBiomes;
+    private static List<String> defaultTropicalBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills", "minecraft:warm_ocean", "minecraft:deep_warm_ocean");
+
+    private static final Predicate<Object> RESOURCE_LOCATION_VALIDATOR = (obj) ->
     {
         if (!(obj instanceof String))
             return false;
@@ -67,7 +79,12 @@ public class ServerConfig
         BUILDER.pop();
 
         BUILDER.push("dimension_settings");
-        whitelistedDimensions = BUILDER.comment("Seasons will only apply to dimensons listed here").defineList("whitelisted_dimensions", defaultWhitelistedDimensions, DIMENSION_VALIDATOR);
+        whitelistedDimensions = BUILDER.comment("Seasons will only apply to dimensons listed here").defineList("whitelisted_dimensions", defaultWhitelistedDimensions, RESOURCE_LOCATION_VALIDATOR);
+        BUILDER.pop();
+
+        BUILDER.push("biome_settings");
+        blacklistedBiomes = BUILDER.comment("Biomes in which seasons will not apply.").defineList("blacklisted_biomes", defaultBlacklistedBiomes, RESOURCE_LOCATION_VALIDATOR);
+        tropicalBiomes = BUILDER.comment("Biomes which use tropical seasons.").defineList("tropical_biomes", defaultTropicalBiomes, RESOURCE_LOCATION_VALIDATOR);
         BUILDER.pop();
 
         SPEC = BUILDER.build();

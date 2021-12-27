@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import sereneseasons.config.json.BiomeData;
 import sereneseasons.util.biome.BiomeUtil;
 import sereneseasons.util.config.JsonUtil;
 
@@ -20,37 +19,11 @@ import java.util.Map;
 
 public class BiomeConfig
 {
-    // We use a HashMap for maximum performance as JsonUtil#getOrCreateConfigFile will return a LinkedHashMap
-    public static final Map<ResourceLocation, BiomeData> biomeDataMap = Maps.newHashMap();
-
-    public static void init(File configDir)
+    public static boolean enablesSeasonalEffects(ResourceKey<Biome> key)
     {
-        Map<String, BiomeData> defaultBiomeData = Maps.newHashMap();
-        addBlacklistedBiomes(defaultBiomeData);
-        addTropicalBiomes(defaultBiomeData);
-
-        biomeDataMap.clear();
-
-        Map<String, BiomeData> tmpBiomeDataMap = JsonUtil.getOrCreateConfigFile(configDir, "biome_info.json", defaultBiomeData, new TypeToken<Map<String, BiomeData>>(){}.getType());
-
-        if (tmpBiomeDataMap != null && !tmpBiomeDataMap.isEmpty())
+        if (ServerConfig.blacklistedBiomes.get().contains(key.location().toString()))
         {
-            // We convert our keys to ResourceLocations here as to avoid calling `ResourceLocation#toString()` everywhere
-            // This reduces CPU overhead and garbage collector pressure
-            for (Map.Entry<String, BiomeData> entry : tmpBiomeDataMap.entrySet())
-            {
-                biomeDataMap.put(new ResourceLocation(entry.getKey()), entry.getValue());
-            }
-        }
-    }
-
-    public static boolean enablesSeasonalEffects(ResourceKey<Biome> biome)
-    {
-        ResourceLocation name = biome.location();
-
-        if (biomeDataMap.containsKey(name))
-        {
-            return biomeDataMap.get(name).enableSeasonalEffects;
+            return false;
         }
 
         return true;
@@ -58,12 +31,11 @@ public class BiomeConfig
 
     public static boolean usesTropicalSeasons(ResourceKey<Biome> key)
     {
-        ResourceLocation name = key.location();
         Biome biome = BiomeUtil.getBiome(key);
 
-        if (biomeDataMap.containsKey(name))
+        if (ServerConfig.tropicalBiomes.get().contains(key.location().toString()))
         {
-            return biomeDataMap.get(name).useTropicalSeasons;
+            return true;
         }
 
         return biome.getBaseTemperature() > 0.8F;
@@ -98,36 +70,5 @@ public class BiomeConfig
         }
 
         return false;
-    }
-
-    private static void addBlacklistedBiomes(Map<String, BiomeData> map)
-    {
-        List<String> blacklistedBiomes = Lists.newArrayList("minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:ocean",
-                "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean",
-                "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
-                "minecraft:the_void",
-
-                "biomesoplenty:origin_valley", "biomesoplenty:rainbow_hills");
-
-        for (String biomeName : blacklistedBiomes)
-        {
-            if (!map.containsKey(biomeName))
-                map.put(biomeName, new BiomeData(false, false));
-            else
-                map.get(biomeName).enableSeasonalEffects = false;
-        }
-    }
-
-    private static void addTropicalBiomes(Map<String, BiomeData> map)
-    {
-        List<String> tropicalBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills", "minecraft:warm_ocean", "minecraft:deep_warm_ocean");
-
-        for (String biomeName : tropicalBiomes)
-        {
-            if (!map.containsKey(biomeName))
-                map.put(biomeName, new BiomeData(true, true));
-            else
-                map.get(biomeName).useTropicalSeasons = true;
-        }
     }
 }

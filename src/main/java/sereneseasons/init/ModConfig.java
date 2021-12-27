@@ -38,7 +38,5 @@ public class ModConfig
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, FertilityConfig.SPEC, "sereneseasons/fertility.toml");
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, SeasonsConfig.SPEC, "sereneseasons/seasons.toml");
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ServerConfig.SPEC, "sereneseasons-server.toml");
-
-        BiomeConfig.init(modConfigPath.toFile());
     }
 }
