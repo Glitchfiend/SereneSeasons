@@ -45,7 +45,6 @@ public class SereneSeasons
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        ModConfig.setup();
     }
 
     private void loadComplete(final FMLLoadCompleteEvent event)

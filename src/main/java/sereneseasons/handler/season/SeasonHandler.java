@@ -5,6 +5,7 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.resources.ResourceKey;
@@ -16,12 +17,11 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
 import sereneseasons.api.SSGameRules;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonSavedData;
@@ -39,7 +39,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         if (event.phase == TickEvent.Phase.END && !world.isClientSide)
         {
-            if (!SyncedConfig.getBooleanValue(SeasonsOption.PROGRESS_SEASON_WHILE_OFFLINE))
+            if (!ServerConfig.progressSeasonWhileOffline.get())
             {
                 MinecraftServer server = world.getServer();
                 if (server != null && server.getPlayerList().getPlayerCount() == 0)
@@ -51,6 +51,9 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
                 return;
                 
             SeasonSavedData savedData = getSeasonSavedData(world);
+
+            // Clamp season cycle ticks to prevent a bad state occurring
+            savedData.seasonCycleTicks = Mth.clamp(savedData.seasonCycleTicks, 0, SeasonTime.ZERO.getCycleDuration());
 
             if (savedData.seasonCycleTicks++ > SeasonTime.ZERO.getCycleDuration())
             {
@@ -89,7 +92,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (Minecraft.getInstance().player == null) return;
         ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
 
-        if (event.phase == TickEvent.Phase.END && SeasonsConfig.isDimensionWhitelisted(dimension))
+        if (event.phase == TickEvent.Phase.END && ServerConfig.isDimensionWhitelisted(dimension))
         {
             clientSeasonCycleTicks.compute(dimension, (k, v) -> v == null ? 0 : v + 1);
         	
@@ -162,12 +165,13 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         {
             SeasonSavedData savedData = new SeasonSavedData();
 
-            int startingSeason = SyncedConfig.getIntValue(SeasonsOption.STARTING_SUB_SEASON);
+            int startingSeason = ServerConfig.startingSubSeason.get();
 
             if (startingSeason == 0)
             {
                 savedData.seasonCycleTicks = (world.random.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
             }
+
             if (startingSeason > 0)
             {
                 savedData.seasonCycleTicks = (startingSeason - 1) * SeasonTime.ZERO.getSubSeasonDuration();

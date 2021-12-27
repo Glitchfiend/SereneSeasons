@@ -17,6 +17,7 @@ import sereneseasons.api.SSItems;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonTime;
 
 public class ClientProxy extends CommonProxy
@@ -77,7 +78,7 @@ public class ClientProxy extends CommonProxy
                 {
                     float type;
 
-                    if (SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+                    if (ServerConfig.isDimensionWhitelisted(world.dimension()))
                     {
                         if (holder != null)
                         {

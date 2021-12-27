@@ -6,7 +6,6 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import sereneseasons.core.SereneSeasons;
-import sereneseasons.network.message.MessageSyncConfigs;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 
 import java.util.function.BiConsumer;
@@ -27,7 +26,6 @@ public class PacketHandler
     public static void init()
     {
         registerMessage(MessageSyncSeasonCycle.class, MessageSyncSeasonCycle::encode, MessageSyncSeasonCycle::decode, MessageSyncSeasonCycle.Handler::handle);
-        registerMessage(MessageSyncConfigs.class, MessageSyncConfigs::encode, MessageSyncConfigs::decode, MessageSyncConfigs.Handler::handle);
     }
 
     private static <T> void registerMessage(Class<T> type, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder,

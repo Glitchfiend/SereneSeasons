@@ -14,6 +14,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.biome.BiomeUtil;
 
@@ -31,7 +32,7 @@ public class BirchColorHandler
 				Level world = Minecraft.getInstance().player.level;
 				ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
 
-				if (world != null && pos != null && SeasonsConfig.changeBirchColor.get() && SeasonsConfig.isDimensionWhitelisted(dimension))
+				if (world != null && pos != null && SeasonsConfig.changeBirchColor.get() && ServerConfig.isDimensionWhitelisted(dimension))
 				{
 					ResourceKey<Biome> biome = world.getBiomeName(pos).orElse(null);
 

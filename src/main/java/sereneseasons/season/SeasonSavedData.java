@@ -5,6 +5,7 @@
 package sereneseasons.season;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.saveddata.SavedData;
 
 public class SeasonSavedData extends SavedData
@@ -24,7 +25,7 @@ public class SeasonSavedData extends SavedData
     public static SeasonSavedData load(CompoundTag nbt)
     {
         SeasonSavedData data = new SeasonSavedData();
-        data.seasonCycleTicks = nbt.getInt("SeasonCycleTicks");
+        data.seasonCycleTicks = Mth.clamp(nbt.getInt("SeasonCycleTicks"), 0, SeasonTime.ZERO.getCycleDuration());
         return data;
     }
 }

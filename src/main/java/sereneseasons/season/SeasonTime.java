@@ -5,10 +5,9 @@
 package sereneseasons.season;
 
 import com.google.common.base.Preconditions;
-import sereneseasons.api.config.SeasonsOption;
-import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
+import sereneseasons.config.ServerConfig;
 
 public final class SeasonTime implements ISeasonState
 {
@@ -24,13 +23,13 @@ public final class SeasonTime implements ISeasonState
     @Override
     public int getDayDuration()
     {
-        return SyncedConfig.getIntValue(SeasonsOption.DAY_DURATION);
+        return ServerConfig.dayDuration.get();
     }
 
     @Override
     public int getSubSeasonDuration()
     {
-        return getDayDuration() * SyncedConfig.getIntValue(SeasonsOption.SUB_SEASON_DURATION);
+        return getDayDuration() * ServerConfig.subSeasonDuration.get();
     }
 
     @Override

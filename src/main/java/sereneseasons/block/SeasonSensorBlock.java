@@ -26,6 +26,7 @@ import net.minecraft.world.level.Level;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.tileentity.SeasonSensorBlockEntity;
 
@@ -65,7 +66,7 @@ public class SeasonSensorBlock extends BaseEntityBlock
     {
         BlockState state = world.getBlockState(pos);
 
-        if (SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+        if (ServerConfig.isDimensionWhitelisted(world.dimension()))
         {
             BlockState currentState = world.getBlockState(pos);
 

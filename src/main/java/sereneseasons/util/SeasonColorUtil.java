@@ -13,6 +13,7 @@ import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sereneseasons.core.SereneSeasons;
 
 public class SeasonColorUtil
@@ -86,7 +87,7 @@ public class SeasonColorUtil
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, ResourceKey<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimension)) {
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(dimension)) {
             return originalColour;
         }
 
@@ -109,8 +110,8 @@ public class SeasonColorUtil
     
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, ResourceKey<Biome> biome, int originalColour)
     {
-        ResourceKey<Level> dimension =  Minecraft.getInstance().level.dimension();
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !SeasonsConfig.isDimensionWhitelisted(dimension))
+        ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
+        if (!BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(dimension))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();

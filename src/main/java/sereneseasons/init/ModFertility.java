@@ -18,6 +18,7 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,7 +69,7 @@ public class ModFertility
         {
             return false;
         }
-        else if (!FertilityConfig.seasonalCrops.get() || !BiomeConfig.enablesSeasonalEffects(biomeKey) || !SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+        else if (!FertilityConfig.seasonalCrops.get() || !BiomeConfig.enablesSeasonalEffects(biomeKey) || !ServerConfig.isDimensionWhitelisted(world.dimension()))
         {
             return true;
         }
@@ -198,7 +199,6 @@ public class ModFertility
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static void setupTooltips(ItemTooltipEvent event)
     {
         //Set up tooltips if enabled and on client side

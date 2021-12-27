@@ -21,6 +21,7 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sereneseasons.util.biome.BiomeUtil;
 
 public class SeasonHooks
@@ -74,7 +75,7 @@ public class SeasonHooks
             Biome biome = level.getBiome(position);
             ResourceKey<Biome> biomeKey = level.getBiomeName(position).orElse(null);
 
-            if (SeasonsConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey))
+            if (ServerConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey))
             {
                 if (SeasonHooks.shouldRainInBiomeInSeason(level, biomeKey))
                 {
@@ -97,7 +98,7 @@ public class SeasonHooks
         Biome.Precipitation rainType = biome.getPrecipitation();
         Level world = Minecraft.getInstance().level;
 
-        if (SeasonsConfig.isDimensionWhitelisted(world.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey) && (rainType == Biome.Precipitation.RAIN || rainType == Biome.Precipitation.NONE))
+        if (ServerConfig.isDimensionWhitelisted(world.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey) && (rainType == Biome.Precipitation.RAIN || rainType == Biome.Precipitation.NONE))
         {
             if (SeasonHooks.shouldRainInBiomeInSeason(world, biomeKey))
                 return Biome.Precipitation.RAIN;
@@ -133,7 +134,7 @@ public class SeasonHooks
 
     public static float getBiomeTemperature(Level world, Biome biome, ResourceKey<Biome> key, BlockPos pos)
     {
-        if (!SeasonsConfig.isDimensionWhitelisted(world.dimension()))
+        if (!ServerConfig.isDimensionWhitelisted(world.dimension()))
         {
             return biome.getTemperature(pos);
         }

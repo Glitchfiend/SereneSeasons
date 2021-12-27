@@ -20,7 +20,6 @@ import sereneseasons.init.ModTags;
 public class SeasonalCropGrowthHandler
 {
 	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
 	public void onItemTooltipAdded(ItemTooltipEvent event)
 	{
 		ModFertility.setupTooltips(event);

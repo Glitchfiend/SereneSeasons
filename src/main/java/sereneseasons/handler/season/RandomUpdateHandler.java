@@ -27,6 +27,7 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonHooks;
 
 import java.util.Collections;
@@ -139,7 +140,7 @@ public class RandomUpdateHandler
 
 			if (season != Season.WINTER)
 			{
-				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.dimension()))
+				if (SeasonsConfig.generateSnowAndIce.get() && ServerConfig.isDimensionWhitelisted(event.world.dimension()))
 				{
 					ServerLevel level = (ServerLevel) event.world;
 					ChunkMap chunkMap = level.getChunkSource().chunkMap;
