@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -21,6 +22,7 @@ import sereneseasons.api.SSGameRules;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.handler.PacketHandler;
@@ -194,16 +196,24 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     //
     // Used to implement getSeasonState in the API
     //
-    
+
+    @Override
     public ISeasonState getServerSeasonState(Level world)
     {
         SeasonSavedData savedData = getSeasonSavedData(world);
         return new SeasonTime(savedData.seasonCycleTicks);
     }
-    
+
+    @Override
     public ISeasonState getClientSeasonState()
     {
         Integer i = clientSeasonCycleTicks.get(Minecraft.getInstance().level.dimension());
     	return new SeasonTime(i == null ? 0 : i);
+    }
+
+    @Override
+    public boolean usesTropicalSeasons(ResourceKey<Biome> key)
+    {
+        return BiomeConfig.usesTropicalSeasons(key);
     }
 }
