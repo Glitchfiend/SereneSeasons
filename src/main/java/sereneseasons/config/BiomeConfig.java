@@ -21,6 +21,8 @@ public class BiomeConfig
 {
     public static boolean enablesSeasonalEffects(ResourceKey<Biome> key)
     {
+        if (key == null) return false;
+
         if (ServerConfig.blacklistedBiomes.get().contains(key.location().toString()))
         {
             return false;
@@ -31,6 +33,8 @@ public class BiomeConfig
 
     public static boolean usesTropicalSeasons(ResourceKey<Biome> key)
     {
+        if (key == null) return false;
+
         Biome biome = BiomeUtil.getBiome(key);
 
         if (ServerConfig.tropicalBiomes.get().contains(key.location().toString()))
@@ -43,6 +47,8 @@ public class BiomeConfig
 
     public static boolean infertileBiome(ResourceKey<Biome> biome)
     {
+        if (biome == null) return false;
+
         List<String> infertileBiomes = Lists.newArrayList("biomesoplenty:wasteland");
 
         String name = biome.location().toString();
@@ -57,6 +63,8 @@ public class BiomeConfig
 
     public static boolean lessColorChange(ResourceKey<Biome> biome)
     {
+        if (biome == null) return false;
+
         List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
                 "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog",
                 "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire", "biomesoplenty:muskeg", "biomesoplenty:seasonal_forest", "biomesoplenty:seasonal_orchard",
