@@ -24,7 +24,10 @@ public class ServerConfig
     public static ForgeConfigSpec.IntValue startingSubSeason;
     public static ForgeConfigSpec.BooleanValue progressSeasonWhileOffline;
 
-
+    // Aesthetic settings
+    public static ForgeConfigSpec.BooleanValue changeGrassColor;
+    public static ForgeConfigSpec.BooleanValue changeFoliageColor;
+    public static ForgeConfigSpec.BooleanValue changeBirchColor;
 
     // Dimension settings
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistedDimensions;
@@ -57,7 +60,13 @@ public class ServerConfig
         progressSeasonWhileOffline = BUILDER.comment("If the season should progress on a server with no players online").define("progress_season_while_offline", true);
         BUILDER.pop();
 
-        BUILDER.push("time_settings");
+        BUILDER.push("aesthetic_settings");
+        changeGrassColor = BUILDER.comment("Change the grass color based on the current season").define("change_grass_color", true);
+        changeFoliageColor = BUILDER.comment("Change the foliage colour based on the current season").define("change_foliage_color", true);
+        changeBirchColor = BUILDER.comment("Change the birch colour based on the current season").define("change_birch_color", true);
+        BUILDER.pop();
+
+        BUILDER.push("dimension_settings");
         whitelistedDimensions = BUILDER.comment("Seasons will only apply to dimensons listed here").defineList("whitelisted_dimensions", defaultWhitelistedDimensions, DIMENSION_VALIDATOR);
         BUILDER.pop();
 

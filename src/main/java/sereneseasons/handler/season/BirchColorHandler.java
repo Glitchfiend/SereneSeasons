@@ -32,7 +32,7 @@ public class BirchColorHandler
 				Level world = Minecraft.getInstance().player.level;
 				ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
 
-				if (world != null && pos != null && SeasonsConfig.changeBirchColor.get() && ServerConfig.isDimensionWhitelisted(dimension))
+				if (world != null && pos != null && ServerConfig.changeBirchColor.get() && ServerConfig.isDimensionWhitelisted(dimension))
 				{
 					ResourceKey<Biome> biome = world.getBiomeName(pos).orElse(null);
 

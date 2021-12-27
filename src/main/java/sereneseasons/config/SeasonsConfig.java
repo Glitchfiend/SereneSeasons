@@ -22,11 +22,6 @@ public class SeasonsConfig
     public static ForgeConfigSpec.BooleanValue generateSnowAndIce;
     public static ForgeConfigSpec.BooleanValue changeWeatherFrequency;
 
-    // Aesthetic settings
-    public static ForgeConfigSpec.BooleanValue changeGrassColor;
-    public static ForgeConfigSpec.BooleanValue changeFoliageColor;
-    public static ForgeConfigSpec.BooleanValue changeBirchColor;
-
     private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
     private static final Predicate<Object> DIMENSION_VALIDATOR = (obj) ->
     {
@@ -48,15 +43,10 @@ public class SeasonsConfig
 
     static
     {
+        BUILDER.comment("Please be advised that certain season-related options are world-specific and are located in <Path to your world folder>/serverconfig/sereneseasons-server.toml.");
         BUILDER.push("weather_settings");
         generateSnowAndIce = BUILDER.comment("Generate snow and ice during the Winter season").define("generate_snow_ice", true);
         changeWeatherFrequency = BUILDER.comment("Change the frequency of rain/snow/storms based on the season").define("change_weather_frequency", true);
-        BUILDER.pop();
-
-        BUILDER.push("aesthetic_settings");
-        changeGrassColor = BUILDER.comment("Change the grass color based on the current season").define("change_grass_color", true);
-        changeFoliageColor = BUILDER.comment("Change the foliage colour based on the current season").define("change_foliage_color", true);
-        changeBirchColor = BUILDER.comment("Change the birch colour based on the current season").define("change_birch_color", true);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
