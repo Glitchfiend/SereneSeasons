@@ -9,10 +9,12 @@ var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
 var InsnNode = Java.type('org.objectweb.asm.tree.InsnNode');
 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
-var GET_TEMPERATURE = ASM.mapMethod("m_47505_");
 var GET_BIOME = ASM.mapMethod("m_46857_");
 var GET_BLOCK_STATE = ASM.mapMethod("m_8055_");
-var IS_COLD_ENOUGH_TO_SNOW = ASM.mapMethod("m_151696_");
+
+var COLD_ENOUGH_TO_SNOW = ASM.mapMethod("m_198904_");
+var WARM_ENOUGH_TO_RAIN = ASM.mapMethod("m_198906_");
+var SHOULD_SNOW_GOLEM_BURN = ASM.mapMethod("m_198910_");
 var GET_PRECIPITATION = ASM.mapMethod("m_47530_");
 
 function Transformation(name, desc) {
@@ -27,15 +29,15 @@ function Transformation(name, desc) {
 
 var TRANSFORMATIONS = {
     "net/minecraft/client/renderer/LevelRenderer": [ 
-        new Transformation(ASM.mapMethod("m_109693_"), "(Lnet/minecraft/client/Camera;)V", patchGetTemperatureCalls, patchLevelRendererGetPrecipitation),                   // tickRain
-        new Transformation(ASM.mapMethod("m_109703_"), "(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", patchGetTemperatureCalls, patchLevelRendererGetPrecipitation) // renderSnowAndRain
+        new Transformation(ASM.mapMethod("m_109693_"), "(Lnet/minecraft/client/Camera;)V", patchWarmEnoughToRainCalls, patchLevelRendererGetPrecipitation),                   // tickRain
+        new Transformation(ASM.mapMethod("m_109703_"), "(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", patchWarmEnoughToRainCalls, patchLevelRendererGetPrecipitation) // renderSnowAndRain
     ],
     "net/minecraft/world/entity/animal/SnowGolem": [ 
-        new Transformation(ASM.mapMethod("m_8107_"), "()V", patchGetTemperatureCalls) // aiStep
+        new Transformation(ASM.mapMethod("m_8107_"), "()V", patchShouldSnowGolemBurnCalls) // aiStep
     ],
     "net/minecraft/world/level/biome/Biome": [ 
-        new Transformation(ASM.mapMethod("m_47480_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", patchGetTemperatureCalls), // shouldFreeze
-        new Transformation(ASM.mapMethod("m_47519_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",  patchShouldSnow)           // shouldSnow
+        new Transformation(ASM.mapMethod("m_47480_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", patchWarmEnoughToRainCalls), // shouldFreeze
+        new Transformation(ASM.mapMethod("m_47519_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",  patchShouldSnow)             // shouldSnow
     ],
     "net/minecraft/server/level/ServerLevel": [
         new Transformation(ASM.mapMethod("m_8714_"), "(Lnet/minecraft/world/level/chunk/LevelChunk;I)V", patchTickChunk) //tickChunk
@@ -107,7 +109,7 @@ function patchLevelRendererGetPrecipitation(node) {
         ASM.MethodType.STATIC
     ));
     node.instructions.remove(call);
-    log("Successfully patched " + node.name);
+    log("Successfully replaced getPrecipitation in " + node.name);
 }
 
 // This is used to make farmland wet during rain (amongst other things)
@@ -149,7 +151,7 @@ function patchTickChunk(node) {
     var call = ASM.findFirstMethodCall(node,
         ASM.MethodType.VIRTUAL,
         "net/minecraft/world/level/biome/Biome",
-        IS_COLD_ENOUGH_TO_SNOW,
+        COLD_ENOUGH_TO_SNOW,
         "(Lnet/minecraft/core/BlockPos;)Z");
 
     if (call == null) {
@@ -157,12 +159,12 @@ function patchTickChunk(node) {
         return;
     }
 
-    // Swap the call to Vanilla's isColdEnoughToSnow with ours
+    // Swap the call to Vanilla's coldEnoughToSnow with ours
     var insns = new InsnList();
     insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
     insns.add(ASM.buildMethodCall(
         "sereneseasons/season/SeasonHooks",
-        "isColdEnoughToSnowHook",
+        "coldEnoughToSnowHook",
         "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/LevelReader;)Z",
         ASM.MethodType.STATIC
     ));
@@ -172,23 +174,31 @@ function patchTickChunk(node) {
     log("Successfully patched tickChunk");
 }
 
-function patchGetTemperatureCalls(method) {
+function patchWarmEnoughToRainCalls(method) {
+    patchTemperatureCalls(method, WARM_ENOUGH_TO_RAIN, "warmEnoughToRainHook");
+}
+
+function patchShouldSnowGolemBurnCalls(method) {
+    patchTemperatureCalls(method, SHOULD_SNOW_GOLEM_BURN, "shouldSnowGolemBurnHook");
+}
+
+function patchTemperatureCalls(method, callMethodName, hookMethodName) {
     var startIndex = 0;
     var patchedCount = 0;
 
     while (true) {
-        var getTemperatureCall = ASM.findFirstMethodCallAfter(method,
+        var call = ASM.findFirstMethodCallAfter(method,
             ASM.MethodType.VIRTUAL,
             "net/minecraft/world/level/biome/Biome",
-            GET_TEMPERATURE,
-            "(Lnet/minecraft/core/BlockPos;)F",
+            callMethodName,
+            "(Lnet/minecraft/core/BlockPos;)Z",
             startIndex);
 
-        if (getTemperatureCall == null) {
+        if (call == null) {
             break;
         }
 
-        startIndex = method.instructions.indexOf(getTemperatureCall);
+        startIndex = method.instructions.indexOf(call);
 
         // We can't reuse the same world instruction, we must make a clone each iteration
         var worldLoad = buildWorldLoad(method);
@@ -202,18 +212,18 @@ function patchGetTemperatureCalls(method) {
         newInstructions.add(worldLoad); // Pass the world as an argument to our hook
         newInstructions.add(ASM.buildMethodCall(
             "sereneseasons/season/SeasonHooks",
-            "getBiomeTemperatureHook",
-            "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/LevelReader;)F",
+            hookMethodName,
+            "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/LevelReader;)Z",
             ASM.MethodType.STATIC
         )); // Replace the existing call with ours
 
-        method.instructions.insertBefore(getTemperatureCall, newInstructions);
-        method.instructions.remove(getTemperatureCall);
+        method.instructions.insertBefore(call, newInstructions);
+        method.instructions.remove(call);
         patchedCount++;
     }
 
     if (patchedCount == 0) {
-        log('Failed to locate call to getTemperature in ' + method.name);
+        log('Failed to locate call to warmEnoughToRain in ' + method.name);
     } else {
         log('Patched ' + patchedCount + ' calls');
     }
@@ -231,7 +241,7 @@ function buildWorldLoad(method) {
         }
     }
 
-    // NOTE: This is potentially dangerous if the first call is executed after getTemperature.
+    // NOTE: This is potentially dangerous if the first call is executed after warmEnoughToRain.
     // However, it is non-trivial to check for this properly.
 
     var worldCall = ASM.findFirstMethodCall(method,

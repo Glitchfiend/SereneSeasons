@@ -6,7 +6,7 @@ package sereneseasons.network.message;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import sereneseasons.api.config.SyncedConfig;
 import sereneseasons.core.SereneSeasons;
 

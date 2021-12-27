@@ -4,13 +4,14 @@
  ******************************************************************************/
 package sereneseasons.handler.season;
 
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ChunkMap;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.*;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
@@ -28,6 +29,8 @@ import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.season.SeasonHooks;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Mod.EventBusSubscriber
@@ -138,25 +141,42 @@ public class RandomUpdateHandler
 			{
 				if (SeasonsConfig.generateSnowAndIce.get() && SeasonsConfig.isDimensionWhitelisted(event.world.dimension()))
 				{
-					ServerLevel world = (ServerLevel) event.world;
-					ChunkMap chunkManager = world.getChunkSource().chunkMap;
+					ServerLevel level = (ServerLevel) event.world;
+					ChunkMap chunkMap = level.getChunkSource().chunkMap;
+					DistanceManager distanceManager = chunkMap.getDistanceManager();
 
-					// Replicate the behaviour of ServerChunkProvider
-					chunkManager.getChunks().forEach((chunkHolder) ->
+					int l = distanceManager.getNaturalSpawnChunkCount();
+					List<ChunkAndHolder> list = Lists.newArrayListWithCapacity(l);
+
+					// Replicate the behaviour of ServerChunkCache
+					for (ChunkHolder chunkholder : chunkMap.getChunks())
 					{
-						Optional<LevelChunk> optional = chunkHolder.getEntityTickingChunkFuture().getNow(ChunkHolder.UNLOADED_LEVEL_CHUNK).left();
-						if (optional.isPresent())
+						LevelChunk levelchunk = chunkholder.getTickingChunk();
+						if (levelchunk != null)
 						{
-							LevelChunk chunk = optional.get();
-							ChunkPos chunkpos = chunkHolder.getPos();
-							if (!chunkManager.noPlayersCloseForSpawning(chunkpos))
+							list.add(new ChunkAndHolder(levelchunk, chunkholder));
+						}
+					}
+
+					Collections.shuffle(list);
+
+					for (ChunkAndHolder serverchunkcache$chunkandholder : list)
+					{
+						LevelChunk levelChunk = serverchunkcache$chunkandholder.chunk;
+						ChunkPos chunkpos = levelChunk.getPos();
+						if ((level.isPositionEntityTicking(chunkpos) && chunkMap.anyPlayerCloseEnoughForSpawning(chunkpos)) || distanceManager.shouldForceTicks(chunkpos.toLong()))
+						{
+							if (level.shouldTickBlocksAt(chunkpos.toLong()))
 							{
-								this.meltInChunk(chunkManager, chunk, subSeason);
+								this.meltInChunk(chunkMap, levelChunk, subSeason);
 							}
 						}
-					});
+					}
 				}
 			}
 		}
+	}
+
+	record ChunkAndHolder(LevelChunk chunk, ChunkHolder holder) {
 	}
 }

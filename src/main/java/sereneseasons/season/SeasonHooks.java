@@ -28,20 +28,9 @@ public class SeasonHooks
     //
     // Hooks called by ASM
     //
-
-    public static float getBiomeTemperatureHook(Biome biome, BlockPos pos, LevelReader levelReader)
-    {
-        if (!(levelReader instanceof Level))
-        {
-            return biome.getTemperature(pos);
-        }
-
-        return getBiomeTemperature((Level)levelReader, biome, pos);
-    }
-
     public static boolean shouldSnowHook(Biome biome, LevelReader levelReader, BlockPos pos)
     {
-        if (!isColdEnoughToSnowHook(biome, pos, levelReader))
+        if (!coldEnoughToSnowHook(biome, pos, levelReader))
         {
             return false;
         }
@@ -60,9 +49,19 @@ public class SeasonHooks
         }
     }
 
-    public static boolean isColdEnoughToSnowHook(Biome biome, BlockPos pos, LevelReader levelReader)
+    public static boolean coldEnoughToSnowHook(Biome biome, BlockPos pos, LevelReader levelReader)
     {
-        return getBiomeTemperatureHook(biome, pos, levelReader) < 0.15F;
+        return !warmEnoughToRainHook(biome, pos, levelReader);
+    }
+
+    public static boolean warmEnoughToRainHook(Biome biome, BlockPos pos, LevelReader levelReader)
+    {
+        return getBiomeTemperature(levelReader, biome, pos) >= 0.15F;
+    }
+
+    public static boolean shouldSnowGolemBurnHook(Biome biome, BlockPos pos, LevelReader levelReader)
+    {
+        return getBiomeTemperature(levelReader, biome, pos) > 1.0F;
     }
 
     public static boolean isRainingAtHook(Level level, BlockPos position)
@@ -112,6 +111,15 @@ public class SeasonHooks
     //
     // General utilities
     //
+    public static float getBiomeTemperature(LevelReader levelReader, Biome biome, BlockPos pos)
+    {
+        if (!(levelReader instanceof Level))
+        {
+            return biome.getTemperature(pos);
+        }
+
+        return getBiomeTemperature((Level)levelReader, biome, pos);
+    }
 
     public static float getBiomeTemperature(Level world, Biome biome, BlockPos pos)
     {

@@ -7,7 +7,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlserverevents.FMLServerAboutToStartEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sereneseasons.handler.season.BirchColorHandler;
@@ -53,7 +53,7 @@ public class SereneSeasons
         ModTags.setup();
     }
 
-    private void serverAboutToStart(final FMLServerAboutToStartEvent event)
+    private void serverAboutToStart(final ServerAboutToStartEvent event)
     {
         ModFertility.init();
     }

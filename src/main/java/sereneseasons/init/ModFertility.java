@@ -86,7 +86,7 @@ public class ModFertility
         }
         else
         {
-            if (biome.getTemperature(pos) < 0.15F)
+            if (!biome.warmEnoughToRain(pos))
             {
                 if (winterPlants.contains(cropName))
                 {
