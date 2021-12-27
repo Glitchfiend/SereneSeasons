@@ -35,6 +35,7 @@ public class SereneSeasons
         ModHandlers.init();
         ModConfig.init();
         ModGameRules.init();
+        ModTags.setup();
     }
 
     private void clientSetup(final FMLClientSetupEvent event)
@@ -49,11 +50,7 @@ public class SereneSeasons
 
     private void loadComplete(final FMLLoadCompleteEvent event)
     {
-        ModTags.setup();
     }
 
-    private void serverAboutToStart(final ServerAboutToStartEvent event)
-    {
-        ModFertility.init();
-    }
+    private void serverAboutToStart(final ServerAboutToStartEvent event) {}
 }

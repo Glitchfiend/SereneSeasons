@@ -10,14 +10,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
-import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
 
 import java.util.HashMap;
@@ -29,7 +26,6 @@ import java.util.List;
  */
 public class ModFertility
 {
-
     private static HashSet<String> springPlants = new HashSet<String>();
     private static HashSet<String> summerPlants = new HashSet<String>();
     private static HashSet<String> autumnPlants = new HashSet<String>();
@@ -39,18 +35,26 @@ public class ModFertility
     //Maps seed name to all fertile seasons via byte
     private static HashMap<String, Integer> seedSeasons = new HashMap<String, Integer>();
 
-    public static void init()
+    public static void populate()
     {
-        //Store crops in hash sets for quick and easy retrieval
-        initSeasonCrops(ModTags.Blocks.spring_crops.getValues(), springPlants, 1);
-        initSeasonCrops(ModTags.Blocks.summer_crops.getValues(), summerPlants, 2);
-        initSeasonCrops(ModTags.Blocks.autumn_crops.getValues(), autumnPlants, 4);
-        initSeasonCrops(ModTags.Blocks.winter_crops.getValues(), winterPlants, 8);
+        // Clear sets
+        springPlants.clear();
+        summerPlants.clear();
+        autumnPlants.clear();
+        winterPlants.clear();
+        allListedPlants.clear();
+        seedSeasons.clear();
 
-        initSeasonSeeds(ModTags.Items.spring_crops.getValues(), springPlants, 1);
-        initSeasonSeeds(ModTags.Items.summer_crops.getValues(), summerPlants, 2);
-        initSeasonSeeds(ModTags.Items.autumn_crops.getValues(), autumnPlants, 4);
-        initSeasonSeeds(ModTags.Items.winter_crops.getValues(), winterPlants, 8);
+        //Store crops in hash sets for quick and easy retrieval
+        populateSeasonCrops(ModTags.Blocks.spring_crops.getValues(), springPlants, 1);
+        populateSeasonCrops(ModTags.Blocks.summer_crops.getValues(), summerPlants, 2);
+        populateSeasonCrops(ModTags.Blocks.autumn_crops.getValues(), autumnPlants, 4);
+        populateSeasonCrops(ModTags.Blocks.winter_crops.getValues(), winterPlants, 8);
+
+        populateSeasonSeeds(ModTags.Items.spring_crops.getValues(), springPlants, 1);
+        populateSeasonSeeds(ModTags.Items.summer_crops.getValues(), summerPlants, 2);
+        populateSeasonSeeds(ModTags.Items.autumn_crops.getValues(), autumnPlants, 4);
+        populateSeasonSeeds(ModTags.Items.winter_crops.getValues(), winterPlants, 8);
     }
 
     public static boolean isCropFertile(String cropName, Level world, BlockPos pos)
@@ -135,7 +139,7 @@ public class ModFertility
      * @param crops   String array of seeds that are fertile during the chosen season
      * @param cropSet HashSet that will store the list of crops fertile during the chosen season
      */
-    private static void initSeasonCrops(List<Block> crops, HashSet<String> cropSet, int bitmask)
+    private static void populateSeasonCrops(List<Block> crops, HashSet<String> cropSet, int bitmask)
     {
         for (Block crop : crops)
         {
@@ -167,7 +171,7 @@ public class ModFertility
         }
     }
 
-    private static void initSeasonSeeds(List<Item> seeds, HashSet<String> cropSet, int bitmask)
+    private static void populateSeasonSeeds(List<Item> seeds, HashSet<String> cropSet, int bitmask)
     {
         for (Item seed : seeds)
         {
