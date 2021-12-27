@@ -22,25 +22,6 @@ public class SeasonsConfig
     public static ForgeConfigSpec.BooleanValue generateSnowAndIce;
     public static ForgeConfigSpec.BooleanValue changeWeatherFrequency;
 
-    private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
-    private static final Predicate<Object> DIMENSION_VALIDATOR = (obj) ->
-    {
-        if (!(obj instanceof String))
-            return false;
-
-        try
-        {
-            new ResourceLocation((String)obj);
-        }
-        catch (Exception e)
-        {
-            // Can't convert to a resource location, therefore this object is invalid
-            return false;
-        }
-
-        return true;
-    };
-
     static
     {
         BUILDER.comment("Please be advised that certain season-related options are world-specific and are located in <Path to your world folder>/serverconfig/sereneseasons-server.toml.");

@@ -31,7 +31,7 @@ public class SeasonHooks
     //
     public static boolean shouldSnowHook(Biome biome, LevelReader levelReader, BlockPos pos)
     {
-        if (!coldEnoughToSnowHook(biome, pos, levelReader))
+        if ((SeasonsConfig.generateSnowAndIce.get() && warmEnoughToRainHook(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.warmEnoughToRain(pos)))
         {
             return false;
         }
@@ -55,9 +55,19 @@ public class SeasonHooks
         return !warmEnoughToRainHook(biome, pos, levelReader);
     }
 
+    public static boolean tickChunkColdEnoughToSnowHook(Biome biome, BlockPos pos, LevelReader levelReader)
+    {
+        return (SeasonsConfig.generateSnowAndIce.get() && coldEnoughToSnowHook(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.coldEnoughToSnow(pos));
+    }
+
     public static boolean warmEnoughToRainHook(Biome biome, BlockPos pos, LevelReader levelReader)
     {
         return getBiomeTemperature(levelReader, biome, pos) >= 0.15F;
+    }
+
+    public static boolean shouldFreezeWarmEnoughToRainHook(Biome biome, BlockPos pos, LevelReader levelReader)
+    {
+        return (SeasonsConfig.generateSnowAndIce.get() && warmEnoughToRainHook(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.warmEnoughToRain(pos));
     }
 
     public static boolean shouldSnowGolemBurnHook(Biome biome, BlockPos pos, LevelReader levelReader)

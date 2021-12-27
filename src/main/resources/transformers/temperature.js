@@ -36,8 +36,8 @@ var TRANSFORMATIONS = {
         new Transformation(ASM.mapMethod("m_8107_"), "()V", patchShouldSnowGolemBurnCalls) // aiStep
     ],
     "net/minecraft/world/level/biome/Biome": [ 
-        new Transformation(ASM.mapMethod("m_47480_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", patchWarmEnoughToRainCalls), // shouldFreeze
-        new Transformation(ASM.mapMethod("m_47519_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",  patchShouldSnow)             // shouldSnow
+        new Transformation(ASM.mapMethod("m_47480_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", patchShouldFreezeWarmEnoughToRainCalls), // shouldFreeze
+        new Transformation(ASM.mapMethod("m_47519_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",  patchShouldSnow)                         // shouldSnow
     ],
     "net/minecraft/server/level/ServerLevel": [
         new Transformation(ASM.mapMethod("m_8714_"), "(Lnet/minecraft/world/level/chunk/LevelChunk;I)V", patchTickChunk) //tickChunk
@@ -155,7 +155,7 @@ function patchTickChunk(node) {
         "(Lnet/minecraft/core/BlockPos;)Z");
 
     if (call == null) {
-        log("Failed to locate call to isColdEnoughToSnow");
+        log("Failed to locate call to coldEnoughToSnow");
         return;
     }
 
@@ -164,7 +164,7 @@ function patchTickChunk(node) {
     insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
     insns.add(ASM.buildMethodCall(
         "sereneseasons/season/SeasonHooks",
-        "coldEnoughToSnowHook",
+        "tickChunkColdEnoughToSnowHook",
         "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/LevelReader;)Z",
         ASM.MethodType.STATIC
     ));
@@ -176,6 +176,10 @@ function patchTickChunk(node) {
 
 function patchWarmEnoughToRainCalls(method) {
     patchTemperatureCalls(method, WARM_ENOUGH_TO_RAIN, "warmEnoughToRainHook");
+}
+
+function patchShouldFreezeWarmEnoughToRainCalls(method) {
+    patchTemperatureCalls(method, WARM_ENOUGH_TO_RAIN, "shouldFreezeWarmEnoughToRainHook");
 }
 
 function patchShouldSnowGolemBurnCalls(method) {
