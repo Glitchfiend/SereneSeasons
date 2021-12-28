@@ -65,10 +65,9 @@ public class BiomeConfig
     {
         if (biome == null) return false;
 
-        List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills",
-                "biomesoplenty:mystic_grove", "biomesoplenty:mystic_plains", "biomesoplenty:tundra", "biomesoplenty:tundra_basin", "biomesoplenty:tundra_bog",
-                "biomesoplenty:ominous_woods", "biomesoplenty:ominous_mire", "biomesoplenty:muskeg", "biomesoplenty:seasonal_forest", "biomesoplenty:seasonal_orchard",
-                "biomesoplenty:seasonal_pumpkin_patch", "biomesoplenty:dead_forest", "biomesoplenty:tall_dead_forest", "biomesoplenty:burnt_forest");
+        List<String> lessColorChangeBiomes = Lists.newArrayList("minecraft:swamp", "biomesoplenty:boreal_forest",
+                "biomesoplenty:bog", "biomesoplenty:mystic_grove", "biomesoplenty:tundra", "biomesoplenty:ominous_woods", "biomesoplenty:muskeg",
+                "biomesoplenty:seasonal_forest", "biomesoplenty:pumpkin_patch", "biomesoplenty:dead_forest", "biomesoplenty:old_growth_dead_forest");
 
         String name = biome.location().toString();
 
