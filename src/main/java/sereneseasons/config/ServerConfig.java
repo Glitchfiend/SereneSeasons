@@ -35,15 +35,11 @@ public class ServerConfig
 
     // Biome settings
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomes;
-    private static List<String> defaultBlacklistedBiomes = Lists.newArrayList("minecraft:mushroom_fields", "minecraft:mushroom_fields_shore", "minecraft:ocean",
-            "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean", "minecraft:cold_ocean", "minecraft:deep_cold_ocean",
-            "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:deep_warm_ocean", "minecraft:river",
-            "minecraft:the_void",
-
-            "biomesoplenty:origin_valley", "biomesoplenty:rainbow_hills");
+    private static List<String> defaultBlacklistedBiomes = Lists.newArrayList("minecraft:ocean", "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean",
+            "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:river", "minecraft:the_void");
 
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> tropicalBiomes;
-    private static List<String> defaultTropicalBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:swamp_hills", "minecraft:warm_ocean", "minecraft:deep_warm_ocean");
+    private static List<String> defaultTropicalBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:warm_ocean");
 
     private static final Predicate<Object> RESOURCE_LOCATION_VALIDATOR = (obj) ->
     {
