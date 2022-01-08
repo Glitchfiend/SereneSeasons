@@ -58,7 +58,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             // Clamp season cycle ticks to prevent a bad state occurring
             savedData.seasonCycleTicks = Mth.clamp(savedData.seasonCycleTicks, 0, SeasonTime.ZERO.getCycleDuration());
 
-            if (savedData.seasonCycleTicks++ > SeasonTime.ZERO.getCycleDuration())
+            if (++savedData.seasonCycleTicks > SeasonTime.ZERO.getCycleDuration())
             {
                 savedData.seasonCycleTicks = 0;
             }
