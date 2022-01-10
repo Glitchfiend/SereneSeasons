@@ -1,0 +1,21 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "Momentální roční období je: %s, den %s/%s, tik %s/%s",
+  "commands.sereneseasons.setseason.success": "Roční období nastaveno na: %s",
+  "commands.sereneseasons.setseason.fail": "Neplatné roční období: %s",
+  "commands.sereneseasons.setseason.disabled": "Roční období jsou momentálně deaktivována!",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "Senzor ročního období",
+  
+  "item.sereneseasons.ss_icon": "Ikona SS",
+  "item.sereneseasons.calendar": "Kalendář",
+
+  "desc.sereneseasons.fertile_seasons": "Úrodné roční období",
+  "desc.sereneseasons.year_round": "Celoroční",
+  "desc.sereneseasons.spring": "Jaro",
+  "desc.sereneseasons.summer": "Léto",
+  "desc.sereneseasons.autumn": "Podzim",
+  "desc.sereneseasons.winter": "Zima"
+}
