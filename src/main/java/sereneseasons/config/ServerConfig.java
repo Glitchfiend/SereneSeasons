@@ -35,8 +35,9 @@ public class ServerConfig
 
     // Biome settings
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomes;
-    private static List<String> defaultBlacklistedBiomes = Lists.newArrayList("minecraft:ocean", "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean",
-            "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:river", "minecraft:the_void");
+    private static List<String> defaultBlacklistedBiomes = Lists.newArrayList("minecraft:lush_caves", "minecraft:dripstone_caves", "minecraft:ocean", "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean",
+            "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:river", "minecraft:the_void",
+            "biomesoplenty:glowing_grotto", "biomesoplenty:spider_nest");
 
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> tropicalBiomes;
     private static List<String> defaultTropicalBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:warm_ocean");
