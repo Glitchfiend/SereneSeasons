@@ -41,6 +41,13 @@ public class ModFertility
     public static void init()
     {
         //Store crops in hash sets for quick and easy retrieval
+        springPlants.clear();
+        summerPlants.clear();
+        autumnPlants.clear();
+        winterPlants.clear();
+        allListedPlants.clear();
+        seedSeasons.clear();
+        
         initSeasonCrops(ModTags.Blocks.spring_crops.getValues(), springPlants, 1);
         initSeasonCrops(ModTags.Blocks.summer_crops.getValues(), summerPlants, 2);
         initSeasonCrops(ModTags.Blocks.autumn_crops.getValues(), autumnPlants, 4);
