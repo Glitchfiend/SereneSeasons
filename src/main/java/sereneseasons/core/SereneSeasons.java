@@ -55,6 +55,5 @@ public class SereneSeasons
 
     private void serverAboutToStart(final FMLServerAboutToStartEvent event)
     {
-        ModFertility.init();
     }
 }

@@ -7,6 +7,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,6 +25,11 @@ public class SeasonalCropGrowthHandler
 	public void onItemTooltipAdded(ItemTooltipEvent event)
 	{
 		ModFertility.setupTooltips(event);
+	}
+
+	@SubscribeEvent
+	public void onTagsUpdated(TagsUpdatedEvent event) {
+		ModFertility.init();
 	}
 
 	@SubscribeEvent
