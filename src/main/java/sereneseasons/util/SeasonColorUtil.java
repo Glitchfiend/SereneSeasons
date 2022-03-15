@@ -6,6 +6,7 @@ package sereneseasons.util;
 
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -84,7 +85,7 @@ public class SeasonColorUtil
         return newColor.toInt();
     }
     
-    public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, ResourceKey<Biome> biome, int originalColour)
+    public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
         if (!BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(dimension)) {
@@ -108,7 +109,7 @@ public class SeasonColorUtil
         return saturationMultiplier != -1 ? saturateColour(fixedColour, saturationMultiplier) : fixedColour;
     }
     
-    public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, ResourceKey<Biome> biome, int originalColour)
+    public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
         if (!BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(dimension))

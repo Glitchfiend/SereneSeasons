@@ -6,6 +6,7 @@ package sereneseasons.handler.season;
 
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.*;
 import net.minecraft.world.level.ChunkPos;
@@ -104,7 +105,7 @@ public class RandomUpdateHandler
 			BlockPos topGroundPos = topAirPos.below();
 			BlockState aboveGroundState = world.getBlockState(topAirPos);
 			BlockState groundState = world.getBlockState(topGroundPos);
-			ResourceKey<Biome> biome = world.getBiomeName(topAirPos).orElse(null);
+			Holder<Biome> biome = world.getBiome(topAirPos);
 
 			if (!BiomeConfig.enablesSeasonalEffects(biome))
 				return;
@@ -165,7 +166,7 @@ public class RandomUpdateHandler
 					{
 						LevelChunk levelChunk = serverchunkcache$chunkandholder.chunk;
 						ChunkPos chunkpos = levelChunk.getPos();
-						if ((level.isPositionEntityTicking(chunkpos) && chunkMap.anyPlayerCloseEnoughForSpawning(chunkpos)) || distanceManager.shouldForceTicks(chunkpos.toLong()))
+						if ((chunkMap.anyPlayerCloseEnoughForSpawning(chunkpos)) || distanceManager.shouldForceTicks(chunkpos.toLong()))
 						{
 							if (level.shouldTickBlocksAt(chunkpos.toLong()))
 							{

@@ -28,10 +28,6 @@ function Transformation(name, desc) {
 }
 
 var TRANSFORMATIONS = {
-    "net/minecraft/client/renderer/LevelRenderer": [ 
-        new Transformation(ASM.mapMethod("m_109693_"), "(Lnet/minecraft/client/Camera;)V", patchWarmEnoughToRainCalls, patchLevelRendererGetPrecipitation),                   // tickRain
-        new Transformation(ASM.mapMethod("m_109703_"), "(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", patchWarmEnoughToRainCalls, patchLevelRendererGetPrecipitation) // renderSnowAndRain
-    ],
     "net/minecraft/world/entity/animal/SnowGolem": [ 
         new Transformation(ASM.mapMethod("m_8107_"), "()V", patchShouldSnowGolemBurnCalls) // aiStep
     ],
@@ -41,9 +37,6 @@ var TRANSFORMATIONS = {
     ],
     "net/minecraft/server/level/ServerLevel": [
         new Transformation(ASM.mapMethod("m_8714_"), "(Lnet/minecraft/world/level/chunk/LevelChunk;I)V", patchTickChunk) //tickChunk
-    ],
-    "net/minecraft/world/level/Level": [
-        new Transformation(ASM.mapMethod("m_46758_"), "(Lnet/minecraft/core/BlockPos;)Z", patchIsRainingAt) //isRainingAt
     ]
 };
 
@@ -90,45 +83,6 @@ function initializeCoreMod() {
     };
 }
 
-function patchLevelRendererGetPrecipitation(node) {
-    var call = ASM.findFirstMethodCall(node,
-        ASM.MethodType.VIRTUAL,
-        "net/minecraft/world/level/biome/Biome",
-        GET_PRECIPITATION,
-        "()Lnet/minecraft/world/level/biome/Biome$Precipitation;");
-
-    if (call == null) {
-        log("Failed to locate call to getPrecipitation");
-        return;
-    }
-
-    node.instructions.insertBefore(call, ASM.buildMethodCall(
-        "sereneseasons/season/SeasonHooks",
-        "getLevelRendererPrecipitation",
-        "(Lnet/minecraft/world/level/biome/Biome;)Lnet/minecraft/world/level/biome/Biome$Precipitation;",
-        ASM.MethodType.STATIC
-    ));
-    node.instructions.remove(call);
-    log("Successfully replaced getPrecipitation in " + node.name);
-}
-
-// This is used to make farmland wet during rain (amongst other things)
-function patchIsRainingAt(node) {
-    // Insert a call to SeasonHooks isRainingAt at the start of Level's isRainingAt
-    var insns = new InsnList();
-    insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
-    insns.add(new VarInsnNode(Opcodes.ALOAD, 1));
-    insns.add(ASM.buildMethodCall(
-        "sereneseasons/season/SeasonHooks",
-        "isRainingAtHook",
-        "(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z",
-        ASM.MethodType.STATIC
-    ));
-    insns.add(new InsnNode(Opcodes.IRETURN));
-    node.instructions.insertBefore(node.instructions.getFirst(), insns);
-    log("Successfully patched isRainingAt");
-}
-
 function patchShouldSnow(node) {
     // Insert a call to SeasonHooks shouldSnow at the start of Biome's shouldSnow
     var insns = new InsnList();
@@ -172,10 +126,6 @@ function patchTickChunk(node) {
     node.instructions.insertBefore(call, insns);
     node.instructions.remove(call);
     log("Successfully patched tickChunk");
-}
-
-function patchWarmEnoughToRainCalls(method) {
-    patchTemperatureCalls(method, WARM_ENOUGH_TO_RAIN, "warmEnoughToRainHook");
 }
 
 function patchShouldFreezeWarmEnoughToRainCalls(method) {

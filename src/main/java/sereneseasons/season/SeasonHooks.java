@@ -6,7 +6,7 @@ package sereneseasons.season;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -22,7 +22,6 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
-import sereneseasons.util.biome.BiomeUtil;
 
 public class SeasonHooks
 {
@@ -31,7 +30,7 @@ public class SeasonHooks
     //
     public static boolean shouldSnowHook(Biome biome, LevelReader levelReader, BlockPos pos)
     {
-        if ((SeasonsConfig.generateSnowAndIce.get() && warmEnoughToRainHook(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.warmEnoughToRain(pos)))
+        if ((SeasonsConfig.generateSnowAndIce.get() && warmEnoughToRain(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.warmEnoughToRain(pos)))
         {
             return false;
         }
@@ -52,7 +51,7 @@ public class SeasonHooks
 
     public static boolean coldEnoughToSnowHook(Biome biome, BlockPos pos, LevelReader levelReader)
     {
-        return !warmEnoughToRainHook(biome, pos, levelReader);
+        return !warmEnoughToRain(biome, pos, levelReader);
     }
 
     public static boolean tickChunkColdEnoughToSnowHook(Biome biome, BlockPos pos, LevelReader levelReader)
@@ -60,19 +59,26 @@ public class SeasonHooks
         return (SeasonsConfig.generateSnowAndIce.get() && coldEnoughToSnowHook(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.coldEnoughToSnow(pos));
     }
 
-    public static boolean warmEnoughToRainHook(Biome biome, BlockPos pos, LevelReader levelReader)
+    private static boolean warmEnoughToRain(Biome biome, BlockPos pos, LevelReader levelReader)
     {
-        return getBiomeTemperature(levelReader, biome, pos) >= 0.15F;
+        Holder<Biome> biomeHolder = levelReader.getBiome(pos);
+        return getBiomeTemperature(levelReader, biomeHolder, pos) >= 0.15F;
+    }
+
+    public static boolean warmEnoughToRainHook(Holder<Biome> biome, BlockPos pos, Level level)
+    {
+        return getBiomeTemperature(level, biome, pos) >= 0.15F;
     }
 
     public static boolean shouldFreezeWarmEnoughToRainHook(Biome biome, BlockPos pos, LevelReader levelReader)
     {
-        return (SeasonsConfig.generateSnowAndIce.get() && warmEnoughToRainHook(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.warmEnoughToRain(pos));
+        return (SeasonsConfig.generateSnowAndIce.get() && warmEnoughToRain(biome, pos, levelReader)) || (!SeasonsConfig.generateSnowAndIce.get() && biome.warmEnoughToRain(pos));
     }
 
     public static boolean shouldSnowGolemBurnHook(Biome biome, BlockPos pos, LevelReader levelReader)
     {
-        return getBiomeTemperature(levelReader, biome, pos) > 1.0F;
+        Holder<Biome> biomeHolder = levelReader.getBiome(pos);
+        return getBiomeTemperature(levelReader, biomeHolder, pos) > 1.0F;
     }
 
     public static boolean isRainingAtHook(Level level, BlockPos position)
@@ -82,35 +88,33 @@ public class SeasonHooks
         else if (level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, position).getY() > position.getY()) return false;
         else
         {
-            Biome biome = level.getBiome(position);
-            ResourceKey<Biome> biomeKey = level.getBiomeName(position).orElse(null);
+            Holder<Biome> biome = level.getBiome(position);
 
-            if (ServerConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey))
+            if (ServerConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biome))
             {
-                if (SeasonHooks.shouldRainInBiomeInSeason(level, biomeKey))
+                if (SeasonHooks.shouldRainInBiomeInSeason(level, biome))
                 {
-                    if (BiomeConfig.usesTropicalSeasons(biomeKey)) return true;
+                    if (BiomeConfig.usesTropicalSeasons(biome)) return true;
                     else return SeasonHooks.getBiomeTemperature(level, biome, position) >= 0.15F;
                 }
                 else return false;
             }
             else
             {
-                return biome.getPrecipitation() == Biome.Precipitation.RAIN && biome.getTemperature(position) >= 0.15F;
+                return biome.value().getPrecipitation() == Biome.Precipitation.RAIN && biome.value().getTemperature(position) >= 0.15F;
             }
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static Biome.Precipitation getLevelRendererPrecipitation(Biome biome)
+    public static Biome.Precipitation getLevelRendererPrecipitation(Holder<Biome> biome)
     {
-        ResourceKey<Biome> biomeKey = BiomeUtil.getBiomeKey(biome);
-        Biome.Precipitation rainType = biome.getPrecipitation();
-        Level world = Minecraft.getInstance().level;
+        Biome.Precipitation rainType = biome.value().getPrecipitation();
+        Level level = Minecraft.getInstance().level;
 
-        if (ServerConfig.isDimensionWhitelisted(world.dimension()) && BiomeConfig.enablesSeasonalEffects(biomeKey) && (rainType == Biome.Precipitation.RAIN || rainType == Biome.Precipitation.NONE))
+        if (ServerConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biome) && (rainType == Biome.Precipitation.RAIN || rainType == Biome.Precipitation.NONE))
         {
-            if (SeasonHooks.shouldRainInBiomeInSeason(world, biomeKey))
+            if (SeasonHooks.shouldRainInBiomeInSeason(level, biome))
                 return Biome.Precipitation.RAIN;
             else
                 return Biome.Precipitation.NONE;
@@ -122,41 +126,31 @@ public class SeasonHooks
     //
     // General utilities
     //
-    public static float getBiomeTemperature(LevelReader levelReader, Biome biome, BlockPos pos)
+    public static float getBiomeTemperature(LevelReader level, Holder<Biome> biome, BlockPos pos)
     {
-        if (!(levelReader instanceof Level))
+        if (!(level instanceof Level))
         {
-            return biome.getTemperature(pos);
+            return biome.value().getTemperature(pos);
         }
 
-        return getBiomeTemperature((Level)levelReader, biome, pos);
+        return getBiomeTemperature((Level)level, biome, pos);
     }
 
-    public static float getBiomeTemperature(Level world, Biome biome, BlockPos pos)
+    public static float getBiomeTemperature(Level level, Holder<Biome> biome, BlockPos pos)
     {
-        return getBiomeTemperature(world, biome, world.getBiomeName(pos).orElse(null), pos);
-    }
-
-    public static float getBiomeTemperature(Level world, ResourceKey<Biome> key, BlockPos pos)
-    {
-        return getBiomeTemperature(world, world.getBiome(pos), key, pos);
-    }
-
-    public static float getBiomeTemperature(Level world, Biome biome, ResourceKey<Biome> key, BlockPos pos)
-    {
-        if (!ServerConfig.isDimensionWhitelisted(world.dimension()))
+        if (!ServerConfig.isDimensionWhitelisted(level.dimension()))
         {
-            return biome.getTemperature(pos);
+            return biome.value().getTemperature(pos);
         }
 
-        return getBiomeTemperatureInSeason(new SeasonTime(SeasonHelper.getSeasonState(world).getSeasonCycleTicks()).getSubSeason(), biome, key, pos);
+        return getBiomeTemperatureInSeason(new SeasonTime(SeasonHelper.getSeasonState(level).getSeasonCycleTicks()).getSubSeason(), biome, pos);
     }
 
-    public static float getBiomeTemperatureInSeason(Season.SubSeason subSeason, Biome biome, ResourceKey<Biome> key, BlockPos pos)
+    public static float getBiomeTemperatureInSeason(Season.SubSeason subSeason, Holder<Biome> biome, BlockPos pos)
     {
-        boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(key);
-        float biomeTemp = biome.getTemperature(pos);
-        if (!tropicalBiome && biome.getBaseTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(key))
+        boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
+        float biomeTemp = biome.value().getTemperature(pos);
+        if (!tropicalBiome && biome.value().getBaseTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
         {
             switch (subSeason)
             {
@@ -184,11 +178,9 @@ public class SeasonHooks
         return biomeTemp;
     }
 
-    public static boolean shouldRainInBiomeInSeason(Level world, ResourceKey<Biome> biomeKey)
+    public static boolean shouldRainInBiomeInSeason(Level world, Holder<Biome> biome)
     {
-        Biome biome = BiomeUtil.getBiome(biomeKey);
-
-        if (BiomeConfig.usesTropicalSeasons(biomeKey))
+        if (BiomeConfig.usesTropicalSeasons(biome))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 
@@ -202,6 +194,6 @@ public class SeasonHooks
             }
         }
 
-        return biome.getPrecipitation() == Biome.Precipitation.RAIN;
+        return biome.value().getPrecipitation() == Biome.Precipitation.RAIN;
     }
 }

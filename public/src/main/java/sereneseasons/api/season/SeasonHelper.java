@@ -4,6 +4,7 @@
  ******************************************************************************/
 package sereneseasons.api.season;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -34,18 +35,18 @@ public class SeasonHelper
 
     /**
      * Check whether a biome uses tropical seasons.
-     * @param key the biome to check.
+     * @param biome the biome to check.
      * @return whether the biome uses tropical seasons.
      */
-    public static boolean usesTropicalSeasons(ResourceKey<Biome> key)
+    public static boolean usesTropicalSeasons(Holder<Biome> biome)
     {
-        return dataProvider.usesTropicalSeasons(key);
+        return dataProvider.usesTropicalSeasons(biome);
     }
 
     public interface ISeasonDataProvider
     {
         ISeasonState getServerSeasonState(Level world);
         ISeasonState getClientSeasonState();
-        boolean usesTropicalSeasons(ResourceKey<Biome> key);
+        boolean usesTropicalSeasons(Holder<Biome> key);
     }
 }

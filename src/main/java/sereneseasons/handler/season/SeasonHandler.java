@@ -5,6 +5,7 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
@@ -23,7 +24,6 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
-import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
@@ -120,36 +120,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             }
         }
     }
-
-    // TODO: Chunk population. See ChunkStatus
-//    @SubscribeEvent
-//    public void onPopulateChunk(PopulateChunkEvent.Populate event)
-//    {
-//        if (!event.getWorld().isRemote && event.getType() != PopulateChunkEvent.Populate.EventType.ICE || !SeasonsConfig.isDimensionWhitelisted(event.getWorld().provider.getDimension()))
-//            return;
-//
-//        event.setResult(Event.Result.DENY);
-//        BlockPos blockpos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16).add(8, 0, 8);
-//
-//        for (int k2 = 0; k2 < 16; ++k2)
-//        {
-//            for (int j3 = 0; j3 < 16; ++j3)
-//            {
-//                BlockPos blockpos1 = event.getWorld().getPrecipitationHeight(blockpos.add(k2, 0, j3));
-//                BlockPos blockpos2 = blockpos1.down();
-//
-//                if (SeasonASMHelper.canBlockFreezeInSeason(event.getWorld(), blockpos2, false, SeasonHelper.getSeasonState(event.getWorld()), true))
-//                {
-//                    event.getWorld().setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
-//                }
-//
-//                if (SeasonASMHelper.canSnowAtInSeason(event.getWorld(), blockpos1, true, SeasonHelper.getSeasonState(event.getWorld()), true))
-//                {
-//                    event.getWorld().setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState(), 2);
-//                }
-//            }
-//        }
-//    }
     
     public static void sendSeasonUpdate(Level world)
     {
@@ -212,8 +182,8 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     @Override
-    public boolean usesTropicalSeasons(ResourceKey<Biome> key)
+    public boolean usesTropicalSeasons(Holder<Biome> biome)
     {
-        return BiomeConfig.usesTropicalSeasons(key);
+        return BiomeConfig.usesTropicalSeasons(biome);
     }
 }

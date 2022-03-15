@@ -1,5 +1,9 @@
 package sereneseasons.init;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.Item;
@@ -10,6 +14,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
@@ -17,20 +22,18 @@ import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.ServerConfig;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Constructs efficient data structures to process, store, and give access to data from the FertilityConfig file
  */
 public class ModFertility
 {
-    private static HashSet<String> springPlants = new HashSet<String>();
-    private static HashSet<String> summerPlants = new HashSet<String>();
-    private static HashSet<String> autumnPlants = new HashSet<String>();
-    private static HashSet<String> winterPlants = new HashSet<String>();
-    private static HashSet<String> allListedPlants = new HashSet<String>();
+    private static Set<String> springPlants = new HashSet<>();
+    private static Set<String> summerPlants = new HashSet<>();
+    private static Set<String> autumnPlants = new HashSet<>();
+    private static Set<String> winterPlants = new HashSet<>();
+    private static Set<String> allListedPlants = new HashSet<>();
 
     //Maps seed name to all fertile seasons via byte
     private static HashMap<String, Integer> seedSeasons = new HashMap<String, Integer>();
@@ -45,40 +48,40 @@ public class ModFertility
         allListedPlants.clear();
         seedSeasons.clear();
 
-        //Store crops in hash sets for quick and easy retrieval
-        populateSeasonCrops(ModTags.Blocks.spring_crops.getValues(), springPlants, 1);
-        populateSeasonCrops(ModTags.Blocks.summer_crops.getValues(), summerPlants, 2);
-        populateSeasonCrops(ModTags.Blocks.autumn_crops.getValues(), autumnPlants, 4);
-        populateSeasonCrops(ModTags.Blocks.winter_crops.getValues(), winterPlants, 8);
 
-        populateSeasonSeeds(ModTags.Items.spring_crops.getValues(), springPlants, 1);
-        populateSeasonSeeds(ModTags.Items.summer_crops.getValues(), summerPlants, 2);
-        populateSeasonSeeds(ModTags.Items.autumn_crops.getValues(), autumnPlants, 4);
-        populateSeasonSeeds(ModTags.Items.winter_crops.getValues(), winterPlants, 8);
+        //Store crops in hash sets for quick and easy retrieval
+        populateSeasonCrops(ModTags.Blocks.SPRING_CROPS, springPlants, 1);
+        populateSeasonCrops(ModTags.Blocks.SUMMER_CROPS, summerPlants, 2);
+        populateSeasonCrops(ModTags.Blocks.AUTUMN_CROPS, autumnPlants, 4);
+        populateSeasonCrops(ModTags.Blocks.WINTER_CROPS, winterPlants, 8);
+
+        populateSeasonSeeds(ModTags.Items.SPRING_CROPS, springPlants, 1);
+        populateSeasonSeeds(ModTags.Items.SUMMER_CROPS, summerPlants, 2);
+        populateSeasonSeeds(ModTags.Items.AUTUMN_CROPS, autumnPlants, 4);
+        populateSeasonSeeds(ModTags.Items.WINTER_CROPS, winterPlants, 8);
     }
 
-    public static boolean isCropFertile(String cropName, Level world, BlockPos pos)
+    public static boolean isCropFertile(String cropName, Level level, BlockPos pos)
     {
         //Get season
-        Season season = SeasonHelper.getSeasonState(world).getSeason();
-        Biome biome = world.getBiome(pos);
-        ResourceKey<Biome> biomeKey = world.getBiomeName(pos).orElse(null);
+        Season season = SeasonHelper.getSeasonState(level).getSeason();
+        Holder<Biome> biome = level.getBiome(pos);
 
-        if (FertilityConfig.undergroundFertilityLevel.get() > -1 && pos.getY() < FertilityConfig.undergroundFertilityLevel.get() && !world.canSeeSky(pos))
+        if (FertilityConfig.undergroundFertilityLevel.get() > -1 && pos.getY() < FertilityConfig.undergroundFertilityLevel.get() && !level.canSeeSky(pos))
         {
             return true;
         }
 
-        if (BiomeConfig.infertileBiome(biomeKey))
+        if (BiomeConfig.infertileBiome(biome))
         {
             return false;
         }
-        else if (!FertilityConfig.seasonalCrops.get() || !BiomeConfig.enablesSeasonalEffects(biomeKey) || !ServerConfig.isDimensionWhitelisted(world.dimension()))
+        else if (!FertilityConfig.seasonalCrops.get() || !BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(level.dimension()))
         {
             return true;
         }
 
-        if (BiomeConfig.usesTropicalSeasons(biomeKey))
+        if (BiomeConfig.usesTropicalSeasons(biome))
         {
             if (summerPlants.contains(cropName) || !(allListedPlants.contains(cropName)))
             {
@@ -91,7 +94,7 @@ public class ModFertility
         }
         else
         {
-            if (!biome.warmEnoughToRain(pos))
+            if (!biome.value().warmEnoughToRain(pos))
             {
                 if (winterPlants.contains(cropName))
                 {
@@ -132,20 +135,18 @@ public class ModFertility
         return false;
     }
 
-    /**
-     * Initializes the crops for a particular season. User's responsibility to match seeds and cropSet to be of the
-     * same season (eg. String [] spring_seeds, HashSet springPlants)
-     *
-     * @param crops   String array of seeds that are fertile during the chosen season
-     * @param cropSet HashSet that will store the list of crops fertile during the chosen season
-     */
-    private static void populateSeasonCrops(List<Block> crops, HashSet<String> cropSet, int bitmask)
+    private static void populateSeasonCrops(TagKey<Block> tag, Set<String> cropSet, int bitmask)
     {
-        for (Block crop : crops)
+        Registry.BLOCK.getTag(tag).ifPresent(blocks ->
         {
-            if (crop != null && crop != Blocks.AIR)
+            for (Holder<Block> block : blocks)
             {
-                String plantName = crop.getRegistryName().toString();
+                Optional<ResourceKey<Block>> blockKey = block.unwrapKey();
+
+                if (blockKey.isEmpty())
+                    continue;
+
+                String plantName = blockKey.get().location().toString();
                 cropSet.add(plantName);
 
                 if (bitmask != 0)
@@ -168,16 +169,21 @@ public class ModFertility
                     seedSeasons.put(plantName, bitmask);
                 }
             }
-        }
+        });
     }
 
-    private static void populateSeasonSeeds(List<Item> seeds, HashSet<String> cropSet, int bitmask)
+    private static void populateSeasonSeeds(TagKey<Item> tag, Set<String> cropSet, int bitmask)
     {
-        for (Item seed : seeds)
+        Registry.ITEM.getTag(tag).ifPresent(items ->
         {
-            if (seed != null)
+            for (Holder<Item> item : items)
             {
-                String plantName = seed.getRegistryName().toString();
+                Optional<ResourceKey<Item>> itemKey = item.unwrapKey();
+
+                if (itemKey.isEmpty())
+                    continue;
+
+                String plantName = itemKey.get().location().toString();
                 cropSet.add(plantName);
 
                 if (bitmask != 0)
@@ -200,7 +206,7 @@ public class ModFertility
                     seedSeasons.put(plantName, bitmask);
                 }
             }
-        }
+        });
     }
 
     public static void setupTooltips(ItemTooltipEvent event)

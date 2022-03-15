@@ -1,5 +1,6 @@
 package sereneseasons.handler.season;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -13,10 +14,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.BiomeConfig;
-import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonTime;
-import sereneseasons.util.biome.BiomeUtil;
 
 import javax.annotation.Nullable;
 
@@ -29,12 +28,12 @@ public class BirchColorHandler
 			Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable BlockAndTintGetter dimensionReader, @Nullable BlockPos pos, int tintIndex) ->
 			{
 				int birchColor = FoliageColor.getBirchColor();
-				Level world = Minecraft.getInstance().player.level;
+				Level level = Minecraft.getInstance().player.level;
 				ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
 
-				if (world != null && pos != null && ServerConfig.changeBirchColor.get() && ServerConfig.isDimensionWhitelisted(dimension))
+				if (level != null && pos != null && ServerConfig.changeBirchColor.get() && ServerConfig.isDimensionWhitelisted(dimension))
 				{
-					ResourceKey<Biome> biome = world.getBiomeName(pos).orElse(null);
+					Holder<Biome> biome = level.getBiome(pos);
 
 					if (BiomeConfig.enablesSeasonalEffects(biome))
 					{

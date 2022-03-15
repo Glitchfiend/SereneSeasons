@@ -1,8 +1,9 @@
 package sereneseasons.init;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -18,22 +19,22 @@ public class ModTags
     {
         private static void setup() {}
 
-        public static final Tag.Named<Block> spring_crops = BlockTags.bind("sereneseasons:spring_crops");
-        public static final Tag.Named<Block> summer_crops = BlockTags.bind("sereneseasons:summer_crops");
-        public static final Tag.Named<Block> autumn_crops = BlockTags.bind("sereneseasons:autumn_crops");
-        public static final Tag.Named<Block> winter_crops = BlockTags.bind("sereneseasons:winter_crops");
+        public static final TagKey<Block> SPRING_CROPS = BlockTags.create(new ResourceLocation("sereneseasons:spring_crops"));
+        public static final TagKey<Block> SUMMER_CROPS = BlockTags.create(new ResourceLocation("sereneseasons:summer_crops"));
+        public static final TagKey<Block> AUTUMN_CROPS = BlockTags.create(new ResourceLocation("sereneseasons:autumn_crops"));
+        public static final TagKey<Block> WINTER_CROPS = BlockTags.create(new ResourceLocation("sereneseasons:winter_crops"));
 
-        public static final Tag.Named<Block> greenhouse_glass = BlockTags.bind("sereneseasons:greenhouse_glass");
-        public static final Tag.Named<Block> unbreakable_infertile_crops = BlockTags.bind("sereneseasons:unbreakable_infertile_crops");
+        public static final TagKey<Block> GREENHOUSE_GLASS = BlockTags.create(new ResourceLocation("sereneseasons:greenhouse_glass"));
+        public static final TagKey<Block> UNBREAKABLE_INFERTILE_CROPS = BlockTags.create(new ResourceLocation("sereneseasons:unbreakable_infertile_crops"));
     }
 
     public static class Items
     {
         private static void setup() {}
 
-        public static final Tag.Named<Item> spring_crops = ItemTags.bind("sereneseasons:spring_crops");
-        public static final Tag.Named<Item> summer_crops = ItemTags.bind("sereneseasons:summer_crops");
-        public static final Tag.Named<Item> autumn_crops = ItemTags.bind("sereneseasons:autumn_crops");
-        public static final Tag.Named<Item> winter_crops = ItemTags.bind("sereneseasons:winter_crops");
+        public static final TagKey<Item> SPRING_CROPS = ItemTags.create(new ResourceLocation("sereneseasons:spring_crops"));
+        public static final TagKey<Item> SUMMER_CROPS = ItemTags.create(new ResourceLocation("sereneseasons:summer_crops"));
+        public static final TagKey<Item> AUTUMN_CROPS = ItemTags.create(new ResourceLocation("sereneseasons:autumn_crops"));
+        public static final TagKey<Item> WINTER_CROPS = ItemTags.create(new ResourceLocation("sereneseasons:winter_crops"));
     }
 }

@@ -1,10 +1,12 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
@@ -14,11 +16,12 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
+apply plugin: 'org.spongepowered.mixin'
 
 repositories { mavenLocal() }
 
 group = "com.github.glitchfiend"
-archivesBaseName = "SereneSeasons"
+archivesBaseName = "${mod_name}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -41,10 +44,12 @@ minecraft {
     runs {
         client = {
             workingDirectory = project.file("run").canonicalPath
+            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.mixins.json"
             source sourceSets.main
         }
         server = {
             workingDirectory = project.file("run").canonicalPath
+            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.mixins.json"
             source sourceSets.main
         }
     }
@@ -77,16 +82,27 @@ processResources {
 }
 
 jar {
-    classifier = 'universal'
     manifest {
         attributes([
-            "Implementation-Version": project.version
+            "Specification-Title": project.mod_id,
+            "Specification-Vendor": project.mod_name,
+            "Specification-Version": "1.1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": project.version,
+            "Implementation-Vendor" :"${mod_id}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
         ])
     }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
 }
 
 task deobfJar(type: Jar) {
@@ -96,39 +112,39 @@ task deobfJar(type: Jar) {
 
 task apiJar(type: Jar) {
     from(sourceSets.main.allJava) {
-        include 'sereneseasons/api/**'
+        include "${mod_id}/api/**"
     }
     from (sourceSets.main.output) {
         include 'LICENSE.txt'
-        include 'sereneseasons/api/**'
+        include "${mod_id}/api/**"
     }
 
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     classifier = 'api'
 }
 
-def changelog_file = rootProject.file("build/SereneSeasons-${version}-changelog.txt")
+def changelog_file = rootProject.file("build/${mod_name}-${version}-changelog.txt")
 
 curseforge {
     if (project.hasProperty('curseApiKey')) {
         apiKey = project.getProperty('curseApiKey')
-        project {
-            id = '291874'
+    }
+    project {
+        id = '291874'
 
-            if (changelog_file.exists()) {
-                changelog = changelog_file
-            }
-
-            releaseType = 'beta'
-            addGameVersion minecraft_version
-
-            mainArtifact(jar) {
-                displayName = "Serene Seasons ${version}"
-            }
-
-            addArtifact deobfJar
-            addArtifact apiJar
+        if (changelog_file.exists()) {
+            changelog = changelog_file
         }
+
+        releaseType = 'beta'
+        addGameVersion minecraft_version
+
+        mainArtifact(jar) {
+            displayName = "${mod_name} ${version}"
+        }
+
+        addArtifact deobfJar
+        addArtifact apiJar
     }
 }
 

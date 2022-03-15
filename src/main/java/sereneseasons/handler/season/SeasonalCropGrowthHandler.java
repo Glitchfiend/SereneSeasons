@@ -56,7 +56,7 @@ public class SeasonalCropGrowthHandler
             }
 		    if (FertilityConfig.outOfSeasonCropBehavior.get() == 2)
             {
-                if (!plant.is(ModTags.Blocks.unbreakable_infertile_crops))
+                if (!plant.is(ModTags.Blocks.UNBREAKABLE_INFERTILE_CROPS))
                 {
 					event.setResult(Event.Result.DENY);
                     event.getWorld().destroyBlock(event.getPos(), false);
@@ -91,7 +91,7 @@ public class SeasonalCropGrowthHandler
             }
             if (FertilityConfig.outOfSeasonCropBehavior.get() == 2)
             {
-                if (!plant.is(ModTags.Blocks.unbreakable_infertile_crops))
+                if (!plant.is(ModTags.Blocks.UNBREAKABLE_INFERTILE_CROPS))
                 {
 					event.setCanceled(true);
                     event.getWorld().destroyBlock(event.getPos(), false);
@@ -108,7 +108,7 @@ public class SeasonalCropGrowthHandler
 	{
 		for (int i = 0; i < 16; i++)
 		{
-			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).is(ModTags.Blocks.greenhouse_glass))
+			if (world.getBlockState(cropPos.offset(0, i + 1, 0)).is(ModTags.Blocks.GREENHOUSE_GLASS))
 			{
 				return true;
 			}

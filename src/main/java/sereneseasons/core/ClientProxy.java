@@ -1,6 +1,7 @@
 package sereneseasons.core;
 
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
@@ -62,15 +63,15 @@ public class ClientProxy extends CommonProxy
             @OnlyIn(Dist.CLIENT)
             public float call(ItemStack stack, ClientLevel clientWorld, LivingEntity entity, int seed)
             {
-                Level world = clientWorld;
+                Level level = clientWorld;
                 Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
 
-                if (world == null && holder != null)
+                if (level == null && holder != null)
                 {
-                    world = holder.level;
+                    level = holder.level;
                 }
 
-                if (world == null)
+                if (level == null)
                 {
                     return 2.0F;
                 }
@@ -78,11 +79,11 @@ public class ClientProxy extends CommonProxy
                 {
                     float type;
 
-                    if (ServerConfig.isDimensionWhitelisted(world.dimension()))
+                    if (ServerConfig.isDimensionWhitelisted(level.dimension()))
                     {
                         if (holder != null)
                         {
-                            ResourceKey<Biome> biome = world.getBiomeName(holder.blockPosition()).orElse(null);
+                            Holder<Biome> biome = level.getBiome(holder.blockPosition());
 
                             if (BiomeConfig.usesTropicalSeasons(biome))
                             {
