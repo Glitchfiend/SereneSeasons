@@ -13,12 +13,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.core.SereneSeasons;
 import sereneseasons.util.biome.BiomeUtil;
 
 public class SeasonHooks
@@ -29,6 +27,32 @@ public class SeasonHooks
 
     public static float getBiomeTemperatureHook(Biome biome, BlockPos pos, IWorldReader worldReader)
     {
+        if (!(worldReader instanceof World))
+        {
+            return biome.getTemperature(pos);
+        }
+
+        return getBiomeTemperature((World)worldReader, biome, pos);
+    }
+    
+    public static float getBiomeTemperatureHookICE(Biome biome, BlockPos pos, IWorldReader worldReader)
+    {
+    	if(!SeasonsConfig.generateIce.get()) {
+    		return 0.15F;
+    	}
+        if (!(worldReader instanceof World))
+        {
+            return biome.getTemperature(pos);
+        }
+
+        return getBiomeTemperature((World)worldReader, biome, pos);
+    }
+    
+    public static float getBiomeTemperatureHookSNOW(Biome biome, BlockPos pos, IWorldReader worldReader)
+    {
+    	if(!SeasonsConfig.generateSnow.get()) {
+    		return 0.15F;
+    	}
         if (!(worldReader instanceof World))
         {
             return biome.getTemperature(pos);
