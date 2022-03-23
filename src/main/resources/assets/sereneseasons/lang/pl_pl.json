@@ -1,25 +1,21 @@
 {
-  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
-  "commands.sereneseasons.getseason.success": "Obecna pora roku to %s, day %s/%s, tick %s/%s",
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "Obecna pora roku to %s, dzień %s/%s, tick %s/%s",
   "commands.sereneseasons.setseason.success": "Ustawiono porę roku na %s",
   "commands.sereneseasons.setseason.fail": "Nieprawidłowa pora roku %s",
-  "commands.sereneseasons.setseason.disabled": "Seasons are currently disabled!",
+  "commands.sereneseasons.setseason.disabled": "Pory roku są obecnie wyłączone!",
 
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
-  "block.sereneseasons.greenhouse_glass": "Szkło szklarniowe",
-  "block.sereneseasons.season_sensor_spring": "Czujnik pory roku",
-  "block.sereneseasons.season_sensor_summer": "Czujnik pory roku",
-  "block.sereneseasons.season_sensor_autumn": "Czujnik pory roku",
-  "block.sereneseasons.season_sensor_winter": "Czujnik pory roku",
+  "block.sereneseasons.season_sensor": "Czujnik pory roku",
+  
   "item.sereneseasons.ss_icon": "SS Icon",
+  "item.sereneseasons.calendar": "Kalendarz",
 
-  "item.sereneseasons.season_clock": "Zegarek pór roku",
-
-  "desc.sereneseasons.fertile_seasons": "Pory żyzne",
-  "desc.sereneseasons.year_round": "Całoroczny",
-  "desc.sereneseasons.spring": "Wiosna",
-  "desc.sereneseasons.summer": "Lato",
-  "desc.sereneseasons.autumn": "Jesień",
-  "desc.sereneseasons.winter": "Zima"
+  "desc.sereneseasons.fertile_seasons": "Fertile Seasons",
+  "desc.sereneseasons.year_round": "Year-Round",
+  "desc.sereneseasons.spring": "Spring",
+  "desc.sereneseasons.summer": "Summer",
+  "desc.sereneseasons.autumn": "Autumn",
+  "desc.sereneseasons.winter": "Winter"
 }
