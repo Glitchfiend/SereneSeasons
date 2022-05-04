@@ -3,7 +3,7 @@
   "commands.sereneseasons.getseason.success": "Obecna pora roku to %s, day %s/%s, tick %s/%s",
   "commands.sereneseasons.setseason.success": "Ustawiono porę roku na %s",
   "commands.sereneseasons.setseason.fail": "Nieprawidłowa pora roku %s",
-  "commands.sereneseasons.setseason.disabled": "Seasons are currently disabled!",
+  "commands.sereneseasons.setseason.disabled": "Pory roku są obecnie wyłączone!",
 
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
