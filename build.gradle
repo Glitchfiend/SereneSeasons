@@ -14,6 +14,7 @@ plugins {
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
+apply plugin: 'maven-publish'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'org.spongepowered.mixin'
@@ -21,49 +22,28 @@ apply plugin: 'org.spongepowered.mixin'
 repositories { mavenLocal() }
 
 group = "com.github.glitchfiend"
-archivesBaseName = "SereneSeasons"
+archivesBaseName = "${mod_name}"
+version = "${minecraft_version}-${mod_version}.${System.getenv().BUILD_NUMBER}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-def getGitHash = {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', '--short', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
-
-version = "${minecraft_version}-${mod_version}.${System.getenv().BUILD_NUMBER}"
-
 minecraft {
     mappings channel: 'official', version: minecraft_version
-
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client = {
-            workingDirectory = project.file("run").canonicalPath
-            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.mixins.json"
+            workingDirectory = project.file("run")
             source sourceSets.main
         }
         server = {
-            workingDirectory = project.file("run").canonicalPath
-            args "-mixin.config=${mod_id}.mixins.json", "-mixin.config=${mod_id}.mixins.json"
+            workingDirectory = project.file("run")
             source sourceSets.main
         }
     }
 }
 
-allprojects {
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xmaxerrs" << "10000"
-        }
-    }
-}
-
-// configure  the source folders
+// Configure  the source folders
 sourceSets {
     main {
         java {
@@ -78,21 +58,7 @@ sourceSets {
 }
 
 processResources {
-	duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": project.mod_id,
-            "Specification-Vendor": project.mod_name,
-            "Specification-Version": "1.1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": project.version,
-            "Implementation-Vendor" :"${mod_id}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-        ])
-    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 dependencies {
@@ -123,14 +89,14 @@ task apiJar(type: Jar) {
     classifier = 'api'
 }
 
-def changelog_file = rootProject.file("build/SereneSeasons-${version}-changelog.txt")
+def changelog_file = rootProject.file("build/${mod_name}-${version}-changelog.txt")
 
 curseforge {
     if (project.hasProperty('curseApiKey')) {
         apiKey = project.getProperty('curseApiKey')
     }
     project {
-        id = '291874'
+        id = mod_curseforge_id
 
         if (changelog_file.exists()) {
             changelog = changelog_file
@@ -140,7 +106,7 @@ curseforge {
         addGameVersion minecraft_version
 
         mainArtifact(jar) {
-            displayName = "${mod_name} ${version}"
+            displayName = "${mod_display_name} ${version}"
         }
 
         addArtifact deobfJar
@@ -155,4 +121,60 @@ artifacts {
     archives jar
     archives deobfJar
     archives apiJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // We must use artifact jar to ensure the Forge dependency is excluded from the pom, breaking fg.deobf()
+            artifact jar
+            artifact deobfJar
+            artifact apiJar
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+
+            pom {
+                name = project.mod_name
+                description = project.mod_description
+                url = project.mod_git_url
+                scm {
+                    url = project.mod_git_url
+                    connection = project.mod_scm_url
+                    developerConnection = project.mod_scm_url
+                }
+                issueManagement {
+                    system = 'github'
+                    url = project.mod_issues_url
+                }
+                licenses {
+                    license {
+                        name = 'All Rights Reserved'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'adubbz'
+                        name = 'Adubbz'
+                    }
+                    developer {
+                        id = 'forstride'
+                        name = 'Forstride'
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://maven.minecraftforge.net/releases/"
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = System.env.MAVEN_USER ?:'fake'
+                password = System.env.MAVEN_PASSWORD ?:'news'
+            }
+        }
+    }
 }
