@@ -5,7 +5,6 @@
 package sereneseasons.block;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DaylightDetectorBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,9 +22,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import sereneseasons.api.SSBlocks;
+import sereneseasons.api.SSBlockEntities;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.tileentity.SeasonSensorBlockEntity;
@@ -133,7 +131,7 @@ public class SeasonSensorBlock extends BaseEntityBlock
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && level.dimensionType().hasSkyLight() ? createTickerHelper(type, (BlockEntityType<SeasonSensorBlockEntity>)SSBlocks.season_sensor_tile_entity, SeasonSensorBlock::tickEntity) : null;
+        return !level.isClientSide && level.dimensionType().hasSkyLight() ? createTickerHelper(type, (BlockEntityType<SeasonSensorBlockEntity>) SSBlockEntities.SEASON_SENSOR.get(), SeasonSensorBlock::tickEntity) : null;
     }
 
     private static void tickEntity(Level level, BlockPos pos, BlockState state, SeasonSensorBlockEntity entity)

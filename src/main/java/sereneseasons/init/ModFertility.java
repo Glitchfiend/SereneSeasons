@@ -1,28 +1,28 @@
 package sereneseasons.init;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.ServerConfig;
+import sereneseasons.core.SereneSeasons;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Constructs efficient data structures to process, store, and give access to data from the FertilityConfig file
@@ -214,34 +214,34 @@ public class ModFertility
         //Set up tooltips if enabled and on client side
         if (FertilityConfig.cropTooltips.get() && FertilityConfig.seasonalCrops.get())
         {
-            String name = event.getItemStack().getItem().getRegistryName().toString();
+            String name = Registry.ITEM.getKey(event.getItemStack().getItem()).toString();
             if (seedSeasons.containsKey(name))
             {
                 int mask = seedSeasons.get(name);
 
-                event.getToolTip().add(new TranslatableComponent("desc.sereneseasons.fertile_seasons").append(":"));
+                event.getToolTip().add(Component.translatable("desc.sereneseasons.fertile_seasons").append(":"));
 
                 if ((mask & 1) != 0 && (mask & 2) != 0 && (mask & 4) != 0 && (mask & 8) != 0)
                 {
-                    event.getToolTip().add(new TextComponent(" ").append((new TranslatableComponent("desc.sereneseasons.year_round")).withStyle(ChatFormatting.LIGHT_PURPLE)));
+                    event.getToolTip().add(Component.translatable(" ").append(Component.translatable("desc.sereneseasons.year_round")).withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
                 else
                 {
                     if ((mask & 1) != 0)
                     {
-                        event.getToolTip().add(new TextComponent(" ").append((new TranslatableComponent("desc.sereneseasons.spring")).withStyle(ChatFormatting.GREEN)));
+                        event.getToolTip().add(Component.translatable(" ").append(Component.translatable("desc.sereneseasons.spring")).withStyle(ChatFormatting.GREEN));
                     }
                     if ((mask & 2) != 0)
                     {
-                        event.getToolTip().add(new TextComponent(" ").append((new TranslatableComponent("desc.sereneseasons.summer")).withStyle(ChatFormatting.YELLOW)));
+                        event.getToolTip().add(Component.translatable(" ").append(Component.translatable("desc.sereneseasons.summer")).withStyle(ChatFormatting.YELLOW));
                     }
                     if ((mask & 4) != 0)
                     {
-                        event.getToolTip().add(new TextComponent(" ").append((new TranslatableComponent("desc.sereneseasons.autumn")).withStyle(ChatFormatting.GOLD)));
+                        event.getToolTip().add(Component.translatable(" ").append(Component.translatable("desc.sereneseasons.autumn")).withStyle(ChatFormatting.GOLD));
                     }
                     if ((mask & 8) != 0)
                     {
-                        event.getToolTip().add(new TextComponent(" ").append((new TranslatableComponent("desc.sereneseasons.winter")).withStyle(ChatFormatting.AQUA)));
+                        event.getToolTip().add(Component.translatable(" ").append(Component.translatable("desc.sereneseasons.winter")).withStyle(ChatFormatting.AQUA));
                     }
                 }
             }

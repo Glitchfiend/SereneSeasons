@@ -1,11 +1,10 @@
 package sereneseasons.api;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.registries.RegistryObject;
 
 public class SSBlocks
 {
-    public static Block season_sensor;
+    public static RegistryObject<Block> SEASON_SENSOR;
 
-    public static BlockEntityType<?> season_sensor_tile_entity;
 }

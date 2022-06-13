@@ -5,17 +5,14 @@
 package sereneseasons.tileentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import sereneseasons.api.SSBlocks;
-import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.block.SeasonSensorBlock;
+import sereneseasons.api.SSBlockEntities;
 
 public class SeasonSensorBlockEntity extends BlockEntity
 {
     public SeasonSensorBlockEntity(BlockPos pos, BlockState state)
     {
-        super(SSBlocks.season_sensor_tile_entity, pos, state);
+        super(SSBlockEntities.SEASON_SENSOR.get(), pos, state);
     }
 }

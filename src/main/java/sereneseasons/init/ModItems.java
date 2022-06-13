@@ -1,32 +1,33 @@
 package sereneseasons.init;
 
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
-import sereneseasons.util.inventory.ItemGroupSS;
+import net.minecraftforge.registries.RegistryObject;
+import sereneseasons.core.SereneSeasons;
+import sereneseasons.util.inventory.CreativeModeTabSS;
 
-import static sereneseasons.api.SSItems.calendar;
-import static sereneseasons.api.SSItems.ss_icon;
+import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+import static sereneseasons.api.SSItems.CALENDAR;
+import static sereneseasons.api.SSItems.SS_ICON;
+
 public class ModItems
 {
-    @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event)
+    public static void setup()
     {
-    	// SS Creative Tab Icon
-        ss_icon = registerItem(new Item(new Item.Properties()), "ss_icon");
-
-        // Main Items
-        calendar = registerItem(new Item(new Item.Properties().stacksTo(1).tab(ItemGroupSS.instance)), "calendar");
+        registerItems();
     }
 
-    public static Item registerItem(Item item, String name)
+    private static void registerItems()
     {
-        item.setRegistryName(name);
-        ForgeRegistries.ITEMS.register(item);
-        return item;
+    	// SS Creative Tab Icon
+        SS_ICON = registerItem(() -> new Item(new Item.Properties()), "ss_icon");
+
+        // Main Items
+        CALENDAR = registerItem(() -> new Item(new Item.Properties().stacksTo(1).tab(CreativeModeTabSS.INSTANCE)), "calendar");
+    }
+
+    public static RegistryObject<Item> registerItem(Supplier<Item> itemSupplier, String name)
+    {
+        return SereneSeasons.ITEM_REGISTER.register(name, itemSupplier);
     }
 }

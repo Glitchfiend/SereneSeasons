@@ -8,27 +8,28 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.season.SeasonSavedData;
 
 import java.util.HashMap;
 
+@Mod.EventBusSubscriber
 public class TimeSkipHandler
 {
     public static final HashMap<ResourceKey<Level>, Long> lastDayTimes = new HashMap<>();
 
     @SubscribeEvent
-    public void onWorldLoaded(WorldEvent.Load event)
+    public static void onWorldLoaded(WorldEvent.Load event)
     {
         lastDayTimes.clear();
     }
 
     @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event)
+    public static void onWorldTick(TickEvent.WorldTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START && event.side == LogicalSide.SERVER)
         {
@@ -53,7 +54,8 @@ public class TimeSkipHandler
                 seasonData.seasonCycleTicks += difference;
                 seasonData.setDirty();
                 SeasonHandler.sendSeasonUpdate(world);
-                SereneSeasons.logger.info("Season time skipped by " + difference + " in " + world.dimension().location().toString());
+                // Really this should be uncommented, but apparently other mods do bullshit things that cause this to get spammed.
+                // SereneSeasons.LOGGER.info("Season time skipped by " + difference + " in " + world.dimension().location().toString());
             }
 
             lastDayTimes.put(world.dimension(), dayTime);

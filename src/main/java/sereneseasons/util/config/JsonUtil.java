@@ -33,7 +33,7 @@ public class JsonUtil
         }
         catch (Exception e)
         {
-            SereneSeasons.logger.error("Error parsing config from json: " + configFile.toString(), e);
+            SereneSeasons.LOGGER.error("Error parsing config from json: " + configFile.toString(), e);
         }
 
         return null;
@@ -48,7 +48,7 @@ public class JsonUtil
         }
         catch (Exception e)
         {
-            SereneSeasons.logger.error("Error writing config file " + outputFile.getAbsolutePath() + ": " + e.getMessage());
+            SereneSeasons.LOGGER.error("Error writing config file " + outputFile.getAbsolutePath() + ": " + e.getMessage());
             return false;
         }
     }

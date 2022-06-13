@@ -1,6 +1,7 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,24 +23,24 @@ public class SeasonalCropGrowthHandler
 {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public void onItemTooltipAdded(ItemTooltipEvent event)
+	public static void onItemTooltipAdded(ItemTooltipEvent event)
 	{
 		ModFertility.setupTooltips(event);
 	}
 
 	@SubscribeEvent
-	public void onTagsUpdated(TagsUpdatedEvent event)
+	public static void onTagsUpdated(TagsUpdatedEvent event)
 	{
 		ModFertility.populate();
 	}
 
 	@SubscribeEvent
-	public void onCropGrowth(BlockEvent.CropGrowEvent event)
+	public static void onCropGrowth(BlockEvent.CropGrowEvent event)
 	{
 		BlockState plant = event.getState();
 		Block plantBlock = plant.getBlock();
 		Level world = (Level)event.getWorld();
-		boolean isFertile = ModFertility.isCropFertile(plantBlock.getRegistryName().toString(), world, event.getPos());
+		boolean isFertile = ModFertility.isCropFertile(Registry.BLOCK.getKey(plantBlock).toString(), world, event.getPos());
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, event.getPos()))
 		{
@@ -70,11 +71,11 @@ public class SeasonalCropGrowthHandler
 	}
 
 	@SubscribeEvent
-	public void onApplyBonemeal(BonemealEvent event)
+	public static void onApplyBonemeal(BonemealEvent event)
 	{
 		BlockState plant = event.getBlock();
 		Block plantBlock = plant.getBlock();
-		boolean isFertile = ModFertility.isCropFertile(plantBlock.getRegistryName().toString(), event.getWorld(), event.getPos());
+		boolean isFertile = ModFertility.isCropFertile(Registry.BLOCK.getKey(plantBlock).toString(), event.getWorld(), event.getPos());
 		
 		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(event.getWorld(), event.getPos()))
 		{
@@ -104,7 +105,7 @@ public class SeasonalCropGrowthHandler
 		}
 	}
 
-	private boolean isGlassAboveBlock(Level world, BlockPos cropPos)
+	private static boolean isGlassAboveBlock(Level world, BlockPos cropPos)
 	{
 		for (int i = 0; i < 16; i++)
 		{

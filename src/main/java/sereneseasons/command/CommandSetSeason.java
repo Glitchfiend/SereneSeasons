@@ -8,7 +8,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.server.command.EnumArgument;
 import sereneseasons.api.season.Season;
@@ -36,11 +36,11 @@ public class CommandSetSeason
             seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * season.ordinal();
             seasonData.setDirty();
             SeasonHandler.sendSeasonUpdate(world);
-            cs.sendSuccess(new TranslatableComponent("commands.sereneseasons.setseason.success", season.toString()), true);
+            cs.sendSuccess(Component.translatable("commands.sereneseasons.setseason.success", season.toString()), true);
         }
         else
         {
-            cs.sendFailure(new TranslatableComponent("commands.sereneseasons.setseason.fail", season.toString()));
+            cs.sendFailure(Component.translatable("commands.sereneseasons.setseason.fail", season.toString()));
         }
 
         return 1;

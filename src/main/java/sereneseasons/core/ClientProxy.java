@@ -7,7 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -17,7 +16,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.SSItems;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.BiomeConfig;
-import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonTime;
 
@@ -27,7 +25,7 @@ public class ClientProxy extends CommonProxy
     @Override
     void registerItemModelsProperties()
     {
-        ItemProperties.register(SSItems.calendar, new ResourceLocation("time"), new ItemPropertyFunction()
+        ItemProperties.register(SSItems.CALENDAR.get(), new ResourceLocation("time"), new ItemPropertyFunction()
         {
             @Override
             @OnlyIn(Dist.CLIENT)
@@ -57,7 +55,7 @@ public class ClientProxy extends CommonProxy
             }
         });
 
-        ItemProperties.register(SSItems.calendar, new ResourceLocation("seasontype"), new ItemPropertyFunction()
+        ItemProperties.register(SSItems.CALENDAR.get(), new ResourceLocation("seasontype"), new ItemPropertyFunction()
         {
             @Override
             @OnlyIn(Dist.CLIENT)

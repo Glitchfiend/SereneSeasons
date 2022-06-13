@@ -38,7 +38,7 @@ import java.util.Optional;
 @Mod.EventBusSubscriber
 public class RandomUpdateHandler
 {
-	private void adjustWeatherFrequency(Level world, Season season)
+	private static void adjustWeatherFrequency(Level world, Season season)
 	{
 		if (!SeasonsConfig.changeWeatherFrequency.get())
 			return;
@@ -75,7 +75,7 @@ public class RandomUpdateHandler
 		}
 	}
 
-	private void meltInChunk(ChunkMap chunkManager, LevelChunk chunkIn, Season.SubSeason subSeason)
+	private static void meltInChunk(ChunkMap chunkManager, LevelChunk chunkIn, Season.SubSeason subSeason)
 	{
 		ServerLevel world = chunkManager.level;
 		ChunkPos chunkpos = chunkIn.getPos();
@@ -130,14 +130,14 @@ public class RandomUpdateHandler
 
 	//Randomly melt ice and snow when it isn't winter
 	@SubscribeEvent
-	public void onWorldTick(TickEvent.WorldTickEvent event)
+	public static void onWorldTick(TickEvent.WorldTickEvent event)
 	{
 		if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER)
 		{
 			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
 			Season season = subSeason.getSeason();
 
-			this.adjustWeatherFrequency(event.world, season);
+			adjustWeatherFrequency(event.world, season);
 
 			if (season != Season.WINTER)
 			{
@@ -170,7 +170,7 @@ public class RandomUpdateHandler
 						{
 							if (level.shouldTickBlocksAt(chunkpos.toLong()))
 							{
-								this.meltInChunk(chunkMap, levelChunk, subSeason);
+								meltInChunk(chunkMap, levelChunk, subSeason);
 							}
 						}
 					}

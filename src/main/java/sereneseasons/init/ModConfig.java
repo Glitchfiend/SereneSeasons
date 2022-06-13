@@ -6,7 +6,6 @@ package sereneseasons.init;
 
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
@@ -32,7 +31,7 @@ public class ModConfig
         catch (FileAlreadyExistsException e) {}
         catch (IOException e)
         {
-            SereneSeasons.logger.error("Failed to create sereneseasons config directory", e);
+            SereneSeasons.LOGGER.error("Failed to create sereneseasons config directory", e);
         }
 
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, FertilityConfig.SPEC, "sereneseasons/fertility.toml");
