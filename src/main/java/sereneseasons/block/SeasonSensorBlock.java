@@ -34,7 +34,7 @@ public class SeasonSensorBlock extends BaseEntityBlock
 {
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
-    private static final IntegerProperty SEASON = IntegerProperty.create("season", 0, 3);
+    public static final IntegerProperty SEASON = IntegerProperty.create("season", 0, 3);
 
     public SeasonSensorBlock(Properties properties)
     {

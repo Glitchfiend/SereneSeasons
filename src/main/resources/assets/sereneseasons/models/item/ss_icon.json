@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "sereneseasons:item/ss_icon"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sereneseasons:item/ss_icon"
+  }
 }

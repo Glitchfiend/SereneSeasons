@@ -1,4 +1,3 @@
 {
-    "parent": "sereneseasons:block/season_sensor_spring"
+  "parent": "sereneseasons:block/season_sensor_spring"
 }
-

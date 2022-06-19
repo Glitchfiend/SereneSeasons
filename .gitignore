@@ -9,6 +9,8 @@
 /.settings/
 /.classpath
 /.project
+/src/generated/
+.cache
 
 # OS generated files
 *.DS_Store

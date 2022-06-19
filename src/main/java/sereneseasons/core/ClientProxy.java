@@ -25,7 +25,7 @@ public class ClientProxy extends CommonProxy
     @Override
     void registerItemModelsProperties()
     {
-        ItemProperties.register(SSItems.CALENDAR.get(), new ResourceLocation("time"), new ItemPropertyFunction()
+        ItemProperties.register(SSItems.CALENDAR.get(), new ResourceLocation(SereneSeasons.MOD_ID, "time"), new ItemPropertyFunction()
         {
             @Override
             @OnlyIn(Dist.CLIENT)
@@ -55,7 +55,7 @@ public class ClientProxy extends CommonProxy
             }
         });
 
-        ItemProperties.register(SSItems.CALENDAR.get(), new ResourceLocation("seasontype"), new ItemPropertyFunction()
+        ItemProperties.register(SSItems.CALENDAR.get(), new ResourceLocation(SereneSeasons.MOD_ID, "seasontype"), new ItemPropertyFunction()
         {
             @Override
             @OnlyIn(Dist.CLIENT)
