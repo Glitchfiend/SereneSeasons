@@ -1,6 +1,6 @@
 modLoader="javafml"
 license="All Rights Reserved"
-loaderVersion="[39,)"
+loaderVersion="[41,)"
 issueTrackerURL="https://github.com/Glitchfiend/SereneSeasons/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/serene-seasons"
 logoFile="ss_logo.png"
@@ -15,6 +15,6 @@ logoFile="ss_logo.png"
 [[dependencies.sereneseasons]]
     modId="forge"
     mandatory=true
-    versionRange="[39.0.8,)"
+    versionRange="[41.0.64,)"
     ordering="NONE"
     side="BOTH"
