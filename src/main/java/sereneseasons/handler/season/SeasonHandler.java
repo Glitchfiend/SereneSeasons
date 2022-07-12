@@ -6,17 +6,17 @@ package sereneseasons.handler.season;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
 import sereneseasons.api.SSGameRules;
@@ -36,9 +36,9 @@ import java.util.function.Supplier;
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {
     @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event)
+    public void onWorldTick(TickEvent.LevelTickEvent event)
     {
-        Level world = event.world;
+        Level world = event.level;
 
         if (event.phase == TickEvent.Phase.END && !world.isClientSide)
         {
@@ -75,7 +75,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         Level world = player.level;
         
         sendSeasonUpdate(world);
@@ -89,7 +89,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     @SubscribeEvent
-    public void onWorldLoaded(WorldEvent.Load event)
+    public void onWorldLoaded(LevelEvent.Load event)
     {
         clientSeasonCycleTicks.clear();
     }

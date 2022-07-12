@@ -5,14 +5,13 @@
 package sereneseasons.handler.season;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import sereneseasons.core.SereneSeasons;
 import sereneseasons.season.SeasonSavedData;
 
 import java.util.HashMap;
@@ -23,17 +22,17 @@ public class TimeSkipHandler
     public static final HashMap<ResourceKey<Level>, Long> lastDayTimes = new HashMap<>();
 
     @SubscribeEvent
-    public static void onWorldLoaded(WorldEvent.Load event)
+    public static void onWorldLoaded(LevelEvent.Load event)
     {
         lastDayTimes.clear();
     }
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.WorldTickEvent event)
+    public static void onWorldTick(TickEvent.LevelTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START && event.side == LogicalSide.SERVER)
         {
-            ServerLevel world = (ServerLevel)event.world;
+            ServerLevel world = (ServerLevel)event.level;
             long dayTime = world.getLevelData().getDayTime();
 
             if (!lastDayTimes.containsKey(world.dimension()))

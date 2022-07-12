@@ -130,20 +130,20 @@ public class RandomUpdateHandler
 
 	//Randomly melt ice and snow when it isn't winter
 	@SubscribeEvent
-	public static void onWorldTick(TickEvent.WorldTickEvent event)
+	public static void onWorldTick(TickEvent.LevelTickEvent event)
 	{
 		if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER)
 		{
-			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.world).getSubSeason();
+			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.level).getSubSeason();
 			Season season = subSeason.getSeason();
 
-			adjustWeatherFrequency(event.world, season);
+			adjustWeatherFrequency(event.level, season);
 
 			if (season != Season.WINTER)
 			{
-				if (SeasonsConfig.generateSnowAndIce.get() && ServerConfig.isDimensionWhitelisted(event.world.dimension()))
+				if (SeasonsConfig.generateSnowAndIce.get() && ServerConfig.isDimensionWhitelisted(event.level.dimension()))
 				{
-					ServerLevel level = (ServerLevel) event.world;
+					ServerLevel level = (ServerLevel) event.level;
 					ChunkMap chunkMap = level.getChunkSource().chunkMap;
 					DistanceManager distanceManager = chunkMap.getDistanceManager();
 
