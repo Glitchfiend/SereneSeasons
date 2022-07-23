@@ -1,0 +1,21 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "Қазіргі маусым %s, %s/%s күн, %s/%s тик",
+  "commands.sereneseasons.setseason.success": "Маусым %s болып қойылды",
+  "commands.sereneseasons.setseason.fail": "%s маусымы қате",
+  "commands.sereneseasons.setseason.disabled": "Маусымдар қазіргі кезде өшірулі!",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "Маусым сенсоры",
+  
+  "item.sereneseasons.ss_icon": "SS белгішесі",
+  "item.sereneseasons.calendar": "Күнтізбе",
+
+  "desc.sereneseasons.fertile_seasons": "Құнарлы маусым",
+  "desc.sereneseasons.year_round": "Жыл бойы",
+  "desc.sereneseasons.spring": "Көктем",
+  "desc.sereneseasons.summer": "Жаз",
+  "desc.sereneseasons.autumn": "Күз",
+  "desc.sereneseasons.winter": "Қыс"
+}
