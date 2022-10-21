@@ -5,13 +5,13 @@
     ]
   },
   "criteria": {
-    "has_paper": {
+    "has_clock": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-               "minecraft:paper"
+               "minecraft:clock"
             ]
           }
         ]
@@ -26,7 +26,7 @@
   },
   "requirements": [
     [
-      "has_paper",
+      "has_clock",
       "has_the_recipe"
     ]
   ]

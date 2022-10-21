@@ -2,12 +2,15 @@
   "type": "crafting_shaped",
   "pattern": [
     "PPP",
-    "PPP",
+    "PCP",
     "PPP"
   ],
   "key": {
     "P": {
       "item": "minecraft:paper"
+    },
+	"C": {
+      "item": "minecraft:clock"
     }
   },
   "result": {
