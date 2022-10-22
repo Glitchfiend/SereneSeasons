@@ -16,6 +16,8 @@ import sereneseasons.handler.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
 
+import java.util.Locale;
+
 public class CommandSetSeason
 {
     static ArgumentBuilder<CommandSourceStack, ?> register()
@@ -36,11 +38,11 @@ public class CommandSetSeason
             seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * season.ordinal();
             seasonData.setDirty();
             SeasonHandler.sendSeasonUpdate(world);
-            cs.sendSuccess(Component.translatable("commands.sereneseasons.setseason.success", season.toString()), true);
+            cs.sendSuccess(Component.translatable("commands.sereneseasons.setseason.success", Component.translatable("desc.sereneseasons."+ season.toString().toLowerCase(Locale.ROOT))), true);
         }
         else
         {
-            cs.sendFailure(Component.translatable("commands.sereneseasons.setseason.fail", season.toString()));
+            cs.sendFailure(Component.translatable("commands.sereneseasons.setseason.fail", Component.translatable("desc.sereneseasons."+ season.toString().toLowerCase(Locale.ROOT))));
         }
 
         return 1;
