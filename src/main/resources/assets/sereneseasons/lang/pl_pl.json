@@ -1,25 +1,34 @@
 {
-  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
-  "commands.sereneseasons.getseason.success": "Obecna pora roku to %s, day %s/%s, tick %s/%s",
-  "commands.sereneseasons.setseason.success": "Ustawiono porę roku na %s",
-  "commands.sereneseasons.setseason.fail": "Nieprawidłowa pora roku %s",
-  "commands.sereneseasons.setseason.disabled": "Seasons are currently disabled!",
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "Obecna pora roku to %s, dzień %s/%s, tick %s/%s",
+  "commands.sereneseasons.setseason.success": "Ustawiono porę roku na: %s",
+  "commands.sereneseasons.setseason.fail": "Nieprawidłowa pora roku: %s",
+  "commands.sereneseasons.setseason.disabled": "Pory roku są obecnie wyłączone!",
 
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
-  "block.sereneseasons.greenhouse_glass": "Szkło szklarniowe",
-  "block.sereneseasons.season_sensor_spring": "Czujnik pory roku",
-  "block.sereneseasons.season_sensor_summer": "Czujnik pory roku",
-  "block.sereneseasons.season_sensor_autumn": "Czujnik pory roku",
-  "block.sereneseasons.season_sensor_winter": "Czujnik pory roku",
+  "block.sereneseasons.season_sensor": "Czujnik pory roku",
+  
   "item.sereneseasons.ss_icon": "SS Icon",
+  "item.sereneseasons.calendar": "Kalendarz",
 
-  "item.sereneseasons.season_clock": "Zegarek pór roku",
-
-  "desc.sereneseasons.fertile_seasons": "Pory żyzne",
-  "desc.sereneseasons.year_round": "Całoroczny",
+  "desc.sereneseasons.fertile_seasons": "Urodzajne pory:",
+  "desc.sereneseasons.year_round": "Całorocznie",
+  "desc.sereneseasons.day_counter": "Dzień %s/%s",
   "desc.sereneseasons.spring": "Wiosna",
+  "desc.sereneseasons.early_spring": "Wczesna wiosna",
+  "desc.sereneseasons.mid_spring": "Środek wiosny",
+  "desc.sereneseasons.late_spring": "Późna wiosna",
   "desc.sereneseasons.summer": "Lato",
+  "desc.sereneseasons.early_summer": "Wczesne lato",
+  "desc.sereneseasons.mid_summer": "Środek lata",
+  "desc.sereneseasons.late_summer": "Późne lato",
   "desc.sereneseasons.autumn": "Jesień",
-  "desc.sereneseasons.winter": "Zima"
+  "desc.sereneseasons.early_autumn": "Wczesna jesień",
+  "desc.sereneseasons.mid_autumn": "Środek jesieni",
+  "desc.sereneseasons.late_autumn": "Późna jesień",
+  "desc.sereneseasons.winter": "Zima",
+  "desc.sereneseasons.early_winter": "Wczesna zima",
+  "desc.sereneseasons.mid_winter": "Środek zimy",
+  "desc.sereneseasons.late_winter": "Późna zima"
 }
