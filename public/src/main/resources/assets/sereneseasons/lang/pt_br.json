@@ -14,8 +14,21 @@
 
   "desc.sereneseasons.fertile_seasons": "Estações férteis",
   "desc.sereneseasons.year_round": "Ano inteiro",
+  "desc.sereneseasons.day_counter": "Dia %s/%s",
   "desc.sereneseasons.spring": "Primavera",
+  "desc.sereneseasons.early_spring": "Início da Primavera",
+  "desc.sereneseasons.mid_spring": "Meio da Primavera",
+  "desc.sereneseasons.late_spring": "Fim da Primavera",
   "desc.sereneseasons.summer": "Verão",
+  "desc.sereneseasons.early_summer": "Início do Verão",
+  "desc.sereneseasons.mid_summer": "Meio do Verão",
+  "desc.sereneseasons.late_summer": "Fim do Verão",
   "desc.sereneseasons.autumn": "Outono",
+  "desc.sereneseasons.early_autumn": "Início do Outono",
+  "desc.sereneseasons.mid_autumn": "Meio do Outono",
+  "desc.sereneseasons.late_autumn": "Fim do Outono",
   "desc.sereneseasons.winter": "Inverno"
+  "desc.sereneseasons.early_winter": "Início do Inverno",
+  "desc.sereneseasons.mid_winter": "Meio do Inverno",
+  "desc.sereneseasons.late_winter": "Fim do Inverno"
 }
