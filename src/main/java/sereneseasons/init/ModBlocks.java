@@ -12,7 +12,6 @@ import sereneseasons.api.SSBlocks;
 import sereneseasons.block.SeasonSensorBlock;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.tileentity.SeasonSensorBlockEntity;
-import sereneseasons.util.inventory.CreativeModeTabSS;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -38,14 +37,14 @@ public class ModBlocks
     public static RegistryObject<Block> registerBlock(Supplier<Block> blockSupplier, String name)
     {
         RegistryObject<Block> blockRegistryObject = SereneSeasons.BLOCK_REGISTER.register(name, blockSupplier);
-        SereneSeasons.ITEM_REGISTER.register(name, () -> new BlockItem(blockRegistryObject.get(), new Item.Properties().tab(CreativeModeTabSS.INSTANCE)));
+        SereneSeasons.ITEM_REGISTER.register(name, () -> new BlockItem(blockRegistryObject.get(), new Item.Properties()));
         return blockRegistryObject;
     }
 
     public static RegistryObject<Block> registerBlockNoGroup(Supplier<Block> blockSupplier, String name)
     {
         RegistryObject<Block> blockRegistryObject = SereneSeasons.BLOCK_REGISTER.register(name, blockSupplier);
-        SereneSeasons.ITEM_REGISTER.register(name, () -> new BlockItem(blockRegistryObject.get(), new Item.Properties().tab(null)));
+        SereneSeasons.ITEM_REGISTER.register(name, () -> new BlockItem(blockRegistryObject.get(), new Item.Properties()));
         return blockRegistryObject;
     }
 

@@ -2,7 +2,10 @@ package sereneseasons.handler.season;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,14 +42,15 @@ public class SeasonalCropGrowthHandler
 	{
 		BlockState plant = event.getState();
 		Block plantBlock = plant.getBlock();
-		Level world = (Level)event.getLevel();
-		boolean isFertile = ModFertility.isCropFertile(Registry.BLOCK.getKey(plantBlock).toString(), world, event.getPos());
+		Level level = (Level)event.getLevel();
+		Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK);
+		boolean isFertile = ModFertility.isCropFertile(blockRegistry.getKey(plantBlock).toString(), level, event.getPos());
 		
-		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(world, event.getPos()))
+		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(level, event.getPos()))
 		{
 			if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
 			{
-				if (world.getRandom().nextInt(6) != 0)
+				if (level.getRandom().nextInt(6) != 0)
 				{
 					event.setResult(Event.Result.DENY);
 				}
@@ -75,13 +79,15 @@ public class SeasonalCropGrowthHandler
 	{
 		BlockState plant = event.getBlock();
 		Block plantBlock = plant.getBlock();
-		boolean isFertile = ModFertility.isCropFertile(Registry.BLOCK.getKey(plantBlock).toString(), event.getLevel(), event.getPos());
+		Level level = event.getLevel();
+		Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK);
+		boolean isFertile = ModFertility.isCropFertile(blockRegistry.getKey(plantBlock).toString(), level, event.getPos());
 		
-		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(event.getLevel(), event.getPos()))
+		if (FertilityConfig.seasonalCrops.get() && !isFertile && !isGlassAboveBlock(level, event.getPos()))
 		{
 			if (FertilityConfig.outOfSeasonCropBehavior.get() == 0)
 			{
-				if (event.getLevel().getRandom().nextInt(6) != 0)
+				if (level.getRandom().nextInt(6) != 0)
 				{
 					event.setResult(Event.Result.DEFAULT);
 				}
@@ -95,7 +101,7 @@ public class SeasonalCropGrowthHandler
                 if (!plant.is(ModTags.Blocks.UNBREAKABLE_INFERTILE_CROPS))
                 {
 					event.setCanceled(true);
-                    event.getLevel().destroyBlock(event.getPos(), false);
+                    level.destroyBlock(event.getPos(), false);
                 }
                 else
                 {

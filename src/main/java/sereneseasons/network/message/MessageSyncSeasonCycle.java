@@ -6,6 +6,7 @@ package sereneseasons.network.message;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +37,7 @@ public class MessageSyncSeasonCycle
 
     public static MessageSyncSeasonCycle decode(FriendlyByteBuf buf)
     {
-        return new MessageSyncSeasonCycle(ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(buf.readUtf())), buf.readInt());
+        return new MessageSyncSeasonCycle(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(buf.readUtf())), buf.readInt());
     }
 
     public static class Handler

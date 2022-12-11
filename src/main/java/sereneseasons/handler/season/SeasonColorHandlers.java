@@ -3,6 +3,7 @@ package sereneseasons.handler.season;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -45,8 +46,8 @@ public class SeasonColorHandlers
 		{
 			Minecraft minecraft = Minecraft.getInstance();
 			Level level = minecraft.level;
-			Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
-			Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(key -> Optional.of(biomeRegistry.getOrCreateHolderOrThrow(key))).orElse(null);
+			Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registries.BIOME);
+			Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(key -> biomeRegistry.getHolder(key)).orElse(null);
 			int originalColor = originalGrassColorResolver.getColor(biome, x, z);
 
 			if (biomeHolder != null)
@@ -64,8 +65,8 @@ public class SeasonColorHandlers
 		{
 			Minecraft minecraft = Minecraft.getInstance();
 			Level level = minecraft.level;
-			Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
-			Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(key -> Optional.of(biomeRegistry.getOrCreateHolderOrThrow(key))).orElse(null);
+			Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registries.BIOME);
+			Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(key -> biomeRegistry.getHolder(key)).orElse(null);
 			int originalColor = originalFoliageColorResolver.getColor(biome, x, z);
 
 			if (biomeHolder != null)

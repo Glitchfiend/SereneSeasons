@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -137,7 +138,7 @@ public class ModFertility
 
     private static void populateSeasonCrops(TagKey<Block> tag, Set<String> cropSet, int bitmask)
     {
-        Registry.BLOCK.getTag(tag).ifPresent(blocks ->
+        BuiltInRegistries.BLOCK.getTag(tag).ifPresent(blocks ->
         {
             for (Holder<Block> block : blocks)
             {
@@ -174,7 +175,7 @@ public class ModFertility
 
     private static void populateSeasonSeeds(TagKey<Item> tag, Set<String> cropSet, int bitmask)
     {
-        Registry.ITEM.getTag(tag).ifPresent(items ->
+        BuiltInRegistries.ITEM.getTag(tag).ifPresent(items ->
         {
             for (Holder<Item> item : items)
             {
@@ -214,7 +215,7 @@ public class ModFertility
         //Set up tooltips if enabled and on client side
         if (FertilityConfig.cropTooltips.get() && FertilityConfig.seasonalCrops.get())
         {
-            String name = Registry.ITEM.getKey(event.getItemStack().getItem()).toString();
+            String name = BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem()).toString();
             if (seedSeasons.containsKey(name))
             {
                 int mask = seedSeasons.get(name);
