@@ -4,6 +4,8 @@
  ******************************************************************************/
 package sereneseasons.init;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import sereneseasons.config.FertilityConfig;

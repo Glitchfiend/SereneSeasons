@@ -12,10 +12,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
-import sereneseasons.config.BiomeConfig;
-import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
-import sereneseasons.core.SereneSeasons;
+import sereneseasons.init.ModConfig;
+import sereneseasons.init.ModTags;
 
 public class SeasonColorUtil
 {
@@ -88,7 +87,7 @@ public class SeasonColorUtil
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(dimension)) {
+        if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !ServerConfig.isDimensionWhitelisted(dimension)) {
             return originalColour;
         }
 
@@ -101,7 +100,7 @@ public class SeasonColorUtil
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
         int fixedColour = newColour;
-        if (BiomeConfig.lessColorChange(biome))
+        if (biome.is(ModTags.Biomes.LESS_COLOR_CHANGE_BIOMES))
         {
             fixedColour = mixColours(newColour, originalColour, 0.75F);
         }
@@ -112,7 +111,7 @@ public class SeasonColorUtil
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
-        if (!BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(dimension))
+        if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !ServerConfig.isDimensionWhitelisted(dimension))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();
@@ -124,7 +123,7 @@ public class SeasonColorUtil
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
         int fixedColour = newColour;
-        if (BiomeConfig.lessColorChange(biome))
+        if (biome.is(ModTags.Biomes.LESS_COLOR_CHANGE_BIOMES))
         {
             fixedColour = mixColours(newColour, originalColour, 0.75F);
         }

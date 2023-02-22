@@ -3,7 +3,6 @@ package sereneseasons.init;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -15,10 +14,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.ServerConfig;
-import sereneseasons.core.SereneSeasons;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -73,16 +70,16 @@ public class ModFertility
             return true;
         }
 
-        if (BiomeConfig.infertileBiome(biome))
+        if (biome.is(ModTags.Biomes.INFERTILE_BIOMES))
         {
             return false;
         }
-        else if (!FertilityConfig.seasonalCrops.get() || !BiomeConfig.enablesSeasonalEffects(biome) || !ServerConfig.isDimensionWhitelisted(level.dimension()))
+        else if (!FertilityConfig.seasonalCrops.get() || biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !ServerConfig.isDimensionWhitelisted(level.dimension()))
         {
             return true;
         }
 
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (biome.is(ModTags.Biomes.TROPICAL_BIOMES))
         {
             if (summerPlants.contains(cropName) || !(allListedPlants.contains(cropName)))
             {

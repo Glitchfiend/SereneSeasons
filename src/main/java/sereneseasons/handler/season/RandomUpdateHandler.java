@@ -7,12 +7,12 @@ package sereneseasons.handler.season;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.*;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.DistanceManager;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
@@ -26,14 +26,14 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
+import sereneseasons.init.ModConfig;
+import sereneseasons.init.ModTags;
 import sereneseasons.season.SeasonHooks;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber
 public class RandomUpdateHandler
@@ -107,7 +107,7 @@ public class RandomUpdateHandler
 			BlockState groundState = world.getBlockState(topGroundPos);
 			Holder<Biome> biome = world.getBiome(topAirPos);
 
-			if (!BiomeConfig.enablesSeasonalEffects(biome))
+			if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
 				return;
 
 			if (aboveGroundState.getBlock() == Blocks.SNOW)

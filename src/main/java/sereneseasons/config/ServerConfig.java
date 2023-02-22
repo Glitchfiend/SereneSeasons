@@ -33,15 +33,6 @@ public class ServerConfig
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistedDimensions;
     private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
 
-    // Biome settings
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> blacklistedBiomes;
-    private static List<String> defaultBlacklistedBiomes = Lists.newArrayList("minecraft:lush_caves", "minecraft:dripstone_caves", "minecraft:ocean", "minecraft:deep_ocean", "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean",
-            "minecraft:cold_ocean", "minecraft:deep_cold_ocean", "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean", "minecraft:warm_ocean", "minecraft:river", "minecraft:the_void",
-            "biomesoplenty:glowing_grotto", "biomesoplenty:spider_nest");
-
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> tropicalBiomes;
-    private static List<String> defaultTropicalBiomes = Lists.newArrayList("minecraft:swamp", "minecraft:warm_ocean");
-
     private static final Predicate<Object> RESOURCE_LOCATION_VALIDATOR = (obj) ->
     {
         if (!(obj instanceof String))
@@ -77,11 +68,6 @@ public class ServerConfig
 
         BUILDER.push("dimension_settings");
         whitelistedDimensions = BUILDER.comment("Seasons will only apply to dimensons listed here").defineList("whitelisted_dimensions", defaultWhitelistedDimensions, RESOURCE_LOCATION_VALIDATOR);
-        BUILDER.pop();
-
-        BUILDER.push("biome_settings");
-        blacklistedBiomes = BUILDER.comment("Biomes in which seasons will not apply.").defineList("blacklisted_biomes", defaultBlacklistedBiomes, RESOURCE_LOCATION_VALIDATOR);
-        tropicalBiomes = BUILDER.comment("Biomes which use tropical seasons.").defineList("tropical_biomes", defaultTropicalBiomes, RESOURCE_LOCATION_VALIDATOR);
         BUILDER.pop();
 
         SPEC = BUILDER.build();

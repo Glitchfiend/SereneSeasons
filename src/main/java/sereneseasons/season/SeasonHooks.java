@@ -19,9 +19,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
+import sereneseasons.init.ModConfig;
+import sereneseasons.init.ModTags;
 
 public class SeasonHooks
 {
@@ -90,11 +91,11 @@ public class SeasonHooks
         {
             Holder<Biome> biome = level.getBiome(position);
 
-            if (ServerConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biome))
+            if (ServerConfig.isDimensionWhitelisted(level.dimension()) && !biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
             {
                 if (SeasonHooks.shouldRainInBiomeInSeason(level, biome))
                 {
-                    if (BiomeConfig.usesTropicalSeasons(biome)) return true;
+                    if (biome.is(ModTags.Biomes.TROPICAL_BIOMES)) return true;
                     else return SeasonHooks.getBiomeTemperature(level, biome, position) >= 0.15F;
                 }
                 else return false;
@@ -112,7 +113,7 @@ public class SeasonHooks
         Biome.Precipitation rainType = biome.value().getPrecipitation();
         Level level = Minecraft.getInstance().level;
 
-        if (ServerConfig.isDimensionWhitelisted(level.dimension()) && BiomeConfig.enablesSeasonalEffects(biome) && (rainType == Biome.Precipitation.RAIN || rainType == Biome.Precipitation.NONE))
+        if (ServerConfig.isDimensionWhitelisted(level.dimension()) && !biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) && (rainType == Biome.Precipitation.RAIN || rainType == Biome.Precipitation.NONE))
         {
             if (SeasonHooks.shouldRainInBiomeInSeason(level, biome))
                 return Biome.Precipitation.RAIN;
@@ -148,9 +149,9 @@ public class SeasonHooks
 
     public static float getBiomeTemperatureInSeason(Season.SubSeason subSeason, Holder<Biome> biome, BlockPos pos)
     {
-        boolean tropicalBiome = BiomeConfig.usesTropicalSeasons(biome);
+        boolean tropicalBiome = biome.is(ModTags.Biomes.TROPICAL_BIOMES);
         float biomeTemp = biome.value().getTemperature(pos);
-        if (!tropicalBiome && biome.value().getBaseTemperature() <= 0.8F && BiomeConfig.enablesSeasonalEffects(biome))
+        if (!tropicalBiome && biome.value().getBaseTemperature() <= 0.8F && !biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
         {
             switch (subSeason)
             {
@@ -180,7 +181,7 @@ public class SeasonHooks
 
     public static boolean shouldRainInBiomeInSeason(Level world, Holder<Biome> biome)
     {
-        if (BiomeConfig.usesTropicalSeasons(biome))
+        if (biome.is(ModTags.Biomes.TROPICAL_BIOMES))
         {
             Season.TropicalSeason tropicalSeason = SeasonHelper.getSeasonState(world).getTropicalSeason();
 

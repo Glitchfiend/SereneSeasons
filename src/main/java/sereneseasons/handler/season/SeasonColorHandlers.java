@@ -1,29 +1,29 @@
 package sereneseasons.handler.season;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.ColorResolver;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.ColorResolver;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.season.ISeasonColorProvider;
-import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.ServerConfig;
+import sereneseasons.init.ModConfig;
+import sereneseasons.init.ModTags;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColorUtil;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class SeasonColorHandlers
@@ -53,7 +53,7 @@ public class SeasonColorHandlers
 			if (biomeHolder != null)
 			{
 				SeasonTime calendar = SeasonHandler.getClientSeasonTime();
-				ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biomeHolder) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+				ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 
 				return SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biomeHolder, originalColor);
 			}
@@ -72,7 +72,7 @@ public class SeasonColorHandlers
 			if (biomeHolder != null)
 			{
 				SeasonTime calendar = SeasonHandler.getClientSeasonTime();
-				ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biomeHolder) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+				ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 
 				return SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biomeHolder, originalColor);
 			}
@@ -93,10 +93,10 @@ public class SeasonColorHandlers
 			{
 				Holder<Biome> biome = level.getBiome(pos);
 
-				if (BiomeConfig.enablesSeasonalEffects(biome))
+				if (!biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
 				{
 					SeasonTime calendar = SeasonHandler.getClientSeasonTime();
-					ISeasonColorProvider colorProvider = BiomeConfig.usesTropicalSeasons(biome) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+					ISeasonColorProvider colorProvider = biome.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 					birchColor = colorProvider.getBirchColor();
 				}
 			}

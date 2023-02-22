@@ -23,9 +23,10 @@ import sereneseasons.api.SSGameRules;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.BiomeConfig;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.handler.PacketHandler;
+import sereneseasons.init.ModConfig;
+import sereneseasons.init.ModTags;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
@@ -184,6 +185,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     @Override
     public boolean usesTropicalSeasons(Holder<Biome> biome)
     {
-        return BiomeConfig.usesTropicalSeasons(biome);
+        return biome.is(ModTags.Biomes.TROPICAL_BIOMES);
     }
 }
