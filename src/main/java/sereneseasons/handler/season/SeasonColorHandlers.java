@@ -98,6 +98,11 @@ public class SeasonColorHandlers
 					SeasonTime calendar = SeasonHandler.getClientSeasonTime();
 					ISeasonColorProvider colorProvider = biome.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 					birchColor = colorProvider.getBirchColor();
+
+					if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
+					{
+						birchColor = SeasonColorUtil.mixColours(colorProvider.getBirchColor(), FoliageColor.getBirchColor(), 0.75F);
+					}
 				}
 			}
 

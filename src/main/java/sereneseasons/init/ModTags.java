@@ -48,11 +48,11 @@ public class ModTags
 
         public static final TagKey<Biome> BLACKLISTED_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:blacklisted_biomes"));
         public static final TagKey<Biome> INFERTILE_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:infertile_biomes"));
-        public static final TagKey<Biome> LESS_COLOR_CHANGE_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:less_color_change_biomes"));
+        public static final TagKey<Biome> LESSER_COLOR_CHANGE_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:lesser_color_change_biomes"));
         public static final TagKey<Biome> TROPICAL_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:tropical_biomes"));
     }
 
-    private static TagKey<Biome> createBiomeTag(final ResourceLocation name) {
+    private static TagKey<Biome> createBiomeTag(ResourceLocation name) {
         return TagKey.create(Registries.BIOME, name);
     }
 }

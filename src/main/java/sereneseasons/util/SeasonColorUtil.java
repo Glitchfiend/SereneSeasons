@@ -13,7 +13,6 @@ import net.minecraft.world.level.biome.Biome;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
 import sereneseasons.config.ServerConfig;
-import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 
 public class SeasonColorUtil
@@ -100,7 +99,7 @@ public class SeasonColorUtil
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
         int fixedColour = newColour;
-        if (biome.is(ModTags.Biomes.LESS_COLOR_CHANGE_BIOMES))
+        if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
         {
             fixedColour = mixColours(newColour, originalColour, 0.75F);
         }
@@ -123,7 +122,7 @@ public class SeasonColorUtil
     	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
         int fixedColour = newColour;
-        if (biome.is(ModTags.Biomes.LESS_COLOR_CHANGE_BIOMES))
+        if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
         {
             fixedColour = mixColours(newColour, originalColour, 0.75F);
         }
