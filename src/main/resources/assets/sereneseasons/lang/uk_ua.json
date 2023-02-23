@@ -14,8 +14,21 @@
 
   "desc.sereneseasons.fertile_seasons": "Родючі сезони",
   "desc.sereneseasons.year_round": "Цілий рік",
+  "desc.sereneseasons.day_counter": "День %s/%s",
   "desc.sereneseasons.spring": "Весна",
+  "desc.sereneseasons.early_spring": "Рання весна",
+  "desc.sereneseasons.mid_spring": "Середина весни",
+  "desc.sereneseasons.late_spring": "Пізня весна",
   "desc.sereneseasons.summer": "Літо",
+  "desc.sereneseasons.early_summer" : "Раннє літо",
+  "desc.sereneseasons.mid_summer" : "Середина літа",
+  "desc.sereneseasons.late_summer" : "Пізнє літо",
   "desc.sereneseasons.autumn": "Осінь",
+  "desc.sereneseasons.early_autumn": "Рання осінь",
+  "desc.sereneseasons.mid_autumn": "Середина осені",
+  "desc.sereneseasons.late_autumn": "Пізня осінь",
   "desc.sereneseasons.winter": "Зима"
+  "desc.sereneseasons.early_winter": "Рання зима",
+  "desc.sereneseasons.mid_winter": "Середина зими",
+  "desc.sereneseasons.late_winter": "Пізня зима"
 }
