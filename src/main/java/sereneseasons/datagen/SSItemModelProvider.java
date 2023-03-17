@@ -5,6 +5,7 @@
 package sereneseasons.datagen;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -18,9 +19,9 @@ import sereneseasons.item.CalendarType;
 
 public class SSItemModelProvider extends ItemModelProvider
 {
-    public SSItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper)
+    public SSItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper)
     {
-        super(generator, SereneSeasons.MOD_ID, existingFileHelper);
+        super(output, SereneSeasons.MOD_ID, existingFileHelper);
     }
 
     @Override

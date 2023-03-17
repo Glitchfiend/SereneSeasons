@@ -36,16 +36,10 @@ public class MixinLevelRenderer
         return this.renderSnowAndRain_biome;
     }
 
-    @Redirect(method="renderSnowAndRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitation()Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
-    public Biome.Precipitation renderSnowAndRain_getPrecipitation(Biome biome)
+    @Redirect(method="renderSnowAndRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
+    public Biome.Precipitation renderSnowAndRain_getPrecipitationAt(Biome biome, BlockPos pos)
     {
-        return SeasonHooks.getLevelRendererPrecipitation(this.renderSnowAndRain_biome);
-    }
-
-    @Redirect(method="renderSnowAndRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
-    public boolean renderSnowAndRain_warmEnoughToRain(Biome biome, BlockPos pos)
-    {
-        return SeasonHooks.warmEnoughToRainHook(this.renderSnowAndRain_biome, pos, this.renderSnowAndRain_level);
+        return SeasonHooks.getPrecipitationAtLevelRendererHook(this.renderSnowAndRain_biome, pos);
     }
 
     /*
@@ -60,15 +54,9 @@ public class MixinLevelRenderer
         return this.tickRain_biome;
     }
 
-    @Redirect(method="tickRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitation()Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
-    public Biome.Precipitation tickRain_getPrecipitation(Biome biome)
+    @Redirect(method="tickRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
+    public Biome.Precipitation tickRain_getPrecipitationAt(Biome biome, BlockPos pos)
     {
-        return SeasonHooks.getLevelRendererPrecipitation(this.tickRain_biome);
-    }
-
-    @Redirect(method="tickRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
-    public boolean tickRain_warmEnoughToRain(Biome biome, BlockPos pos)
-    {
-        return SeasonHooks.warmEnoughToRainHook(this.tickRain_biome, pos, this.tickRain_level);
+        return SeasonHooks.getPrecipitationAtLevelRendererHook(this.tickRain_biome, pos);
     }
 }

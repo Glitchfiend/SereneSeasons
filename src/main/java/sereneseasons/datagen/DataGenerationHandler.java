@@ -5,6 +5,7 @@
 package sereneseasons.datagen;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,10 +18,11 @@ public class DataGenerationHandler
     public static void onGatherData(GatherDataEvent event)
     {
         DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         // Client
-        generator.addProvider(event.includeClient(), new SSBlockStateProvider(generator, existingFileHelper));
-        generator.addProvider(event.includeClient(), new SSItemModelProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeClient(), new SSBlockStateProvider(packOutput, existingFileHelper));
+        generator.addProvider(event.includeClient(), new SSItemModelProvider(packOutput, existingFileHelper));
     }
 }

@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "sereneseasons.refmap.json",
   "mixins": [
-    "MixinLevel"
+    "MixinLevel",
+    "MixinServerLevel"
   ],
   "client": [
     "client.MixinLevelRenderer"

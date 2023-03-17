@@ -28,15 +28,9 @@ function Transformation(name, desc) {
 }
 
 var TRANSFORMATIONS = {
-    "net/minecraft/world/entity/animal/SnowGolem": [ 
-        new Transformation(ASM.mapMethod("m_8107_"), "()V", patchShouldSnowGolemBurnCalls) // aiStep
-    ],
     "net/minecraft/world/level/biome/Biome": [ 
         new Transformation(ASM.mapMethod("m_47480_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", patchShouldFreezeWarmEnoughToRainCalls), // shouldFreeze
         new Transformation(ASM.mapMethod("m_47519_"), "(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",  patchShouldSnow)                         // shouldSnow
-    ],
-    "net/minecraft/server/level/ServerLevel": [
-        new Transformation(ASM.mapMethod("m_8714_"), "(Lnet/minecraft/world/level/chunk/LevelChunk;I)V", patchTickChunk) //tickChunk
     ]
 };
 
@@ -100,40 +94,8 @@ function patchShouldSnow(node) {
     log("Successfully patched shouldSnow");
 }
 
-// This is used to fill cauldrons with snow/rain during rain
-function patchTickChunk(node) {
-    var call = ASM.findFirstMethodCall(node,
-        ASM.MethodType.VIRTUAL,
-        "net/minecraft/world/level/biome/Biome",
-        COLD_ENOUGH_TO_SNOW,
-        "(Lnet/minecraft/core/BlockPos;)Z");
-
-    if (call == null) {
-        log("Failed to locate call to coldEnoughToSnow");
-        return;
-    }
-
-    // Swap the call to Vanilla's coldEnoughToSnow with ours
-    var insns = new InsnList();
-    insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
-    insns.add(ASM.buildMethodCall(
-        "sereneseasons/season/SeasonHooks",
-        "tickChunkColdEnoughToSnowHook",
-        "(Lnet/minecraft/world/level/biome/Biome;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/LevelReader;)Z",
-        ASM.MethodType.STATIC
-    ));
-
-    node.instructions.insertBefore(call, insns);
-    node.instructions.remove(call);
-    log("Successfully patched tickChunk");
-}
-
 function patchShouldFreezeWarmEnoughToRainCalls(method) {
     patchTemperatureCalls(method, WARM_ENOUGH_TO_RAIN, "shouldFreezeWarmEnoughToRainHook");
-}
-
-function patchShouldSnowGolemBurnCalls(method) {
-    patchTemperatureCalls(method, SHOULD_SNOW_GOLEM_BURN, "shouldSnowGolemBurnHook");
 }
 
 function patchTemperatureCalls(method, callMethodName, hookMethodName) {

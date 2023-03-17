@@ -87,7 +87,7 @@ public class SereneSeasons
         {
             builder.icon(() -> new ItemStack(SSItems.SS_ICON.get()))
                 .title(Component.translatable("itemGroup.tabSereneSeasons"))
-                .displayItems((featureFlags, output, hasOp) -> {
+                .displayItems((displayParameters, output) -> {
                     // Add items
                     for (Field field : SSItems.class.getFields())
                     {

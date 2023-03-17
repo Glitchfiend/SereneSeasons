@@ -5,6 +5,7 @@
 package sereneseasons.datagen;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -21,9 +22,9 @@ import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOL
 
 public class SSBlockStateProvider extends BlockStateProvider
 {
-    public SSBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper)
+    public SSBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper)
     {
-        super(gen, SereneSeasons.MOD_ID, exFileHelper);
+        super(output, SereneSeasons.MOD_ID, exFileHelper);
     }
 
     @Override

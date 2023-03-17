@@ -28,7 +28,6 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
-import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 import sereneseasons.season.SeasonHooks;
 
