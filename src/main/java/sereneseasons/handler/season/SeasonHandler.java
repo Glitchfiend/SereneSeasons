@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
@@ -22,10 +23,10 @@ import net.minecraftforge.network.PacketDistributor;
 import sereneseasons.api.SSGameRules;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
+import sereneseasons.api.season.SeasonChangedEvent;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.handler.PacketHandler;
-import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 import sereneseasons.season.SeasonSavedData;
@@ -121,14 +122,38 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             }
         }
     }
-    
-    public static void sendSeasonUpdate(Level world)
+
+    public static final HashMap<ResourceKey<Level>, Integer> prevServerSeasonCycleTicks = new HashMap<>();
+
+    public static void sendSeasonUpdate(Level level)
     {
-        if (!world.isClientSide)
-        {
-            SeasonSavedData savedData = getSeasonSavedData(world);
-            PacketHandler.HANDLER.send(PacketDistributor.ALL.noArg(), new MessageSyncSeasonCycle(world.dimension(), savedData.seasonCycleTicks));
-        }
+        if (level.isClientSide)
+            return;
+
+            SeasonSavedData savedData = getSeasonSavedData(level);
+
+        // NOTE: The previous tick time is not necessary the current tick time - 1. This is why we have to store it in a map.
+        SeasonTime newTime = new SeasonTime(savedData.seasonCycleTicks);
+        SeasonTime prevTime = new SeasonTime(prevServerSeasonCycleTicks.computeIfAbsent(level.dimension(), (key) -> newTime.getSeasonCycleTicks()));
+
+        Season.SubSeason prevSeason = prevTime.getSubSeason();
+        Season.TropicalSeason prevTropicalSeason = prevTime.getTropicalSeason();
+        Season.SubSeason newSeason = newTime.getSubSeason();
+        Season.TropicalSeason newTropicalSeason = newTime.getTropicalSeason();
+
+        // Update the previous time
+        prevServerSeasonCycleTicks.put(level.dimension(), newTime.getSeasonCycleTicks());
+
+        // Fire an event on standard season changes
+        if (!prevSeason.equals(newSeason))
+            MinecraftForge.EVENT_BUS.post(new SeasonChangedEvent.Standard(level, prevSeason, newSeason));
+
+        // Fire an event on tropical season changes
+        if (!prevTropicalSeason.equals(newTropicalSeason))
+            MinecraftForge.EVENT_BUS.post(new SeasonChangedEvent.Tropical(level, prevTropicalSeason, newTropicalSeason));
+
+        // Send the update packet
+        PacketHandler.HANDLER.send(PacketDistributor.ALL.noArg(), new MessageSyncSeasonCycle(level.dimension(), savedData.seasonCycleTicks));
     }
     
     public static SeasonSavedData getSeasonSavedData(Level w)
