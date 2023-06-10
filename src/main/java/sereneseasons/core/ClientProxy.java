@@ -33,7 +33,7 @@ public class ClientProxy extends CommonProxy
 
                 if (world == null && holder != null)
                 {
-                    world = holder.level;
+                    world = holder.level();
                 }
 
                 if (world == null)
@@ -63,7 +63,7 @@ public class ClientProxy extends CommonProxy
 
                 if (level == null && holder != null)
                 {
-                    level = holder.level;
+                    level = holder.level();
                 }
 
                 if (level == null)

@@ -38,7 +38,7 @@ public class CommandSetSeason
             seasonData.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * season.ordinal();
             seasonData.setDirty();
             SeasonHandler.sendSeasonUpdate(world);
-            cs.sendSuccess(Component.translatable("commands.sereneseasons.setseason.success", Component.translatable("desc.sereneseasons."+ season.toString().toLowerCase(Locale.ROOT))), true);
+            cs.sendSuccess(() -> Component.translatable("commands.sereneseasons.setseason.success", Component.translatable("desc.sereneseasons."+ season.toString().toLowerCase(Locale.ROOT))), true);
         }
         else
         {

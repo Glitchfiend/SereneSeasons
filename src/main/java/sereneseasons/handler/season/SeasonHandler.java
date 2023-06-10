@@ -78,7 +78,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
         Player player = event.getEntity();
-        Level world = player.level;
+        Level world = player.level();
         
         sendSeasonUpdate(world);
     }
@@ -101,7 +101,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         //Only do this when in the world
         if (Minecraft.getInstance().player == null) return;
-        ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
+        ResourceKey<Level> dimension = Minecraft.getInstance().player.level().dimension();
 
         if (event.phase == TickEvent.Phase.END && ServerConfig.isDimensionWhitelisted(dimension))
         {

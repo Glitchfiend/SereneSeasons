@@ -47,7 +47,7 @@ public class MessageSyncSeasonCycle
             context.get().enqueueWork(() ->
             {
                 if (Minecraft.getInstance().player == null) return;
-                ResourceKey<Level> playerDimension = Minecraft.getInstance().player.level.dimension();
+                ResourceKey<Level> playerDimension = Minecraft.getInstance().player.level().dimension();
 
                 if (playerDimension.equals(packet.dimension))
                 {

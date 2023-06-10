@@ -86,8 +86,8 @@ public class SeasonColorHandlers
 		Minecraft.getInstance().getBlockColors().register((BlockState state, @Nullable BlockAndTintGetter dimensionReader, @Nullable BlockPos pos, int tintIndex) ->
 		{
 			int birchColor = FoliageColor.getBirchColor();
-			Level level = Minecraft.getInstance().player.level;
-			ResourceKey<Level> dimension = Minecraft.getInstance().player.level.dimension();
+			Level level = Minecraft.getInstance().player.level();
+			ResourceKey<Level> dimension = Minecraft.getInstance().player.level().dimension();
 
 			if (level != null && pos != null && ServerConfig.changeBirchColor.get() && ServerConfig.isDimensionWhitelisted(dimension))
 			{

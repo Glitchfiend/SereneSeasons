@@ -5,7 +5,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 import sereneseasons.api.SSBlockEntities;
 import sereneseasons.api.SSBlocks;
@@ -26,7 +25,7 @@ public class ModBlocks
 
     private static void registerBlocks()
     {
-        SSBlocks.SEASON_SENSOR = registerBlock(() -> new SeasonSensorBlock(Block.Properties.of(Material.STONE).strength(0.2F).sound(SoundType.STONE)), "season_sensor");
+        SSBlocks.SEASON_SENSOR = registerBlock(() -> new SeasonSensorBlock(Block.Properties.of().strength(0.2F).sound(SoundType.STONE)), "season_sensor");
     }
 
     private static void registerBlockEntities()
