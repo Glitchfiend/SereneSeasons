@@ -7,6 +7,7 @@
 	"minecraft:jungle_sapling",
 	"minecraft:acacia_sapling",
 	"minecraft:dark_oak_sapling",
+	"minecraft:mangrove_leaves",
 	"minecraft:mangrove_propagule",
 	"minecraft:azalea",
 	"minecraft:flowering_azalea",
@@ -23,6 +24,7 @@
 	"minecraft:sea_pickle",
 	"minecraft:kelp",
 	"minecraft:glow_lichen",
-	"minecraft:glow_berries"
+	"minecraft:glow_berries",
+	"minecraft:rooted_dirt"
   ]
 }

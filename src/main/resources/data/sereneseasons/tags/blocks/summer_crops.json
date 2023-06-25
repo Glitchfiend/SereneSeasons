@@ -7,7 +7,9 @@
 	"minecraft:jungle_sapling",
 	"minecraft:acacia_sapling",
 	"minecraft:dark_oak_sapling",
+	"minecraft:mangrove_leaves",
 	"minecraft:mangrove_propagule",
+	"minecraft:cherry_sapling",
 	"minecraft:azalea",
 	"minecraft:flowering_azalea",
 	"minecraft:red_mushroom",
@@ -28,8 +30,13 @@
 	"minecraft:glow_lichen",
 	"minecraft:cave_vines",
 	"minecraft:cave_vines_plant",
+	"minecraft:small_dripleaf",
+	"minecraft:big_dripleaf",
+	"minecraft:big_dripleaf_stem",
 	"minecraft:sweet_berry_bush",
 	"minecraft:grass_block",
+	"minecraft:moss_block",
+	"minecraft:rooted_dirt",
 	"minecraft:grass",
 	"minecraft:fern",
 	"minecraft:bamboo",
@@ -38,6 +45,8 @@
 	"minecraft:sugar_cane",
 	"minecraft:wheat",
 	"minecraft:melon_stem",
-	"minecraft:cocoa"
+	"minecraft:cocoa",
+	"minecraft:torchflower_crop",
+	"minecraft:pitcher_crop"
   ]
 }

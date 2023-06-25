@@ -2,6 +2,12 @@
   "replace": false,
   "values": [
 	"minecraft:grass_block",
+	"minecraft:moss_block",
+	"minecraft:rooted_dirt",
+	"minecraft:big_dripleaf",
+	"minecraft:big_dripleaf_stem",
+	"minecraft:small_dripleaf",
+	"minecraft:mangrove_leaves",
 	"minecraft:sugar_cane",
 	"minecraft:cactus",
 	"minecraft:bamboo",
