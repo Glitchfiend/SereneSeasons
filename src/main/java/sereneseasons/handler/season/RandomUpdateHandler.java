@@ -28,6 +28,8 @@ import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
+import sereneseasons.config.ServerConfig.MeltChanceInfo;
+import sereneseasons.core.SereneSeasons;
 import sereneseasons.init.ModTags;
 import sereneseasons.season.SeasonHooks;
 
@@ -74,31 +76,14 @@ public class RandomUpdateHandler
 		}
 	}
 
-	private static void meltInChunk(ChunkMap chunkManager, LevelChunk chunkIn, Season.SubSeason subSeason)
+	private static void meltInChunk(ChunkMap chunkManager, LevelChunk chunkIn, int meltRand)
 	{
 		ServerLevel world = chunkManager.level;
 		ChunkPos chunkpos = chunkIn.getPos();
 		int i = chunkpos.getMinBlockX();
 		int j = chunkpos.getMinBlockZ();
-		int meltRand;
 
-		switch (subSeason)
-		{
-			case EARLY_SPRING:
-				meltRand = 16;
-				break;
-			case MID_SPRING:
-				meltRand = 12;
-				break;
-			case LATE_SPRING:
-				meltRand = 8;
-				break;
-			default:
-				meltRand = 4;
-				break;
-		}
-
-		if (world.random.nextInt(meltRand) == 0)
+		if (meltRand > 0 && world.random.nextInt(meltRand) == 0)
 		{
 			BlockPos topAirPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, world.getBlockRandomPos(i, 0, j, 15));
 			BlockPos topGroundPos = topAirPos.below();
@@ -109,19 +94,10 @@ public class RandomUpdateHandler
 			if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
 				return;
 
-			if (aboveGroundState.getBlock() == Blocks.SNOW)
+			if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 			{
-				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
-				{
-					world.setBlockAndUpdate(topAirPos, Blocks.AIR.defaultBlockState());
-				}
-			}
-			else if (groundState.getBlock() == Blocks.ICE)
-			{
-				if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
-				{
-					((IceBlock) Blocks.ICE).melt(groundState, world, topGroundPos);
-				}
+				if(aboveGroundState.getBlock() == Blocks.SNOW) world.setBlockAndUpdate(topAirPos, Blocks.AIR.defaultBlockState());
+				else if(groundState.getBlock() == Blocks.ICE) ((IceBlock) Blocks.ICE).melt(groundState, world, topGroundPos);
 			}
 		}
 	}
@@ -136,9 +112,13 @@ public class RandomUpdateHandler
 			Season.SubSeason subSeason = SeasonHelper.getSeasonState(event.level).getSubSeason();
 			Season season = subSeason.getSeason();
 
+			MeltChanceInfo meltInfo =  ServerConfig.getMeltInfo(subSeason);
+			int meltRand = meltInfo.getMeltChance();
+			int rolls = meltInfo.getRolls();
+
 			adjustWeatherFrequency(event.level, season);
 
-			if (season != Season.WINTER)
+			if(rolls > 0 && meltRand > 0)
 			{
 				if (SeasonsConfig.generateSnowAndIce.get() && ServerConfig.isDimensionWhitelisted(event.level.dimension()))
 				{
@@ -169,7 +149,10 @@ public class RandomUpdateHandler
 						{
 							if (level.shouldTickBlocksAt(chunkpos.toLong()))
 							{
-								meltInChunk(chunkMap, levelChunk, subSeason);
+								for(int i = 0; i < rolls; i++)
+								{
+									meltInChunk(chunkMap, levelChunk, meltRand);
+								}
 							}
 						}
 					}
