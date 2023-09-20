@@ -149,6 +149,7 @@ public class ServerConfig
         Config config = Config.of(LinkedHashMap::new, InMemoryFormat.withUniversalSupport());
         config.add("season", meltChanceInfo.getSubSeason().toString());
         config.add("melt_chance", meltChanceInfo.getMeltChance());
+        config.add("rolls", meltChanceInfo.getRolls());
         return config;
     }
 
