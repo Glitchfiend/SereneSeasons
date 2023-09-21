@@ -46,18 +46,18 @@ public class ServerConfig
     // Snow melting settings
     private static ForgeConfigSpec.ConfigValue<List<Config>> meltChanceEntries;
     private static List<Config> defaultMeltChances = Lists.newArrayList(
-            new MeltChanceInfo(SubSeason.EARLY_WINTER, 0, 1),
-            new MeltChanceInfo(SubSeason.MID_WINTER, 0, 1),
-            new MeltChanceInfo(SubSeason.LATE_WINTER, 0, 1),
-            new MeltChanceInfo(SubSeason.EARLY_SPRING, 16, 1),
-            new MeltChanceInfo(SubSeason.MID_SPRING, 12, 1),
-            new MeltChanceInfo(SubSeason.LATE_SPRING, 8, 1),
-            new MeltChanceInfo(SubSeason.EARLY_SUMMER, 4, 1),
-            new MeltChanceInfo(SubSeason.MID_SUMMER, 4, 1),
-            new MeltChanceInfo(SubSeason.LATE_SUMMER, 4, 1),
-            new MeltChanceInfo(SubSeason.EARLY_AUTUMN, 8, 1),
-            new MeltChanceInfo(SubSeason.MID_AUTUMN, 12, 1),
-            new MeltChanceInfo(SubSeason.LATE_AUTUMN, 16, 1)
+            new MeltChanceInfo(SubSeason.EARLY_WINTER, 0.0F, 0),
+            new MeltChanceInfo(SubSeason.MID_WINTER, 0.0F, 0),
+            new MeltChanceInfo(SubSeason.LATE_WINTER, 0.0F, 0),
+            new MeltChanceInfo(SubSeason.EARLY_SPRING, 6.25F, 1),
+            new MeltChanceInfo(SubSeason.MID_SPRING, 8.33F, 1),
+            new MeltChanceInfo(SubSeason.LATE_SPRING, 12.5F, 1),
+            new MeltChanceInfo(SubSeason.EARLY_SUMMER, 25.0F, 1),
+            new MeltChanceInfo(SubSeason.MID_SUMMER, 25.0F, 1),
+            new MeltChanceInfo(SubSeason.LATE_SUMMER, 25.0F, 1),
+            new MeltChanceInfo(SubSeason.EARLY_AUTUMN, 12.5F, 1),
+            new MeltChanceInfo(SubSeason.MID_AUTUMN, 8.33F, 1),
+            new MeltChanceInfo(SubSeason.LATE_AUTUMN, 6.25F, 1)
     ).stream().map(ServerConfig::meltChanceInfoToConfig).collect(Collectors.toList());
 
     private static final Predicate<Object> RESOURCE_LOCATION_VALIDATOR = (obj) ->
@@ -88,13 +88,19 @@ public class ServerConfig
 
             // Ensure config contains required values
             if (!config.contains("season")) return false;
-            if (!config.contains("melt_chance")) return false;
+            if (!config.contains("melt_percent")) return false;
             if (!config.contains("rolls")) return false;
 
             try
             {
                 // Validate season.
                 config.getEnum("season", SubSeason.class);
+
+                // Validate melt chance is within range.
+                float meltChance = config.<Number>get("melt_percent").floatValue();
+                if(meltChance < 0.0F || meltChance > 100.0F) return false;
+                // Validate rolls is positive.
+                if(config.getInt("rolls") < 0) return false;
             }
             catch (Exception e)
             {
@@ -125,7 +131,11 @@ public class ServerConfig
         BUILDER.pop();
 
         BUILDER.push("melting_settings");
-        meltChanceEntries = BUILDER.comment("The chance for a snow or ice block to melt per-tick in each season. The game must be restarted for these to apply.\nThe chance for a block to melt is is 1/melt_chance.\nIf melt_chance <= 0 or rolls <= 0, blocks will not melt during that subseason.").define("season_melt_chances", defaultMeltChances, MELT_INFO_VALIDATOR);
+        meltChanceEntries = BUILDER.comment("""
+                The melting settings for snow and ice in each season. The game must be restarted for these to apply.
+                melt_percent is the 0-1 percentage chance a snow or ice block will melt when chosen. (e.g. 100.0 = 100%, 50.0 = 50%)
+                rolls is the number of blocks randomly picked in each chunk, each tick. (High number rolls is not recommended on servers)
+                rolls should be 0 if blocks should not melt in that season.""").define("season_melt_chances", defaultMeltChances, MELT_INFO_VALIDATOR);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
@@ -148,7 +158,7 @@ public class ServerConfig
     {
         Config config = Config.of(LinkedHashMap::new, InMemoryFormat.withUniversalSupport());
         config.add("season", meltChanceInfo.getSubSeason().toString());
-        config.add("melt_chance", meltChanceInfo.getMeltChance());
+        config.add("melt_percent", meltChanceInfo.getMeltChance());
         config.add("rolls", meltChanceInfo.getRolls());
         return config;
     }
@@ -170,7 +180,7 @@ public class ServerConfig
         for (Config config : meltChanceEntries.get())
         {
             SubSeason subSeason = config.getEnum("season", SubSeason.class);
-            int meltChance = config.getInt("melt_chance");
+            float meltChance = config.<Number>get("melt_percent").floatValue();
             int rolls = config.getInt("rolls");
 
             tmp.put(subSeason, new MeltChanceInfo(subSeason, meltChance, rolls));
@@ -182,11 +192,11 @@ public class ServerConfig
 
     public static class MeltChanceInfo
     {
-        private SubSeason subSeason;
-        private int meltChance;
-        private int rolls;
+        private final SubSeason subSeason;
+        private final float meltChance;
+        private final int rolls;
 
-        private MeltChanceInfo(SubSeason subSeason, int meltChance, int rolls)
+        private MeltChanceInfo(SubSeason subSeason, float meltChance, int rolls)
         {
             this.subSeason = subSeason;
             this.meltChance = meltChance;
@@ -198,7 +208,7 @@ public class ServerConfig
             return subSeason;
         }
 
-        public int getMeltChance()
+        public float getMeltChance()
         {
             return meltChance;
         }

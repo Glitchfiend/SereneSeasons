@@ -76,14 +76,14 @@ public class RandomUpdateHandler
 		}
 	}
 
-	private static void meltInChunk(ChunkMap chunkManager, LevelChunk chunkIn, int meltRand)
+	private static void meltInChunk(ChunkMap chunkManager, LevelChunk chunkIn, float meltChance)
 	{
 		ServerLevel world = chunkManager.level;
 		ChunkPos chunkpos = chunkIn.getPos();
 		int i = chunkpos.getMinBlockX();
 		int j = chunkpos.getMinBlockZ();
 
-		if (meltRand > 0 && world.random.nextInt(meltRand) == 0)
+		if (meltChance > 0 && world.random.nextFloat() < meltChance)
 		{
 			BlockPos topAirPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, world.getBlockRandomPos(i, 0, j, 15));
 			BlockPos topGroundPos = topAirPos.below();
@@ -113,12 +113,12 @@ public class RandomUpdateHandler
 			Season season = subSeason.getSeason();
 
 			MeltChanceInfo meltInfo =  ServerConfig.getMeltInfo(subSeason);
-			int meltRand = meltInfo.getMeltChance();
+			float meltRand = meltInfo.getMeltChance() / 100.0F;
 			int rolls = meltInfo.getRolls();
 
 			adjustWeatherFrequency(event.level, season);
 
-			if(rolls > 0 && meltRand > 0)
+			if(rolls > 0 && meltRand > 0.0F)
 			{
 				if (SeasonsConfig.generateSnowAndIce.get() && ServerConfig.isDimensionWhitelisted(event.level.dimension()))
 				{
