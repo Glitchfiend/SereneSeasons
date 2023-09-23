@@ -10,9 +10,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -153,7 +155,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             MinecraftForge.EVENT_BUS.post(new SeasonChangedEvent.Tropical(level, prevTropicalSeason, newTropicalSeason));
 
         // Send the update packet
-        PacketHandler.HANDLER.send(PacketDistributor.ALL.noArg(), new MessageSyncSeasonCycle(level.dimension(), savedData.seasonCycleTicks));
+        PacketHandler.HANDLER.send(new MessageSyncSeasonCycle(level.dimension(), savedData.seasonCycleTicks), PacketDistributor.ALL.noArg());
     }
     
     public static SeasonSavedData getSeasonSavedData(Level w)
@@ -186,7 +188,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             return savedData;
         };
 
-        return saveDataManager.computeIfAbsent(SeasonSavedData::load, defaultSaveDataSupplier, SeasonSavedData.DATA_IDENTIFIER);
+        return saveDataManager.computeIfAbsent(new SavedData.Factory<>(defaultSaveDataSupplier, SeasonSavedData::load, DataFixTypes.LEVEL), SeasonSavedData.DATA_IDENTIFIER);
     }
     
     //

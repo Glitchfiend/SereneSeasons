@@ -2,9 +2,9 @@ package sereneseasons.handler;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.SimpleChannel;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.network.message.MessageSyncSeasonCycle;
 
@@ -14,12 +14,10 @@ import java.util.function.Supplier;
 
 public class PacketHandler
 {
-    public static final String PROTOCOL_VERSION = Integer.toString(0);
-    public static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
+    public static final int PROTOCOL_VERSION = 0;
+    public static final SimpleChannel HANDLER = ChannelBuilder
             .named(new ResourceLocation(SereneSeasons.MOD_ID, "main_channel"))
-            .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-            .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-            .networkProtocolVersion(() -> PROTOCOL_VERSION)
+            .networkProtocolVersion(PROTOCOL_VERSION)
             .simpleChannel();
     private static int nextFreeIndex;
 
@@ -29,8 +27,8 @@ public class PacketHandler
     }
 
     private static <T> void registerMessage(Class<T> type, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder,
-                                            BiConsumer<T, Supplier<NetworkEvent.Context>> consumer) {
-        HANDLER.registerMessage(nextFreeIndex++, type, encoder, decoder, consumer);
+                                            BiConsumer<T, CustomPayloadEvent.Context> consumer) {
+        HANDLER.messageBuilder(type).encoder(encoder).decoder(decoder).consumerMainThread(consumer).add();
     }
 
 }

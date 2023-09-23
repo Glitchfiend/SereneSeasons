@@ -84,7 +84,7 @@ public class SeasonHooks
     // Hooks for different calls to getPrecipitationAt in Biome
     //
 
-    public static Biome.Precipitation getPrecipitationAtTickChunkHook(LevelReader level, Biome biome, BlockPos pos)
+    public static Biome.Precipitation getPrecipitationAtTickIceAndSnowHook(LevelReader level, Biome biome, BlockPos pos)
     {
         if (!biome.hasPrecipitation())
         {
