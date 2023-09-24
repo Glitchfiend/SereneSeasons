@@ -5,6 +5,7 @@
   "commands.sereneseasons.setseason.fail": "Invalid season %s",
   "commands.sereneseasons.setseason.disabled": "Seasons are currently disabled!",
 
+  "gamerule.doSeasonCycle": "Advance seasonal cycle",
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
   "block.sereneseasons.season_sensor": "Season Sensor",
