@@ -20,6 +20,7 @@ public class MixinLevelRenderer
 {
     private Level renderSnowAndRain_level;
     private Holder<Biome> renderSnowAndRain_biome;
+    private BlockPos renderSnowAndRain_pos;
 
     private Level tickRain_level;
     private Holder<Biome> tickRain_biome;
@@ -33,6 +34,7 @@ public class MixinLevelRenderer
     {
         this.renderSnowAndRain_level = level;
         this.renderSnowAndRain_biome = level.getBiome(pos);
+        this.renderSnowAndRain_pos = pos;
         return this.renderSnowAndRain_biome;
     }
 
@@ -40,6 +42,12 @@ public class MixinLevelRenderer
     public Biome.Precipitation renderSnowAndRain_getPrecipitationAt(Biome biome, BlockPos pos)
     {
         return SeasonHooks.getPrecipitationAtLevelRendererHook(this.renderSnowAndRain_biome, pos);
+    }
+
+    @Redirect(method="renderSnowAndRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;hasPrecipitation()Z"))
+    public boolean renderSnowAndRain_hasPrecipitation(Biome biome)
+    {
+        return SeasonHooks.hasPrecipitationSeasonal(this.renderSnowAndRain_level, this.renderSnowAndRain_biome);
     }
 
     /*

@@ -66,12 +66,7 @@ public class SeasonHooks
 
             if (ServerConfig.isDimensionWhitelisted(level.dimension()) && !biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
             {
-                if (SeasonHooks.shouldRainInBiomeInSeason(level, biome, position))
-                {
-                    if (biome.is(ModTags.Biomes.TROPICAL_BIOMES)) return true;
-                    else return SeasonHooks.getBiomeTemperature(level, biome, position) >= 0.15F;
-                }
-                else return false;
+                return SeasonHooks.shouldRainAtSeasonal(level, biome, position);
             }
             else
             {
@@ -102,7 +97,7 @@ public class SeasonHooks
     {
         Level level = Minecraft.getInstance().level;
 
-        if (!biome.value().hasPrecipitation())
+        if (!hasPrecipitationSeasonal(level, biome))
         {
             return Biome.Precipitation.NONE;
         }
@@ -187,7 +182,7 @@ public class SeasonHooks
         return biomeTemp;
     }
 
-    public static boolean shouldRainInBiomeInSeason(Level level, Holder<Biome> biome, BlockPos pos)
+    public static boolean hasPrecipitationSeasonal(Level level, Holder<Biome> biome)
     {
         if (biome.is(ModTags.Biomes.TROPICAL_BIOMES))
         {
@@ -200,9 +195,20 @@ public class SeasonHooks
 
                 case MID_WET:
                     return true;
+
+                default:
+                    break;
             }
         }
 
-        return biome.value().getPrecipitationAt(pos) == Biome.Precipitation.RAIN;
+        return biome.value().hasPrecipitation();
+    }
+
+    public static boolean shouldRainAtSeasonal(Level level, Holder<Biome> biome, BlockPos pos)
+    {
+        if (!hasPrecipitationSeasonal(level, biome))
+            return false;
+
+        return biome.value().getPrecipitationAt(pos) == Biome.Precipitation.RAIN && warmEnoughToRainSeasonal(level, biome, pos);
     }
 }
