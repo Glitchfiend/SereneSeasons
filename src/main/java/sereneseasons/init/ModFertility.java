@@ -65,7 +65,7 @@ public class ModFertility
         Season season = SeasonHelper.getSeasonState(level).getSeason();
         Holder<Biome> biome = level.getBiome(pos);
 
-        if (FertilityConfig.undergroundFertilityLevel.get() > -1 && pos.getY() < FertilityConfig.undergroundFertilityLevel.get() && !level.canSeeSky(pos))
+        if (pos.getY() < FertilityConfig.undergroundFertilityLevel.get() && !level.canSeeSky(pos))
         {
             return true;
         }
