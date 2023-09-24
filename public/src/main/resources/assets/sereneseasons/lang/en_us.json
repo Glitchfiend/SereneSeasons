@@ -15,6 +15,7 @@
   "desc.sereneseasons.fertile_seasons": "Fertile Seasons",
   "desc.sereneseasons.year_round": "Year-Round",
   "desc.sereneseasons.day_counter": "Day %s/%s",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
   "desc.sereneseasons.spring": "Spring",
   "desc.sereneseasons.early_spring": "Early Spring",
   "desc.sereneseasons.mid_spring": "Mid Spring",
@@ -30,5 +31,12 @@
   "desc.sereneseasons.winter": "Winter",
   "desc.sereneseasons.early_winter": "Early Winter",
   "desc.sereneseasons.mid_winter": "Mid Winter",
-  "desc.sereneseasons.late_winter": "Late Winter"
+  "desc.sereneseasons.late_winter": "Late Winter",
+  
+  "desc.sereneseasons.early_wet": "Early Wet",
+  "desc.sereneseasons.mid_wet": "Mid Wet",
+  "desc.sereneseasons.late_wet": "Late Wet",
+  "desc.sereneseasons.early_dry": "Early Dry",
+  "desc.sereneseasons.mid_dry": "Mid Dry",
+  "desc.sereneseasons.late_dry": "Late Dry"
 }

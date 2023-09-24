@@ -1,9 +1,7 @@
 package sereneseasons.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -23,26 +21,6 @@ public class CalendarItem extends Item
         super(p_41383_);
     }
 
-    /*@Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int p_42873_, boolean p_42874_)
-    {
-        if (!world.isClientSide)
-        {
-            if (stack.isFramed())
-            {
-                int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
-                SeasonTime time = new SeasonTime(seasonCycleTicks);
-                int subSeasonDuration = ServerConfig.subSeasonDuration.get();
-
-                stack.setHoverName(Component.translatable("desc.sereneseasons." + time.getSubSeason().toString().toLowerCase(Locale.ROOT)).append(" - ").append(Component.translatable("desc.sereneseasons.day_counter",(time.getDay() % subSeasonDuration) + 1, subSeasonDuration)));
-            }
-            else
-            {
-                stack.resetHoverName();
-            }
-        }
-    }*/
-
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag)
     {
@@ -54,8 +32,8 @@ public class CalendarItem extends Item
                 SeasonTime time = new SeasonTime(seasonCycleTicks);
                 int subSeasonDuration = ServerConfig.subSeasonDuration.get();
 
-                tooltip.add(Component.translatable("desc.sereneseasons." + time.getSubSeason().toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.GRAY));
-                tooltip.add(Component.translatable("desc.sereneseasons.day_counter", (time.getDay() % subSeasonDuration) + 1, subSeasonDuration).withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("desc.sereneseasons." + time.getSubSeason().toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.GRAY).append(Component.literal(" (").withStyle(ChatFormatting.DARK_GRAY)).append(Component.translatable("desc.sereneseasons." + time.getTropicalSeason().toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.DARK_GRAY)).append(Component.literal(")").withStyle(ChatFormatting.DARK_GRAY)));
+                tooltip.add(Component.translatable("desc.sereneseasons.day_counter", (time.getDay() % subSeasonDuration) + 1, subSeasonDuration).withStyle(ChatFormatting.GRAY).append(Component.translatable("desc.sereneseasons.tropical_day_counter", (((time.getDay() + subSeasonDuration) % (subSeasonDuration * 2)) + 1), subSeasonDuration * 2).withStyle(ChatFormatting.DARK_GRAY)));
             }
             else
             {
