@@ -13,6 +13,8 @@
 	"minecraft:deep_lukewarm_ocean",
 	"minecraft:warm_ocean",
 	"minecraft:river",
+	"minecraft:beach",
+	"minecraft:stony_shore",
 	"minecraft:the_void"
   ]
 }
