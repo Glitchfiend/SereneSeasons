@@ -66,7 +66,7 @@ public class SeasonHooks
 
             if (ServerConfig.isDimensionWhitelisted(level.dimension()) && !biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
             {
-                return SeasonHooks.shouldRainAtSeasonal(level, biome, position);
+                return getPrecipitationAtSeasonal(level, biome, position) == Biome.Precipitation.RAIN && warmEnoughToRainSeasonal(level, biome, position);
             }
             else
             {
@@ -204,11 +204,15 @@ public class SeasonHooks
         return biome.value().hasPrecipitation();
     }
 
-    public static boolean shouldRainAtSeasonal(Level level, Holder<Biome> biome, BlockPos pos)
+    public static Biome.Precipitation getPrecipitationAtSeasonal(Level level, Holder<Biome> biome, BlockPos pos)
     {
         if (!hasPrecipitationSeasonal(level, biome))
-            return false;
-
-        return biome.value().getPrecipitationAt(pos) == Biome.Precipitation.RAIN && warmEnoughToRainSeasonal(level, biome, pos);
+        {
+            return Biome.Precipitation.NONE;
+        }
+        else
+        {
+            return coldEnoughToSnowSeasonal(level, biome, pos) ? Biome.Precipitation.SNOW : Biome.Precipitation.RAIN;
+        }
     }
 }
