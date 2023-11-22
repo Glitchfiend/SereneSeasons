@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sereneseasons:item/tropical_calendar_02"
+  }
+}

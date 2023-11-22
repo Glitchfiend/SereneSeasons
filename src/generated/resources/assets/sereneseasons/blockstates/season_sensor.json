@@ -1,0 +1,196 @@
+{
+  "variants": {
+    "power=0,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=0,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=0,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=0,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=1,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=1,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=1,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=1,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=10,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=10,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=10,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=10,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=11,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=11,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=11,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=11,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=12,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=12,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=12,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=12,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=13,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=13,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=13,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=13,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=14,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=14,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=14,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=14,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=15,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=15,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=15,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=15,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=2,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=2,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=2,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=2,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=3,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=3,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=3,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=3,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=4,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=4,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=4,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=4,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=5,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=5,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=5,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=5,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=6,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=6,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=6,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=6,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=7,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=7,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=7,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=7,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=8,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=8,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=8,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=8,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    },
+    "power=9,season=0": {
+      "model": "sereneseasons:block/season_sensor_spring"
+    },
+    "power=9,season=1": {
+      "model": "sereneseasons:block/season_sensor_summer"
+    },
+    "power=9,season=2": {
+      "model": "sereneseasons:block/season_sensor_autumn"
+    },
+    "power=9,season=3": {
+      "model": "sereneseasons:block/season_sensor_winter"
+    }
+  }
+}

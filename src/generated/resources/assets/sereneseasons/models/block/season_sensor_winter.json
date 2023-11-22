@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_daylight_detector",
+  "textures": {
+    "side": "sereneseasons:block/season_sensor_side",
+    "top": "sereneseasons:block/season_sensor_winter_top"
+  }
+}

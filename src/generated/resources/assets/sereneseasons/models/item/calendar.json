@@ -1,0 +1,180 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "sereneseasons:item/calendar_00",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.0
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_01",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.083333336
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_02",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.16666667
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_03",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.25
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_04",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.33333334
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_05",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.41666666
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_06",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.5
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_07",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.5833333
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_08",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.6666667
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_09",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.75
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_10",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.8333333
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_11",
+      "predicate": {
+        "sereneseasons:seasontype": 0.0,
+        "sereneseasons:time": 0.9166667
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_00",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.0
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_00",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.083333336
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_01",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.16666667
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_01",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.25
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_02",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.33333334
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_02",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.41666666
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_03",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.5
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_03",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.5833333
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_04",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.6666667
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_04",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.75
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_05",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.8333333
+      }
+    },
+    {
+      "model": "sereneseasons:item/tropical_calendar_05",
+      "predicate": {
+        "sereneseasons:seasontype": 1.0,
+        "sereneseasons:time": 0.9166667
+      }
+    },
+    {
+      "model": "sereneseasons:item/calendar_null",
+      "predicate": {
+        "sereneseasons:seasontype": 2.0,
+        "sereneseasons:time": 0.0
+      }
+    }
+  ]
+}
