@@ -1,0 +1,21 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "Het huidige seizoen is %s, dag %s/%s en tick %s/%s",
+  "commands.sereneseasons.setseason.success": "Het seizoen is nu op %s gezet",
+  "commands.sereneseasons.setseason.fail": "Seizoen %s bestaat niet!",
+  "commands.sereneseasons.setseason.disabled": "Seizoenen zijn momenteel uitgeschakeld!",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "Seizoensensor",
+  
+  "item.sereneseasons.ss_icon": "SS Icoon",
+  "item.sereneseasons.calendar": "Kalender",
+
+  "desc.sereneseasons.fertile_seasons": "Vruchtbare seizoenen",
+  "desc.sereneseasons.year_round": "Hele jaar",
+  "desc.sereneseasons.spring": "Voorjaar",
+  "desc.sereneseasons.summer": "Zomer",
+  "desc.sereneseasons.autumn": "Herfst",
+  "desc.sereneseasons.winter": "Winter"
+}

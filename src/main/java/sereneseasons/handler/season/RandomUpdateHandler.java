@@ -29,7 +29,6 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.config.ServerConfig.MeltChanceInfo;
-import sereneseasons.core.SereneSeasons;
 import sereneseasons.init.ModTags;
 import sereneseasons.season.SeasonHooks;
 

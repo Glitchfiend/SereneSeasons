@@ -4,7 +4,6 @@
  ******************************************************************************/
 package sereneseasons.datagen;
 
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;

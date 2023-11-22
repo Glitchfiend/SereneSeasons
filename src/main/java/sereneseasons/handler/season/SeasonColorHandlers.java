@@ -18,7 +18,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.config.ServerConfig;
-import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColorUtil;
