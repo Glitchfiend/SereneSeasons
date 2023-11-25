@@ -1,34 +1,43 @@
 {
   "commands.sereneseasons.usage": "/season <get/set> [args]",
-  "commands.sereneseasons.getseason.success": "Поточний сезон %s, день %s/%s, тік %s/%s",
-  "commands.sereneseasons.setseason.success": "Сезон встановлено на %s",
-  "commands.sereneseasons.setseason.fail": "Неправильний сезон %s",
-  "commands.sereneseasons.setseason.disabled": "Сезони зараз відключені!",
+  "commands.sereneseasons.getseason.success": "Поточний сезон — %s, день %s/%s, такт %s/%s",
+  "commands.sereneseasons.setseason.success": "Установлено сезон на %s",
+  "commands.sereneseasons.setseason.fail": "Недійсний сезон %s",
+  "commands.sereneseasons.setseason.disabled": "Сезони наразі вимкнено!",
+
+  "gamerule.doSeasonCycle": "Просування сезонного циклу",
 
   "itemGroup.tabSereneSeasons": "Serene Seasons",
+  "block.sereneseasons.season_sensor": "Сезонний датчик",
 
-  "block.sereneseasons.season_sensor": "Датчик сезону",
-  
   "item.sereneseasons.ss_icon": "Іконка SS",
   "item.sereneseasons.calendar": "Календар",
 
   "desc.sereneseasons.fertile_seasons": "Родючі сезони",
   "desc.sereneseasons.year_round": "Цілий рік",
   "desc.sereneseasons.day_counter": "День %s/%s",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
   "desc.sereneseasons.spring": "Весна",
   "desc.sereneseasons.early_spring": "Рання весна",
   "desc.sereneseasons.mid_spring": "Середина весни",
   "desc.sereneseasons.late_spring": "Пізня весна",
   "desc.sereneseasons.summer": "Літо",
-  "desc.sereneseasons.early_summer" : "Раннє літо",
-  "desc.sereneseasons.mid_summer" : "Середина літа",
-  "desc.sereneseasons.late_summer" : "Пізнє літо",
+  "desc.sereneseasons.early_summer": "Раннє літо",
+  "desc.sereneseasons.mid_summer": "Середина літа",
+  "desc.sereneseasons.late_summer": "Пізнє літо",
   "desc.sereneseasons.autumn": "Осінь",
   "desc.sereneseasons.early_autumn": "Рання осінь",
   "desc.sereneseasons.mid_autumn": "Середина осені",
   "desc.sereneseasons.late_autumn": "Пізня осінь",
-  "desc.sereneseasons.winter": "Зима"
+  "desc.sereneseasons.winter": "Зима",
   "desc.sereneseasons.early_winter": "Рання зима",
   "desc.sereneseasons.mid_winter": "Середина зими",
-  "desc.sereneseasons.late_winter": "Пізня зима"
+  "desc.sereneseasons.late_winter": "Пізня зима",
+
+  "desc.sereneseasons.early_wet": "Ранні опади",
+  "desc.sereneseasons.mid_wet": "Середина опадів",
+  "desc.sereneseasons.late_wet": "Пізні опади",
+  "desc.sereneseasons.early_dry": "Рання посуха",
+  "desc.sereneseasons.mid_dry": "Середина посухи",
+  "desc.sereneseasons.late_dry": "Пізня посуха"
 }
