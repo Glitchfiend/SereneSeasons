@@ -5,7 +5,8 @@
   "commands.sereneseasons.setseason.fail": "Неверный сезон %s.",
   "commands.sereneseasons.setseason.disabled": "В данный момент Сезоны отключены!",
 
-  "itemGroup.tabSereneSeasons": "Serene Seasons",
+  "gamerule.doSeasonCycle": "Опережающий сезонный цикл",
+  "itemGroup.tabSereneSeasons": "Безмятежные сезоны",
 
   "block.sereneseasons.season_sensor": "Датчик сезона",
   
@@ -15,6 +16,7 @@
   "desc.sereneseasons.fertile_seasons": "Плодородные сезоны",
   "desc.sereneseasons.year_round": "Круглый год",
   "desc.sereneseasons.day_counter": "День %s/%s",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
   "desc.sereneseasons.spring": "Весна",
   "desc.sereneseasons.early_spring": "Начало весны",
   "desc.sereneseasons.mid_spring": "Середина весны",
@@ -30,5 +32,12 @@
   "desc.sereneseasons.winter": "Зима",
   "desc.sereneseasons.early_winter": "Начало зимы",
   "desc.sereneseasons.mid_winter": "Середина зимы",
-  "desc.sereneseasons.late_winter": "Поздняя зима"
+  "desc.sereneseasons.late_winter": "Поздняя зима",
+  
+  "desc.sereneseasons.early_wet": "Ранние паводки",
+  "desc.sereneseasons.mid_wet": "Паводки",
+  "desc.sereneseasons.late_wet": "Поздние паводки",
+  "desc.sereneseasons.early_dry": "Ранняя засуха",
+  "desc.sereneseasons.mid_dry": "Засуха",
+  "desc.sereneseasons.late_dry": "Поздняя засуха"
 }
