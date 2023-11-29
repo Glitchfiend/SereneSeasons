@@ -59,7 +59,7 @@ public class SSItemModelProvider extends ItemModelProvider
             calendar.override()
                 .predicate(location("seasontype"), CalendarType.TROPICAL.ordinal())
                 .predicate(location("time"), (float)i / 12.0F)
-                .model(calendarTropical[i / 2]);
+                .model(calendarTropical[((i + 3) / 2) % 6]);
         }
 
         // Null calendar
