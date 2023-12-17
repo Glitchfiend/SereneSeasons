@@ -5,7 +5,6 @@
 package sereneseasons.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -28,7 +27,7 @@ public class CommandGetSeason
             });
     }
 
-    private static int getSeason(CommandSourceStack cs, Level world) throws CommandRuntimeException
+    private static int getSeason(CommandSourceStack cs, Level world)
     {
         SeasonSavedData seasonData = SeasonHandler.getSeasonSavedData(world);
         SeasonTime time = new SeasonTime(seasonData.seasonCycleTicks);
