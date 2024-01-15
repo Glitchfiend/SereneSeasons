@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "sereneseasons.refmap.json",
   "mixins": [
+    "MixinBiome",
     "MixinLevel",
     "MixinServerLevel"
   ],
