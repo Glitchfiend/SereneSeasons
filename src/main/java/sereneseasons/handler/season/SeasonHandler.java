@@ -13,6 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -21,6 +22,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.PacketDistributor;
 import sereneseasons.api.SSGameRules;
 import sereneseasons.api.season.ISeasonState;
@@ -39,41 +41,53 @@ import java.util.function.Supplier;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {
+    public static final HashMap<Level, Long> lastDayTimes = new HashMap<>();
+    public static final HashMap<Level, Integer> updateTicks = new HashMap<>();
+
     @SubscribeEvent
     public void onWorldTick(TickEvent.LevelTickEvent event)
     {
-        Level world = event.level;
+        Level level = event.level;
 
-        if (event.phase == TickEvent.Phase.END && !world.isClientSide)
+        if (event.phase != TickEvent.Phase.START || level.isClientSide() || !ServerConfig.isDimensionWhitelisted(level.dimension()))
+            return;
+
+        long dayTime = level.getDayTime();
+        long lastDayTime = lastDayTimes.getOrDefault(level, dayTime);
+        lastDayTimes.put(level, dayTime);
+
+        // Only tick seasons if the game rule is enabled
+        if (!level.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONCYCLE))
+            return;
+
+        if (!ServerConfig.progressSeasonWhileOffline.get())
         {
-            if (!ServerConfig.progressSeasonWhileOffline.get())
-            {
-                MinecraftServer server = world.getServer();
-                if (server != null && server.getPlayerList().getPlayerCount() == 0)
-                    return;
-            }
-
-            // Only tick seasons if the game rule is enabled
-            if (!world.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONCYCLE))
+            MinecraftServer server = level.getServer();
+            if (server != null && server.getPlayerList().getPlayerCount() == 0)
                 return;
-                
-            SeasonSavedData savedData = getSeasonSavedData(world);
-
-            // Clamp season cycle ticks to prevent a bad state occurring
-            savedData.seasonCycleTicks = Mth.clamp(savedData.seasonCycleTicks, 0, SeasonTime.ZERO.getCycleDuration());
-
-            if (++savedData.seasonCycleTicks > SeasonTime.ZERO.getCycleDuration())
-            {
-                savedData.seasonCycleTicks = 0;
-            }
-            
-            if (savedData.seasonCycleTicks % 20 == 0)
-            {
-                sendSeasonUpdate(world);
-            }
-
-            savedData.setDirty();
         }
+
+        long difference = dayTime - lastDayTime;
+        if (difference == 0)
+            return;
+
+        SeasonSavedData savedData = getSeasonSavedData(level);
+        savedData.seasonCycleTicks = Mth.positiveModulo(savedData.seasonCycleTicks + (int)difference, SeasonTime.ZERO.getCycleDuration());
+
+        int ticks = updateTicks.getOrDefault(level, 0);
+        if (ticks >= 20)
+        {
+            sendSeasonUpdate(level);
+            ticks %= 20;
+        }
+        updateTicks.put(level, ticks + 1);
+        savedData.setDirty();
+    }
+
+    @SubscribeEvent
+    public static void onWorldLoaded(LevelEvent.Load event)
+    {
+        clientSeasonCycleTicks.clear();
     }
     
     @SubscribeEvent
@@ -90,12 +104,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public static SeasonTime getClientSeasonTime() {
         Integer i = clientSeasonCycleTicks.get(Minecraft.getInstance().level.dimension());
     	return new SeasonTime(i == null ? 0 : i);
-    }
-
-    @SubscribeEvent
-    public void onWorldLoaded(LevelEvent.Load event)
-    {
-        clientSeasonCycleTicks.clear();
     }
 
     @SubscribeEvent

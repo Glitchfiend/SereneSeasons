@@ -27,7 +27,7 @@ import sereneseasons.api.SSBlockEntities;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.ServerConfig;
 import sereneseasons.season.SeasonTime;
-import sereneseasons.tileentity.SeasonSensorBlockEntity;
+import sereneseasons.block.entity.SeasonSensorBlockEntity;
 
 import javax.annotation.Nullable;
 

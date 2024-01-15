@@ -10,7 +10,7 @@ import sereneseasons.api.SSBlockEntities;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.block.SeasonSensorBlock;
 import sereneseasons.core.SereneSeasons;
-import sereneseasons.tileentity.SeasonSensorBlockEntity;
+import sereneseasons.block.entity.SeasonSensorBlockEntity;
 
 import java.util.List;
 import java.util.function.Supplier;
