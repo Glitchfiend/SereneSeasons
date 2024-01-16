@@ -48,7 +48,7 @@ public class MessageSyncSeasonCycle
 
                 if (playerDimension.equals(packet.dimension))
                 {
-                    SeasonHandler.clientSeasonCycleTicks.replace(playerDimension, packet.seasonCycleTicks);
+                    SeasonHandler.clientSeasonCycleTicks.put(playerDimension, packet.seasonCycleTicks);
                 }
             });
             context.setPacketHandled(true);
