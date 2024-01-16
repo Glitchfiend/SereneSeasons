@@ -101,10 +101,6 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
     private static Season.SubSeason lastSeason = null;
     public static final HashMap<ResourceKey<Level>, Integer> clientSeasonCycleTicks = new HashMap<>();
-    public static SeasonTime getClientSeasonTime() {
-        Integer i = clientSeasonCycleTicks.getOrDefault(Minecraft.getInstance().level.dimension(), 0);
-    	return new SeasonTime(i == null ? 0 : i);
-    }
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event)
@@ -133,7 +129,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
     public static void sendSeasonUpdate(Level level)
     {
-        if (level.isClientSide)
+        if (level.isClientSide())
             return;
 
         SeasonSavedData savedData = getSeasonSavedData(level);
@@ -194,7 +190,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
         return saveDataManager.computeIfAbsent(new SavedData.Factory<>(defaultSaveDataSupplier, SeasonSavedData::load, DataFixTypes.LEVEL), SeasonSavedData.DATA_IDENTIFIER);
     }
-    
+
     //
     // Used to implement getSeasonState in the API
     //
@@ -207,10 +203,10 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     }
 
     @Override
-    public ISeasonState getClientSeasonState()
+    public ISeasonState getClientSeasonState(Level level)
     {
-        Integer i = clientSeasonCycleTicks.getOrDefault(Minecraft.getInstance().level.dimension(), 0);
-    	return new SeasonTime(i == null ? 0 : i);
+        int time = level != null ? clientSeasonCycleTicks.getOrDefault(level.dimension(), 0) : 0;
+    	return new SeasonTime(time);
     }
 
     @Override

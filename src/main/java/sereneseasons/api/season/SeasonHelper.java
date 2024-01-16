@@ -16,17 +16,17 @@ public class SeasonHelper
      * Obtains data about the state of the season cycle in the world. This works both on
      * the client and the server.
      */
-    public static ISeasonState getSeasonState(Level world)
+    public static ISeasonState getSeasonState(Level level)
     {
         ISeasonState data;
 
-        if (!world.isClientSide())
+        if (!level.isClientSide())
         {
-            data = dataProvider.getServerSeasonState(world);
+            data = dataProvider.getServerSeasonState(level);
         }
         else
         {
-            data = dataProvider.getClientSeasonState();
+            data = dataProvider.getClientSeasonState(level);
         }
 
         return data;
@@ -44,8 +44,8 @@ public class SeasonHelper
 
     public interface ISeasonDataProvider
     {
-        ISeasonState getServerSeasonState(Level world);
-        ISeasonState getClientSeasonState();
+        ISeasonState getServerSeasonState(Level level);
+        ISeasonState getClientSeasonState(Level level);
         boolean usesTropicalSeasons(Holder<Biome> key);
     }
 }
