@@ -4,7 +4,6 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import net.minecraftforge.common.MinecraftForge;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.handler.PacketHandler;
 import sereneseasons.handler.season.SeasonHandler;

@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import sereneseasons.handler.season.SeasonHandler;
+import sereneseasons.handler.season.SeasonHandlerClient;
 
 public class MessageSyncSeasonCycle
 {
@@ -48,7 +49,7 @@ public class MessageSyncSeasonCycle
 
                 if (playerDimension.equals(packet.dimension))
                 {
-                    SeasonHandler.clientSeasonCycleTicks.put(playerDimension, packet.seasonCycleTicks);
+                    SeasonHandlerClient.clientSeasonCycleTicks.put(playerDimension, packet.seasonCycleTicks);
                 }
             });
             context.setPacketHandled(true);
