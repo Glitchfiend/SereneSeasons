@@ -4,11 +4,16 @@
  ******************************************************************************/
 package sereneseasons.api.season;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.util.StringRepresentable;
+
+import java.util.Locale;
+
 public enum Season
 {
     SPRING, SUMMER, AUTUMN, WINTER;
 
-    public enum SubSeason implements ISeasonColorProvider
+    public enum SubSeason implements ISeasonColorProvider, StringRepresentable
     {
         EARLY_SPRING(SPRING, 0x778087, 0.85F, 0x6F818F, 0.85F, 0x869A68),
         MID_SPRING(SPRING, 0x678297, 0x4F86AF, 0x6EB283),
@@ -23,6 +28,7 @@ public enum Season
         MID_WINTER(WINTER, 0xAF4F4F, 0.45F, 0xDB3030, 0.45F, 0xA0824D),
         LATE_WINTER(WINTER, 0x8E8181, 0.60F, 0xA57070, 0.60F, 0x8F925F);
 
+        public static final Codec<SubSeason> CODEC = StringRepresentable.fromEnum(SubSeason::values);
         public static final SubSeason[] VALUES = SubSeason.values();
 
         private Season season;
@@ -75,6 +81,12 @@ public enum Season
         public int getBirchColor()
         {
             return this.birchColor;
+        }
+
+        @Override
+        public String getSerializedName()
+        {
+            return this.name().toLowerCase(Locale.ROOT);
         }
     }
 

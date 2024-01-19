@@ -2,14 +2,13 @@
  * Copyright 2021, the Glitchfiend Team.
  * All rights reserved.
  ******************************************************************************/
-package sereneseasons.forge.command;
+package sereneseasons.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.server.command.EnumArgument;
 import sereneseasons.api.season.Season;
 import sereneseasons.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
@@ -22,10 +21,10 @@ public class CommandSetSeason
     static ArgumentBuilder<CommandSourceStack, ?> register()
     {
         return Commands.literal("set")
-            .then(Commands.argument("season", EnumArgument.enumArgument(Season.SubSeason.class))
+            .then(Commands.argument("season", SeasonArgument.season())
             .executes(ctx -> {
                 Level world = ctx.getSource().getLevel();
-                return setSeason(ctx.getSource(), world, ctx.getArgument("season", Season.SubSeason.class));
+                return setSeason(ctx.getSource(), world, SeasonArgument.getSeason(ctx, "season"));
             }));
     }
 

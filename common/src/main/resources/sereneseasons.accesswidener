@@ -22,3 +22,6 @@ accessible field net/minecraft/server/level/ChunkMap level Lnet/minecraft/server
 accessible method net/minecraft/server/level/ChunkMap getChunks ()Ljava/lang/Iterable;
 accessible method net/minecraft/server/level/ChunkMap anyPlayerCloseEnoughForSpawning (Lnet/minecraft/world/level/ChunkPos;)Z
 accessible method net/minecraft/world/level/block/IceBlock melt (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V
+
+# Commands
+accessible field net/minecraft/commands/synchronization/ArgumentTypeInfos BY_CLASS Ljava/util/Map;

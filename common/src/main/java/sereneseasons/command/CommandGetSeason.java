@@ -2,7 +2,7 @@
  * Copyright 2021, the Glitchfiend Team.
  * All rights reserved.
  ******************************************************************************/
-package sereneseasons.forge.command;
+package sereneseasons.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
