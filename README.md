@@ -8,4 +8,4 @@
 
 -----------------
 
-© 2021 Glitchfiend. All rights reserved.
+© 2024 Glitchfiend. All rights reserved.
