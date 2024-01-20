@@ -40,9 +40,9 @@ public class SeasonsConfig extends glitchcore.config.Config
             new SeasonProperties(Season.SubSeason.EARLY_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
             new SeasonProperties(Season.SubSeason.MID_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
             new SeasonProperties(Season.SubSeason.LATE_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
-            new SeasonProperties(Season.SubSeason.EARLY_SPRING, 6.25F, 1, -0.4F, 96000, 12000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
-            new SeasonProperties(Season.SubSeason.MID_SPRING, 8.33F, 1, -0.2F, 96000, 12000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
-            new SeasonProperties(Season.SubSeason.LATE_SPRING, 12.5F, 1, -0.1F, 96000, 12000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.EARLY_SPRING, 6.25F, 1, -0.4F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.MID_SPRING, 8.33F, 1, -0.2F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.LATE_SPRING, 12.5F, 1, -0.1F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
             new SeasonProperties(Season.SubSeason.EARLY_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
             new SeasonProperties(Season.SubSeason.MID_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
             new SeasonProperties(Season.SubSeason.LATE_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
@@ -185,6 +185,8 @@ public class SeasonsConfig extends glitchcore.config.Config
                 Preconditions.checkArgument(meltChance < 0.0F || meltChance > 100.0F);
                 Preconditions.checkArgument(rolls >= 0);
                 Preconditions.checkArgument(biomeTempAdjustment >= -10.0 && biomeTempAdjustment <= 10.0);
+                Preconditions.checkArgument(minRainTime >= maxRainTime);
+                Preconditions.checkArgument(minThunderTime >= maxThunderTime);
 
                 return Optional.of(new SeasonProperties(subSeason, meltChance, rolls, biomeTempAdjustment, minRainTime, maxRainTime, minThunderTime, maxThunderTime));
             }
