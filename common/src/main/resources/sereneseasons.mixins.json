@@ -5,6 +5,7 @@
   "refmap": "sereneseasons.refmap.json",
   "mixins": [
     "MixinBiome",
+    "MixinBlockStateBase",
     "MixinLevel",
     "MixinServerLevel"
   ],

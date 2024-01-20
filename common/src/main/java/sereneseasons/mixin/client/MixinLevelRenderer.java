@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import sereneseasons.season.SeasonHooks;
+import sereneseasons.season.SeasonHooksClient;
 
 @Mixin(LevelRenderer.class)
 public class MixinLevelRenderer
@@ -47,7 +48,7 @@ public class MixinLevelRenderer
     @Redirect(method="renderSnowAndRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
     public Biome.Precipitation renderSnowAndRain_getPrecipitationAt(Biome biome, BlockPos pos)
     {
-        return SeasonHooks.getPrecipitationAtLevelRendererHook(this.renderSnowAndRain_biome, pos);
+        return SeasonHooksClient.getPrecipitationAtLevelRendererHook(this.renderSnowAndRain_biome, pos);
     }
 
     @Redirect(method="renderSnowAndRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;hasPrecipitation()Z"))
@@ -71,6 +72,6 @@ public class MixinLevelRenderer
     @Redirect(method="tickRain", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
     public Biome.Precipitation tickRain_getPrecipitationAt(Biome biome, BlockPos pos)
     {
-        return SeasonHooks.getPrecipitationAtLevelRendererHook(this.tickRain_biome, pos);
+        return SeasonHooksClient.getPrecipitationAtLevelRendererHook(this.tickRain_biome, pos);
     }
 }

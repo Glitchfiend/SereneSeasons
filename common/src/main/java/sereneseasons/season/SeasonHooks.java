@@ -4,7 +4,6 @@
  ******************************************************************************/
 package sereneseasons.season;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
@@ -86,20 +85,6 @@ public class SeasonHooks
         {
             boolean shouldSnow = (ModConfig.seasons.generateSnowAndIce && coldEnoughToSnowSeasonal(level, pos)) || (!ModConfig.seasons.generateSnowAndIce && biome.coldEnoughToSnow(pos));
             return shouldSnow ? Biome.Precipitation.SNOW : Biome.Precipitation.RAIN;
-        }
-    }
-
-    public static Biome.Precipitation getPrecipitationAtLevelRendererHook(Holder<Biome> biome, BlockPos pos)
-    {
-        Level level = Minecraft.getInstance().level;
-
-        if (!hasPrecipitationSeasonal(level, biome))
-        {
-            return Biome.Precipitation.NONE;
-        }
-        else
-        {
-            return coldEnoughToSnowSeasonal(level, biome, pos) ? Biome.Precipitation.SNOW : Biome.Precipitation.RAIN;
         }
     }
 

@@ -3,12 +3,10 @@ package sereneseasons.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import glitchcore.event.server.RegisterCommandsEvent;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.TemplateMirrorArgument;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import sereneseasons.core.SereneSeasons;
 
 import java.util.function.BiConsumer;

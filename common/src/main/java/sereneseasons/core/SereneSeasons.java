@@ -14,6 +14,7 @@ import sereneseasons.command.SeasonCommands;
 import sereneseasons.init.*;
 import sereneseasons.season.RandomUpdateHandler;
 import sereneseasons.season.SeasonHandler;
+import sereneseasons.season.SeasonalCropGrowthHandler;
 
 public class SereneSeasons
 {
@@ -43,10 +44,19 @@ public class SereneSeasons
 
     private static void addHandlers()
     {
+        // Season updates
         EventManager.addListener(SeasonHandler::onLevelTick);
         EventManager.addListener(SeasonHandler::onJoinLevel);
+
+        // Melting
         EventManager.addListener(RandomUpdateHandler::onWorldTick);
+
+        // Commands
         EventManager.addListener(SeasonCommands::onRegisterCommands);
+
+        // Crop fertility
+        EventManager.addListener(SeasonalCropGrowthHandler::onTagsUpdated);
+        EventManager.addListener(SeasonalCropGrowthHandler::applyBonemeal);
 
         if (Environment.isClient())
         {

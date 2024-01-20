@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 
@@ -55,6 +56,11 @@ public class ModFertility
         populateSeasonSeeds(ModTags.Items.SUMMER_CROPS, summerPlants, 2);
         populateSeasonSeeds(ModTags.Items.AUTUMN_CROPS, autumnPlants, 4);
         populateSeasonSeeds(ModTags.Items.WINTER_CROPS, winterPlants, 8);
+    }
+
+    public static boolean isCrop(BlockState state)
+    {
+        return state.is(ModTags.Blocks.SPRING_CROPS) || state.is(ModTags.Blocks.SUMMER_CROPS) || state.is(ModTags.Blocks.AUTUMN_CROPS) || state.is(ModTags.Blocks.WINTER_CROPS);
     }
 
     public static boolean isCropFertile(String cropName, Level level, BlockPos pos)

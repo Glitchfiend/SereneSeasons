@@ -1,7 +1,5 @@
 {
   "replace": false,
   "values": [
-	"#forge:glass",
-    "#c:glass_blocks"
   ]
 }
