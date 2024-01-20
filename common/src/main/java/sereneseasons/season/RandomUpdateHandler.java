@@ -32,41 +32,31 @@ import java.util.List;
 
 public class RandomUpdateHandler
 {
-	private static void adjustWeatherFrequency(Level world, Season season)
+	private static void adjustWeatherFrequency(Level world, Season.SubSeason subSeason)
 	{
 		if (!ModConfig.seasons.changeWeatherFrequency)
 			return;
 
 		ServerLevelData serverLevelData = (ServerLevelData)world.getLevelData();
+		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
 
-		if (season == Season.WINTER)
+		if (seasonProperties.canRain())
 		{
-			if (serverLevelData.isThundering())
+			if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > seasonProperties.maxRainTime())
 			{
-				serverLevelData.setThundering(false);
-			}
-			if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > 36000)
-			{
-				serverLevelData.setRainTime(world.random.nextInt(24000) + 12000);
+				serverLevelData.setRainTime(world.random.nextInt(seasonProperties.maxRainTime() - seasonProperties.minRainTime()) + seasonProperties.minRainTime());
 			}
 		}
-		else
+		else if (serverLevelData.isRaining()) serverLevelData.setRaining(false);
+
+		if (seasonProperties.canThunder())
 		{
-			if (season == Season.SPRING)
+			if (!world.getLevelData().isThundering() && serverLevelData.getThunderTime() > seasonProperties.maxThunderTime())
 			{
-				if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > 96000)
-				{
-					serverLevelData.setRainTime(world.random.nextInt(84000) + 12000);
-				}
-			}
-			else if (season == Season.SUMMER)
-			{
-				if (!world.getLevelData().isThundering() && serverLevelData.getThunderTime() > 36000)
-				{
-					serverLevelData.setThunderTime(world.random.nextInt(24000) + 12000);
-				}
+				serverLevelData.setThunderTime(world.random.nextInt(seasonProperties.maxThunderTime() - seasonProperties.minThunderTime()) + seasonProperties.minThunderTime());
 			}
 		}
+		else if (serverLevelData.isThundering()) serverLevelData.setThundering(false);
 	}
 
 	private static void meltInChunk(ChunkMap chunkMap, LevelChunk chunkIn, float meltChance)
@@ -106,11 +96,11 @@ public class RandomUpdateHandler
 		Season.SubSeason subSeason = SeasonHelper.getSeasonState(level).getSubSeason();
 		Season season = subSeason.getSeason();
 
-		SeasonsConfig.MeltChanceInfo meltInfo = ModConfig.seasons.getMeltInfo(subSeason);
-		float meltRand = meltInfo.getMeltChance() / 100.0F;
-		int rolls = meltInfo.getRolls();
+		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
+		float meltRand = seasonProperties.meltChance() / 100.0F;
+		int rolls = seasonProperties.meltRolls();
 
-		adjustWeatherFrequency(level, season);
+		adjustWeatherFrequency(level, subSeason);
 
 		if(rolls > 0 && meltRand > 0.0F)
 		{

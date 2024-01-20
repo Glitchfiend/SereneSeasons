@@ -6,60 +6,50 @@ package sereneseasons.config;
 
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.InMemoryFormat;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import glitchcore.util.Environment;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.Season;
 import sereneseasons.core.SereneSeasons;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import static net.minecraft.server.level.ServerLevel.RAIN_DELAY;
 
 public class SeasonsConfig extends glitchcore.config.Config
 {
-    // Weather settings
-    public boolean generateSnowAndIce;
-    public boolean changeWeatherFrequency;
+    // From ServerLevel
+    private static final IntProvider THUNDER_DELAY = UniformInt.of(12000, 180000);
 
-    // Time settings
-    public int dayDuration;
-    public int subSeasonDuration;
-    public int startingSubSeason;
-    public boolean progressSeasonWhileOffline;
+    private static final Predicate<List<Config>> SEASON_PROPERTIES_VALIDATOR = (configs) -> configs.stream().allMatch(c -> SeasonProperties.decode(c).isPresent());
 
-    // Aesthetic settings
-    public boolean changeGrassColor;
-    public boolean changeFoliageColor;
-    public boolean changeBirchColor;
-
-    // Dimension settings
-    public static List<String> whitelistedDimensions;
-    private static List<String> defaultWhitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
-
-    // Snow melting settings
-    private static List<Config> meltChanceEntries;
-    private static List<Config> defaultMeltChances = Lists.newArrayList(
-            new MeltChanceInfo(Season.SubSeason.EARLY_WINTER, 0.0F, 0),
-            new MeltChanceInfo(Season.SubSeason.MID_WINTER, 0.0F, 0),
-            new MeltChanceInfo(Season.SubSeason.LATE_WINTER, 0.0F, 0),
-            new MeltChanceInfo(Season.SubSeason.EARLY_SPRING, 6.25F, 1),
-            new MeltChanceInfo(Season.SubSeason.MID_SPRING, 8.33F, 1),
-            new MeltChanceInfo(Season.SubSeason.LATE_SPRING, 12.5F, 1),
-            new MeltChanceInfo(Season.SubSeason.EARLY_SUMMER, 25.0F, 1),
-            new MeltChanceInfo(Season.SubSeason.MID_SUMMER, 25.0F, 1),
-            new MeltChanceInfo(Season.SubSeason.LATE_SUMMER, 25.0F, 1),
-            new MeltChanceInfo(Season.SubSeason.EARLY_AUTUMN, 12.5F, 1),
-            new MeltChanceInfo(Season.SubSeason.MID_AUTUMN, 8.33F, 1),
-            new MeltChanceInfo(Season.SubSeason.LATE_AUTUMN, 6.25F, 1)
-    ).stream().map(SeasonsConfig::meltChanceInfoToConfig).collect(Collectors.toList());
+    private static final Map<Season.SubSeason, SeasonProperties> DEFAULT_SEASON_PROPERTIES = Lists.newArrayList(
+            new SeasonProperties(Season.SubSeason.EARLY_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
+            new SeasonProperties(Season.SubSeason.MID_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
+            new SeasonProperties(Season.SubSeason.LATE_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
+            new SeasonProperties(Season.SubSeason.EARLY_SPRING, 6.25F, 1, -0.4F, 96000, 12000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.MID_SPRING, 8.33F, 1, -0.2F, 96000, 12000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.LATE_SPRING, 12.5F, 1, -0.1F, 96000, 12000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.EARLY_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.MID_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.LATE_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.EARLY_AUTUMN, 12.5F, 1, -0.1F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.MID_AUTUMN, 8.33F, 1, -0.2F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.LATE_AUTUMN, 6.25F, 1, -0.4F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue())
+    ).stream().collect(Collectors.toMap(SeasonProperties::subSeason, v -> v));
 
     private static final Predicate<List<String>> RESOURCE_LOCATION_VALIDATOR = (list) ->
     {
@@ -78,34 +68,30 @@ public class SeasonsConfig extends glitchcore.config.Config
         return true;
     };
 
-    private static final Predicate<List<Config>> MELT_INFO_VALIDATOR = (configs) ->
-    {
-        for (Config config : configs)
-        {
-            // Ensure config contains required values
-            if (!config.contains("season")) return false;
-            if (!config.contains("melt_percent")) return false;
-            if (!config.contains("rolls")) return false;
+    // Weather settings
+    public boolean generateSnowAndIce;
+    public boolean changeWeatherFrequency;
 
-            try
-            {
-                // Validate season.
-                config.getEnum("season", Season.SubSeason.class);
+    // Time settings
+    public int dayDuration;
+    public int subSeasonDuration;
+    public int startingSubSeason;
+    public boolean progressSeasonWhileOffline;
 
-                // Validate melt chance is within range.
-                float meltChance = config.<Number>get("melt_percent").floatValue();
-                if(meltChance < 0.0F || meltChance > 100.0F) return false;
-                // Validate rolls is positive.
-                if(config.getInt("rolls") < 0) return false;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
+    // Aesthetic settings
+    public boolean changeGrassColor;
+    public boolean changeFoliageColor;
+    public boolean changeBirchColor;
 
-        return true;
-    };
+    // Dimension settings
+    public List<String> whitelistedDimensions;
+    private static final List<String> defaultWhitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
+
+    // Snow melting settings
+    private List<Config> seasonProperties;
+
+    private Supplier<ImmutableMap<Season.SubSeason, SeasonProperties>> seasonPropertiesMapper;
+
 
     public SeasonsConfig()
     {
@@ -129,11 +115,23 @@ public class SeasonsConfig extends glitchcore.config.Config
 
         whitelistedDimensions = add("dimension_settings.whitelisted_dimensions", defaultWhitelistedDimensions, "Seasons will only apply to dimensons listed here", RESOURCE_LOCATION_VALIDATOR);
 
-        meltChanceEntries = add("melting_settings.season_melt_chances", defaultMeltChances, """
-                The melting settings for snow and ice in each season. The game must be restarted for these to apply.
+        final List<Config> defaultProperties = DEFAULT_SEASON_PROPERTIES.values().stream().map(SeasonProperties::encode).toList();
+        seasonProperties = add("season_properties", defaultProperties, """
                 melt_percent is the 0-1 percentage chance a snow or ice block will melt when chosen. (e.g. 100.0 = 100%, 50.0 = 50%)
-                rolls is the number of blocks randomly picked in each chunk, each tick. (High number rolls is not recommended on servers)
-                rolls should be 0 if blocks should not melt in that season.""", MELT_INFO_VALIDATOR);
+                melt_rolls is the number of blocks randomly picked in each chunk, each tick. (High number rolls is not recommended on servers)
+                melt_rolls should be 0 if blocks should not melt in that season.
+                biome_temp_adjustment is the amount to adjust the biome temperature by from -10.0 to 10.0.
+                min_rain_time is the minimum time interval between rain events in ticks. Set to -1 to disable rain.
+                max_rain_time is the maximum time interval between rain events in ticks. Set to -1 to disable rain.
+                min_thunder_time is the minimum time interval between thunder events in ticks. Set to -1 to disable thunder.
+                max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.""", SEASON_PROPERTIES_VALIDATOR);
+
+        seasonPropertiesMapper = Suppliers.memoize(() -> {
+            var builder = ImmutableMap.<Season.SubSeason, SeasonProperties>builder();
+            builder.putAll(DEFAULT_SEASON_PROPERTIES);
+            seasonProperties.stream().map(SeasonProperties::decode).forEach(o -> o.ifPresent(v -> builder.put(v.subSeason(), v)));
+            return builder.build();
+        });
     }
 
     public boolean isDimensionWhitelisted(ResourceKey<Level> dimension)
@@ -149,69 +147,66 @@ public class SeasonsConfig extends glitchcore.config.Config
         return false;
     }
 
-    private static Config meltChanceInfoToConfig(MeltChanceInfo meltChanceInfo)
-    {
-        Config config = Config.of(LinkedHashMap::new, InMemoryFormat.withUniversalSupport());
-        config.add("season", meltChanceInfo.getSubSeason().toString());
-        config.add("melt_percent", meltChanceInfo.getMeltChance());
-        config.add("rolls", meltChanceInfo.getRolls());
-        return config;
-    }
-
-    private static ImmutableMap<Season.SubSeason, MeltChanceInfo> meltInfoCache;
-
     @Nullable
-    public MeltChanceInfo getMeltInfo(Season.SubSeason season)
+    public SeasonProperties getSeasonProperties(Season.SubSeason season)
     {
-        return getMeltInfos().get(season);
+        return seasonPropertiesMapper.get().get(season);
     }
 
-    private ImmutableMap<Season.SubSeason, MeltChanceInfo> getMeltInfos()
+    public record SeasonProperties(Season.SubSeason subSeason, float meltChance, int meltRolls, float biomeTempAdjustment, int minRainTime, int maxRainTime, int minThunderTime, int maxThunderTime)
     {
-        if (meltInfoCache != null) return meltInfoCache;
-
-        Map<Season.SubSeason, MeltChanceInfo> tmp = Maps.newHashMap();
-
-        for (Config config : meltChanceEntries)
+        public Config encode()
         {
-            Season.SubSeason subSeason = config.getEnum("season", Season.SubSeason.class);
-            float meltChance = config.<Number>get("melt_percent").floatValue();
-            int rolls = config.getInt("rolls");
-
-            tmp.put(subSeason, new MeltChanceInfo(subSeason, meltChance, rolls));
+            Config config = Config.of(LinkedHashMap::new, InMemoryFormat.withUniversalSupport());
+            config.add("season", this.subSeason.toString());
+            config.add("melt_percent", this.meltChance);
+            config.add("melt_rolls", this.meltRolls);
+            config.add("biome_temp_adjustment", this.biomeTempAdjustment);
+            config.add("min_rain_time", this.minRainTime);
+            config.add("max_rain_time", this.maxRainTime);
+            config.add("min_thunder_time", this.minThunderTime);
+            config.add("max_thunder_time", this.maxThunderTime);
+            return config;
         }
 
-        meltInfoCache = ImmutableMap.copyOf(tmp);
-        return meltInfoCache;
+        public static Optional<SeasonProperties> decode(Config config)
+        {
+            try
+            {
+                Season.SubSeason subSeason = config.getEnum("season", Season.SubSeason.class);
+                float meltChance = config.<Number>get("melt_percent").floatValue();
+                int rolls = config.getInt("melt_rolls");
+                float biomeTempAdjustment = config.<Number>get("biome_temp_adjustment").floatValue();
+                int minRainTime = config.getInt("min_rain_time");
+                int maxRainTime = config.getInt("max_rain_time");
+                int minThunderTime = config.getInt("min_thunder_time");
+                int maxThunderTime = config.getInt("max_thunder_time");
+
+                Preconditions.checkArgument(meltChance < 0.0F || meltChance > 100.0F);
+                Preconditions.checkArgument(rolls >= 0);
+                Preconditions.checkArgument(biomeTempAdjustment >= -10.0 && biomeTempAdjustment <= 10.0);
+
+                return Optional.of(new SeasonProperties(subSeason, meltChance, rolls, biomeTempAdjustment, minRainTime, maxRainTime, minThunderTime, maxThunderTime));
+            }
+            catch (Exception e)
+            {
+                return Optional.empty();
+            }
+        }
+
+        public boolean canRain()
+        {
+            return this.minRainTime != -1 && this.maxRainTime != -1;
+        }
+
+        public boolean canThunder()
+        {
+            return this.minThunderTime != -1 && this.maxThunderTime != -1;
+        }
     }
 
-    public static class MeltChanceInfo
+    static
     {
-        private final Season.SubSeason subSeason;
-        private final float meltChance;
-        private final int rolls;
-
-        private MeltChanceInfo(Season.SubSeason subSeason, float meltChance, int rolls)
-        {
-            this.subSeason = subSeason;
-            this.meltChance = meltChance;
-            this.rolls = rolls;
-        }
-
-        public Season.SubSeason getSubSeason()
-        {
-            return subSeason;
-        }
-
-        public float getMeltChance()
-        {
-            return meltChance;
-        }
-
-        public int getRolls()
-        {
-            return rolls;
-        }
-
+        Preconditions.checkState(DEFAULT_SEASON_PROPERTIES.keySet().containsAll(List.of(Season.SubSeason.values())));
     }
 }

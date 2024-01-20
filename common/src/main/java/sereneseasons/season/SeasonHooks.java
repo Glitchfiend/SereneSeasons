@@ -137,27 +137,7 @@ public class SeasonHooks
         float biomeTemp = biome.value().getTemperature(pos);
         if (!tropicalBiome && biome.value().getBaseTemperature() <= 0.8F && !biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
         {
-            switch (subSeason)
-            {
-                default:
-                    break;
-
-                case LATE_SPRING: case EARLY_AUTUMN:
-                biomeTemp = Mth.clamp(biomeTemp - 0.1F, -0.5F, 2.0F);
-                break;
-
-                case MID_SPRING: case MID_AUTUMN:
-                biomeTemp = Mth.clamp(biomeTemp - 0.2F, -0.5F, 2.0F);
-                break;
-
-                case EARLY_SPRING: case LATE_AUTUMN:
-                biomeTemp = Mth.clamp(biomeTemp - 0.4F, -0.5F, 2.0F);
-                break;
-
-                case EARLY_WINTER: case MID_WINTER: case LATE_WINTER:
-                biomeTemp = Mth.clamp(biomeTemp - 0.8F, -0.5F, 2.0F);
-                break;
-            }
+            biomeTemp = Mth.clamp(biomeTemp + ModConfig.seasons.getSeasonProperties(subSeason).biomeTempAdjustment(), -0.5F, 2.0F);
         }
 
         return biomeTemp;
