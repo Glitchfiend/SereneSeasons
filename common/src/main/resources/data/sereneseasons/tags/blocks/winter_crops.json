@@ -1,35 +1,15 @@
 {
   "replace": false,
   "values": [
-	"minecraft:oak_sapling",
-	"minecraft:birch_sapling",
+    "minecraft:oak_sapling",
 	"minecraft:spruce_sapling",
-	"minecraft:jungle_sapling",
-	"minecraft:acacia_sapling",
-	"minecraft:dark_oak_sapling",
-	"minecraft:mangrove_leaves",
-	"minecraft:mangrove_propagule",
-	"minecraft:cherry_sapling",
-	"minecraft:azalea",
-	"minecraft:flowering_azalea",
 	"minecraft:red_mushroom",
 	"minecraft:brown_mushroom",
 	"minecraft:nether_wart",
 	"minecraft:crimson_fungus",
 	"minecraft:warped_fungus",
-	"minecraft:crimson_nylium",
-	"minecraft:warped_nylium",
-	"minecraft:twisting_vines",
-	"minecraft:twisting_vines_plant",
-	"minecraft:weeping_vines",
-	"minecraft:weeping_vines_plant",
-	"minecraft:seagrass",
-	"minecraft:sea_pickle",
-	"minecraft:kelp",
-	"minecraft:kelp_plant",
-	"minecraft:glow_lichen",
+	"minecraft:sweet_berry_bush",
 	"minecraft:cave_vines",
-	"minecraft:cave_vines_plant",
-	"minecraft:rooted_dirt"
+	"minecraft:cave_vines_plant"
   ]
 }
