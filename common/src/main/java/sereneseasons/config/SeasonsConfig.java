@@ -182,11 +182,11 @@ public class SeasonsConfig extends glitchcore.config.Config
                 int minThunderTime = config.getInt("min_thunder_time");
                 int maxThunderTime = config.getInt("max_thunder_time");
 
-                Preconditions.checkArgument(meltChance < 0.0F || meltChance > 100.0F);
+                Preconditions.checkArgument(meltChance >= 0.0F && meltChance <= 100.0F);
                 Preconditions.checkArgument(rolls >= 0);
                 Preconditions.checkArgument(biomeTempAdjustment >= -10.0 && biomeTempAdjustment <= 10.0);
-                Preconditions.checkArgument(minRainTime >= maxRainTime);
-                Preconditions.checkArgument(minThunderTime >= maxThunderTime);
+                Preconditions.checkArgument(minRainTime <= maxRainTime);
+                Preconditions.checkArgument(minThunderTime <= maxThunderTime);
 
                 return Optional.of(new SeasonProperties(subSeason, meltChance, rolls, biomeTempAdjustment, minRainTime, maxRainTime, minThunderTime, maxThunderTime));
             }
