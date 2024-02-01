@@ -90,7 +90,7 @@ public class SeasonsConfig extends glitchcore.config.Config
     // Snow melting settings
     private List<Config> seasonProperties;
 
-    private Supplier<ImmutableMap<Season.SubSeason, SeasonProperties>> seasonPropertiesMapper;
+    private Supplier<Map<Season.SubSeason, SeasonProperties>> seasonPropertiesMapper;
 
 
     public SeasonsConfig()
@@ -127,10 +127,9 @@ public class SeasonsConfig extends glitchcore.config.Config
                 max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.""", SEASON_PROPERTIES_VALIDATOR);
 
         seasonPropertiesMapper = Suppliers.memoize(() -> {
-            var builder = ImmutableMap.<Season.SubSeason, SeasonProperties>builder();
-            builder.putAll(DEFAULT_SEASON_PROPERTIES);
-            seasonProperties.stream().map(SeasonProperties::decode).forEach(o -> o.ifPresent(v -> builder.put(v.subSeason(), v)));
-            return builder.build();
+            var map = new HashMap<>(DEFAULT_SEASON_PROPERTIES);
+            seasonProperties.stream().map(SeasonProperties::decode).forEach(o -> o.ifPresent(v -> map.put(v.subSeason(), v)));
+            return map;
         });
     }
 
