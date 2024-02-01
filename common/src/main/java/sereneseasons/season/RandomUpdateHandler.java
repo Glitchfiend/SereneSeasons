@@ -73,14 +73,22 @@ public class RandomUpdateHandler
 			BlockState aboveGroundState = world.getBlockState(topAirPos);
 			BlockState groundState = world.getBlockState(topGroundPos);
 			Holder<Biome> biome = world.getBiome(topAirPos);
+			Holder<Biome> groundBiome = world.getBiome(topGroundPos);
 
-			if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
-				return;
-
-			if (SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
+			if (!biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) && SeasonHooks.getBiomeTemperature(world, biome, topGroundPos) >= 0.15F)
 			{
-				if(aboveGroundState.getBlock() == Blocks.SNOW) world.setBlockAndUpdate(topAirPos, Blocks.AIR.defaultBlockState());
-				else if(groundState.getBlock() == Blocks.ICE) ((IceBlock) Blocks.ICE).melt(groundState, world, topGroundPos);
+				if (aboveGroundState.getBlock() == Blocks.SNOW)
+				{
+					world.setBlockAndUpdate(topAirPos, Blocks.AIR.defaultBlockState());
+				}
+			}
+
+			if (!groundBiome.is(ModTags.Biomes.BLACKLISTED_BIOMES) && SeasonHooks.getBiomeTemperature(world, groundBiome, topGroundPos) >= 0.15F)
+			{
+				if (groundState.getBlock() == Blocks.ICE)
+				{
+					((IceBlock) Blocks.ICE).melt(groundState, world, topGroundPos);
+				}
 			}
 		}
 	}
