@@ -40,15 +40,15 @@ public class SeasonsConfig extends glitchcore.config.Config
             new SeasonProperties(Season.SubSeason.EARLY_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
             new SeasonProperties(Season.SubSeason.MID_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
             new SeasonProperties(Season.SubSeason.LATE_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1),
-            new SeasonProperties(Season.SubSeason.EARLY_SPRING, 6.25F, 1, -0.4F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
-            new SeasonProperties(Season.SubSeason.MID_SPRING, 8.33F, 1, -0.2F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
-            new SeasonProperties(Season.SubSeason.LATE_SPRING, 12.5F, 1, -0.1F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.EARLY_SPRING, 6.25F, 1, -0.25F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.MID_SPRING, 8.33F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.LATE_SPRING, 12.5F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
             new SeasonProperties(Season.SubSeason.EARLY_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
             new SeasonProperties(Season.SubSeason.MID_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
             new SeasonProperties(Season.SubSeason.LATE_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
-            new SeasonProperties(Season.SubSeason.EARLY_AUTUMN, 12.5F, 1, -0.1F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
-            new SeasonProperties(Season.SubSeason.MID_AUTUMN, 8.33F, 1, -0.2F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
-            new SeasonProperties(Season.SubSeason.LATE_AUTUMN, 6.25F, 1, -0.4F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue())
+            new SeasonProperties(Season.SubSeason.EARLY_AUTUMN, 12.5F, 1, 0.0F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.MID_AUTUMN, 8.33F, 1, 0.0F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue()),
+            new SeasonProperties(Season.SubSeason.LATE_AUTUMN, 6.25F, 1, -0.25F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue())
     ).stream().collect(Collectors.toMap(SeasonProperties::subSeason, v -> v));
 
     private static final Predicate<List<String>> RESOURCE_LOCATION_VALIDATOR = (list) ->
