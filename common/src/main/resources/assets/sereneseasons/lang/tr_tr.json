@@ -1,0 +1,43 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [komutlar]",
+  "commands.sereneseasons.getseason.success": "Mevcut mevsim: %s, gün: %s/%s, tick %s/%s",
+  "commands.sereneseasons.setseason.success": "Mevsimi şuna ayarla: %s",
+  "commands.sereneseasons.setseason.fail": "Hatalı mevsim: %s",
+  "commands.sereneseasons.setseason.disabled": "Mevsimler şuanda devre dışı!",
+
+  "gamerule.doSeasonCycle": "Gelişmiş Mevsimsel Döngü",
+  "itemGroup.tabSereneSeasons": "Huzurlu Mevsimler",
+
+  "block.sereneseasons.season_sensor": "Mevsim Sensörü",
+  
+  "item.sereneseasons.ss_icon": "SS İkonu",
+  "item.sereneseasons.calendar": "Takvim",
+
+  "desc.sereneseasons.fertile_seasons": "Bereketli Mevsimler",
+  "desc.sereneseasons.year_round": "Tüm Yıl Boyunca",
+  "desc.sereneseasons.day_counter": "%s/%s. Gün",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
+  "desc.sereneseasons.spring": "İlkbahar",
+  "desc.sereneseasons.early_spring": "İlkbahar Başlangıcı",
+  "desc.sereneseasons.mid_spring": "İlkbahar Ortaları",
+  "desc.sereneseasons.late_spring": "İlkbahar Sonları",
+  "desc.sereneseasons.summer": "Yaz",
+  "desc.sereneseasons.early_summer": "Yaz Başlangıcı",
+  "desc.sereneseasons.mid_summer": "Yaz Ortaları",
+  "desc.sereneseasons.late_summer": "Yaz Sonları",
+  "desc.sereneseasons.autumn": "Sonbahar",
+  "desc.sereneseasons.early_autumn": "Sonbahar Başlangıcı",
+  "desc.sereneseasons.mid_autumn": "Sonbahar Ortaları",
+  "desc.sereneseasons.late_autumn": "Sonbahar Sonları",
+  "desc.sereneseasons.winter": "Kış",
+  "desc.sereneseasons.early_winter": "Kış Başlangıcı",
+  "desc.sereneseasons.mid_winter": "Kış Ortaları",
+  "desc.sereneseasons.late_winter": "Kış Sonları",
+  
+  "desc.sereneseasons.early_wet": "Early Nem",
+  "desc.sereneseasons.mid_wet": "Orta Nem",
+  "desc.sereneseasons.late_wet": "Geç Nem",
+  "desc.sereneseasons.early_dry": "Erken Kuru Nem",
+  "desc.sereneseasons.mid_dry": "Orta Kuru Nem",
+  "desc.sereneseasons.late_dry": "Geç Kuru Nem"
+}
