@@ -1,5 +1,7 @@
 package sereneseasons.season;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
@@ -22,13 +24,21 @@ import sereneseasons.init.ModTags;
 import sereneseasons.util.SeasonColorUtil;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class SeasonColorHandlers
 {
+	private static final Multimap<ResolverType, ColorOverride> resolverOverrides = HashMultimap.create();
+
 	public static void setup()
     {
 		registerGrassAndFoliageColorHandlers();
     }
+
+	public static void registerResolverOverride(ResolverType type, ColorOverride override)
+	{
+		resolverOverrides.put(type, override);
+	}
 
 	private static ColorResolver originalGrassColorResolver;
 	private static ColorResolver originalFoliageColorResolver;
@@ -38,42 +48,54 @@ public class SeasonColorHandlers
 		originalGrassColorResolver = BiomeColors.GRASS_COLOR_RESOLVER;
 		originalFoliageColorResolver = BiomeColors.FOLIAGE_COLOR_RESOLVER;
 
-		BiomeColors.GRASS_COLOR_RESOLVER = (biome, x, z) ->
-		{
-			Minecraft minecraft = Minecraft.getInstance();
-			Level level = minecraft.level;
-			Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registries.BIOME);
-			Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(key -> biomeRegistry.getHolder(key)).orElse(null);
-			int originalColor = originalGrassColorResolver.getColor(biome, x, z);
+		BiomeColors.GRASS_COLOR_RESOLVER = (biome, x, z) -> resolveColors(ResolverType.GRASS, biome, x, z);
+		BiomeColors.FOLIAGE_COLOR_RESOLVER = (biome, x, z) -> resolveColors(ResolverType.FOLIAGE, biome, x, z);
+	}
 
-			if (biomeHolder != null)
-			{
-				ISeasonState calendar = SeasonHelper.getSeasonState(level);
-				ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-
-				return SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biomeHolder, originalColor);
-			}
-
-			return originalColor;
+	private static int resolveColors(ResolverType type, Biome biome, double x, double z)
+	{
+		int originalColor = switch (type) {
+			case GRASS -> originalGrassColorResolver.getColor(biome, x, z);
+			case FOLIAGE -> originalFoliageColorResolver.getColor(biome, x, z);
 		};
 
-		BiomeColors.FOLIAGE_COLOR_RESOLVER = (biome, x, z) ->
+		Minecraft minecraft = Minecraft.getInstance();
+		Level level = minecraft.level;
+
+		if (level == null) return originalColor;
+
+		Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registries.BIOME);
+		Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(biomeRegistry::getHolder).orElse(null);
+
+		if (biomeHolder != null)
 		{
-			Minecraft minecraft = Minecraft.getInstance();
-			Level level = minecraft.level;
-			Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registries.BIOME);
-			Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(key -> biomeRegistry.getHolder(key)).orElse(null);
-			int originalColor = originalFoliageColorResolver.getColor(biome, x, z);
+			ISeasonState calendar = SeasonHelper.getSeasonState(level);
+			ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 
-			if (biomeHolder != null)
+			int seasonalColor = switch (type) {
+				case GRASS -> SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biomeHolder, originalColor);
+				case FOLIAGE -> SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biomeHolder, originalColor);
+			};
+
+			int currentColor = seasonalColor;
+			for (ColorOverride override : resolverOverrides.get(type))
 			{
-				ISeasonState calendar = SeasonHelper.getSeasonState(level);
-				ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-
-				return SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biomeHolder, originalColor);
+				currentColor = override.apply(originalColor, seasonalColor, currentColor, biomeHolder, x, z);
 			}
 
-			return originalColor;
-		};
+			return currentColor;
+		}
+
+		return originalColor;
+	}
+
+	public interface ColorOverride
+	{
+		int apply(int originalColor, int seasonalColor, int currentColor, Holder<Biome> biome, double x, double z);
+	}
+
+	public enum ResolverType
+	{
+		GRASS, FOLIAGE
 	}
 }
