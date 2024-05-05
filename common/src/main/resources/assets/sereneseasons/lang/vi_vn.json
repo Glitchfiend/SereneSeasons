@@ -1,0 +1,34 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "Current season is %s, day %s/%s, tick %s/%s",
+  "commands.sereneseasons.setseason.success": "Set season to %s",
+  "commands.sereneseasons.setseason.fail": "Invalid season %s",
+  "commands.sereneseasons.setseason.disabled": "Seasons are currently disabled!",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "Cảm biến mùa",
+
+  "item.sereneseasons.ss_icon": "SS Icon",
+  "item.sereneseasons.calendar": "Lịch",
+
+  "desc.sereneseasons.fertile_seasons": "Mùa màu mỡ",
+  "desc.sereneseasons.year_round": "Quanh năm",
+  "desc.sereneseasons.day_counter": "Ngày %s/%s",
+  "desc.sereneseasons.spring": "Mùa xuân",
+  "desc.sereneseasons.early_spring": "Đầu mùa xuân",
+  "desc.sereneseasons.mid_spring": "Giữa mùa xuân",
+  "desc.sereneseasons.late_spring": "Cuối mùa xuân",
+  "desc.sereneseasons.summer": "Mùa hè",
+  "desc.sereneseasons.early_summer": "Đầu mùa hè",
+  "desc.sereneseasons.mid_summer": "Giữa mùa hè",
+  "desc.sereneseasons.late_summer": "Cuối mùa hè",
+  "desc.sereneseasons.autumn": "Mùa thu",
+  "desc.sereneseasons.early_autumn": "Đầu mùa thu",
+  "desc.sereneseasons.mid_autumn": "Giữa mùa thu",
+  "desc.sereneseasons.late_autumn": "Cuối mùa thu",
+  "desc.sereneseasons.winter": "Mùa đông",
+  "desc.sereneseasons.early_winter": "Đầu mùa đông",
+  "desc.sereneseasons.mid_winter": "Giữa mùa đông",
+  "desc.sereneseasons.late_winter": "Cuối mùa đông"
+}

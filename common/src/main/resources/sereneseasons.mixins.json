@@ -10,7 +10,8 @@
     "MixinServerLevel"
   ],
   "client": [
-    "client.MixinLevelRenderer"
+    "client.MixinLevelRenderer",
+    "client.MixinBiomeClient"
   ],
   "injectors": {
     "defaultRequire": 1
