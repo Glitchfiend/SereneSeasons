@@ -62,6 +62,11 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (difference == 0)
             return;
 
+        if (difference < 0)
+        {
+            difference += 24000L;
+        }
+
         SeasonSavedData savedData = getSeasonSavedData(level);
         savedData.seasonCycleTicks = Mth.positiveModulo(savedData.seasonCycleTicks + (int)difference, SeasonTime.ZERO.getCycleDuration());
 
