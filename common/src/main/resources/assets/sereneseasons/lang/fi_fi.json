@@ -1,0 +1,44 @@
+{
+    "commands.sereneseasons.usage": "/season <get/set> [args]",
+    "commands.sereneseasons.getseason.success": "Nykyinen vuodenaika on %s, päivä %s/%s, tick %s/%s",
+    "commands.sereneseasons.setseason.success": "Vuodenajaksi asetettu %s",
+    "commands.sereneseasons.setseason.fail": "Virheellinen vuodenaika %s",
+    "commands.sereneseasons.setseason.disabled": "Vuodenajat on tällä hetkellä pois päältä!",
+  
+    "gamerule.doSeasonCycle": "Vuodenajat edistyvät",
+    "itemGroup.tabSereneSeasons": "Serene Seasons",
+  
+    "block.sereneseasons.season_sensor": "Vuodenajantunnistin",
+    
+    "item.sereneseasons.ss_icon": "SS Kuvake",
+    "item.sereneseasons.calendar": "Kalenteri",
+  
+    "desc.sereneseasons.fertile_seasons": "Viljavat vuodenajat",
+    "desc.sereneseasons.year_round": "Ympäri vuoden",
+    "desc.sereneseasons.day_counter": "Päivä %s/%s",
+    "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
+    "desc.sereneseasons.spring": "Kevät",
+    "desc.sereneseasons.early_spring": "Alkukevät",
+    "desc.sereneseasons.mid_spring": "Keskikevät",
+    "desc.sereneseasons.late_spring": "Loppukevät",
+    "desc.sereneseasons.summer": "Kesä",
+    "desc.sereneseasons.early_summer": "Alkukesä",
+    "desc.sereneseasons.mid_summer": "Keskikesä",
+    "desc.sereneseasons.late_summer": "Loppukesä",
+    "desc.sereneseasons.autumn": "Syksy",
+    "desc.sereneseasons.early_autumn": "Alkusyksy",
+    "desc.sereneseasons.mid_autumn": "Keskisyksy",
+    "desc.sereneseasons.late_autumn": "Loppusyksy",
+    "desc.sereneseasons.winter": "Talvi",
+    "desc.sereneseasons.early_winter": "Alkutalvi",
+    "desc.sereneseasons.mid_winter": "Keskitalvi",
+    "desc.sereneseasons.late_winter": "Lopputalvi",
+    
+    "desc.sereneseasons.early_wet": "Alkumärkä",
+    "desc.sereneseasons.mid_wet": "Keskimärkä",
+    "desc.sereneseasons.late_wet": "Loppumärkä",
+    "desc.sereneseasons.early_dry": "Alkukuiva",
+    "desc.sereneseasons.mid_dry": "Keskikuiva",
+    "desc.sereneseasons.late_dry": "Loppukuiva"
+  }
+  
