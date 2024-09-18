@@ -1,11 +1,12 @@
 {
-  "commands.sereneseasons.usage": "/sereneseasons <getseason/setseason> [args]",
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
   "commands.sereneseasons.getseason.success": "Derzeitige Jahreszeit ist %s, Tag %s/%s, tick %s/%s",
   "commands.sereneseasons.setseason.success": "Setze Jahreszeit zu %s",
   "commands.sereneseasons.setseason.fail": "Ungültige Jahreszeit %s",
   "commands.sereneseasons.setseason.disabled": "Jahreszeiten sind derzeit deaktiviert!",
 
-  "itemGroup.tabSereneSeasons": "Ruhige Jahreszeiten",
+  "gamerule.doSeasonCycle": "Jahreszeiten schreiten voran",
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
 
   "block.sereneseasons.season_sensor": "Jahreszeiten Sensor",
   
@@ -14,8 +15,29 @@
 
   "desc.sereneseasons.fertile_seasons": "Fertile Jahreszeiten",
   "desc.sereneseasons.year_round": "Ganzjährig",
+  "desc.sereneseasons.day_counter": "Tag %s/%s",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
   "desc.sereneseasons.spring": "Frühling",
+  "desc.sereneseasons.early_spring": "Frühlingsanfang",
+  "desc.sereneseasons.mid_spring": "Frühlingsmitte",
+  "desc.sereneseasons.late_spring": "Frühlingsende",
   "desc.sereneseasons.summer": "Sommer",
+  "desc.sereneseasons.early_summer": "Frühsommer",
+  "desc.sereneseasons.mid_summer": "Hochsommer",
+  "desc.sereneseasons.late_summer": "Spätsommer",
   "desc.sereneseasons.autumn": "Herbst",
-  "desc.sereneseasons.winter": "Winter"
+  "desc.sereneseasons.early_autumn": "Herbstanfang",
+  "desc.sereneseasons.mid_autumn": "Herbstmitte",
+  "desc.sereneseasons.late_autumn": "Herbstende",
+  "desc.sereneseasons.winter": "Winter",
+  "desc.sereneseasons.early_winter": "Winteranfang",
+  "desc.sereneseasons.mid_winter": "Wintermitte",
+  "desc.sereneseasons.late_winter": "Winterende",
+  
+  "desc.sereneseasons.early_wet": "Anfang der Regenzeit",
+  "desc.sereneseasons.mid_wet": "Mitte der Regenzeit",
+  "desc.sereneseasons.late_wet": "Ende der Regenzeit",
+  "desc.sereneseasons.early_dry": "Anfang der Trockenzeit",
+  "desc.sereneseasons.mid_dry": "Mitte der Trockenzeit",
+  "desc.sereneseasons.late_dry": "Ende der Trockenzeit"
 }
