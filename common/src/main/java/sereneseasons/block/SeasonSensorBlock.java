@@ -34,7 +34,6 @@ import sereneseasons.season.SeasonTime;
 
 public class SeasonSensorBlock extends BaseEntityBlock
 {
-    public static final MapCodec<SeasonSensorBlock> CODEC = simpleCodec(SeasonSensorBlock::new);
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
     public static final IntegerProperty SEASON = IntegerProperty.create("season", 0, 3);
@@ -43,12 +42,6 @@ public class SeasonSensorBlock extends BaseEntityBlock
     {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(POWER, 0).setValue(SEASON, 0));
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec()
-    {
-        return CODEC;
     }
 
     @Override

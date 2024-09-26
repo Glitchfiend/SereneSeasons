@@ -148,7 +148,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             return savedData;
         };
 
-        return saveDataManager.computeIfAbsent(new SavedData.Factory<>(defaultSaveDataSupplier, SeasonSavedData::load, DataFixTypes.LEVEL), SeasonSavedData.DATA_IDENTIFIER);
+        return saveDataManager.computeIfAbsent(SeasonSavedData::load, defaultSaveDataSupplier, SeasonSavedData.DATA_IDENTIFIER);
     }
 
     //
