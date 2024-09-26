@@ -23,6 +23,7 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonChangedEvent;
 import sereneseasons.api.season.SeasonHelper;
+import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModPackets;
 import sereneseasons.init.ModTags;
@@ -40,7 +41,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         Level level = event.getLevel();
 
-        if (event.getPhase() != TickEvent.Phase.START || level.isClientSide() || !ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+        if (event.getPhase() != TickEvent.Phase.START || level.isClientSide() || !SeasonsConfigModel.isDimensionWhitelisted(level.dimension()))
             return;
 
         long dayTime = level.getDayTime();
@@ -51,7 +52,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (!level.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONCYCLE))
             return;
 
-        if (!ModConfig.seasons.progressSeasonWhileOffline)
+        if (!ModConfig.seasons.progressSeasonWhileOffline())
         {
             MinecraftServer server = level.getServer();
             if (server != null && server.getPlayerList().getPlayerCount() == 0)
@@ -132,7 +133,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         {
             SeasonSavedData savedData = new SeasonSavedData();
 
-            int startingSeason = ModConfig.seasons.startingSubSeason;
+            int startingSeason = ModConfig.seasons.startingSubSeason();
 
             if (startingSeason == 0)
             {

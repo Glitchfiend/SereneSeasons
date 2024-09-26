@@ -23,13 +23,13 @@ public final class SeasonTime implements ISeasonState
     @Override
     public int getDayDuration()
     {
-        return ModConfig.seasons.dayDuration;
+        return ModConfig.seasons.dayDuration();
     }
 
     @Override
     public int getSubSeasonDuration()
     {
-        return getDayDuration() * ModConfig.seasons.subSeasonDuration;
+        return getDayDuration() * ModConfig.seasons.subSeasonDuration();
     }
 
     @Override

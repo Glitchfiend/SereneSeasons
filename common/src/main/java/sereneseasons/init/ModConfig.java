@@ -4,9 +4,10 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import glitchcore.config.ConfigSync;
+
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.SeasonsConfigModel;
 
 public class ModConfig
 {
@@ -15,10 +16,10 @@ public class ModConfig
 
     public static void init()
     {
-        fertility = new FertilityConfig();
-        seasons = new SeasonsConfig();
+        fertility = FertilityConfig.createAndLoad();
 
-        ConfigSync.register(fertility);
-        ConfigSync.register(seasons);
+        var inst = SeasonsConfig.createAndLoad();
+        SeasonsConfigModel.setInstance(inst);
+        seasons = inst;
     }
 }

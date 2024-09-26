@@ -24,6 +24,7 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
+import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 
@@ -34,13 +35,13 @@ public class RandomUpdateHandler
 {
 	private static void adjustWeatherFrequency(Level world, Season.SubSeason subSeason)
 	{
-		if (!ModConfig.seasons.changeWeatherFrequency)
+		if (!ModConfig.seasons.changeWeatherFrequency())
 			return;
 
 		ServerLevelData serverLevelData = (ServerLevelData)world.getLevelData();
-		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
+		SeasonsConfig.SeasonProperties seasonProperties = SeasonsConfigModel.getSeasonProperties(subSeason);
 
-		if (seasonProperties.canRain())
+		if (SeasonsConfigModel.canRain(seasonProperties))
 		{
 			if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > seasonProperties.maxRainTime())
 			{
@@ -49,7 +50,7 @@ public class RandomUpdateHandler
 		}
 		else if (serverLevelData.isRaining()) serverLevelData.setRaining(false);
 
-		if (seasonProperties.canThunder())
+		if (SeasonsConfigModel.canThunder(seasonProperties))
 		{
 			if (!world.getLevelData().isThundering() && serverLevelData.getThunderTime() > seasonProperties.maxThunderTime())
 			{
@@ -102,9 +103,8 @@ public class RandomUpdateHandler
 
 		ServerLevel level = (ServerLevel)event.getLevel();
 		Season.SubSeason subSeason = SeasonHelper.getSeasonState(level).getSubSeason();
-		Season season = subSeason.getSeason();
 
-		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
+		SeasonsConfig.SeasonProperties seasonProperties = SeasonsConfigModel.getSeasonProperties(subSeason);
 		float meltRand = seasonProperties.meltChance() / 100.0F;
 		int rolls = seasonProperties.meltRolls();
 
@@ -112,7 +112,7 @@ public class RandomUpdateHandler
 
 		if(rolls > 0 && meltRand > 0.0F)
 		{
-			if (ModConfig.seasons.generateSnowAndIce && ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+			if (ModConfig.seasons.generateSnowAndIce() && SeasonsConfigModel.isDimensionWhitelisted(level.dimension()))
 			{
 				ChunkMap chunkMap = level.getChunkSource().chunkMap;
 				DistanceManager distanceManager = chunkMap.getDistanceManager();

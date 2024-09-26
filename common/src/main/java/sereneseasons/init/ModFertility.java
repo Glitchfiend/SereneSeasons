@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import sereneseasons.config.SeasonsConfigModel;
 
 /**
  * Constructs efficient data structures to process, store, and give access to data from the FertilityConfig file
@@ -69,7 +70,7 @@ public class ModFertility
         Season season = SeasonHelper.getSeasonState(level).getSeason();
         Holder<Biome> biome = level.getBiome(pos);
 
-        if (pos.getY() < ModConfig.fertility.undergroundFertilityLevel && !level.canSeeSky(pos))
+        if (pos.getY() < ModConfig.fertility.undergroundFertilityLevel() && !level.canSeeSky(pos))
         {
             return true;
         }
@@ -78,7 +79,7 @@ public class ModFertility
         {
             return false;
         }
-        else if (!ModConfig.fertility.seasonalCrops || biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+        else if (!ModConfig.fertility.seasonalCrops() || biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !SeasonsConfigModel.isDimensionWhitelisted(level.dimension()))
         {
             return true;
         }
@@ -214,7 +215,7 @@ public class ModFertility
     public static void setupTooltips(ItemTooltipEvent event)
     {
         //Set up tooltips if enabled and on client side
-        if (ModConfig.fertility.cropTooltips && ModConfig.fertility.seasonalCrops)
+        if (ModConfig.fertility.cropTooltips() && ModConfig.fertility.seasonalCrops())
         {
             String name = BuiltInRegistries.ITEM.getKey(event.getStack().getItem()).toString();
             if (seedSeasons.containsKey(name))

@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.Season;
+import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class SeasonHandlerClient
         if (player == null) return;
         ResourceKey<Level> dimension = player.level().dimension();
 
-        if (event.getPhase() == TickEvent.Phase.END && ModConfig.seasons.isDimensionWhitelisted(dimension))
+        if (event.getPhase() == TickEvent.Phase.END && SeasonsConfigModel.isDimensionWhitelisted(dimension))
         {
             //Keep ticking as we're synchronized with the server only every second
             clientSeasonCycleTicks.compute(dimension, (k, v) -> v == null ? 0 : (v + 1) % SeasonTime.ZERO.getCycleDuration());

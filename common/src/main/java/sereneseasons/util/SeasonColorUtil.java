@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.Season;
+import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 
@@ -86,13 +87,13 @@ public class SeasonColorUtil
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
-        if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !ModConfig.seasons.isDimensionWhitelisted(dimension)) {
+        if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !SeasonsConfigModel.isDimensionWhitelisted(dimension)) {
             return originalColour;
         }
 
         int overlay = colorProvider.getGrassOverlay();
         float saturationMultiplier = colorProvider.getGrassSaturationMultiplier();
-        if (!ModConfig.seasons.changeGrassColor)
+        if (!ModConfig.seasons.changeGrassColor())
     	{
             overlay = Season.SubSeason.MID_SUMMER.getGrassOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getGrassSaturationMultiplier();
@@ -110,12 +111,12 @@ public class SeasonColorUtil
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
-        if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !ModConfig.seasons.isDimensionWhitelisted(dimension))
+        if (biome.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !SeasonsConfigModel.isDimensionWhitelisted(dimension))
             return originalColour;
 
         int overlay = colorProvider.getFoliageOverlay();
         float saturationMultiplier = colorProvider.getFoliageSaturationMultiplier();
-        if (!ModConfig.seasons.changeFoliageColor)
+        if (!ModConfig.seasons.changeFoliageColor())
     	{
         	overlay = Season.SubSeason.MID_SUMMER.getFoliageOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getFoliageSaturationMultiplier();

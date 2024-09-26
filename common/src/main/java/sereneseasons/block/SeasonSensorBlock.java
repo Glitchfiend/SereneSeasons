@@ -26,7 +26,7 @@ import net.minecraft.world.level.Level;
 import sereneseasons.api.SSBlockEntities;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.block.entity.SeasonSensorBlockEntity;
-import sereneseasons.init.ModConfig;
+import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.season.SeasonTime;
 
 import javax.annotation.Nullable;
@@ -70,9 +70,7 @@ public class SeasonSensorBlock extends BaseEntityBlock
 
     public void updatePower(Level world, BlockPos pos)
     {
-        BlockState state = world.getBlockState(pos);
-
-        if (ModConfig.seasons.isDimensionWhitelisted(world.dimension()))
+        if (SeasonsConfigModel.isDimensionWhitelisted(world.dimension()))
         {
             BlockState currentState = world.getBlockState(pos);
 
