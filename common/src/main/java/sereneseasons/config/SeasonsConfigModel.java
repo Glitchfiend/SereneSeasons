@@ -98,21 +98,20 @@ public class SeasonsConfigModel {
     return seasonProperties.minThunderTime() != -1 && seasonProperties.maxThunderTime() != -1;
   }
 
-  @Nest public SeasonProperties earlyWinterProperties = new SeasonProperties(Season.SubSeason.EARLY_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1);
-  @Nest public SeasonProperties midWinterProperties = new SeasonProperties(Season.SubSeason.MID_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1);
-  @Nest public SeasonProperties lateWinterProperties = new SeasonProperties(Season.SubSeason.LATE_WINTER, 0.0F, 0, -0.8F, 12000, 36000, -1, -1);
-  @Nest public SeasonProperties earlySpringProperties = new SeasonProperties(Season.SubSeason.EARLY_SPRING, 6.25F, 1, -0.25F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties midSpringProperties = new SeasonProperties(Season.SubSeason.MID_SPRING, 8.33F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties lateSpringProperties = new SeasonProperties(Season.SubSeason.LATE_SPRING, 12.5F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties earlySummerProperties = new SeasonProperties(Season.SubSeason.EARLY_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties midSummerProperties = new SeasonProperties(Season.SubSeason.MID_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties lateSummerProperties = new SeasonProperties(Season.SubSeason.LATE_SUMMER, 25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties earlyAutumnProperties = new SeasonProperties(Season.SubSeason.EARLY_AUTUMN, 12.5F, 1, 0.0F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties midAutumnProperties = new SeasonProperties(Season.SubSeason.MID_AUTUMN, 8.33F, 1, 0.0F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
-  @Nest public SeasonProperties lateAutumnProperties = new SeasonProperties(Season.SubSeason.LATE_AUTUMN, 6.25F, 1, -0.25F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties earlyWinterProperties = new SeasonProperties(0.0F, 0, -0.8F, 12000, 36000, -1, -1);
+  @Nest public SeasonProperties midWinterProperties = new SeasonProperties(0.0F, 0, -0.8F, 12000, 36000, -1, -1);
+  @Nest public SeasonProperties lateWinterProperties = new SeasonProperties(0.0F, 0, -0.8F, 12000, 36000, -1, -1);
+  @Nest public SeasonProperties earlySpringProperties = new SeasonProperties(6.25F, 1, -0.25F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties midSpringProperties = new SeasonProperties(8.33F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties lateSpringProperties = new SeasonProperties(12.5F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties earlySummerProperties = new SeasonProperties(25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties midSummerProperties = new SeasonProperties(25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties lateSummerProperties = new SeasonProperties(25.0F, 1, 0.0F, 12000, 96000, THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties earlyAutumnProperties = new SeasonProperties(12.5F, 1, 0.0F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties midAutumnProperties = new SeasonProperties(8.33F, 1, 0.0F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
+  @Nest public SeasonProperties lateAutumnProperties = new SeasonProperties(6.25F, 1, -0.25F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
 
   public static class SeasonProperties {
-    public Season.SubSeason subSeason;
     public float meltChance;
     public int meltRolls;
     public float biomeTempAdjustments;
@@ -120,9 +119,8 @@ public class SeasonsConfigModel {
     public int maxRainTime;
     public int minThunderTime;
     public int maxThunderTime;
-    SeasonProperties(Season.SubSeason subSeason, float meltChance, int meltRolls,
+    SeasonProperties(float meltChance, int meltRolls,
         float biomeTempAdjustment, int minRainTime, int maxRainTime, int minThunderTime, int maxThunderTime) {
-      this.subSeason = subSeason;
       this.meltChance = meltChance;
       this.meltRolls = meltRolls;
       this.biomeTempAdjustments = biomeTempAdjustment;
