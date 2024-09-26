@@ -80,7 +80,6 @@ subprojects {
     processResources {
         var expandProps = [
             minecraft_version   : minecraft_version,
-            forge_version       : forge_version, forge_version_range: forge_version_range, forge_loader_version_range: forge_loader_version_range,
             glitchcore_version  : glitchcore_version,
             mod_id              : mod_id, mod_name: mod_name, mod_display_name: mod_display_name, mod_version: mod_version,
             mod_authors         : mod_authors, mod_description: mod_description,
@@ -88,7 +87,7 @@ subprojects {
             mod_discord_url     : mod_discord_url,
             mod_license         : mod_license
         ]
-        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', "*.mixins.json"]) {
+        filesMatching(['pack.mcmeta', 'fabric.mod.json', "*.mixins.json"]) {
             expand expandProps
         }
         inputs.properties(expandProps)
@@ -163,27 +162,6 @@ subprojects {
                             developer {
                                 id = 'forstride'
                                 name = 'Forstride'
-                            }
-                        }
-                        withXml {
-                            NodeList dependencies = asNode().dependencies
-                            NodeList allDeps = dependencies.'*'
-
-                            // Remove forge deps
-                            allDeps.<Node> findAll() { Node el ->
-                                el.artifactId.text() == 'forge' && el.groupId.text() == 'net.minecraftforge'
-                            }.forEach() { Node el ->
-                                el.parent().remove(el)
-                            }
-                            // Remove ForgeGradle's mapped suffix from versions & set as optional so anyone else doesn't inherit them
-                            allDeps.<Node> findAll() { Node el ->
-                                el.version.text().contains('_mapped_')
-                            }.each { Node el ->
-                                el.version.each { Node version ->
-                                    def versionText = version.text()
-                                    version.setValue(versionText.substring(0, versionText.indexOf('_mapped_')))
-                                }
-                                el.appendNode('optional', true)
                             }
                         }
                     }
