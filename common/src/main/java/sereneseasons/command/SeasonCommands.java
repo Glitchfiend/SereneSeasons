@@ -2,14 +2,13 @@ package sereneseasons.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import glitchcore.event.server.RegisterCommandsEvent;
+import java.util.function.BiConsumer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
 import sereneseasons.core.SereneSeasons;
-
-import java.util.function.BiConsumer;
 
 public class SeasonCommands
 {

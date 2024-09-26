@@ -17,7 +17,6 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.Season;
-import sereneseasons.config.SeasonsConfig.SeasonProperties;
 
 @Sync(SyncMode.OVERRIDE_CLIENT)
 @Config(name = "SereneSeasons_seasons", wrapperName = "SeasonsConfig")

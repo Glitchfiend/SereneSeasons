@@ -5,9 +5,8 @@
 package sereneseasons.api.season;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.StringRepresentable;
-
 import java.util.Locale;
+import net.minecraft.util.StringRepresentable;
 
 public enum Season
 {

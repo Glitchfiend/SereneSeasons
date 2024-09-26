@@ -6,6 +6,8 @@ package sereneseasons.season;
 
 import com.google.common.collect.Lists;
 import glitchcore.event.TickEvent;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ChunkHolder;
@@ -27,9 +29,6 @@ import sereneseasons.config.SeasonsConfig;
 import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
-
-import java.util.Collections;
-import java.util.List;
 
 public class RandomUpdateHandler
 {

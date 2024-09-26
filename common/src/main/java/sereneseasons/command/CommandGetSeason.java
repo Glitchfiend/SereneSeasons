@@ -5,6 +5,7 @@
 package sereneseasons.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import java.util.Locale;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -13,8 +14,6 @@ import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
-
-import java.util.Locale;
 
 public class CommandGetSeason
 {
