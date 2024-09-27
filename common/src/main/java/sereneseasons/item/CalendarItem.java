@@ -29,7 +29,7 @@ public class CalendarItem extends Item
             {
                 int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
                 SeasonTime time = new SeasonTime(seasonCycleTicks);
-                int subSeasonDuration = ModConfig.seasons.subSeasonDuration();
+                int subSeasonDuration = ModConfig.seasons.subSeasonDuration;
 
                 tooltip.add(Component.translatable("desc.sereneseasons." + time.getSubSeason().toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.GRAY).append(Component.literal(" (").withStyle(ChatFormatting.DARK_GRAY)).append(Component.translatable("desc.sereneseasons." + time.getTropicalSeason().toString().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.DARK_GRAY)).append(Component.literal(")").withStyle(ChatFormatting.DARK_GRAY)));
                 tooltip.add(Component.translatable("desc.sereneseasons.day_counter", (time.getDay() % subSeasonDuration) + 1, subSeasonDuration).withStyle(ChatFormatting.GRAY).append(Component.translatable("desc.sereneseasons.tropical_day_counter", (((time.getDay() + subSeasonDuration) % (subSeasonDuration * 2)) + 1), subSeasonDuration * 2).withStyle(ChatFormatting.DARK_GRAY)));

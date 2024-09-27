@@ -140,7 +140,7 @@ public class ModClient
             Level level = Minecraft.getInstance().player.level();
             ResourceKey<Level> dimension = Minecraft.getInstance().player.level().dimension();
 
-            if (level != null && pos != null && ModConfig.seasons.changeBirchColor() && ModConfig.seasons.isDimensionWhitelisted(dimension))
+            if (level != null && pos != null && ModConfig.seasons.changeBirchColor && ModConfig.seasons.isDimensionWhitelisted(dimension))
             {
                 Holder<Biome> biome = level.getBiome(pos);
 

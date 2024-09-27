@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.Season;
+import sereneseasons.init.ModConfig;
 
 public class SeasonHandlerClient
 {

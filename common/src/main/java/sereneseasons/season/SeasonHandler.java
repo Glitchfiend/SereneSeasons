@@ -48,7 +48,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (!level.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONCYCLE))
             return;
 
-        if (!ModConfig.seasons.progressSeasonWhileOffline())
+        if (!ModConfig.seasons.progressSeasonWhileOffline)
         {
             MinecraftServer server = level.getServer();
             if (server != null && server.getPlayerList().getPlayerCount() == 0)
@@ -129,7 +129,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         {
             SeasonSavedData savedData = new SeasonSavedData();
 
-            int startingSeason = ModConfig.seasons.startingSubSeason();
+            int startingSeason = ModConfig.seasons.startingSubSeason;
 
             if (startingSeason == 0)
             {

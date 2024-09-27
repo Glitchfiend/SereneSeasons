@@ -33,13 +33,13 @@ public class RandomUpdateHandler
 {
 	private static void adjustWeatherFrequency(Level world, Season.SubSeason subSeason)
 	{
-		if (!ModConfig.seasons.changeWeatherFrequency())
+		if (!ModConfig.seasons.changeWeatherFrequency)
 			return;
 
 		ServerLevelData serverLevelData = (ServerLevelData)world.getLevelData();
 		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
 
-		if (ModConfig.seasons.canRain(seasonProperties))
+		if (seasonProperties.canRain())
 		{
 			if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > seasonProperties.maxRainTime())
 			{
@@ -48,7 +48,7 @@ public class RandomUpdateHandler
 		}
 		else if (serverLevelData.isRaining()) serverLevelData.setRaining(false);
 
-		if (ModConfig.seasons.canThunder(seasonProperties))
+		if (seasonProperties.canThunder())
 		{
 			if (!world.getLevelData().isThundering() && serverLevelData.getThunderTime() > seasonProperties.maxThunderTime())
 			{
@@ -110,7 +110,7 @@ public class RandomUpdateHandler
 
 		if(rolls > 0 && meltRand > 0.0F)
 		{
-			if (ModConfig.seasons.generateSnowAndIce() && ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+			if (ModConfig.seasons.generateSnowAndIce && ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
 			{
 				ChunkMap chunkMap = level.getChunkSource().chunkMap;
 				DistanceManager distanceManager = chunkMap.getDistanceManager();

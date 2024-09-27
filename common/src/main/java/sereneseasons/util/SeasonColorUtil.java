@@ -92,7 +92,7 @@ public class SeasonColorUtil
 
         int overlay = colorProvider.getGrassOverlay();
         float saturationMultiplier = colorProvider.getGrassSaturationMultiplier();
-        if (!ModConfig.seasons.changeGrassColor())
+        if (!ModConfig.seasons.changeGrassColor)
     	{
             overlay = Season.SubSeason.MID_SUMMER.getGrassOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getGrassSaturationMultiplier();
@@ -115,7 +115,7 @@ public class SeasonColorUtil
 
         int overlay = colorProvider.getFoliageOverlay();
         float saturationMultiplier = colorProvider.getFoliageSaturationMultiplier();
-        if (!ModConfig.seasons.changeFoliageColor())
+        if (!ModConfig.seasons.changeFoliageColor)
     	{
         	overlay = Season.SubSeason.MID_SUMMER.getFoliageOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getFoliageSaturationMultiplier();
