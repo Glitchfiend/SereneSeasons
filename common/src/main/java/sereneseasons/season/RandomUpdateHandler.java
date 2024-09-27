@@ -26,7 +26,6 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 
@@ -38,9 +37,9 @@ public class RandomUpdateHandler
 			return;
 
 		ServerLevelData serverLevelData = (ServerLevelData)world.getLevelData();
-		SeasonsConfig.SeasonProperties seasonProperties = SeasonsConfigModel.getSeasonProperties(subSeason);
+		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
 
-		if (SeasonsConfigModel.canRain(seasonProperties))
+		if (ModConfig.seasons.canRain(seasonProperties))
 		{
 			if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > seasonProperties.maxRainTime())
 			{
@@ -49,7 +48,7 @@ public class RandomUpdateHandler
 		}
 		else if (serverLevelData.isRaining()) serverLevelData.setRaining(false);
 
-		if (SeasonsConfigModel.canThunder(seasonProperties))
+		if (ModConfig.seasons.canThunder(seasonProperties))
 		{
 			if (!world.getLevelData().isThundering() && serverLevelData.getThunderTime() > seasonProperties.maxThunderTime())
 			{
@@ -103,7 +102,7 @@ public class RandomUpdateHandler
 		ServerLevel level = (ServerLevel)event.getLevel();
 		Season.SubSeason subSeason = SeasonHelper.getSeasonState(level).getSubSeason();
 
-		SeasonsConfig.SeasonProperties seasonProperties = SeasonsConfigModel.getSeasonProperties(subSeason);
+		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
 		float meltRand = seasonProperties.meltChance() / 100.0F;
 		int rolls = seasonProperties.meltRolls();
 
@@ -111,7 +110,7 @@ public class RandomUpdateHandler
 
 		if(rolls > 0 && meltRand > 0.0F)
 		{
-			if (ModConfig.seasons.generateSnowAndIce() && SeasonsConfigModel.isDimensionWhitelisted(level.dimension()))
+			if (ModConfig.seasons.generateSnowAndIce() && ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
 			{
 				ChunkMap chunkMap = level.getChunkSource().chunkMap;
 				DistanceManager distanceManager = chunkMap.getDistanceManager();

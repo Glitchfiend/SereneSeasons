@@ -4,7 +4,6 @@
  ******************************************************************************/
 package sereneseasons.block;
 
-import com.mojang.serialization.MapCodec;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import sereneseasons.api.SSBlockEntities;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.block.entity.SeasonSensorBlockEntity;
-import sereneseasons.config.SeasonsConfigModel;
+import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 
 public class SeasonSensorBlock extends BaseEntityBlock
@@ -64,7 +63,7 @@ public class SeasonSensorBlock extends BaseEntityBlock
 
     public void updatePower(Level world, BlockPos pos)
     {
-        if (SeasonsConfigModel.isDimensionWhitelisted(world.dimension()))
+        if (ModConfig.seasons.isDimensionWhitelisted(world.dimension()))
         {
             BlockState currentState = world.getBlockState(pos);
 

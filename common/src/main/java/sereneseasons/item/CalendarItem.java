@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonTime;
 
@@ -26,7 +25,7 @@ public class CalendarItem extends Item
     {
         if (world != null)
         {
-            if (SeasonsConfigModel.isDimensionWhitelisted(world.dimension()))
+            if (ModConfig.seasons.isDimensionWhitelisted(world.dimension()))
             {
                 int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
                 SeasonTime time = new SeasonTime(seasonCycleTicks);

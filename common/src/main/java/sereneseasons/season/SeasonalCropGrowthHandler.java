@@ -28,7 +28,7 @@ public class SeasonalCropGrowthHandler
 
 	public static void onCropGrowth(Level level, BlockPos pos, BlockState state, CallbackInfo ci)
 	{
-		if (!ModConfig.fertility.seasonalCrops() || !ModFertility.isCrop(state))
+		if (!ModConfig.fertility.seasonalCrops || !ModFertility.isCrop(state))
 			return;
 
 		Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK);
@@ -36,18 +36,18 @@ public class SeasonalCropGrowthHandler
 
 		if (!isFertile && !isGlassAboveBlock(level, pos))
 		{
-			if (ModConfig.fertility.outOfSeasonCropBehavior() == 0)
+			if (ModConfig.fertility.outOfSeasonCropBehavior == 0)
 			{
 				if (level.getRandom().nextInt(6) != 0)
 				{
 					ci.cancel();
 				}
 			}
-		    else if (ModConfig.fertility.outOfSeasonCropBehavior() == 1)
+		    else if (ModConfig.fertility.outOfSeasonCropBehavior == 1)
             {
                 ci.cancel();
             }
-		    else if (ModConfig.fertility.outOfSeasonCropBehavior() == 2)
+		    else if (ModConfig.fertility.outOfSeasonCropBehavior == 2)
             {
                 if (!state.is(ModTags.Blocks.UNBREAKABLE_INFERTILE_CROPS))
                 {
@@ -75,14 +75,14 @@ public class SeasonalCropGrowthHandler
 		Block plantBlock = plant.getBlock();
 		Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK);
 
-		if (!ModConfig.fertility.seasonalCrops() || !ModFertility.isCrop(plant))
+		if (!ModConfig.fertility.seasonalCrops || !ModFertility.isCrop(plant))
 			return;
 
 		boolean isFertile = ModFertility.isCropFertile(blockRegistry.getKey(plantBlock).toString(), level, pos);
 
 		if (!isFertile && !isGlassAboveBlock(level, pos))
 		{
-			if (ModConfig.fertility.outOfSeasonCropBehavior() == 0)
+			if (ModConfig.fertility.outOfSeasonCropBehavior == 0)
 			{
 				if (level.getRandom().nextInt(6) != 0)
 				{
@@ -90,12 +90,12 @@ public class SeasonalCropGrowthHandler
 					event.setCancelResult(InteractionResultHolder.success(stack));
 				}
 			}
-            else if (ModConfig.fertility.outOfSeasonCropBehavior() == 1)
+            else if (ModConfig.fertility.outOfSeasonCropBehavior == 1)
             {
 				event.setCancelled(true);
 				event.setCancelResult(InteractionResultHolder.fail(stack));
             }
-            else if (ModConfig.fertility.outOfSeasonCropBehavior() == 2)
+            else if (ModConfig.fertility.outOfSeasonCropBehavior == 2)
             {
                 if (!plant.is(ModTags.Blocks.UNBREAKABLE_INFERTILE_CROPS))
                 {

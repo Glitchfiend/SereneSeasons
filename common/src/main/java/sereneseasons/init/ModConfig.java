@@ -7,7 +7,6 @@ package sereneseasons.init;
 
 import sereneseasons.config.FertilityConfig;
 import sereneseasons.config.SeasonsConfig;
-import sereneseasons.config.SeasonsConfigModel;
 
 public class ModConfig
 {
@@ -16,10 +15,7 @@ public class ModConfig
 
     public static void init()
     {
-        fertility = FertilityConfig.createAndLoad();
-
-        var inst = SeasonsConfig.createAndLoad();
-        SeasonsConfigModel.setInstance(inst);
-        seasons = inst;
+        fertility = new FertilityConfig();
+        seasons = new SeasonsConfig();
     }
 }

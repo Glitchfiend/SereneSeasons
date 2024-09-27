@@ -29,7 +29,6 @@ import sereneseasons.api.SSItems;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.season.SeasonColorHandlers;
 import sereneseasons.season.SeasonHandlerClient;
@@ -102,7 +101,7 @@ public class ModClient
                 {
                     float type;
 
-                    if (SeasonsConfigModel.isDimensionWhitelisted(level.dimension()))
+                    if (ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
                     {
                         if (holder != null)
                         {
@@ -141,7 +140,7 @@ public class ModClient
             Level level = Minecraft.getInstance().player.level();
             ResourceKey<Level> dimension = Minecraft.getInstance().player.level().dimension();
 
-            if (level != null && pos != null && ModConfig.seasons.changeBirchColor() && SeasonsConfigModel.isDimensionWhitelisted(dimension))
+            if (level != null && pos != null && ModConfig.seasons.changeBirchColor() && ModConfig.seasons.isDimensionWhitelisted(dimension))
             {
                 Holder<Biome> biome = level.getBiome(pos);
 

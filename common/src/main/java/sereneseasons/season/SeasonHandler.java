@@ -15,17 +15,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import sereneseasons.api.SSGameRules;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonChangedEvent;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.config.SeasonsConfigModel;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModPackets;
 import sereneseasons.init.ModTags;
@@ -40,7 +37,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         Level level = event.getLevel();
 
-        if (event.getPhase() != TickEvent.Phase.START || level.isClientSide() || !SeasonsConfigModel.isDimensionWhitelisted(level.dimension()))
+        if (event.getPhase() != TickEvent.Phase.START || level.isClientSide() || !ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
             return;
 
         long dayTime = level.getDayTime();
