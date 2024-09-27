@@ -2,6 +2,7 @@ package sereneseasons.config;
 
 import static net.minecraft.server.level.ServerLevel.RAIN_DELAY;
 
+import blue.endless.jankson.Comment;
 import com.google.common.collect.Lists;
 import io.wispforest.owo.config.Option.SyncMode;
 import io.wispforest.owo.config.annotation.Config;
@@ -111,12 +112,19 @@ public class SeasonsConfigModel {
   @Nest public SeasonProperties lateAutumnProperties = new SeasonProperties(6.25F, 1, -0.25F, RAIN_DELAY.getMinValue(), RAIN_DELAY.getMaxValue(), THUNDER_DELAY.getMinValue(), THUNDER_DELAY.getMaxValue());
 
   public static class SeasonProperties {
+    @Comment("meltChance is the 0-1 percentage chance a snow or ice block will melt when chosen. (e.g. 100.0 = 100%, 50.0 = 50%)")
     public float meltChance;
+    @Comment("meltRolls is the number of blocks randomly picked in each chunk, each tick. (High number rolls is not recommended on servers)\nmeltRolls should be 0 if blocks should not melt in that season.")
     public int meltRolls;
+    @Comment("biomeTempAdjustments is the amount to adjust the biome temperature by from -10.0 to 10.0.")
     public float biomeTempAdjustments;
+    @Comment("minRainTime is the minimum time interval between rain events in ticks. Set to -1 to disable rain.")
     public int minRainTime;
+    @Comment("maxRainTime is the maximum time interval between rain events in ticks. Set to -1 to disable rain.")
     public int maxRainTime;
+    @Comment("minThunderTime is the minimum time interval between thunder events in ticks. Set to -1 to disable thunder.")
     public int minThunderTime;
+    @Comment("max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.")
     public int maxThunderTime;
     SeasonProperties(float meltChance, int meltRolls,
         float biomeTempAdjustment, int minRainTime, int maxRainTime, int minThunderTime, int maxThunderTime) {
@@ -132,24 +140,34 @@ public class SeasonsConfigModel {
 
   // SETTINGS
   // Weather settings
+  @Comment("Generate snow and ice during the Winter season")
   public boolean generateSnowAndIce = true;
+  @Comment("Change the frequency of rain/snow/storms based on the season")
   public boolean changeWeatherFrequency = true;
 
   // Time settings
+  @Comment("The duration of a Minecraft day in ticks.\nThis only adjusts the internal length of a day used by the season cycle.\nIt is intended to be used in conjunction with another mod which adjusts the actual length of a Minecraft day.")
   @RangeConstraint(min = 20, max = Integer.MAX_VALUE)
   public int dayDuration = 24000;
+  @Comment("The duration of a sub season in days.")
   @RangeConstraint(min = 1, max = Integer.MAX_VALUE)
   public int subSeasonDuration = 8;
+  @Comment("The starting sub season for new worlds.\n0 = Random, 1 - 3 = Early/Mid/Late Spring\n4 - 6 = Early/Mid/Late Summer\n7 - 9 = Early/Mid/Late Autumn\n10 - 12 = Early/Mid/Late Winter")
   @RangeConstraint(min = 0, max = 12)
   public int startingSubSeason = 1;
+  @Comment("If the season should progress on a server with no players online")
   public boolean progressSeasonWhileOffline = true;
 
   // Aesthetic settings
+  @Comment("Change the grass color based on the current season")
   public boolean changeGrassColor = true;
+  @Comment("Change the foliage color based on the current season")
   public boolean changeFoliageColor = true;
+  @Comment("Change the birch color based on the current season")
   public boolean changeBirchColor = true;
 
   // Dimension settings
+  @Comment("Seasons will only apply to dimensons listed here")
   @PredicateConstraint("resourceLocationValidate")
   public List<String> whitelistedDimensions = Lists.newArrayList(Level.OVERWORLD.location().toString());
 
