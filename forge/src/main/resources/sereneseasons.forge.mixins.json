@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "sereneseasons.forge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "sereneseasons.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8.4"
+}
