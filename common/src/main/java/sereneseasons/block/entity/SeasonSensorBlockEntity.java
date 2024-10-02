@@ -5,8 +5,8 @@
 package sereneseasons.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import sereneseasons.api.SSBlockEntities;
 
 public class SeasonSensorBlockEntity extends BlockEntity

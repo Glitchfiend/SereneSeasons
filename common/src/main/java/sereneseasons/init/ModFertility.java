@@ -1,10 +1,6 @@
 package sereneseasons.init;
 
 import glitchcore.event.client.ItemTooltipEvent;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -19,6 +15,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Constructs efficient data structures to process, store, and give access to data from the FertilityConfig file

@@ -1,7 +1,5 @@
 package sereneseasons.init;
 
-import static sereneseasons.api.SSItems.SEASON_SENSOR;
-
 import glitchcore.util.Environment;
 import java.util.function.BiConsumer;
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +9,8 @@ import sereneseasons.api.SSBlocks;
 import sereneseasons.api.SSItems;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.item.CalendarItem;
+
+import static sereneseasons.api.SSItems.SEASON_SENSOR;
 
 public class ModItems
 {

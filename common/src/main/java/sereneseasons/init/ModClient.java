@@ -6,7 +6,6 @@ package sereneseasons.init;
 
 import glitchcore.event.EventManager;
 import glitchcore.event.client.RegisterColorsEvent;
-import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -34,6 +33,8 @@ import sereneseasons.season.SeasonColorHandlers;
 import sereneseasons.season.SeasonHandlerClient;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColorUtil;
+
+import javax.annotation.Nullable;
 
 public class ModClient
 {
