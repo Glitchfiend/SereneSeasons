@@ -5,6 +5,8 @@
 package sereneseasons.init;
 
 import com.google.common.collect.ImmutableList;
+import java.lang.reflect.Field;
+import java.util.function.BiConsumer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -12,9 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import sereneseasons.api.SSItems;
 import sereneseasons.core.SereneSeasons;
-
-import java.lang.reflect.Field;
-import java.util.function.BiConsumer;
 
 public class ModCreativeTab
 {
@@ -26,14 +25,18 @@ public class ModCreativeTab
                 .title(Component.translatable("itemGroup.tabSereneSeasons"))
                 .displayItems((displayParameters, output) ->
                 {
-                    for (Field field : SSItems.class.getFields()) {
+                    for (Field field : SSItems.class.getFields())
+                    {
                         if (field.getType() != Item.class) continue;
 
-                        try {
+                        try
+                        {
                             Item item = (Item) field.get(null);
                             if (!ITEM_BLACKLIST.contains(item))
                                 output.accept(new ItemStack(item));
-                        } catch (IllegalAccessException e) {
+                        }
+                        catch (IllegalAccessException e)
+                        {
                         }
                     }
                 }).build();

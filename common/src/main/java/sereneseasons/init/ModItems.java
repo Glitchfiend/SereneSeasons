@@ -1,6 +1,9 @@
 package sereneseasons.init;
 
+import static sereneseasons.api.SSItems.SEASON_SENSOR;
+
 import glitchcore.util.Environment;
+import java.util.function.BiConsumer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -9,10 +12,6 @@ import sereneseasons.api.SSItems;
 import sereneseasons.core.SereneSeasons;
 import sereneseasons.item.CalendarItem;
 
-import java.util.function.BiConsumer;
-
-import static sereneseasons.api.SSItems.SEASON_SENSOR;
-
 public class ModItems
 {
     public static void setup(BiConsumer<ResourceLocation, Item> func)
@@ -20,14 +19,15 @@ public class ModItems
         registerItems(func);
         registerBlockItems(func);
 
-        if (Environment.isClient()) {
+        if (Environment.isClient())
+        {
             ModClient.registerItemProperties();
         }
     }
 
     public static void registerItems(BiConsumer<ResourceLocation, Item> func)
     {
-        // SS Creative Tab Icon
+    	// SS Creative Tab Icon
         SSItems.SS_ICON = register(func, "ss_icon", new Item(new Item.Properties()));
 
         // Main Items

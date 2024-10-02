@@ -11,8 +11,7 @@ import sereneseasons.api.season.Season;
 
 public class SeasonArgument extends StringRepresentableArgument<Season.SubSeason>
 {
-    private SeasonArgument()
-    {
+    private SeasonArgument() {
         super(Season.SubSeason.CODEC, Season.SubSeason::values);
     }
 
@@ -21,8 +20,7 @@ public class SeasonArgument extends StringRepresentableArgument<Season.SubSeason
         return new SeasonArgument();
     }
 
-    public static Season.SubSeason getSeason(CommandContext<CommandSourceStack> context, String s)
-    {
+    public static Season.SubSeason getSeason(CommandContext<CommandSourceStack> context, String s) {
         return context.getArgument(s, Season.SubSeason.class);
     }
 }

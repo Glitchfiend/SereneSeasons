@@ -22,7 +22,7 @@ public class Color
 
     public Color(double r, double g, double b)
     {
-        this((int) (r * 255.0), (int) (g * 255), (int) (b * 255));
+        this((int)(r * 255.0), (int)(g * 255), (int)(b * 255));
     }
 
     public int getRed()
@@ -57,22 +57,26 @@ public class Color
         double min, max, delta;
 
         min = r < g ? r : g;
-        min = min < b ? min : b;
+        min = min  < b ? min  : b;
 
         max = r > g ? r : g;
-        max = max > b ? max : b;
+        max = max  > b ? max  : b;
 
         v = max;
         delta = max - min;
-        if (delta < 0.00001) {
+        if (delta < 0.00001)
+        {
             s = 0;
             h = 0; // undefined, maybe nan?
             return new double[]{h, s, v};
         }
-        if (max > 0.0) {
+        if (max > 0.0)
+        {
             // NOTE: if Max is == 0, this divide would cause a crash
             s = (delta / max);
-        } else {
+        }
+        else
+        {
             // if max is 0, then r = g = b = 0
             // s = 0, h is undefined
             s = 0.0;
@@ -80,8 +84,9 @@ public class Color
             return new double[]{h, s, v};
         }
         if (r >= max)
-            h = (g - b) / delta; // between yellow & magenta
-        else {
+            h = ( g - b ) / delta; // between yellow & magenta
+        else
+        {
             if (g >= max)
                 h = 2.0 + (b - r) / delta;  // between cyan & yellow
             else
@@ -102,7 +107,8 @@ public class Color
         int i;
         double r, g, b;
 
-        if (s <= 0.0) {
+        if (s <= 0.0)
+        {
             r = v;
             g = v;
             b = v;
@@ -111,13 +117,14 @@ public class Color
         hh = h;
         if (hh >= 360.0) hh = 0.0;
         hh /= 60.0;
-        i = (int) hh;
+        i = (int)hh;
         ff = hh - i;
         p = v * (1.0 - s);
         q = v * (1.0 - (s * ff));
         t = v * (1.0 - (s * (1.0 - ff)));
 
-        switch (i) {
+        switch (i)
+        {
             case 0:
                 r = v;
                 g = t;

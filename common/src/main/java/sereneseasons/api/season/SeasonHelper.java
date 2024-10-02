@@ -8,11 +8,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
-public class SeasonHelper
+public class SeasonHelper 
 {
     public static ISeasonDataProvider dataProvider;
 
-    /**
+    /** 
      * Obtains data about the state of the season cycle in the world. This works both on
      * the client and the server.
      */
@@ -20,9 +20,12 @@ public class SeasonHelper
     {
         ISeasonState data;
 
-        if (!level.isClientSide()) {
+        if (!level.isClientSide())
+        {
             data = dataProvider.getServerSeasonState(level);
-        } else {
+        }
+        else
+        {
             data = dataProvider.getClientSeasonState(level);
         }
 
@@ -31,7 +34,6 @@ public class SeasonHelper
 
     /**
      * Check whether a biome uses tropical seasons.
-     *
      * @param biome the biome to check.
      * @return whether the biome uses tropical seasons.
      */
@@ -43,9 +45,7 @@ public class SeasonHelper
     public interface ISeasonDataProvider
     {
         ISeasonState getServerSeasonState(Level level);
-
         ISeasonState getClientSeasonState(Level level);
-
         boolean usesTropicalSeasons(Holder<Biome> key);
     }
 }

@@ -21,32 +21,34 @@ public class SeasonColorUtil
     {
         //Convert each colour to a scale between 0 and 1 and multiply them
         //Multiply by 255 to bring back between 0 and 255
-        return (int) ((colour1 / 255.0F) * (colour2 / 255.0F) * 255.0F);
+        return (int)((colour1 / 255.0F) * (colour2 / 255.0F) * 255.0F);
     }
 
     public static int overlayBlendChannel(int underColour, int overColour)
     {
         int retVal;
-        if (underColour < 128) {
+        if (underColour < 128)
+        {
             retVal = multiplyColours(2 * underColour, overColour);
-        } else {
+        }
+        else
+        {
             retVal = multiplyColours(2 * (255 - underColour), 255 - overColour);
             retVal = 255 - retVal;
         }
         return retVal;
     }
-
+    
     public static int overlayBlend(int underColour, int overColour)
     {
         int r = overlayBlendChannel((underColour >> 16) & 255, (overColour >> 16) & 255);
         int g = overlayBlendChannel((underColour >> 8) & 255, (overColour >> 8) & 255);
         int b = overlayBlendChannel(underColour & 255, overColour & 255);
-
+        
         return (r & 255) << 16 | (g & 255) << 8 | (b & 255);
     }
 
-    public static int mixColours(int a, int b, float ratio)
-    {
+    public static int mixColours(int a, int b, float ratio) {
         if (ratio > 1f) {
             ratio = 1f;
         } else if (ratio < 0f) {
@@ -64,14 +66,14 @@ public class SeasonColorUtil
         int bG = ((b & 0xff00) >> 8);
         int bB = (b & 0xff);
 
-        int A = (int) ((aA * iRatio) + (bA * ratio));
-        int R = (int) ((aR * iRatio) + (bR * ratio));
-        int G = (int) ((aG * iRatio) + (bG * ratio));
-        int B = (int) ((aB * iRatio) + (bB * ratio));
+        int A = (int)((aA * iRatio) + (bA * ratio));
+        int R = (int)((aR * iRatio) + (bR * ratio));
+        int G = (int)((aG * iRatio) + (bG * ratio));
+        int B = (int)((aB * iRatio) + (bB * ratio));
 
         return A << 24 | R << 16 | G << 8 | B;
     }
-
+    
     public static int saturateColour(int colour, float saturationMultiplier)
     {
         Color newColor = new Color(colour);
@@ -80,7 +82,7 @@ public class SeasonColorUtil
         newColor = Color.convertHSVtoRGB(hsv[0], hsv[1], hsv[2]);
         return newColor.toInt();
     }
-
+    
     public static int applySeasonalGrassColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
@@ -90,19 +92,21 @@ public class SeasonColorUtil
 
         int overlay = colorProvider.getGrassOverlay();
         float saturationMultiplier = colorProvider.getGrassSaturationMultiplier();
-        if (!ModConfig.seasons.changeGrassColor) {
+        if (!ModConfig.seasons.changeGrassColor)
+    	{
             overlay = Season.SubSeason.MID_SUMMER.getGrassOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getGrassSaturationMultiplier();
-        }
+    	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
         int fixedColour = newColour;
-        if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES)) {
+        if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
+        {
             fixedColour = mixColours(newColour, originalColour, 0.75F);
         }
 
         return saturationMultiplier != -1 ? saturateColour(fixedColour, saturationMultiplier) : fixedColour;
     }
-
+    
     public static int applySeasonalFoliageColouring(ISeasonColorProvider colorProvider, Holder<Biome> biome, int originalColour)
     {
         ResourceKey<Level> dimension = Minecraft.getInstance().level.dimension();
@@ -111,13 +115,15 @@ public class SeasonColorUtil
 
         int overlay = colorProvider.getFoliageOverlay();
         float saturationMultiplier = colorProvider.getFoliageSaturationMultiplier();
-        if (!ModConfig.seasons.changeFoliageColor) {
-            overlay = Season.SubSeason.MID_SUMMER.getFoliageOverlay();
+        if (!ModConfig.seasons.changeFoliageColor)
+    	{
+        	overlay = Season.SubSeason.MID_SUMMER.getFoliageOverlay();
             saturationMultiplier = Season.SubSeason.MID_SUMMER.getFoliageSaturationMultiplier();
-        }
+    	}
         int newColour = overlay == 0xFFFFFF ? originalColour : overlayBlend(originalColour, overlay);
         int fixedColour = newColour;
-        if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES)) {
+        if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
+        {
             fixedColour = mixColours(newColour, originalColour, 0.75F);
         }
 

@@ -6,6 +6,7 @@ package sereneseasons.init;
 
 import glitchcore.event.EventManager;
 import glitchcore.event.client.RegisterColorsEvent;
+import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -34,8 +35,6 @@ import sereneseasons.season.SeasonHandlerClient;
 import sereneseasons.season.SeasonTime;
 import sereneseasons.util.SeasonColorUtil;
 
-import javax.annotation.Nullable;
-
 public class ModClient
 {
     public static void setup()
@@ -58,21 +57,25 @@ public class ModClient
             public float unclampedCall(ItemStack stack, ClientLevel clientWorld, LivingEntity entity, int seed)
             {
                 Level world = clientWorld;
-                Entity holder = (Entity) (entity != null ? entity : stack.getFrame());
+                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
 
-                if (world == null && holder != null) {
+                if (world == null && holder != null)
+                {
                     world = holder.level();
                 }
 
-                if (world == null) {
+                if (world == null)
+                {
                     return 0.0F;
-                } else {
+                }
+                else
+                {
                     double d0;
 
                     int seasonCycleTicks = SeasonHelper.getSeasonState(world).getSeasonCycleTicks();
-                    d0 = (double) ((float) seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
+                    d0 = (double)((float)seasonCycleTicks / (float) SeasonTime.ZERO.getCycleDuration());
 
-                    return Mth.positiveModulo((float) d0, 1.0F);
+                    return Mth.positiveModulo((float)d0, 1.0F);
                 }
             }
         });
@@ -83,30 +86,43 @@ public class ModClient
             public float unclampedCall(ItemStack stack, ClientLevel clientWorld, LivingEntity entity, int seed)
             {
                 Level level = clientWorld;
-                Entity holder = (Entity) (entity != null ? entity : stack.getFrame());
+                Entity holder = (Entity)(entity != null ? entity : stack.getFrame());
 
-                if (level == null && holder != null) {
+                if (level == null && holder != null)
+                {
                     level = holder.level();
                 }
 
-                if (level == null) {
+                if (level == null)
+                {
                     return 2.0F;
-                } else {
+                }
+                else
+                {
                     float type;
 
-                    if (ModConfig.seasons.isDimensionWhitelisted(level.dimension())) {
-                        if (holder != null) {
+                    if (ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+                    {
+                        if (holder != null)
+                        {
                             Holder<Biome> biome = level.getBiome(holder.blockPosition());
 
-                            if (biome.is(ModTags.Biomes.TROPICAL_BIOMES)) {
+                            if (biome.is(ModTags.Biomes.TROPICAL_BIOMES))
+                            {
                                 type = 1.0F;
-                            } else {
+                            }
+                            else
+                            {
                                 type = 0.0F;
                             }
-                        } else {
+                        }
+                        else
+                        {
                             type = 0.0F;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         type = 2.0F;
                     }
 
@@ -124,15 +140,18 @@ public class ModClient
             Level level = Minecraft.getInstance().player.level();
             ResourceKey<Level> dimension = Minecraft.getInstance().player.level().dimension();
 
-            if (level != null && pos != null && ModConfig.seasons.changeBirchColor && ModConfig.seasons.isDimensionWhitelisted(dimension)) {
+            if (level != null && pos != null && ModConfig.seasons.changeBirchColor && ModConfig.seasons.isDimensionWhitelisted(dimension))
+            {
                 Holder<Biome> biome = level.getBiome(pos);
 
-                if (!biome.is(ModTags.Biomes.BLACKLISTED_BIOMES)) {
+                if (!biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
+                {
                     ISeasonState calendar = SeasonHelper.getSeasonState(level);
                     ISeasonColorProvider colorProvider = biome.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
                     birchColor = colorProvider.getBirchColor();
 
-                    if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES)) {
+                    if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
+                    {
                         birchColor = SeasonColorUtil.mixColours(colorProvider.getBirchColor(), FoliageColor.getBirchColor(), 0.75F);
                     }
                 }

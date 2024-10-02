@@ -5,9 +5,8 @@
 package sereneseasons.api.season;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.StringRepresentable;
-
 import java.util.Locale;
+import net.minecraft.util.StringRepresentable;
 
 public enum Season
 {
@@ -37,47 +36,47 @@ public enum Season
         private int foliageOverlay;
         private float foliageSaturationMultiplier;
         private int birchColor;
-
+        
         SubSeason(Season season, int grassColour, float grassSaturation, int foliageColour, float foliageSaturation, int birchColor)
         {
             this.season = season;
             this.grassOverlay = grassColour;
             this.grassSaturationMultiplier = grassSaturation;
             this.foliageOverlay = foliageColour;
-            this.foliageSaturationMultiplier = foliageSaturation;
+            this.foliageSaturationMultiplier = foliageSaturation; 
             this.birchColor = birchColor;
         }
-
+        
         SubSeason(Season season, int grassColour, int foliageColour, int birchColor)
         {
             this(season, grassColour, -1, foliageColour, -1, birchColor);
         }
-
+        
         public Season getSeason()
         {
             return this.season;
         }
-
+        
         public int getGrassOverlay()
         {
             return this.grassOverlay;
         }
-
+        
         public float getGrassSaturationMultiplier()
         {
             return this.grassSaturationMultiplier;
         }
-
+        
         public int getFoliageOverlay()
         {
             return this.foliageOverlay;
         }
-
+        
         public float getFoliageSaturationMultiplier()
         {
             return this.foliageSaturationMultiplier;
         }
-
+        
         public int getBirchColor()
         {
             return this.birchColor;
@@ -140,7 +139,7 @@ public enum Season
         {
             return this.foliageSaturationMultiplier;
         }
-
+        
         public int getBirchColor()
         {
             return this.birchColor;

@@ -12,6 +12,7 @@ import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.Season;
 import sereneseasons.block.SeasonSensorBlock;
 import sereneseasons.core.SereneSeasons;
+import sereneseasons.forge.core.SereneSeasonsForge;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -36,12 +37,12 @@ public class SSBlockStateProvider extends BlockStateProvider
     {
         Map<Season, ModelFile> models = Arrays.stream(Season.values()).collect(Collectors.toMap(key -> key, this::seasonSensor));
         getVariantBuilder(SSBlocks.SEASON_SENSOR)
-                .forAllStates(state -> {
-                    Season season = Season.values()[state.getValue(SeasonSensorBlock.SEASON)];
-                    return ConfiguredModel.builder()
-                            .modelFile(models.get(season))
-                            .build();
-                });
+            .forAllStates(state -> {
+                Season season = Season.values()[state.getValue(SeasonSensorBlock.SEASON)];
+                return ConfiguredModel.builder()
+                    .modelFile(models.get(season))
+                    .build();
+            });
 
         this.simpleBlockItem(SSBlocks.SEASON_SENSOR, models.get(Season.SPRING));
     }
@@ -57,7 +58,7 @@ public class SSBlockStateProvider extends BlockStateProvider
     public BlockModelBuilder daylightDetector(String name, ResourceLocation top, ResourceLocation side)
     {
         return this.models().withExistingParent(name, BLOCK_FOLDER + "/template_daylight_detector")
-                .texture("top", top)
-                .texture("side", side);
+            .texture("top", top)
+            .texture("side", side);
     }
 }

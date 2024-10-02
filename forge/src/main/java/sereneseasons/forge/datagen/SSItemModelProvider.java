@@ -14,6 +14,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import sereneseasons.api.SSItems;
 import sereneseasons.core.SereneSeasons;
+import sereneseasons.forge.core.SereneSeasonsForge;
 import sereneseasons.item.CalendarType;
 
 public class SSItemModelProvider extends ItemModelProvider
@@ -29,7 +30,6 @@ public class SSItemModelProvider extends ItemModelProvider
         this.basicItem(SSItems.SS_ICON);
         this.registerCalendarModels();
     }
-
     private void registerCalendarModels()
     {
         var calendar = getBuilder(location("calendar").toString()).parent(new ModelFile.UncheckedModelFile("item/generated"));
@@ -38,33 +38,36 @@ public class SSItemModelProvider extends ItemModelProvider
         ModelFile[] calendarTropical = new ModelFile[6];
 
         // Populate standard and tropical arrays
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 12; i++)
+        {
             String pathIndex = String.format("%02d", i);
             calendarStandard[i] = this.basicItem(location("calendar_" + pathIndex));
             if (i < 6) calendarTropical[i] = this.basicItem(location("tropical_calendar_" + pathIndex));
         }
 
         // Standard calendar
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 12; i++)
+        {
             calendar.override()
-                    .predicate(location("seasontype"), CalendarType.STANDARD.ordinal())
-                    .predicate(location("time"), (float) i / 12.0F)
-                    .model(calendarStandard[i]);
+                .predicate(location("seasontype"), CalendarType.STANDARD.ordinal())
+                .predicate(location("time"), (float)i / 12.0F)
+                .model(calendarStandard[i]);
         }
 
         // Tropical calendar
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 12; i++)
+        {
             calendar.override()
-                    .predicate(location("seasontype"), CalendarType.TROPICAL.ordinal())
-                    .predicate(location("time"), (float) i / 12.0F)
-                    .model(calendarTropical[((i + 3) / 2) % 6]);
+                .predicate(location("seasontype"), CalendarType.TROPICAL.ordinal())
+                .predicate(location("time"), (float)i / 12.0F)
+                .model(calendarTropical[((i + 3) / 2) % 6]);
         }
 
         // Null calendar
         calendar.override()
-                .predicate(location("seasontype"), CalendarType.NONE.ordinal())
-                .predicate(location("time"), 0.0f)
-                .model(calendarNull);
+            .predicate(location("seasontype"), CalendarType.NONE.ordinal())
+            .predicate(location("time"), 0.0f)
+            .model(calendarNull);
     }
 
     public ItemModelBuilder basicItem(RegistryObject<Item> item)

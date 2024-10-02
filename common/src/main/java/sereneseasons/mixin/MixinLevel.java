@@ -15,9 +15,9 @@ import sereneseasons.season.SeasonHooks;
 @Mixin(Level.class)
 public class MixinLevel
 {
-    @Inject(method = "isRainingAt", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method="isRainingAt", at=@At(value="HEAD"), cancellable = true)
     public void onIsRainingAt(BlockPos pos, CallbackInfoReturnable<Boolean> cir)
     {
-        cir.setReturnValue(SeasonHooks.isRainingAtHook((Level) (Object) this, pos));
+        cir.setReturnValue(SeasonHooks.isRainingAtHook((Level)(Object)this, pos));
     }
 }

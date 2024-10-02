@@ -57,18 +57,19 @@ public class SeasonColorHandlers
         Registry<Biome> biomeRegistry = level.registryAccess().registryOrThrow(Registries.BIOME);
         Holder<Biome> biomeHolder = biomeRegistry.getResourceKey(biome).flatMap(biomeRegistry::getHolder).orElse(null);
 
-        if (biomeHolder != null) {
+        if (biomeHolder != null)
+        {
             ISeasonState calendar = SeasonHelper.getSeasonState(level);
             ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
 
             int seasonalColor = switch (type) {
                 case GRASS -> SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biomeHolder, originalColor);
-                case FOLIAGE ->
-                        SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biomeHolder, originalColor);
+                case FOLIAGE -> SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biomeHolder, originalColor);
             };
 
             int currentColor = seasonalColor;
-            for (ColorOverride override : resolverOverrides.get(type)) {
+            for (ColorOverride override : resolverOverrides.get(type))
+            {
                 currentColor = override.apply(originalColor, seasonalColor, currentColor, biomeHolder, x, z);
             }
 
