@@ -16,9 +16,11 @@ public class SyncSeasonCyclePacket implements CustomPacket<SyncSeasonCyclePacket
 {
     public ResourceKey<Level> dimension;
     public int seasonCycleTicks;
-    
-    public SyncSeasonCyclePacket() {}
-    
+
+    public SyncSeasonCyclePacket()
+    {
+    }
+
     public SyncSeasonCyclePacket(ResourceKey<Level> dimension, int seasonCycleTicks)
     {
         this.dimension = dimension;
@@ -44,8 +46,7 @@ public class SyncSeasonCyclePacket implements CustomPacket<SyncSeasonCyclePacket
         context.getPlayer().ifPresent(player -> {
             ResourceKey<Level> playerDimension = player.level().dimension();
 
-            if (playerDimension.equals(packet.dimension))
-            {
+            if (playerDimension.equals(packet.dimension)) {
                 SeasonHandlerClient.clientSeasonCycleTicks.put(playerDimension, packet.seasonCycleTicks);
             }
         });

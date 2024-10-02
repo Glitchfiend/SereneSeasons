@@ -17,14 +17,13 @@ import sereneseasons.season.SeasonHooks;
 @Mixin(Biome.class)
 public class MixinBiomeClient
 {
-    @Inject(method="getPrecipitationAt", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "getPrecipitationAt", at = @At("HEAD"), cancellable = true)
     public void onGetPrecipitationAt(BlockPos pos, CallbackInfoReturnable<Biome.Precipitation> cir)
     {
         Minecraft minecraft = Minecraft.getInstance();
         Level level = minecraft.level;
 
-        if (level != null)
-        {
+        if (level != null) {
             cir.setReturnValue(SeasonHooks.getPrecipitationAtSeasonal(level, level.getBiome(pos), pos));
         }
     }

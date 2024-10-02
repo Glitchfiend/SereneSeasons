@@ -12,7 +12,7 @@ public class SeasonSavedData extends SavedData
 {
     public static final String DATA_IDENTIFIER = "seasons";
     public static final int VERSION = 0;
-    
+
     public int seasonCycleTicks;
 
     @Override

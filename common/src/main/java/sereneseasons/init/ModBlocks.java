@@ -1,12 +1,13 @@
 package sereneseasons.init;
 
-import java.util.function.BiConsumer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.block.SeasonSensorBlock;
 import sereneseasons.core.SereneSeasons;
+
+import java.util.function.BiConsumer;
 
 public class ModBlocks
 {

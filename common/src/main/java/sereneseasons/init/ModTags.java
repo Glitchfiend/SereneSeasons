@@ -18,7 +18,9 @@ public class ModTags
 
     public static class Blocks
     {
-        private static void setup() {}
+        private static void setup()
+        {
+        }
 
         public static final TagKey<Block> SPRING_CROPS = create(new ResourceLocation("sereneseasons:spring_crops"));
         public static final TagKey<Block> SUMMER_CROPS = create(new ResourceLocation("sereneseasons:summer_crops"));
@@ -36,7 +38,9 @@ public class ModTags
 
     public static class Items
     {
-        private static void setup() {}
+        private static void setup()
+        {
+        }
 
         public static final TagKey<Item> SPRING_CROPS = create(new ResourceLocation("sereneseasons:spring_crops"));
         public static final TagKey<Item> SUMMER_CROPS = create(new ResourceLocation("sereneseasons:summer_crops"));
@@ -51,7 +55,9 @@ public class ModTags
 
     public static class Biomes
     {
-        private static void setup() {}
+        private static void setup()
+        {
+        }
 
         public static final TagKey<Biome> BLACKLISTED_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:blacklisted_biomes"));
         public static final TagKey<Biome> INFERTILE_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:infertile_biomes"));
@@ -59,7 +65,8 @@ public class ModTags
         public static final TagKey<Biome> TROPICAL_BIOMES = createBiomeTag(new ResourceLocation("sereneseasons:tropical_biomes"));
     }
 
-    private static TagKey<Biome> createBiomeTag(ResourceLocation name) {
+    private static TagKey<Biome> createBiomeTag(ResourceLocation name)
+    {
         return TagKey.create(Registries.BIOME, name);
     }
 }

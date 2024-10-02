@@ -13,7 +13,7 @@ public final class SeasonTime implements ISeasonState
 {
     public static final SeasonTime ZERO = new SeasonTime(0);
     public final int time;
-    
+
     public SeasonTime(int time)
     {
         Preconditions.checkArgument(time >= 0, "Time cannot be negative!");
@@ -43,9 +43,9 @@ public final class SeasonTime implements ISeasonState
     {
         return getSubSeasonDuration() * Season.SubSeason.VALUES.length;
     }
-    
+
     @Override
-    public int getSeasonCycleTicks() 
+    public int getSeasonCycleTicks()
     {
         return this.time;
     }

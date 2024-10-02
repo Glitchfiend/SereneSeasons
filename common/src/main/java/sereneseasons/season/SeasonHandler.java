@@ -7,8 +7,6 @@ package sereneseasons.season;
 import glitchcore.event.EventManager;
 import glitchcore.event.TickEvent;
 import glitchcore.event.player.PlayerEvent;
-import java.util.HashMap;
-import java.util.function.Supplier;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -27,6 +25,9 @@ import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModPackets;
 import sereneseasons.init.ModTags;
 import sereneseasons.network.SyncSeasonCyclePacket;
+
+import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {
@@ -48,8 +49,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         if (!level.getGameRules().getBoolean(SSGameRules.RULE_DOSEASONCYCLE))
             return;
 
-        if (!ModConfig.seasons.progressSeasonWhileOffline)
-        {
+        if (!ModConfig.seasons.progressSeasonWhileOffline) {
             MinecraftServer server = level.getServer();
             if (server != null && server.getPlayerList().getPlayerCount() == 0)
                 return;
@@ -60,11 +60,10 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             return;
 
         SeasonSavedData savedData = getSeasonSavedData(level);
-        savedData.seasonCycleTicks = Mth.positiveModulo(savedData.seasonCycleTicks + (int)difference, SeasonTime.ZERO.getCycleDuration());
+        savedData.seasonCycleTicks = Mth.positiveModulo(savedData.seasonCycleTicks + (int) difference, SeasonTime.ZERO.getCycleDuration());
 
         int ticks = updateTicks.getOrDefault(level, 0);
-        if (ticks >= 20)
-        {
+        if (ticks >= 20) {
             sendSeasonUpdate(level);
             ticks %= 20;
         }
@@ -112,17 +111,16 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             EventManager.fire(new SeasonChangedEvent.Tropical(level, prevTropicalSeason, newTropicalSeason));
 
         // Send the update packet
-        ModPackets.HANDLER.sendToAll(new SyncSeasonCyclePacket(level.dimension(), savedData.seasonCycleTicks), ((ServerLevel)level).getServer());
+        ModPackets.HANDLER.sendToAll(new SyncSeasonCyclePacket(level.dimension(), savedData.seasonCycleTicks), ((ServerLevel) level).getServer());
     }
-    
+
     public static SeasonSavedData getSeasonSavedData(Level w)
     {
-        if (w.isClientSide() || !(w instanceof ServerLevel))
-        {
+        if (w.isClientSide() || !(w instanceof ServerLevel)) {
             return null;
         }
 
-        ServerLevel world = (ServerLevel)w;
+        ServerLevel world = (ServerLevel) w;
         DimensionDataStorage saveDataManager = world.getChunkSource().getDataStorage();
 
         Supplier<SeasonSavedData> defaultSaveDataSupplier = () ->
@@ -131,13 +129,11 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 
             int startingSeason = ModConfig.seasons.startingSubSeason;
 
-            if (startingSeason == 0)
-            {
+            if (startingSeason == 0) {
                 savedData.seasonCycleTicks = (world.random.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
             }
 
-            if (startingSeason > 0)
-            {
+            if (startingSeason > 0) {
                 savedData.seasonCycleTicks = (startingSeason - 1) * SeasonTime.ZERO.getSubSeasonDuration();
             }
 
@@ -163,7 +159,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     public ISeasonState getClientSeasonState(Level level)
     {
         int time = level != null ? SeasonHandlerClient.clientSeasonCycleTicks.getOrDefault(level.dimension(), 0) : 0;
-    	return new SeasonTime(time);
+        return new SeasonTime(time);
     }
 
     @Override

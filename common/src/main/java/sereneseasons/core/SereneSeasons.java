@@ -11,16 +11,7 @@ import net.minecraft.core.registries.Registries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sereneseasons.command.SeasonCommands;
-import sereneseasons.init.ModAPI;
-import sereneseasons.init.ModBlockEntities;
-import sereneseasons.init.ModBlocks;
-import sereneseasons.init.ModClient;
-import sereneseasons.init.ModConfig;
-import sereneseasons.init.ModCreativeTab;
-import sereneseasons.init.ModGameRules;
-import sereneseasons.init.ModItems;
-import sereneseasons.init.ModPackets;
-import sereneseasons.init.ModTags;
+import sereneseasons.init.*;
 import sereneseasons.season.RandomUpdateHandler;
 import sereneseasons.season.SeasonHandler;
 import sereneseasons.season.SeasonalCropGrowthHandler;
@@ -67,8 +58,7 @@ public class SereneSeasons
         EventManager.addListener(SeasonalCropGrowthHandler::onTagsUpdated);
         EventManager.addListener(SeasonalCropGrowthHandler::applyBonemeal);
 
-        if (Environment.isClient())
-        {
+        if (Environment.isClient()) {
             ModClient.addClientHandlers();
         }
     }
