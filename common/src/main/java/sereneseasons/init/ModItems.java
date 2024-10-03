@@ -11,7 +11,7 @@ import sereneseasons.item.CalendarItem;
 
 import java.util.function.BiConsumer;
 
-import static sereneseasons.api.SSItems.SEASON_SENSOR;
+import static sereneseasons.api.SSItems.*;
 
 public class ModItems
 {
