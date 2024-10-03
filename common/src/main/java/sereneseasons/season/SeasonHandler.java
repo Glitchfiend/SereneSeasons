@@ -7,8 +7,6 @@ package sereneseasons.season;
 import glitchcore.event.EventManager;
 import glitchcore.event.TickEvent;
 import glitchcore.event.player.PlayerEvent;
-import java.util.HashMap;
-import java.util.function.Supplier;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -27,6 +25,9 @@ import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModPackets;
 import sereneseasons.init.ModTags;
 import sereneseasons.network.SyncSeasonCyclePacket;
+
+import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {

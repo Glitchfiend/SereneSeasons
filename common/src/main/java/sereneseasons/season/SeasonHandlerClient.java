@@ -5,13 +5,14 @@
 package sereneseasons.season;
 
 import glitchcore.event.TickEvent;
-import java.util.HashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.Season;
 import sereneseasons.init.ModConfig;
+
+import java.util.HashMap;
 
 public class SeasonHandlerClient
 {

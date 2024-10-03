@@ -4,7 +4,6 @@
  ******************************************************************************/
 package sereneseasons.init;
 
-import java.util.function.BiConsumer;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.References;
@@ -14,6 +13,8 @@ import sereneseasons.api.SSBlockEntities;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.block.entity.SeasonSensorBlockEntity;
 import sereneseasons.core.SereneSeasons;
+
+import java.util.function.BiConsumer;
 
 public class ModBlockEntities
 {
