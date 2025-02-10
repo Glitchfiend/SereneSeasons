@@ -34,10 +34,10 @@
   "desc.sereneseasons.mid_winter": "Kış Ortaları",
   "desc.sereneseasons.late_winter": "Kış Sonları",
   
-  "desc.sereneseasons.early_wet": "Early Nem",
-  "desc.sereneseasons.mid_wet": "Orta Nem",
-  "desc.sereneseasons.late_wet": "Geç Nem",
-  "desc.sereneseasons.early_dry": "Erken Kuru Nem",
-  "desc.sereneseasons.mid_dry": "Orta Kuru Nem",
-  "desc.sereneseasons.late_dry": "Geç Kuru Nem"
+  "desc.sereneseasons.early_wet": "Nemli Mevsim Başlangıcı",
+  "desc.sereneseasons.mid_wet": "Nemli Mevsim Ortaları",
+  "desc.sereneseasons.late_wet": "Nemli Mevsim Sonları",
+  "desc.sereneseasons.early_dry": "Kurak Mevsim Başlangıcı",
+  "desc.sereneseasons.mid_dry": "Kurak Mevsim Ortaları",
+  "desc.sereneseasons.late_dry": "Kurak Mevsim Sonları"
 }
