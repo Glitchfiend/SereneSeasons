@@ -1,16 +1,10 @@
 {
   "replace": false,
   "values": [
-	"minecraft:oak_sapling",
+	"#sereneseasons:year_round_crops",
 	"minecraft:birch_sapling",
 	"minecraft:spruce_sapling",
 	"minecraft:dark_oak_sapling",
-	"minecraft:red_mushroom",
-	"minecraft:brown_mushroom",
-	"minecraft:nether_wart",
-	"minecraft:crimson_fungus",
-	"minecraft:warped_fungus",
-	"minecraft:glow_berries",
 	"minecraft:wheat_seeds",
 	"minecraft:pumpkin_seeds",
 	"minecraft:beetroot_seeds",

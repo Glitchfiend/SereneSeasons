@@ -27,6 +27,7 @@ public class ModTags
         public static final TagKey<Block> SUMMER_CROPS = create(ResourceLocation.parse("sereneseasons:summer_crops"));
         public static final TagKey<Block> AUTUMN_CROPS = create(ResourceLocation.parse("sereneseasons:autumn_crops"));
         public static final TagKey<Block> WINTER_CROPS = create(ResourceLocation.parse("sereneseasons:winter_crops"));
+        public static final TagKey<Block> YEAR_ROUND_CROPS = create(ResourceLocation.parse("sereneseasons:year_round_crops"));
 
         public static final TagKey<Block> GREENHOUSE_GLASS = create(ResourceLocation.parse("sereneseasons:greenhouse_glass"));
         public static final TagKey<Block> UNBREAKABLE_INFERTILE_CROPS = create(ResourceLocation.parse("sereneseasons:unbreakable_infertile_crops"));
@@ -45,6 +46,7 @@ public class ModTags
         public static final TagKey<Item> SUMMER_CROPS = create(ResourceLocation.parse("sereneseasons:summer_crops"));
         public static final TagKey<Item> AUTUMN_CROPS = create(ResourceLocation.parse("sereneseasons:autumn_crops"));
         public static final TagKey<Item> WINTER_CROPS = create(ResourceLocation.parse("sereneseasons:winter_crops"));
+        public static final TagKey<Item> YEAR_ROUND_CROPS = create(ResourceLocation.parse("sereneseasons:year_round_crops"));
 
         public static TagKey<Item> create(ResourceLocation name)
         {
