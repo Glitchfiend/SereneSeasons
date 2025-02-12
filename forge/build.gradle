@@ -62,9 +62,6 @@ dependencies {
     compileOnly project(":Common")
     implementation 'com.github.glitchfiend:GlitchCore-forge:' + minecraft_version + '-' + glitchcore_version
     annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT:processor'
-
-    // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transtive dependencies request 6.0+
-    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
 tasks.withType(JavaCompile).configureEach {
