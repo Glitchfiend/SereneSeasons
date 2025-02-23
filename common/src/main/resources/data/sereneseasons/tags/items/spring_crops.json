@@ -1,21 +1,15 @@
 {
-  "replace": false,
-  "values": [
-    "minecraft:oak_sapling",
-	"minecraft:birch_sapling",
-	"minecraft:spruce_sapling",
-	"minecraft:cherry_sapling",
-	"minecraft:azalea",
-	"minecraft:flowering_azalea",
-	"minecraft:red_mushroom",
-	"minecraft:brown_mushroom",
-	"minecraft:nether_wart",
-	"minecraft:crimson_fungus",
-	"minecraft:warped_fungus",
-	"minecraft:glow_berries",
-	"minecraft:sweet_berries",
-	"minecraft:bamboo",
-	"minecraft:carrot",
-	"minecraft:potato"
-  ]
+	"replace": false,
+	"values": [
+		"#sereneseasons:year_round_crops",
+		"minecraft:birch_sapling",
+		"minecraft:spruce_sapling",
+		"minecraft:cherry_sapling",
+		"minecraft:azalea",
+		"minecraft:flowering_azalea",
+		"minecraft:sweet_berries",
+		"minecraft:bamboo",
+		"minecraft:carrot",
+		"minecraft:potato"
+	]
 }

@@ -24,6 +24,7 @@ public class ModTags
         public static final TagKey<Block> SUMMER_CROPS = create(new ResourceLocation("sereneseasons:summer_crops"));
         public static final TagKey<Block> AUTUMN_CROPS = create(new ResourceLocation("sereneseasons:autumn_crops"));
         public static final TagKey<Block> WINTER_CROPS = create(new ResourceLocation("sereneseasons:winter_crops"));
+        public static final TagKey<Block> YEAR_ROUND_CROPS = create(new ResourceLocation("sereneseasons:year_round_crops"));
 
         public static final TagKey<Block> GREENHOUSE_GLASS = create(new ResourceLocation("sereneseasons:greenhouse_glass"));
         public static final TagKey<Block> UNBREAKABLE_INFERTILE_CROPS = create(new ResourceLocation("sereneseasons:unbreakable_infertile_crops"));
@@ -42,6 +43,7 @@ public class ModTags
         public static final TagKey<Item> SUMMER_CROPS = create(new ResourceLocation("sereneseasons:summer_crops"));
         public static final TagKey<Item> AUTUMN_CROPS = create(new ResourceLocation("sereneseasons:autumn_crops"));
         public static final TagKey<Item> WINTER_CROPS = create(new ResourceLocation("sereneseasons:winter_crops"));
+        public static final TagKey<Item> YEAR_ROUND_CROPS = create(new ResourceLocation("sereneseasons:year_round_crops"));
 
         public static TagKey<Item> create(ResourceLocation name)
         {
