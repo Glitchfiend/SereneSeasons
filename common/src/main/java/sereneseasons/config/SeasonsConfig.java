@@ -129,7 +129,7 @@ public class SeasonsConfig extends glitchcore.config.Config
                 birch_color is the color of birch foliage, from 0 to 0xFFFFFF(16777215). It will use the same saturation multiplier of foliage_colour""", SEASON_PROPERTIES_VALIDATOR);
 
         seasonPropertiesMapper = Suppliers.memoize(() -> {
-            var map = new HashMap<>(DEFAULT_SEASON_PROPERTIES);
+            var map = new LinkedHashMap<>(DEFAULT_SEASON_PROPERTIES);
             seasonProperties.stream().map(SeasonProperties::decode).forEach(o -> o.ifPresent(v -> map.put(v.subSeason(), v)));
             return map;
         });
