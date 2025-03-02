@@ -128,6 +128,11 @@ public class SeasonsConfig extends glitchcore.config.Config
             seasonProperties.stream().map(SeasonProperties::decode).forEach(o -> o.ifPresent(v -> map.put(v.subSeason(), v)));
             return map;
         });
+
+        for (var subSeason : Season.SubSeason.VALUES) {
+            var properties = getSeasonProperties(subSeason);
+            subSeason.applyProperties(properties);
+        };
     }
 
     public boolean isDimensionWhitelisted(ResourceKey<Level> dimension)
