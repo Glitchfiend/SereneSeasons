@@ -121,7 +121,12 @@ public class SeasonsConfig extends glitchcore.config.Config
                 min_rain_time is the minimum time interval between rain events in ticks. Set to -1 to disable rain.
                 max_rain_time is the maximum time interval between rain events in ticks. Set to -1 to disable rain.
                 min_thunder_time is the minimum time interval between thunder events in ticks. Set to -1 to disable thunder.
-                max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.""", SEASON_PROPERTIES_VALIDATOR);
+                max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.
+                grass_colour is the color of grass, from 0 to 0xFFFFFF(16777215).
+                grass_saturation is the saturation multiplier of grass color, must be no smaller than 0.
+                foliage_colour is the color of foliage, from 0 to 0xFFFFFF(16777215).
+                foliage_saturation is the saturation multiplier of foliage color, must be no smaller than 0.
+                birch_color is the color of birch foliage, from 0 to 0xFFFFFF(16777215). It will use the same saturation multiplier of foliage_colour""", SEASON_PROPERTIES_VALIDATOR);
 
         seasonPropertiesMapper = Suppliers.memoize(() -> {
             var map = new HashMap<>(DEFAULT_SEASON_PROPERTIES);
