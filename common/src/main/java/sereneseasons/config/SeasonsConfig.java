@@ -123,13 +123,13 @@ public class SeasonsConfig extends glitchcore.config.Config
                 min_thunder_time is the minimum time interval between thunder events in ticks. Set to -1 to disable thunder.
                 max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.
                 grass_colour is the color of grass, from 0 to 0xFFFFFF(16777215).
-                grass_saturation is the saturation multiplier of grass color, must be no smaller than 0.
+                grass_saturation is the saturation multiplier of grass color.
                 foliage_colour is the color of foliage, from 0 to 0xFFFFFF(16777215).
-                foliage_saturation is the saturation multiplier of foliage color, must be no smaller than 0.
+                foliage_saturation is the saturation multiplier of foliage color.
                 birch_color is the color of birch foliage, from 0 to 0xFFFFFF(16777215). It will use the same saturation multiplier of foliage_colour""", SEASON_PROPERTIES_VALIDATOR);
 
         seasonPropertiesMapper = Suppliers.memoize(() -> {
-            var map = new LinkedHashMap<>(DEFAULT_SEASON_PROPERTIES);
+            var map = new HashMap<>(DEFAULT_SEASON_PROPERTIES);
             seasonProperties.stream().map(SeasonProperties::decode).forEach(o -> o.ifPresent(v -> map.put(v.subSeason(), v)));
             return map;
         });
@@ -219,9 +219,7 @@ public class SeasonsConfig extends glitchcore.config.Config
                 Preconditions.checkArgument(minRainTime <= maxRainTime);
                 Preconditions.checkArgument(minThunderTime <= maxThunderTime);
                 Preconditions.checkArgument(grassColour >= 0 && grassColour <= 0xFFFFFF);
-                Preconditions.checkArgument(grassSaturation >= 0);
                 Preconditions.checkArgument(foliageColour >= 0 && foliageColour <= 0xFFFFFF);
-                Preconditions.checkArgument(foliageSaturation >= 0);
                 Preconditions.checkArgument(birchColor >= 0 && birchColor <= 0xFFFFFF);
 
                 return Optional.of(new SeasonProperties(
