@@ -34,10 +34,10 @@
   "desc.sereneseasons.mid_winter": "완연한 겨울",
   "desc.sereneseasons.late_winter": "늦겨울",
   
-  "desc.sereneseasons.early_wet": "Early Wet",
-  "desc.sereneseasons.mid_wet": "Mid Wet",
-  "desc.sereneseasons.late_wet": "Late Wet",
-  "desc.sereneseasons.early_dry": "Early Dry",
-  "desc.sereneseasons.mid_dry": "Mid Dry",
-  "desc.sereneseasons.late_dry": "Late Dry"
+  "desc.sereneseasons.early_wet": "우기 초기",
+  "desc.sereneseasons.mid_wet": "우기 중기",
+  "desc.sereneseasons.late_wet": "우기 후기",
+  "desc.sereneseasons.early_dry": "건기 초기",
+  "desc.sereneseasons.mid_dry": "건기 중기",
+  "desc.sereneseasons.late_dry": "건기 후기"
 }
