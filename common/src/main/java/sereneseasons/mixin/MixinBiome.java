@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sereneseasons.init.ModConfig;
 import sereneseasons.season.SeasonHooks;
 
-@Mixin(value = Biome.class, priority = 999)
+@Mixin(Biome.class)
 public abstract class MixinBiome
 {
     @Shadow public abstract boolean warmEnoughToRain(BlockPos $$0, int $$1);
