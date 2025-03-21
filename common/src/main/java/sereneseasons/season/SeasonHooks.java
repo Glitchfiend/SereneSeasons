@@ -25,26 +25,7 @@ public class SeasonHooks
     // Hooks called by ASM
     //
 
-    public static boolean shouldSnowHook(Biome biome, LevelReader levelReader, BlockPos pos, int seaLevel)
-    {
-        if ((ModConfig.seasons.generateSnowAndIce && warmEnoughToRainSeasonal(levelReader, pos, seaLevel)) || (!ModConfig.seasons.generateSnowAndIce && biome.warmEnoughToRain(pos, seaLevel)))
-        {
-            return false;
-        }
-        else
-        {
-            if (levelReader.isInsideBuildHeight(pos.getY()) && levelReader.getBrightness(LightLayer.BLOCK, pos) < 10)
-            {
-                BlockState blockstate = levelReader.getBlockState(pos);
-                if (blockstate.isAir() && Blocks.SNOW.defaultBlockState().canSurvive(levelReader, pos))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
+    public static boolean shouldSnowHook = false;
 
     public static boolean shouldFreezeWarmEnoughToRainHook(Biome biome, BlockPos pos, int seaLevel, LevelReader levelReader)
     {
