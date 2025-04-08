@@ -124,13 +124,23 @@ public class SeasonsConfig extends glitchcore.config.Config
                 min_rain_time is the minimum time interval between rain events in ticks. Set to -1 to disable rain.
                 max_rain_time is the maximum time interval between rain events in ticks. Set to -1 to disable rain.
                 min_thunder_time is the minimum time interval between thunder events in ticks. Set to -1 to disable thunder.
-                max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.""", SEASON_PROPERTIES_VALIDATOR);
+                max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.
+                grass_colour is the color of grass, from 0 to 0xFFFFFF(16777215).
+                grass_saturation is the saturation multiplier of grass color. Set to -1 to disable.
+                foliage_colour is the color of foliage, from 0 to 0xFFFFFF(16777215).
+                foliage_saturation is the saturation multiplier of foliage color. Set to -1 to disable.
+                birch_color is the color of birch foliage, from 0 to 0xFFFFFF(16777215). It will use the same saturation multiplier of foliage_colour""", SEASON_PROPERTIES_VALIDATOR);
 
         seasonPropertiesMapper = Suppliers.memoize(() -> {
             var map = new HashMap<>(DEFAULT_SEASON_PROPERTIES);
             seasonProperties.stream().map(SeasonProperties::decode).forEach(o -> o.ifPresent(v -> map.put(v.subSeason(), v)));
             return map;
         });
+
+        for (var subSeason : Season.SubSeason.VALUES) {
+            var properties = getSeasonProperties(subSeason);
+            subSeason.applyProperties(properties);
+        };
     }
 
     public boolean isDimensionWhitelisted(ResourceKey<Level> dimension)
@@ -152,8 +162,23 @@ public class SeasonsConfig extends glitchcore.config.Config
         return seasonPropertiesMapper.get().get(season);
     }
 
-    public record SeasonProperties(Season.SubSeason subSeason, float meltChance, int meltRolls, float biomeTempAdjustment, int minRainTime, int maxRainTime, int minThunderTime, int maxThunderTime)
-    {
+    public record SeasonProperties(
+        // season
+        Season.SubSeason subSeason,
+        // server side properties
+        float meltChance, int meltRolls, float biomeTempAdjustment, int minRainTime, int maxRainTime, int minThunderTime, int maxThunderTime,
+        // client side properties
+        int grassColour, float grassSaturation, int foliageColour, float foliageSaturation, int birchColor
+    ) {
+        public SeasonProperties(
+            // season
+            Season.SubSeason subSeason,
+            // server side properties
+            float meltChance, int meltRolls, float biomeTempAdjustment, int minRainTime, int maxRainTime, int minThunderTime, int maxThunderTime
+        ) {
+            this(subSeason, meltChance, meltRolls, biomeTempAdjustment, minRainTime, maxRainTime, minThunderTime, maxThunderTime, subSeason.getGrassOverlay(), subSeason.getGrassSaturationMultiplier(), subSeason.getFoliageOverlay(), subSeason.getFoliageSaturationMultiplier(), subSeason.getBirchColor());
+        }
+
         public Config encode()
         {
             Config config = Config.of(LinkedHashMap::new, InMemoryFormat.withUniversalSupport());
@@ -165,6 +190,11 @@ public class SeasonsConfig extends glitchcore.config.Config
             config.add("max_rain_time", this.maxRainTime);
             config.add("min_thunder_time", this.minThunderTime);
             config.add("max_thunder_time", this.maxThunderTime);
+            config.add("grass_colour", this.grassColour);
+            config.add("grass_saturation", this.grassSaturation);
+            config.add("foliage_colour", this.foliageColour);
+            config.add("foliage_saturation", this.foliageSaturation);
+            config.add("birch_color", this.birchColor);
             return config;
         }
 
@@ -180,14 +210,26 @@ public class SeasonsConfig extends glitchcore.config.Config
                 int maxRainTime = config.getInt("max_rain_time");
                 int minThunderTime = config.getInt("min_thunder_time");
                 int maxThunderTime = config.getInt("max_thunder_time");
+                int grassColour = config.getInt("grass_colour");
+                float grassSaturation = config.<Number>get("grass_saturation").floatValue();
+                int foliageColour = config.getInt("foliage_colour");
+                float foliageSaturation = config.<Number>get("foliage_saturation").floatValue();
+                int birchColor = config.getInt("birch_color");
 
                 Preconditions.checkArgument(meltChance >= 0.0F && meltChance <= 100.0F);
                 Preconditions.checkArgument(rolls >= 0);
                 Preconditions.checkArgument(biomeTempAdjustment >= -10.0 && biomeTempAdjustment <= 10.0);
                 Preconditions.checkArgument(minRainTime <= maxRainTime);
                 Preconditions.checkArgument(minThunderTime <= maxThunderTime);
+                Preconditions.checkArgument(grassColour >= 0 && grassColour <= 0xFFFFFF);
+                Preconditions.checkArgument(foliageColour >= 0 && foliageColour <= 0xFFFFFF);
+                Preconditions.checkArgument(birchColor >= 0 && birchColor <= 0xFFFFFF);
 
-                return Optional.of(new SeasonProperties(subSeason, meltChance, rolls, biomeTempAdjustment, minRainTime, maxRainTime, minThunderTime, maxThunderTime));
+                return Optional.of(new SeasonProperties(
+                    subSeason,
+                    meltChance, rolls, biomeTempAdjustment, minRainTime, maxRainTime, minThunderTime, maxThunderTime,
+                    grassColour, grassSaturation, foliageColour, foliageSaturation, birchColor
+                ));
             }
             catch (Exception e)
             {
