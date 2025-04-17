@@ -5,6 +5,7 @@
   "commands.sereneseasons.setseason.fail": "A estação %s é inválida",
   "commands.sereneseasons.setseason.disabled": "As estações foram desativadas!",
 
+  "gamerule.doSeasonCycle": "Ciclo sazonal avançado",
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
   "block.sereneseasons.season_sensor": "Sensor de estações",
@@ -15,6 +16,7 @@
   "desc.sereneseasons.fertile_seasons": "Estações férteis",
   "desc.sereneseasons.year_round": "Ano inteiro",
   "desc.sereneseasons.day_counter": "Dia %s/%s",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
   "desc.sereneseasons.spring": "Primavera",
   "desc.sereneseasons.early_spring": "Início da Primavera",
   "desc.sereneseasons.mid_spring": "Meio da Primavera",
@@ -27,8 +29,15 @@
   "desc.sereneseasons.early_autumn": "Início do Outono",
   "desc.sereneseasons.mid_autumn": "Meio do Outono",
   "desc.sereneseasons.late_autumn": "Fim do Outono",
-  "desc.sereneseasons.winter": "Inverno"
+  "desc.sereneseasons.winter": "Inverno",
   "desc.sereneseasons.early_winter": "Início do Inverno",
   "desc.sereneseasons.mid_winter": "Meio do Inverno",
-  "desc.sereneseasons.late_winter": "Fim do Inverno"
+  "desc.sereneseasons.late_winter": "Fim do Inverno",
+  
+  "desc.sereneseasons.early_wet": "Início da Estação Chuvosa",
+  "desc.sereneseasons.mid_wet": "Meio da Estação Chuvosa",
+  "desc.sereneseasons.late_wet": "Fim da Estação Chuvosa",
+  "desc.sereneseasons.early_dry": "Início da Estação Seca",
+  "desc.sereneseasons.mid_dry": "Meio da Estação Seca",
+  "desc.sereneseasons.late_dry": "Fim da Estação Seca"
 }
