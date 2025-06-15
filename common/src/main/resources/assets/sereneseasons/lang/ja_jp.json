@@ -1,0 +1,43 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [引数]",
+  "commands.sereneseasons.getseason.success": "現在の季節は %s、日付 %s/%s、ティック %s/%s",
+  "commands.sereneseasons.setseason.success": "季節を %s に設定しました",
+  "commands.sereneseasons.setseason.fail": "無効な季節です: %s",
+  "commands.sereneseasons.setseason.disabled": "現在、季節の機能は無効になっています！",
+
+  "gamerule.doSeasonCycle": "季節を進行させる",
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "シーズンセンサー",
+  
+  "item.sereneseasons.ss_icon": "SS icon",
+  "item.sereneseasons.calendar": "カレンダー",
+
+  "desc.sereneseasons.fertile_seasons": "作物の育つ季節",
+  "desc.sereneseasons.year_round": "一年中",
+  "desc.sereneseasons.day_counter": "日数 %s/%s",
+  "desc.sereneseasons.tropical_day_counter": "（%s/%s）",
+  "desc.sereneseasons.spring": "春",
+  "desc.sereneseasons.early_spring": "初春",
+  "desc.sereneseasons.mid_spring": "春の中頃",
+  "desc.sereneseasons.late_spring": "晩春",
+  "desc.sereneseasons.summer": "夏",
+  "desc.sereneseasons.early_summer": "初夏",
+  "desc.sereneseasons.mid_summer": "夏の中頃",
+  "desc.sereneseasons.late_summer": "晩夏",
+  "desc.sereneseasons.autumn": "秋",
+  "desc.sereneseasons.early_autumn": "初秋",
+  "desc.sereneseasons.mid_autumn": "秋の中頃",
+  "desc.sereneseasons.late_autumn": "晩秋",
+  "desc.sereneseasons.winter": "冬",
+  "desc.sereneseasons.early_winter": "初冬",
+  "desc.sereneseasons.mid_winter": "冬の中頃",
+  "desc.sereneseasons.late_winter": "晩冬",
+  
+  "desc.sereneseasons.early_wet": "雨季初期",
+  "desc.sereneseasons.mid_wet": "雨季中期",
+  "desc.sereneseasons.late_wet": "雨季後期",
+  "desc.sereneseasons.early_dry": "乾季初期",
+  "desc.sereneseasons.mid_dry": "乾季中期",
+  "desc.sereneseasons.late_dry": "乾季後期"
+}
