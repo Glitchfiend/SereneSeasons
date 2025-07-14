@@ -4,40 +4,40 @@
   "commands.sereneseasons.setseason.success": "Estación ajustada a %s",
   "commands.sereneseasons.setseason.fail": "Estación desconocida: %s",
   "commands.sereneseasons.setseason.disabled": "¡Las estaciones están desactivadas!",
-
+  
   "gamerule.doSeasonCycle": "Ciclo estacional avanzado",
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
   "block.sereneseasons.season_sensor": "Sensor de estaciones",
-  
-  "item.sereneseasons.ss_icon": "Ícono de SS",
+
+  "item.sereneseasons.ss_icon": "Ícono de Serene Seasons",
   "item.sereneseasons.calendar": "Calendario",
 
-  "desc.sereneseasons.fertile_seasons": "Estación fértil:",
+  "desc.sereneseasons.fertile_seasons": "Estación fértil",
   "desc.sereneseasons.year_round": "Todo el año",
   "desc.sereneseasons.day_counter": "Día %s/%s",
   "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
   "desc.sereneseasons.spring": "Primavera",
-  "desc.sereneseasons.early_spring": "Comienzo de la primavera",
-  "desc.sereneseasons.mid_spring": "Mediados de primavera",
+  "desc.sereneseasons.early_spring": "Inicios de la primavera",
+  "desc.sereneseasons.mid_spring": "Mediados de la primavera",
   "desc.sereneseasons.late_spring": "Finales de la primavera",
   "desc.sereneseasons.summer": "Verano",
-  "desc.sereneseasons.early_summer": "Comienzo del verano",
-  "desc.sereneseasons.mid_summer": "Mediados de verano",
+  "desc.sereneseasons.early_summer": "Inicios del verano",
+  "desc.sereneseasons.mid_summer": "Mediados del verano",
   "desc.sereneseasons.late_summer": "Finales del verano",
   "desc.sereneseasons.autumn": "Otoño",
-  "desc.sereneseasons.early_autumn": "Comienzo del otoño",
-  "desc.sereneseasons.mid_autumn": "Mediados de otoño",
+  "desc.sereneseasons.early_autumn": "Inicios del otoño",
+  "desc.sereneseasons.mid_autumn": "Mediados del otoño",
   "desc.sereneseasons.late_autumn": "Finales del otoño",
   "desc.sereneseasons.winter": "Invierno",
-  "desc.sereneseasons.early_winter": "Comienzo del invierno",
-  "desc.sereneseasons.mid_winter": "Mediados de invierno",
+  "desc.sereneseasons.early_winter": "Inicios del invierno",
+  "desc.sereneseasons.mid_winter": "Mediados del invierno",
   "desc.sereneseasons.late_winter": "Finales del invierno",
-  
-  "desc.sereneseasons.early_wet": "Tormenta temprana",
-  "desc.sereneseasons.mid_wet": "Tormenta media",
-  "desc.sereneseasons.late_wet": "Tormenta tardía",
-  "desc.sereneseasons.early_dry": "Sequía temprana",
-  "desc.sereneseasons.mid_dry": "Sequía media",
-  "desc.sereneseasons.late_dry": "Sequía tardía"
+
+  "desc.sereneseasons.early_wet": "Inicios de temporada lluviosa",
+  "desc.sereneseasons.mid_wet": "Mediados de temporada lluviosa",
+  "desc.sereneseasons.late_wet": "Finales de temporada lluviosa",
+  "desc.sereneseasons.early_dry": "Inicios de temporada seca",
+  "desc.sereneseasons.mid_dry": "Mediados de temporada seca",
+  "desc.sereneseasons.late_dry": "Finales de temporada seca"
 }
