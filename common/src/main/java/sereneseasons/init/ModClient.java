@@ -22,8 +22,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.GrassColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import sereneseasons.api.SSItems;
@@ -42,6 +44,26 @@ import java.util.Locale;
 
 public class ModClient
 {
+    private static final Block[] SEASONAL_FOLIAGE_BLOCKS = new Block[] {
+            Blocks.OAK_LEAVES,
+            Blocks.JUNGLE_LEAVES,
+            Blocks.ACACIA_LEAVES,
+            Blocks.DARK_OAK_LEAVES,
+            Blocks.MANGROVE_LEAVES,
+            Blocks.AZALEA_LEAVES,
+            Blocks.FLOWERING_AZALEA_LEAVES,
+            Blocks.VINE
+    };
+
+    private static final Block[] SEASONAL_GRASS_BLOCKS = new Block[] {
+            Blocks.GRASS_BLOCK,
+            Blocks.SHORT_GRASS,
+            Blocks.TALL_GRASS,
+            Blocks.FERN,
+            Blocks.LARGE_FERN,
+            Blocks.SUGAR_CANE
+    };
+
     public static void setup()
     {
         SeasonColorHandlers.setup();
@@ -188,5 +210,44 @@ public class ModClient
 
             return birchColor;
         }, Blocks.BIRCH_LEAVES);
+
+        event.register(ModClient::resolveSeasonalFoliageColor, SEASONAL_FOLIAGE_BLOCKS);
+        event.register(ModClient::resolveSeasonalGrassColor, SEASONAL_GRASS_BLOCKS);
+    }
+
+    private static int resolveSeasonalFoliageColor(BlockState state, @Nullable BlockAndTintGetter blockGetter, @Nullable BlockPos pos, int tintIndex)
+    {
+        Level level = resolveLevel(blockGetter);
+        if (pos == null || level == null)
+        {
+            return -1;
+        }
+
+        Holder<Biome> biome = level.getBiome(pos);
+        return SeasonColorHandlers.getSeasonalColor(level, biome, pos.getX(), pos.getZ(), SeasonColorHandlers.ResolverType.FOLIAGE);
+    }
+
+    private static int resolveSeasonalGrassColor(BlockState state, @Nullable BlockAndTintGetter blockGetter, @Nullable BlockPos pos, int tintIndex)
+    {
+        Level level = resolveLevel(blockGetter);
+        if (pos == null || level == null)
+        {
+            return -1;
+        }
+
+        Holder<Biome> biome = level.getBiome(pos);
+        return SeasonColorHandlers.getSeasonalColor(level, biome, pos.getX(), pos.getZ(), SeasonColorHandlers.ResolverType.GRASS);
+    }
+
+    @Nullable
+    private static Level resolveLevel(@Nullable BlockAndTintGetter blockGetter)
+    {
+        if (blockGetter instanceof Level level)
+        {
+            return level;
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+        return minecraft.level;
     }
 }

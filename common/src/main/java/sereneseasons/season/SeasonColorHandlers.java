@@ -70,24 +70,63 @@ public class SeasonColorHandlers
 
         if (biomeHolder != null)
         {
-            ISeasonState calendar = SeasonHelper.getSeasonState(level);
-            ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-
-            int seasonalColor = switch (type) {
-                case GRASS -> SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biomeHolder, originalColor);
-                case FOLIAGE -> SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biomeHolder, originalColor);
-            };
-
-            int currentColor = seasonalColor;
-            for (ColorOverride override : resolverOverrides.get(type))
-            {
-                currentColor = override.apply(originalColor, seasonalColor, currentColor, biomeHolder, x, z);
-            }
-
-            return currentColor;
+            return getSeasonalColor(level, biomeHolder, x, z, type, originalColor);
         }
 
         return originalColor;
+    }
+
+    public static int getSeasonalColor(@Nullable Level level, Holder<Biome> biomeHolder, double x, double z, ResolverType type)
+    {
+        int originalColor = originalColorFor(biomeHolder, x, z, type);
+        return getSeasonalColor(level, biomeHolder, x, z, type, originalColor);
+    }
+
+    public static int getSeasonalColor(@Nullable Level level, Holder<Biome> biomeHolder, double x, double z, ResolverType type, int originalColor)
+    {
+        if (level == null || biomeHolder == null)
+        {
+            return originalColor;
+        }
+
+        if (biomeHolder.is(ModTags.Biomes.BLACKLISTED_BIOMES) || !ModConfig.seasons.isDimensionWhitelisted(level.dimension()))
+        {
+            return originalColor;
+        }
+
+        ISeasonState calendar = SeasonHelper.getSeasonState(level);
+        ISeasonColorProvider colorProvider = biomeHolder.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+
+        int seasonalColor = switch (type) {
+            case GRASS -> SeasonColorUtil.applySeasonalGrassColouring(colorProvider, biomeHolder, originalColor);
+            case FOLIAGE -> SeasonColorUtil.applySeasonalFoliageColouring(colorProvider, biomeHolder, originalColor);
+        };
+
+        int currentColor = seasonalColor;
+        for (ColorOverride override : resolverOverrides.get(type))
+        {
+            currentColor = override.apply(originalColor, seasonalColor, currentColor, biomeHolder, x, z);
+        }
+
+        return currentColor;
+    }
+
+    private static int originalColorFor(Holder<Biome> biomeHolder, double x, double z, ResolverType type)
+    {
+        ColorResolver resolver = switch (type) {
+            case GRASS -> originalGrassColorResolver;
+            case FOLIAGE -> originalFoliageColorResolver;
+        };
+
+        if (resolver != null)
+        {
+            return resolver.getColor(biomeHolder.value(), x, z);
+        }
+
+        return switch (type) {
+            case GRASS -> biomeHolder.value().getGrassColor(x, z);
+            case FOLIAGE -> biomeHolder.value().getFoliageColor();
+        };
     }
 
     public interface ColorOverride
