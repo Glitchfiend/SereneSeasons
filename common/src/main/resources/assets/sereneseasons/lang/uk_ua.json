@@ -3,7 +3,7 @@
   "commands.sereneseasons.getseason.success": "Поточна пора року — %s, день %s/%s, такт %s/%s",
   "commands.sereneseasons.setseason.success": "Установлено пору року на %s",
   "commands.sereneseasons.setseason.fail": "Недійсна пора року %s",
-  "commands.sereneseasons.setseason.disabled": "Пор року наразі вимкнено!",
+  "commands.sereneseasons.setseason.disabled": "Пори року наразі вимкнено!",
 
   "gamerule.doSeasonCycle": "Змінювати пори року",
 
