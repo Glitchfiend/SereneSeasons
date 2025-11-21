@@ -1,19 +1,19 @@
 {
   "commands.sereneseasons.usage": "/season <get/set> [args]",
-  "commands.sereneseasons.getseason.success": "Поточний сезон — %s, день %s/%s, такт %s/%s",
-  "commands.sereneseasons.setseason.success": "Установлено сезон на %s",
-  "commands.sereneseasons.setseason.fail": "Недійсний сезон %s",
-  "commands.sereneseasons.setseason.disabled": "Сезони наразі вимкнено!",
+  "commands.sereneseasons.getseason.success": "Поточна пора року — %s, день %s/%s, такт %s/%s",
+  "commands.sereneseasons.setseason.success": "Установлено пору року на %s",
+  "commands.sereneseasons.setseason.fail": "Недійсна пора року %s",
+  "commands.sereneseasons.setseason.disabled": "Пор року наразі вимкнено!",
 
   "gamerule.doSeasonCycle": "Змінювати пори року",
 
   "itemGroup.tabSereneSeasons": "Serene Seasons",
-  "block.sereneseasons.season_sensor": "Сезонний датчик",
+  "block.sereneseasons.season_sensor": "Датчик пори року",
 
   "item.sereneseasons.ss_icon": "Значок SS",
   "item.sereneseasons.calendar": "Календар",
 
-  "desc.sereneseasons.fertile_seasons": "Родючі сезони",
+  "desc.sereneseasons.fertile_seasons": "Родючі пори року",
   "desc.sereneseasons.year_round": "Цілий рік",
   "desc.sereneseasons.day_counter": "День %s/%s",
   "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
