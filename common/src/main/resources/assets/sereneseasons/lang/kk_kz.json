@@ -1,21 +1,48 @@
 {
-  "commands.sereneseasons.usage": "/season <get/set> [args]",
-  "commands.sereneseasons.getseason.success": "Қазіргі маусым %s, %s/%s күн, %s/%s тик",
-  "commands.sereneseasons.setseason.success": "Маусым %s болып қойылды",
-  "commands.sereneseasons.setseason.fail": "%s маусымы қате",
-  "commands.sereneseasons.setseason.disabled": "Маусымдар қазіргі кезде өшірулі!",
+  "commands.sereneseasons.usage": "/season <get/set> [параметрлер]",
+  "commands.sereneseasons.getseason.success": "Қазіргі маусым: %s, күн %s/%s, тик %s/%s",
+  "commands.sereneseasons.setseason.success": "Маусым %s деп орнатылды",
+  "commands.sereneseasons.setseason.fail": "%s - жарамсыз маусым",
+  "commands.sereneseasons.setseason.disabled": "Маусымдар қазір өшірулі!",
 
+  "gamerule.doSeasonCycle": "Маусымдар циклін ілгерілету",
   "itemGroup.tabSereneSeasons": "Serene Seasons",
 
   "block.sereneseasons.season_sensor": "Маусым сенсоры",
-  
+
   "item.sereneseasons.ss_icon": "SS белгішесі",
   "item.sereneseasons.calendar": "Күнтізбе",
 
-  "desc.sereneseasons.fertile_seasons": "Құнарлы маусым",
+  "desc.sereneseasons.fertile_seasons": "Құнарлы маусымдар",
   "desc.sereneseasons.year_round": "Жыл бойы",
+  "desc.sereneseasons.day_counter": "Күн %s/%s",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
+
   "desc.sereneseasons.spring": "Көктем",
+  "desc.sereneseasons.early_spring": "Ерте көктем",
+  "desc.sereneseasons.mid_spring": "Көктем ортасы",
+  "desc.sereneseasons.late_spring": "Кеш көктем",
+
   "desc.sereneseasons.summer": "Жаз",
+  "desc.sereneseasons.early_summer": "Ерте жаз",
+  "desc.sereneseasons.mid_summer": "Жаз ортасы",
+  "desc.sereneseasons.late_summer": "Кеш жаз",
+
   "desc.sereneseasons.autumn": "Күз",
-  "desc.sereneseasons.winter": "Қыс"
+  "desc.sereneseasons.early_autumn": "Ерте күз",
+  "desc.sereneseasons.mid_autumn": "Күз ортасы",
+  "desc.sereneseasons.late_autumn": "Кеш күз",
+
+  "desc.sereneseasons.winter": "Қыс",
+  "desc.sereneseasons.early_winter": "Ерте қыс",
+  "desc.sereneseasons.mid_winter": "Қыс ортасы",
+  "desc.sereneseasons.late_winter": "Кеш қыс",
+
+  "desc.sereneseasons.early_wet": "Ерте ылғалды маусым",
+  "desc.sereneseasons.mid_wet": "Ылғалды маусым ортасы",
+  "desc.sereneseasons.late_wet": "Кеш ылғалды маусым",
+
+  "desc.sereneseasons.early_dry": "Ерте құрғақ маусым",
+  "desc.sereneseasons.mid_dry": "Құрғақ маусым ортасы",
+  "desc.sereneseasons.late_dry": "Кеш құрғақ маусым"
 }
