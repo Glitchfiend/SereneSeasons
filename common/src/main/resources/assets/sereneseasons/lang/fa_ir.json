@@ -1,0 +1,43 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "تنظیم فصل به %s, روز %s/%s, تیک %s/%s",
+  "commands.sereneseasons.setseason.success": "تنظیم فصل به %s",
+  "commands.sereneseasons.setseason.fail": "فصل نامعتبر %s",
+  "commands.sereneseasons.setseason.disabled": "!فصل‌ها در حال حاضر غیرفعال هستند",
+
+  "gamerule.doSeasonCycle": "Advance seasonal cycle",
+  "itemGroup.tabSereneSeasons": "فصل های آرام",
+
+  "block.sereneseasons.season_sensor": "حسگر فصل",
+  
+  "item.sereneseasons.ss_icon": "SS Icon",
+  "item.sereneseasons.calendar": "تقویم",
+
+  "desc.sereneseasons.fertile_seasons": "فصل های حاصلخیز",
+  "desc.sereneseasons.year_round": "تمام سال",
+  "desc.sereneseasons.day_counter": "روز %s/%s",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
+  "desc.sereneseasons.spring": "بهار",
+  "desc.sereneseasons.early_spring": "اوایل بهار",
+  "desc.sereneseasons.mid_spring": "اواسط بهار",
+  "desc.sereneseasons.late_spring": "اواخر بهار",
+  "desc.sereneseasons.summer": "تابستان",
+  "desc.sereneseasons.early_summer": "اوایل تابستان",
+  "desc.sereneseasons.mid_summer": "اواسط تابستان",
+  "desc.sereneseasons.late_summer": "اواخر تابستان",
+  "desc.sereneseasons.autumn": "پاییز",
+  "desc.sereneseasons.early_autumn": "اوایل پاییز",
+  "desc.sereneseasons.mid_autumn": "اواسط پاییز",
+  "desc.sereneseasons.late_autumn": "اواخر پاییز",
+  "desc.sereneseasons.winter": "زمستان",
+  "desc.sereneseasons.early_winter": "اوایل زمستان",
+  "desc.sereneseasons.mid_winter": "اواسط زمستان",
+  "desc.sereneseasons.late_winter": "اواخر زمستان",
+  
+  "desc.sereneseasons.early_wet": "اوایل فصل مرطوب",
+  "desc.sereneseasons.mid_wet": "اواسط فصل مرطوب",
+  "desc.sereneseasons.late_wet": "اواخر فصل مرطوب",
+  "desc.sereneseasons.early_dry": "اوایل فصل خشک",
+  "desc.sereneseasons.mid_dry": "اواسط فصل خشک",
+  "desc.sereneseasons.late_dry": "اواخر فصل خشک"
+}
