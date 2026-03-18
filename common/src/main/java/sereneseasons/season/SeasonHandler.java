@@ -137,9 +137,10 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
         }
 
         DimensionDataStorage saveDataManager = ((ServerLevel)w).getChunkSource().getDataStorage();
+        boolean uninitialized = saveDataManager.get(SAVED_DATA_TYPE) == null;
         SeasonSavedData savedData = saveDataManager.computeIfAbsent(SAVED_DATA_TYPE);
 
-        if (ModConfig.seasons.startingSubSeason == 0)
+        if (uninitialized && ModConfig.seasons.startingSubSeason == 0)
         {
             savedData.seasonCycleTicks = (w.random.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
         }
