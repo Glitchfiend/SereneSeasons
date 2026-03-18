@@ -1,13 +1,14 @@
 {
-  "replace": false,
-  "values": [
-	"#sereneseasons:year_round_crops",
-	"minecraft:birch_sapling",
-	"minecraft:spruce_sapling",
-	"minecraft:dark_oak_sapling",
-	"minecraft:wheat",
-	"minecraft:pumpkin_stem",
-	"minecraft:beetroots",
-	"minecraft:carrots"
-  ]
+	"replace": false,
+	"values": [
+		"#sereneseasons:year_round_crops",
+		"minecraft:birch_sapling",
+		"minecraft:pale_oak_sapling",
+		"minecraft:spruce_sapling",
+		"minecraft:dark_oak_sapling",
+		"minecraft:wheat",
+		"minecraft:pumpkin_stem",
+		"minecraft:beetroots",
+		"minecraft:carrots"
+	]
 }
