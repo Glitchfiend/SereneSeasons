@@ -9,18 +9,13 @@ import glitchcore.event.client.ItemTooltipEvent;
 import glitchcore.event.client.RegisterColorsEvent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.color.block.BlockTintSource;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -30,7 +25,6 @@ import sereneseasons.api.SSItems;
 import sereneseasons.api.season.ISeasonColorProvider;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
-import sereneseasons.core.SereneSeasons;
 import sereneseasons.season.SeasonColorHandlers;
 import sereneseasons.season.SeasonHandlerClient;
 import sereneseasons.season.SeasonTime;
@@ -163,30 +157,39 @@ public class ModClient
 
     private static void registerBlockColors(RegisterColorsEvent.Block event)
     {
-        event.register((BlockState state, @Nullable BlockAndTintGetter dimensionReader, @Nullable BlockPos pos, int tintIndex) ->
-        {
-            int birchColor = FoliageColor.FOLIAGE_BIRCH;
-            Level level = Minecraft.getInstance().player.level();
-            ResourceKey<Level> dimension = Minecraft.getInstance().player.level().dimension();
-
-            if (level != null && pos != null && ModConfig.seasons.changeBirchColor && ModConfig.seasons.isDimensionWhitelisted(dimension))
+        event.register(List.of(new BlockTintSource() {
+            @Override
+            public int color(BlockState blockState)
             {
-                Holder<Biome> biome = level.getBiome(pos);
-
-                if (!biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
-                {
-                    ISeasonState calendar = SeasonHelper.getSeasonState(level);
-                    ISeasonColorProvider colorProvider = biome.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
-                    birchColor = colorProvider.getBirchColor();
-
-                    if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
-                    {
-                        birchColor = SeasonColorUtil.mixColours(colorProvider.getBirchColor(), FoliageColor.FOLIAGE_BIRCH, 0.75F);
-                    }
-                }
+                return FoliageColor.FOLIAGE_BIRCH;
             }
 
-            return birchColor;
-        }, Blocks.BIRCH_LEAVES);
+            @Override
+            public int colorInWorld(BlockState state, BlockAndTintGetter blockAndTintGetter, BlockPos pos) {
+                int birchColor = FoliageColor.FOLIAGE_BIRCH;
+                Level level = Minecraft.getInstance().player.level();
+                ResourceKey<Level> dimension = level.dimension();
+
+                if (level != null && pos != null && ModConfig.seasons.changeBirchColor && ModConfig.seasons.isDimensionWhitelisted(dimension))
+                {
+                    Holder<Biome> biome = level.getBiome(pos);
+
+                    if (!biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
+                    {
+                        ISeasonState calendar = SeasonHelper.getSeasonState(level);
+                        ISeasonColorProvider colorProvider = biome.is(ModTags.Biomes.TROPICAL_BIOMES) ? calendar.getTropicalSeason() : calendar.getSubSeason();
+                        birchColor = colorProvider.getBirchColor();
+
+                        if (biome.is(ModTags.Biomes.LESSER_COLOR_CHANGE_BIOMES))
+                        {
+                            birchColor = SeasonColorUtil.mixColours(colorProvider.getBirchColor(), FoliageColor.FOLIAGE_BIRCH, 0.75F);
+                        }
+                    }
+                }
+
+                // Ensure the upper bits are set for opacity
+                return birchColor | (0xFF << 24);
+            }
+        }), Blocks.BIRCH_LEAVES);
     }
 }

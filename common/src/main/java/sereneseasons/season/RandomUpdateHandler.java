@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.saveddata.WeatherData;
 import net.minecraft.world.level.storage.ServerLevelData;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
@@ -37,26 +38,26 @@ public class RandomUpdateHandler
 		if (!ModConfig.seasons.changeWeatherFrequency)
 			return;
 
-		ServerLevelData serverLevelData = (ServerLevelData)world.getLevelData();
+		WeatherData weatherData = ((ServerLevel)world).getWeatherData();
 		SeasonsConfig.SeasonProperties seasonProperties = ModConfig.seasons.getSeasonProperties(subSeason);
 
 		if (seasonProperties.canRain())
 		{
-			if (!world.getLevelData().isRaining() && serverLevelData.getRainTime() > seasonProperties.maxRainTime())
+			if (!weatherData.isRaining() && weatherData.getRainTime() > seasonProperties.maxRainTime())
 			{
-				serverLevelData.setRainTime(world.random.nextInt(seasonProperties.maxRainTime() - seasonProperties.minRainTime()) + seasonProperties.minRainTime());
+				weatherData.setRainTime(world.getRandom().nextInt(seasonProperties.maxRainTime() - seasonProperties.minRainTime()) + seasonProperties.minRainTime());
 			}
 		}
-		else if (serverLevelData.isRaining()) serverLevelData.setRaining(false);
+		else if (weatherData.isRaining()) weatherData.setRaining(false);
 
 		if (seasonProperties.canThunder())
 		{
-			if (!world.getLevelData().isThundering() && serverLevelData.getThunderTime() > seasonProperties.maxThunderTime())
+			if (!weatherData.isThundering() && weatherData.getThunderTime() > seasonProperties.maxThunderTime())
 			{
-				serverLevelData.setThunderTime(world.random.nextInt(seasonProperties.maxThunderTime() - seasonProperties.minThunderTime()) + seasonProperties.minThunderTime());
+				weatherData.setThunderTime(world.getRandom().nextInt(seasonProperties.maxThunderTime() - seasonProperties.minThunderTime()) + seasonProperties.minThunderTime());
 			}
 		}
-		else if (serverLevelData.isThundering()) serverLevelData.setThundering(false);
+		else if (weatherData.isThundering()) weatherData.setThundering(false);
 	}
 
 	private static void meltInChunk(ChunkMap chunkMap, LevelChunk chunkIn, float meltChance)
@@ -66,7 +67,7 @@ public class RandomUpdateHandler
 		int i = chunkpos.getMinBlockX();
 		int j = chunkpos.getMinBlockZ();
 
-		if (meltChance > 0 && world.random.nextFloat() < meltChance)
+		if (meltChance > 0 && world.getRandom().nextFloat() < meltChance)
 		{
 			BlockPos topAirPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, world.getBlockRandomPos(i, 0, j, 15));
 			BlockPos topGroundPos = topAirPos.below();
@@ -119,7 +120,7 @@ public class RandomUpdateHandler
 					ChunkPos chunkpos = chunk.getPos();
 					if ((chunkMap.anyPlayerCloseEnoughForSpawning(chunkpos)))
 					{
-						if (level.shouldTickBlocksAt(chunkpos.toLong()))
+						if (level.shouldTickBlocksAt(chunkpos.pack()))
 						{
 							for(int i = 0; i < rolls; i++)
 							{

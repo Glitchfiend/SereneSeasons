@@ -23,11 +23,11 @@ import sereneseasons.client.item.SeasonTimeProperty;
 @Mixin(RangeSelectItemModelProperties.class)
 public class MixinRangeSelectItemModelProperties
 {
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private static ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends RangeSelectItemModelProperty>> ID_MAPPER;
 
-    @Inject(method = "bootstrap", at=@At("TAIL"))
+    @Inject(method = "bootstrap", at=@At("TAIL"), remap = false)
     private static void onBootstrap(CallbackInfo ci)
     {
         ID_MAPPER.put(Identifier.withDefaultNamespace("season_time"), SeasonTimeProperty.TYPE);

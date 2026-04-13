@@ -17,13 +17,13 @@ import sereneseasons.season.SeasonHooks;
 @Mixin(Biome.class)
 public class MixinBiome
 {
-    @Inject(method="shouldSnow", at=@At("HEAD"), cancellable = true)
+    @Inject(method="shouldSnow", at=@At("HEAD"), cancellable = true, remap = false)
     public void onShouldSnow(LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir)
     {
         cir.setReturnValue(SeasonHooks.shouldSnowHook((Biome)(Object)this, level, pos, level.getSeaLevel()));
     }
 
-    @Redirect(method = "shouldFreeze(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", at=@At(value = "INVOKE", target = "net/minecraft/world/level/biome/Biome.warmEnoughToRain(Lnet/minecraft/core/BlockPos;I)Z"))
+    @Redirect(method = "shouldFreeze(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z", at=@At(value = "INVOKE", target = "net/minecraft/world/level/biome/Biome.warmEnoughToRain(Lnet/minecraft/core/BlockPos;I)Z"), remap = false)
     public boolean onShouldFreeze_warmEnoughToRain(Biome biome, BlockPos pos, int seaLevel, LevelReader level)
     {
         return SeasonHooks.shouldFreezeWarmEnoughToRainHook(biome, pos, seaLevel, level);

@@ -18,7 +18,7 @@ import sereneseasons.season.SeasonalCropGrowthHandler;
 @Mixin(BlockBehaviour.BlockStateBase.class)
 public class MixinBlockStateBase
 {
-    @Inject(method="randomTick", at=@At("HEAD"), cancellable = true)
+    @Inject(method="randomTick", at=@At("HEAD"), cancellable = true, remap = false)
     public void onRandomTick(ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci)
     {
         if ((Object)this instanceof BlockState)

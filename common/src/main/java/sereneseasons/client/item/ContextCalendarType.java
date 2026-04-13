@@ -28,10 +28,11 @@ public class ContextCalendarType implements SelectItemModelProperty<CalendarType
 
     @Nullable
     @Override
-    public CalendarType get(ItemStack stack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity, int i, ItemDisplayContext itemDisplayContext)
+    public CalendarType get(ItemStack stack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity holder, int i, ItemDisplayContext itemDisplayContext)
     {
+        if (holder == null) return CalendarType.STANDARD;
+
         Level level = clientLevel;
-        Entity holder = (Entity)(livingEntity != null ? livingEntity : stack.getFrame());
 
         if (level == null && holder != null)
         {

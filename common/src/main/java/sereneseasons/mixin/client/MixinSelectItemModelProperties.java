@@ -20,11 +20,11 @@ import sereneseasons.client.item.ContextCalendarType;
 @Mixin(SelectItemModelProperties.class)
 public class MixinSelectItemModelProperties
 {
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private static ExtraCodecs.LateBoundIdMapper<Identifier, SelectItemModelProperty.Type<?, ?>> ID_MAPPER;
 
-    @Inject(method = "bootstrap", at=@At("TAIL"))
+    @Inject(method = "bootstrap", at=@At("TAIL"), remap = false)
     private static void onBootstrap(CallbackInfo ci)
     {
         ID_MAPPER.put(Identifier.withDefaultNamespace("context_calendar_type"), ContextCalendarType.TYPE);

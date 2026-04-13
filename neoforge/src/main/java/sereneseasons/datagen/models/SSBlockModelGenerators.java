@@ -6,12 +6,15 @@ package sereneseasons.datagen.models;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelOutput;
-import net.minecraft.client.data.models.blockstates.*;
-import net.minecraft.client.data.models.model.*;
-import net.minecraft.client.renderer.block.model.VariantMutator;
+import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ModelInstance;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import sereneseasons.api.SSBlocks;
 import sereneseasons.api.season.Season;
 import sereneseasons.block.SeasonSensorBlock;
@@ -33,7 +36,7 @@ public class SSBlockModelGenerators extends BlockModelGenerators
 
     private void createSeasonSensor()
     {
-        Identifier sideTexture = TextureMapping.getBlockTexture(SSBlocks.SEASON_SENSOR, "_side");
+        Material sideTexture = TextureMapping.getBlockTexture(SSBlocks.SEASON_SENSOR, "_side");
         TextureMapping textures = new TextureMapping()
                 .put(TextureSlot.TOP, TextureMapping.getBlockTexture(SSBlocks.SEASON_SENSOR, "_summer_top"))
                 .put(TextureSlot.SIDE, sideTexture);

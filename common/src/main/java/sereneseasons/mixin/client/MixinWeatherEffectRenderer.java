@@ -18,7 +18,7 @@ import sereneseasons.season.SeasonHooks;
 @Mixin(WeatherEffectRenderer.class)
 public class MixinWeatherEffectRenderer
 {
-    @Inject(method="getPrecipitationAt", at=@At(value = "HEAD"), cancellable = true)
+    @Inject(method="getPrecipitationAt", at=@At(value = "HEAD"), cancellable = true, remap = false)
     public void onGetPrecipitationAt(Level level, BlockPos pos, CallbackInfoReturnable<Biome.Precipitation> cir)
     {
         cir.setReturnValue(SeasonHooks.getPrecipitationAtSeasonal(level, level.getBiome(pos), pos, level.getSeaLevel()));

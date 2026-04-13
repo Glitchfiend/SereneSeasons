@@ -10,17 +10,14 @@ import glitchcore.event.player.PlayerEvent;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
-import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraft.world.scores.ScoreboardSaveData;
+import net.minecraft.world.level.storage.SavedDataStorage;
 import sereneseasons.api.SSGameRules;
 import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.Season;
@@ -32,7 +29,6 @@ import sereneseasons.init.ModTags;
 import sereneseasons.network.SyncSeasonCyclePacket;
 
 import java.util.HashMap;
-import java.util.function.Supplier;
 
 public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
 {
@@ -45,7 +41,7 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             return;
 
         ServerLevel level = (ServerLevel)event.getLevel();
-        long dayTime = level.getDayTime();
+        long dayTime = level.getOverworldClockTime();
         long lastDayTime = lastDayTimes.getOrDefault(level, dayTime);
         lastDayTimes.put(level, dayTime);
 
@@ -136,13 +132,13 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
             return null;
         }
 
-        DimensionDataStorage saveDataManager = ((ServerLevel)w).getChunkSource().getDataStorage();
+        SavedDataStorage saveDataManager = ((ServerLevel)w).getChunkSource().getDataStorage();
         boolean uninitialized = saveDataManager.get(SAVED_DATA_TYPE) == null;
         SeasonSavedData savedData = saveDataManager.computeIfAbsent(SAVED_DATA_TYPE);
 
         if (uninitialized && ModConfig.seasons.startingSubSeason == 0)
         {
-            savedData.seasonCycleTicks = (w.random.nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
+            savedData.seasonCycleTicks = (w.getRandom().nextInt(12)) * SeasonTime.ZERO.getSubSeasonDuration();
         }
 
         return savedData;

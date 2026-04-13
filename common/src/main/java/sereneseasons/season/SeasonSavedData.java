@@ -8,9 +8,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.TicketStorage;
 import net.minecraft.world.level.saveddata.SavedData;
+import sereneseasons.core.SereneSeasons;
 import sereneseasons.init.ModConfig;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class SeasonSavedData extends SavedData
         ).apply(builder, SeasonSavedData::new)
     );
 
-    public static final String DATA_IDENTIFIER = "seasons";
+    public static final Identifier DATA_IDENTIFIER = Identifier.fromNamespaceAndPath(SereneSeasons.MOD_ID, "seasons");
     public static final int VERSION = 0;
 
     public int seasonCycleTicks;

@@ -16,7 +16,7 @@ import sereneseasons.season.SeasonHooks;
 @Mixin(ServerLevel.class)
 public class MixinServerLevel
 {
-    @Redirect(method="tickPrecipitation", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;I)Lnet/minecraft/world/level/biome/Biome$Precipitation;"))
+    @Redirect(method="tickPrecipitation", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;getPrecipitationAt(Lnet/minecraft/core/BlockPos;I)Lnet/minecraft/world/level/biome/Biome$Precipitation;"), remap = false)
     public Biome.Precipitation tickIceAndSnow_getPrecipitationAt(Biome biome, BlockPos pos, int seaLevel)
     {
         return SeasonHooks.getPrecipitationAtTickIceAndSnowHook((LevelReader)this, biome, pos, seaLevel);

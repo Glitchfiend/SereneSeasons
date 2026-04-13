@@ -17,7 +17,7 @@ import sereneseasons.season.SeasonHooks;
 @Mixin(Biome.class)
 public class MixinBiomeClient
 {
-    @Inject(method="getPrecipitationAt", at=@At("HEAD"), cancellable = true)
+    @Inject(method="getPrecipitationAt", at=@At("HEAD"), cancellable = true, remap = false)
     public void onGetPrecipitationAt(BlockPos pos, int seaLevel, CallbackInfoReturnable<Biome.Precipitation> cir)
     {
         Minecraft minecraft = Minecraft.getInstance();

@@ -1,66 +1,69 @@
 plugins {
-    id "net.neoforged.gradle.userdev" version "7.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id 'net.neoforged.moddev' version '2.0.141'
+    id "de.maxhenkel.cursegradle" version "1.5.1"
 }
 
 base.archivesName.set("${mod_name}-neoforge")
 
-minecraft {
-    mappings {
-        channel = official()
-        version.put "minecraft", minecraft_version
-    }
-    accessTransformers.file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-runs {
-    configureEach {
-        modSource project.sourceSets.main
-    }
-
-    client {
-        workingDirectory.set(project.file('run'))
-        systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
-    }
-
-    server {
-        workingDirectory.set(project.file('run'))
-        systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
-        programArgument '--nogui'
-    }
-
-    clientData {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', project(':Common').file('src/generated/resources/').getAbsolutePath(), '--existing', project(':Common').file('src/main/resources/').getAbsolutePath()
-    }
-}
-
 dependencies {
-    implementation "net.neoforged:neoforge:${neoforge_version}"
-    compileOnly project(":Common")
     implementation 'com.github.glitchfiend:GlitchCore-neoforge:' + minecraft_version + '-' + glitchcore_version
 }
 
-// NeoGradle compiles the game, but we don't want to add our common code to the game's code
-TaskCollection.metaClass.excludingNeoTasks = { ->
-    delegate.matching { !it.name.startsWith("neo") }
+def resources = project(':Common').file('src/generated/resources/').getAbsolutePath()
+neoForge {
+    version = neoforge_version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':Common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
+        client {
+            client()
+            gameDirectory = this.mkdir(this.file("runs/client"))
+        }
+        data {
+            clientData()
+            gameDirectory = this.mkdir(this.file("runs/data"))
+            // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', resources, '--existing', resources
+        }
+        server {
+            server()
+            this.file("runs/server").createParentDirectories()
+            gameDirectory = this.mkdir(this.file("runs/server"))
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
 }
 
-tasks.withType(JavaCompile).excludingNeoTasks().configureEach {
-    source(project(":Common").sourceSets.main.allSource)
-}
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-tasks.withType(Javadoc).excludingNeoTasks().configureEach {
-    source(project(":Common").sourceSets.main.allJava)
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
 }
-
-tasks.named("sourcesJar", Jar) {
-    from(project(":Common").sourceSets.main.allSource)
-}
-
-tasks.withType(ProcessResources).excludingNeoTasks().configureEach {
-    from project(":Common").sourceSets.main.resources
-    filesMatching("${mod_id}.mixins.json") {
-        expand "refmap_target": "${mod_id}."
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant ->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
     }
 }
 
@@ -79,10 +82,6 @@ curseforge {
 
         mainArtifact(jar) {
             displayName = "${mod_display_name} ${name} ${version}"
-        }
-
-        relations {
-            requiredDependency 'glitchcore'
         }
     }
 }
