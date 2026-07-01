@@ -11,9 +11,9 @@
   ],
   "client": [
     "client.MixinBiomeClient",
-    "client.MixinSelectItemModelProperties",
+    "client.MixinClientLevel",
     "client.MixinRangeSelectItemModelProperties",
-    "client.MixinWeatherEffectRenderer"
+    "client.MixinSelectItemModelProperties"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -35,7 +35,7 @@ public class SeasonHandlerClient
             SeasonTime calendar = new SeasonTime(clientSeasonCycleTicks.get(dimension));
             if (calendar.getSubSeason() != lastSeason)
             {
-                Minecraft.getInstance().levelRenderer.allChanged();
+                Minecraft.getInstance().levelExtractor.allChanged();
                 lastSeason = calendar.getSubSeason();
             }
         }
