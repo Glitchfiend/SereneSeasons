@@ -27,8 +27,14 @@
   "desc.sereneseasons.early_autumn": "Início do Outono",
   "desc.sereneseasons.mid_autumn": "Meio do Outono",
   "desc.sereneseasons.late_autumn": "Fim do Outono",
-  "desc.sereneseasons.winter": "Inverno"
+  "desc.sereneseasons.winter": "Inverno",
   "desc.sereneseasons.early_winter": "Início do Inverno",
   "desc.sereneseasons.mid_winter": "Meio do Inverno",
-  "desc.sereneseasons.late_winter": "Fim do Inverno"
+  "desc.sereneseasons.late_winter": "Fim do Inverno",
+  "desc.sereneseasons.late_wet": "Fim da Estação Chuvosa",
+  "desc.sereneseasons.early_dry": "Início da Estação Seca",
+  "desc.sereneseasons.mid_dry": "Meio da Estação Seca",
+  "desc.sereneseasons.early_wet": "Início da Estação Chuvosa",
+  "desc.sereneseasons.mid_wet": "Meio da Estação Chuvosa",
+  "desc.sereneseasons.late_dry": "Fim da Estação Seca"
 }
