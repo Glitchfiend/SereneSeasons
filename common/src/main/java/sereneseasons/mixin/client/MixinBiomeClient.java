@@ -20,7 +20,7 @@ import sereneseasons.season.SeasonHooks;
 @Mixin(Biome.class)
 public class MixinBiomeClient
 {
-    @Inject(method="hasPrecipitation", at=@At("HEAD"), cancellable = true)
+    @Inject(method="hasPrecipitation", at=@At("HEAD"), cancellable = true, remap = false)
     public void onHasPrecipitation(CallbackInfoReturnable<Boolean> cir)
     {
         @Nullable Level level = Minecraft.getInstance().level;
