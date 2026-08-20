@@ -165,7 +165,12 @@ public class SeasonsConfig extends glitchcore.config.Config
     }
 
     private static void convertToHexColor(@Nonnull Config config, String key) {
-        config.set(key, new HexColor(config.getInt(key)));
+        Number value = config.get(key);
+
+        if (value == null)
+            return;
+
+        config.set(key, new HexColor(value.intValue()));
     }
 
     public boolean isDimensionWhitelisted(ResourceKey<Level> dimension)
