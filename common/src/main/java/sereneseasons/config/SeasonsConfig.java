@@ -19,6 +19,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.Level;
 import sereneseasons.api.season.Season;
 import sereneseasons.core.SereneSeasons;
+import sereneseasons.util.HexColor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -125,11 +126,11 @@ public class SeasonsConfig extends glitchcore.config.Config
                 max_rain_time is the maximum time interval between rain events in ticks. Set to -1 to disable rain.
                 min_thunder_time is the minimum time interval between thunder events in ticks. Set to -1 to disable thunder.
                 max_thunder_time is the maximum time interval between thunder events in ticks. Set to -1 to disable thunder.
-                grass_colour is the color of grass, from 0 to 0xFFFFFF(16777215).
+                grass_colour is the color of grass in RGB, from 0x000000 to 0xFFFFFF.
                 grass_saturation is the saturation multiplier of grass color. Set to -1 to disable.
-                foliage_colour is the color of foliage, from 0 to 0xFFFFFF(16777215).
+                foliage_colour is the color of foliage in RGB, from 0x000000 to 0xFFFFFF.
                 foliage_saturation is the saturation multiplier of foliage color. Set to -1 to disable.
-                birch_color is the color of birch foliage, from 0 to 0xFFFFFF(16777215). It will use the same saturation multiplier of foliage_colour""", SEASON_PROPERTIES_VALIDATOR);
+                birch_color is the color of birch foliage in RGB, from 0x000000 to 0xFFFFFF. It will use the same saturation multiplier of foliage_colour""", SEASON_PROPERTIES_VALIDATOR);
 
         seasonPropertiesMapper = Suppliers.memoize(() -> {
             var map = new HashMap<>(DEFAULT_SEASON_PROPERTIES);
@@ -140,7 +141,31 @@ public class SeasonsConfig extends glitchcore.config.Config
         for (var subSeason : Season.SubSeason.VALUES) {
             var properties = getSeasonProperties(subSeason);
             subSeason.applyProperties(properties);
-        };
+        }
+    }
+
+    /**
+     * The {@link com.electronwill.nightconfig.toml.TomlParser} sees {@code 0xFF} as an integer, not a {@link HexColor}.
+     * This converts the parse result into {@link HexColor} (where needed).
+     */
+    @Override
+    public void parse(String toml) {
+        super.parse(toml);
+
+        List<Config> seasonConfigs = get("season_properties");
+
+        if (seasonConfigs == null)
+            return;
+
+        for (Config seasonConfig : seasonConfigs) {
+            convertToHexColor(seasonConfig, "grass_colour");
+            convertToHexColor(seasonConfig, "foliage_colour");
+            convertToHexColor(seasonConfig, "birch_color");
+        }
+    }
+
+    private static void convertToHexColor(@Nonnull Config config, String key) {
+        config.set(key, new HexColor(config.getInt(key)));
     }
 
     public boolean isDimensionWhitelisted(ResourceKey<Level> dimension)
@@ -190,11 +215,11 @@ public class SeasonsConfig extends glitchcore.config.Config
             config.add("max_rain_time", this.maxRainTime);
             config.add("min_thunder_time", this.minThunderTime);
             config.add("max_thunder_time", this.maxThunderTime);
-            config.add("grass_colour", this.grassColour);
+            config.add("grass_colour", new HexColor(this.grassColour));
             config.add("grass_saturation", this.grassSaturation);
-            config.add("foliage_colour", this.foliageColour);
+            config.add("foliage_colour", new HexColor(this.foliageColour));
             config.add("foliage_saturation", this.foliageSaturation);
-            config.add("birch_color", this.birchColor);
+            config.add("birch_color", new HexColor(this.birchColor));
             return config;
         }
 
