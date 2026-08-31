@@ -6,6 +6,7 @@ package sereneseasons.api.season;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
+import sereneseasons.config.SeasonsConfig.SeasonProperties;
 
 import java.util.Locale;
 
@@ -51,6 +52,14 @@ public enum Season
         SubSeason(Season season, int grassColour, int foliageColour, int birchColor)
         {
             this(season, grassColour, -1, foliageColour, -1, birchColor);
+        }
+
+        public void applyProperties(SeasonProperties properties) {
+            this.grassOverlay = properties.grassColour();
+            this.grassSaturationMultiplier = properties.grassSaturation();
+            this.foliageOverlay = properties.foliageColour();
+            this.foliageSaturationMultiplier = properties.foliageSaturation();
+            this.birchColor = properties.birchColor();
         }
         
         public Season getSeason()
