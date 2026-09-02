@@ -44,6 +44,32 @@ public interface ISeasonState
      */
     int getSeasonCycleTicks();
 
+    default float getCycleProgress()
+    {
+        int duration = getSubSeasonDuration();
+        if (duration <= 0)
+            return 0.0F;
+
+        int count = Season.SubSeason.VALUES.length;
+        int index = (getSeasonCycleTicks() / duration) % count;
+        double elapsed = (double)(getSeasonCycleTicks() % duration) / (double)duration;
+        return clampProgress((float)((index + elapsed) / count));
+    }
+
+    default float getSubSeasonProgress()
+    {
+        int duration = getSubSeasonDuration();
+        if (duration <= 0)
+            return 0.0F;
+
+        return clampProgress((float)((double)(getSeasonCycleTicks() % duration) / (double)duration));
+    }
+
+    private static float clampProgress(float progress)
+    {
+        return progress < 1.0F ? progress : Math.nextDown(1.0F);
+    }
+
     /**
      * Get the number of days elapsed.
      *
