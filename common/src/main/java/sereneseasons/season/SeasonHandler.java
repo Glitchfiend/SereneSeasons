@@ -171,4 +171,28 @@ public class SeasonHandler implements SeasonHelper.ISeasonDataProvider
     {
         return biome.is(ModTags.Biomes.TROPICAL_BIOMES);
     }
+
+    @Override
+    public boolean hasSeasons(Level level)
+    {
+        return level != null && ModConfig.seasons.isDimensionWhitelisted(level.dimension());
+    }
+
+    @Override
+    public boolean changesGrassColor(Level level)
+    {
+        return ModConfig.seasons.changeGrassColor && hasSeasons(level);
+    }
+
+    @Override
+    public boolean changesFoliageColor(Level level)
+    {
+        return ModConfig.seasons.changeFoliageColor && hasSeasons(level);
+    }
+
+    @Override
+    public boolean changesBirchColor(Level level)
+    {
+        return ModConfig.seasons.changeBirchColor && hasSeasons(level);
+    }
 }
