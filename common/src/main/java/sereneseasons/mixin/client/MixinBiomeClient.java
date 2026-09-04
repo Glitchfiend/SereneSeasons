@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sereneseasons.season.SeasonHooks;
 
+import java.util.Optional;
+
 @Mixin(Biome.class)
 public class MixinBiomeClient
 {
@@ -31,7 +33,8 @@ public class MixinBiomeClient
                 .registryOrThrow(Registries.BIOME)
                 .wrapAsHolder((Biome) (Object) this);
 
-        cir.setReturnValue(SeasonHooks.hasPrecipitationSeasonal(level, holder));
+        Optional<Boolean> override = SeasonHooks.precipitationOverrideSeasonal(level, holder);
+        override.ifPresent(cir::setReturnValue);
     }
 
     @Inject(method="getPrecipitationAt", at=@At("HEAD"), cancellable = true)
