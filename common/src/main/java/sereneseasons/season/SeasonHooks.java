@@ -19,6 +19,8 @@ import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.init.ModConfig;
 import sereneseasons.init.ModTags;
 
+import java.util.Optional;
+
 public class SeasonHooks
 {
     //
@@ -143,7 +145,7 @@ public class SeasonHooks
         return biomeTemp;
     }
 
-    public static boolean hasPrecipitationSeasonal(Level level, Holder<Biome> biome)
+    public static Optional<Boolean> precipitationOverrideSeasonal(Level level, Holder<Biome> biome)
     {
         if (biome.is(ModTags.Biomes.TROPICAL_BIOMES))
         {
@@ -152,17 +154,22 @@ public class SeasonHooks
             switch (tropicalSeason)
             {
                 case MID_DRY:
-                    return false;
+                    return Optional.of(false);
 
                 case MID_WET:
-                    return true;
+                    return Optional.of(true);
 
                 default:
                     break;
             }
         }
+        return Optional.empty();
+    }
 
-        return biome.value().hasPrecipitation();
+    public static boolean hasPrecipitationSeasonal(Level level, Holder<Biome> biome)
+    {
+        Optional<Boolean> override = precipitationOverrideSeasonal(level, biome);
+        return override.orElseGet(() -> biome.value().hasPrecipitation());
     }
 
     public static Biome.Precipitation getPrecipitationAtSeasonal(Level level, Holder<Biome> biome, BlockPos pos)
