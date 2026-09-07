@@ -4,6 +4,8 @@
  ******************************************************************************/
 package sereneseasons.season;
 
+import java.util.Optional;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
@@ -91,6 +93,7 @@ public class SeasonHooks
     //
     // General utilities
     //
+
     public static boolean coldEnoughToSnowSeasonal(LevelReader level, BlockPos pos, int seaLevel)
     {
         return coldEnoughToSnowSeasonal(level, level.getBiome(pos), pos, seaLevel);
@@ -135,6 +138,7 @@ public class SeasonHooks
     {
         boolean tropicalBiome = biome.is(ModTags.Biomes.TROPICAL_BIOMES);
         float biomeTemp = biome.value().getTemperature(pos, seaLevel);
+
         if (!tropicalBiome && biome.value().getBaseTemperature() <= 0.8F && !biome.is(ModTags.Biomes.BLACKLISTED_BIOMES))
         {
             biomeTemp = Mth.clamp(biomeTemp + ModConfig.seasons.getSeasonProperties(subSeason).biomeTempAdjustment(), -0.5F, 2.0F);
@@ -143,7 +147,7 @@ public class SeasonHooks
         return biomeTemp;
     }
 
-    public static boolean hasPrecipitationSeasonal(Level level, Holder<Biome> biome)
+    public static Optional<Boolean> precipitationOverrideSeasonal(Level level, Holder<Biome> biome)
     {
         if (biome.is(ModTags.Biomes.TROPICAL_BIOMES))
         {
@@ -152,17 +156,23 @@ public class SeasonHooks
             switch (tropicalSeason)
             {
                 case MID_DRY:
-                    return false;
+                    return Optional.of(false);
 
                 case MID_WET:
-                    return true;
+                    return Optional.of(true);
 
                 default:
                     break;
             }
         }
 
-        return biome.value().hasPrecipitation();
+        return Optional.empty();
+    }
+
+    public static boolean hasPrecipitationSeasonal(Level level, Holder<Biome> biome)
+    {
+        Optional<Boolean> override = precipitationOverrideSeasonal(level, biome);
+        return override.orElseGet(() -> biome.value().hasPrecipitation());
     }
 
     public static Biome.Precipitation getPrecipitationAtSeasonal(Level level, Holder<Biome> biome, BlockPos pos, int seaLevel)
