@@ -1,0 +1,48 @@
+{
+  "commands.sereneseasons.usage": "/season <get/set> [args]",
+  "commands.sereneseasons.getseason.success": "A jelenlegi évszak: %s, nap %s/%s, tick %s/%s",
+  "commands.sereneseasons.setseason.success": "Évszak beállítva: %s",
+  "commands.sereneseasons.setseason.fail": "Érvénytelen évszak: %s",
+  "commands.sereneseasons.setseason.disabled": "Az évszakok jelenleg le vannak tiltva!",
+
+  "gamerule.doSeasonCycle": "Évszakváltás folyamata",
+
+  "itemGroup.tabSereneSeasons": "Serene Seasons",
+
+  "block.sereneseasons.season_sensor": "Évszakérzékelő",
+  
+  "item.sereneseasons.ss_icon": "Serene Seasons ikon",
+  "item.sereneseasons.calendar": "Naptár",
+
+  "desc.sereneseasons.fertile_seasons": "Termékeny évszakok",
+  "desc.sereneseasons.year_round": "Egész évben",
+  "desc.sereneseasons.day_counter": "%s/%s. nap",
+  "desc.sereneseasons.tropical_day_counter": " (%s/%s)",
+
+  "desc.sereneseasons.spring": "Tavasz",
+  "desc.sereneseasons.early_spring": "Kora tavasz",
+  "desc.sereneseasons.mid_spring": "Tavasz közepe",
+  "desc.sereneseasons.late_spring": "Késő tavasz",
+
+  "desc.sereneseasons.summer": "Nyár",
+  "desc.sereneseasons.early_summer": "Kora nyár",
+  "desc.sereneseasons.mid_summer": "Nyár közepe",
+  "desc.sereneseasons.late_summer": "Késő nyár",
+
+  "desc.sereneseasons.autumn": "Ősz",
+  "desc.sereneseasons.early_autumn": "Kora ősz",
+  "desc.sereneseasons.mid_autumn": "Ősz közepe",
+  "desc.sereneseasons.late_autumn": "Késő ősz",
+
+  "desc.sereneseasons.winter": "Tél",
+  "desc.sereneseasons.early_winter": "Kora tél",
+  "desc.sereneseasons.mid_winter": "Tél közepe",
+  "desc.sereneseasons.late_winter": "Késő tél",
+
+  "desc.sereneseasons.early_wet": "Kora esős évszak",
+  "desc.sereneseasons.mid_wet": "Esős évszak közepe",
+  "desc.sereneseasons.late_wet": "Késő esős évszak",
+  "desc.sereneseasons.early_dry": "Kora száraz évszak",
+  "desc.sereneseasons.mid_dry": "Száraz évszak közepe",
+  "desc.sereneseasons.late_dry": "Késő száraz évszak"
+}
